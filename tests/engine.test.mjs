@@ -1,0 +1,71 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { initialState } from "../src/criteria.js";
+import { evaluateCriteria } from "../src/engine.js";
+
+const scenario = (changes) => ({ ...initialState, procedure: "egd", site: "other", bmi: "25", ...changes });
+
+test("EGD BMI boundary routes exactly as supplied", () => {
+  assert.equal(evaluateCriteria(scenario({ bmi: "42.9" })).level, "none");
+  assert.equal(evaluateCriteria(scenario({ bmi: "43" })).level, "optiflow");
+  assert.equal(evaluateCriteria(scenario({ bmi: "50" })).level, "optiflow");
+  assert.equal(evaluateCriteria(scenario({ bmi: "50.1" })).level, "mac");
+  assert.equal(evaluateCriteria(scenario({ bmi: "55" })).level, "mac");
+  assert.equal(evaluateCriteria(scenario({ bmi: "55.1" })).level, "or");
+});
+
+test("colonoscopy BMI boundary routes exactly as supplied", () => {
+  assert.equal(evaluateCriteria(scenario({ procedure: "colonoscopy", bmi: "50" })).level, "none");
+  assert.equal(evaluateCriteria(scenario({ procedure: "colonoscopy", bmi: "50.1" })).level, "mac");
+  assert.equal(evaluateCriteria(scenario({ procedure: "colonoscopy", bmi: "60" })).level, "mac");
+  assert.equal(evaluateCriteria(scenario({ procedure: "colonoscopy", bmi: "60.1" })).level, "or");
+});
+
+test("highest-acuity criterion wins while all reasons remain", () => {
+  const result = evaluateCriteria(scenario({ bmi: "52", severeGastroparesis: true, chronicLung: true }));
+  assert.equal(result.level, "or");
+  assert.ok(result.reasons.some((reason) => reason.includes("BMI")));
+  assert.ok(result.reasons.some((reason) => reason.includes("gastroparesis")));
+  assert.ok(result.reasons.some((reason) => reason.includes("lung")));
+  assert.ok(result.advisories.some((item) => item.includes("POM")));
+});
+
+test("oxygen routing differs by procedure and dose", () => {
+  assert.equal(evaluateCriteria(scenario({ oxygen: "intermittentUnder2" })).level, "or");
+  assert.equal(evaluateCriteria(scenario({ procedure: "colonoscopy", oxygen: "twoToUnder4" })).level, "macPom");
+  assert.equal(evaluateCriteria(scenario({ procedure: "colonoscopy", oxygen: "fourPlus" })).level, "or");
+});
+
+test("intellectual disability routes according to IV tolerance", () => {
+  assert.equal(evaluateCriteria(scenario({ cognitive: "canIv" })).level, "macPom");
+  assert.equal(evaluateCriteria(scenario({ cognitive: "cannotIv" })).level, "or");
+});
+
+test("dialysis produces MAC and correct preparation instructions", () => {
+  const hd = evaluateCriteria(scenario({ dialysis: "hd" }));
+  const pd = evaluateCriteria(scenario({ dialysis: "pd" }));
+  assert.equal(hd.level, "mac");
+  assert.ok(hd.advisories.some((item) => item.includes("potassium")));
+  assert.equal(pd.level, "mac");
+  assert.ok(pd.advisories.some((item) => item.includes("antibiotics")));
+});
+
+test("Pleasanton exclusion does not silently alter sedation level", () => {
+  const result = evaluateCriteria(scenario({ site: "pleasanton", procedure: "colonoscopy", ageOver75: true }));
+  assert.equal(result.level, "none");
+  assert.equal(result.status, "excluded");
+  assert.ok(result.pleasantonExclusions.some((item) => item.includes("75")));
+});
+
+test("exactly four short-acting opioid tablets is flagged, not guessed", () => {
+  const result = evaluateCriteria(scenario({ opioid: "shortExactly4" }));
+  assert.equal(result.level, "none");
+  assert.equal(result.status, "review");
+  assert.ok(result.reviewFlags.some((item) => item.includes("exactly 4")));
+});
+
+test("OR always adds POM instruction", () => {
+  const result = evaluateCriteria(scenario({ severePulmonaryHypertension: true }));
+  assert.equal(result.level, "or");
+  assert.ok(result.advisories.includes("POM clinic is required before all OR procedures"));
+});
