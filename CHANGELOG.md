@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.3.1 — 2026-08-17
+
+- Restored the complete high-dose and long-acting narcotic MAC criteria in the Criteria Matrix.
+- Added the same opioid routing details beside the Navigator medication choices.
+- Added browser assertions to prevent these five supplied details from being summarized away again.
+
 ## 0.3.0 — 2026-08-16
 
 - Compressed the Navigator into a denser two-column clinical workstation to reduce scrolling.

@@ -99,6 +99,18 @@ function CheckCard({ checked, title, detail, onChange }) {
   );
 }
 
+function CriteriaItem({ item }) {
+  if (typeof item === "string") return <li>{item}</li>;
+  return (
+    <li>
+      {item.text}
+      <ul className="criteria-details">
+        {item.details.map((detail) => <li key={detail}>{detail}</li>)}
+      </ul>
+    </li>
+  );
+}
+
 function OutcomeRail({ active }) {
   const activeIndex = rail.findIndex((item) => item.id === active);
   return (
@@ -249,6 +261,7 @@ function Navigator({ state, setState, result, onReset }) {
           <div className="section-body">
             <p className="eyebrow">Medication & substances</p>
             <h2>Sedation tolerance</h2>
+            <p className="field-guidance">MAC only for high-dose or long-acting narcotics: MS Contin, Oral Dilaudid, Fentanyl Patch, Opiate AND Benzo use, or Norco/Percocet/Vicodin &gt;4 tabs/day.</p>
             <Segmented
               label="Opioid use"
               value={state.opioid}
@@ -357,7 +370,7 @@ function Library() {
           <article className={`criteria-card tone-card-${section.tone}`} key={section.id} style={{ "--delay": `${index * 55}ms` }}>
             <span className="card-index">{String(index + 1).padStart(2, "0")}</span>
             <h2>{section.title}</h2>
-            <ul>{section.items.map((item) => <li key={item}>{item}</li>)}</ul>
+            <ul>{section.items.map((item) => <CriteriaItem key={typeof item === "string" ? item : item.text} item={item} />)}</ul>
           </article>
         ))}
       </div>

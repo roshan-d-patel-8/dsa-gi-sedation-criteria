@@ -56,7 +56,16 @@ export const policySections = [
     items: [
       "BMI >50 for EGD or colonoscopy.",
       "Severe OSA requiring CPAP/BiPAP for EGD; conscious sedation is listed for colonoscopy.",
-      "High-dose or long-acting narcotic dependence.",
+      {
+        text: "Chronic pain with high-dose narcotic dependence. MAC only if the patient is taking high-dose or long-acting narcotics:",
+        details: [
+          "MS Contin",
+          "Oral Dilaudid",
+          "Fentanyl Patch",
+          "Opiate AND Benzo use",
+          "Norco, Percocet, or Vicodin: MAC if using >4 tabs/day.",
+        ],
+      },
       "Opioid antagonist use, including naloxone, naltrexone, or buprenorphine/Suboxone.",
       "Heavy alcohol or drug use.",
       "Excessive pain/anxiety or prior intolerance to moderate sedation.",

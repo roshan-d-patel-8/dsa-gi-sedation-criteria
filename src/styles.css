@@ -85,6 +85,7 @@ h1, h2, h3, p { text-wrap: pretty; }
 .question-section { display: grid; grid-template-columns: 34px minmax(0, 1fr); padding: 15px 16px 16px; background: rgba(255, 255, 255, .88); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 6px 18px rgba(27, 58, 95, .045); }
 .section-number { color: rgba(27, 58, 95, .38); font-size: 14px; font-weight: 800; }
 .section-body > h2 { margin: 0 0 11px; color: var(--navy); font-size: clamp(19px, 1.8vw, 24px); font-weight: 700; line-height: 1.08; letter-spacing: -.02em; }
+.field-guidance { margin: -3px 0 9px; padding: 8px 9px; border-left: 3px solid var(--pink); background: rgba(242, 160, 184, .11); color: var(--muted); font-size: 10px; font-weight: 600; line-height: 1.35; }
 .essentials { background: var(--navy); color: var(--white); border: 0; padding: 17px 18px 18px; border-radius: 18px; box-shadow: var(--shadow); }
 .essentials .section-number { color: rgba(255, 255, 255, .42); }
 .essentials .eyebrow { color: var(--pillar); }
@@ -169,6 +170,8 @@ h1, h2, h3, p { text-wrap: pretty; }
 .criteria-card h2 { margin: 14px 0 17px; color: var(--navy); font-size: 27px; font-weight: 700; }
 .criteria-card ul { margin: 0; padding: 0 0 0 18px; color: var(--muted); line-height: 1.46; font-size: 13px; }
 .criteria-card li { margin: 7px 0; }
+.criteria-details { margin-top: 7px !important; padding-left: 18px !important; color: var(--ink) !important; font-weight: 650; }
+.criteria-details li { margin: 4px 0; }
 .card-index { color: rgba(27, 58, 95, .32); font-size: 21px; font-weight: 800; }
 
 .medication-timeline { display: grid; gap: 10px; margin-top: 34px; position: relative; }
