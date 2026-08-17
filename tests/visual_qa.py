@@ -23,6 +23,13 @@ with sync_playwright() as playwright:
     assert desktop.locator(".opioid-lane-moderate").get_by_text("Moderate sedation", exact=True).is_visible()
     assert desktop.locator(".opioid-lane-heavy").get_by_text("MAC + Remimazolam signal", exact=True).is_visible()
     assert desktop.locator(".opioid-boundary").get_by_text("Policy boundary", exact=True).is_visible()
+    desktop.locator(".bmi-field input").fill("80")
+    assert desktop.locator(".bmi-route-signal").get_by_text("Choose procedure", exact=True).is_visible()
+    desktop.get_by_text("EGD", exact=True).click()
+    assert desktop.locator(".bmi-route-signal").get_by_text("Operating room", exact=True).is_visible()
+    assert desktop.locator(".result-panel > h2").inner_text() == "Operating room"
+    assert desktop.get_by_text("BMI route active · complete opening fields", exact=True).is_visible()
+    desktop.screenshot(path=OUTPUT / "dsa-gi-sedation-bmi-80.png", full_page=False)
     fill_basics(desktop, "EGD", "Other DSA GI site", 56)
     assert desktop.locator(".result-panel > h2").inner_text() == "Operating room"
     assert desktop.evaluate("document.body.scrollHeight") < 2600

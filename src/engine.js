@@ -19,10 +19,19 @@ export function evaluateCriteria(state) {
   const reviewFlags = [];
   const pleasantonExclusions = [];
   const remimazolam = [];
+  let bmiLevel = "none";
+  const bmiReasons = [];
+  const bmiReviewFlags = [];
 
   const elevate = (next, reason) => {
     if (LEVELS.indexOf(next) > LEVELS.indexOf(level)) level = next;
     addUnique(reasons, reason);
+  };
+
+  const elevateBmi = (next, reason) => {
+    elevate(next, reason);
+    if (LEVELS.indexOf(next) > LEVELS.indexOf(bmiLevel)) bmiLevel = next;
+    addUnique(bmiReasons, reason);
   };
 
   const bmi = state.bmi === "" ? null : Number(state.bmi);
@@ -30,25 +39,28 @@ export function evaluateCriteria(state) {
 
   if (hasValidBmi) {
     if (state.procedure === "egd") {
-      if (bmi > 55) elevate("or", `EGD BMI ${bmi} is greater than 55`);
-      else if (bmi > 50) elevate("mac", `EGD BMI ${bmi} is greater than 50`);
-      else if (bmi >= 43) elevate("optiflow", `EGD BMI ${bmi} is within the listed 43–50 Optiflow range`);
+      if (bmi > 55) elevateBmi("or", `EGD BMI ${bmi} is greater than 55`);
+      else if (bmi > 50) elevateBmi("mac", `EGD BMI ${bmi} is greater than 50`);
+      else if (bmi >= 43) elevateBmi("optiflow", `EGD BMI ${bmi} is within the listed 43–50 Optiflow range`);
       if (state.site === "pleasanton" && bmi > 42) {
         addUnique(pleasantonExclusions, `EGD BMI ${bmi} is greater than the Pleasanton limit of 42`);
       }
     }
 
     if (state.procedure === "colonoscopy") {
-      if (bmi > 60) elevate("or", `Colonoscopy BMI ${bmi} is greater than 60`);
-      else if (bmi > 50) elevate("mac", `Colonoscopy BMI ${bmi} is greater than 50`);
+      if (bmi > 60) elevateBmi("or", `Colonoscopy BMI ${bmi} is greater than 60`);
+      else if (bmi > 50) elevateBmi("mac", `Colonoscopy BMI ${bmi} is greater than 50`);
       if (state.site === "pleasanton" && bmi > 50) {
         addUnique(pleasantonExclusions, `Colonoscopy BMI ${bmi} is greater than the Pleasanton limit of 50`);
       }
     }
 
     if (state.procedure === "turns") {
-      if (bmi >= 43 && bmi <= 50) elevate("optiflow", `TURNS BMI ${bmi} is within the listed 43–50 Optiflow range`);
-      if (bmi > 50) addUnique(reviewFlags, "The supplied policy does not define a TURNS route for BMI above 50");
+      if (bmi >= 43 && bmi <= 50) elevateBmi("optiflow", `TURNS BMI ${bmi} is within the listed 43–50 Optiflow range`);
+      if (bmi > 50) {
+        addUnique(reviewFlags, "The supplied policy does not define a TURNS route for BMI above 50");
+        addUnique(bmiReviewFlags, "The supplied policy does not define a TURNS route for BMI above 50");
+      }
       if (state.site === "pleasanton") addUnique(reviewFlags, "Pleasanton BMI exclusions are not defined for TURNS");
     }
   }
@@ -143,6 +155,13 @@ export function evaluateCriteria(state) {
   if (level === "macPom") addUnique(advisories, "POM clinic review indicated");
 
   const completedBasics = Boolean(state.procedure && state.site && hasValidBmi);
+  const bmiAssessmentState = !hasValidBmi
+    ? "missing"
+    : !state.procedure
+      ? "needsProcedure"
+      : bmiReviewFlags.length
+        ? "review"
+        : "ready";
   const status = !completedBasics
     ? "incomplete"
     : reviewFlags.length > 0
@@ -161,5 +180,13 @@ export function evaluateCriteria(state) {
     reviewFlags,
     pleasantonExclusions,
     remimazolam,
+    bmiAssessment: {
+      value: hasValidBmi ? bmi : null,
+      state: bmiAssessmentState,
+      level: bmiLevel,
+      label: labelFor[bmiLevel],
+      reasons: bmiReasons,
+      reviewFlags: bmiReviewFlags,
+    },
   };
 }

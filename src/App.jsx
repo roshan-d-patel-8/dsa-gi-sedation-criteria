@@ -194,9 +194,44 @@ function OutcomeRail({ active }) {
   );
 }
 
+function BmiRouteSignal({ assessment, procedure }) {
+  const procedureLabel = procedureOptions.find((option) => option.value === procedure)?.label;
+  const tone = assessment.state === "review" ? "review" : assessment.level;
+  const routeLabel = assessment.state === "review"
+    ? "Review required"
+    : assessment.level === "none"
+      ? "No BMI escalation"
+      : assessment.label;
+
+  let detail = "Enter BMI to reveal its sedation route immediately.";
+  if (assessment.state === "needsProcedure") detail = "Choose a procedure—EGD, colonoscopy, and TURNS use different BMI thresholds.";
+  if (assessment.state === "ready") detail = assessment.reasons[0] || `${procedureLabel} BMI ${assessment.value} does not trigger a BMI escalation.`;
+  if (assessment.state === "review") detail = assessment.reviewFlags[0];
+
+  return (
+    <div className={`bmi-route-signal bmi-signal-${tone} bmi-state-${assessment.state}`} aria-live="polite">
+      <div className="bmi-signal-value"><span>BMI</span><strong>{assessment.value ?? "—"}</strong></div>
+      <span className="bmi-signal-arrow" aria-hidden="true">→</span>
+      <div className="bmi-signal-route">
+        <span>{assessment.state === "needsProcedure" ? "Procedure needed" : "BMI sedation signal"}</span>
+        <strong>{assessment.state === "missing" ? "Sedation route" : assessment.state === "needsProcedure" ? "Choose procedure" : routeLabel}</strong>
+        <small>{detail}</small>
+      </div>
+    </div>
+  );
+}
+
 function ResultPanel({ result }) {
+  const bmiRouteAvailable = result.bmiAssessment.state === "ready" || result.bmiAssessment.state === "review";
+  const bmiPreviewReason = result.bmiAssessment.reasons[0]
+    || result.bmiAssessment.reviewFlags[0]
+    || `BMI ${result.bmiAssessment.value} does not trigger a BMI escalation for the selected procedure`;
   const statusLabel = result.status === "incomplete"
-    ? "Complete the three opening fields"
+    ? result.bmiAssessment.state === "needsProcedure"
+      ? "BMI captured · choose procedure"
+      : bmiRouteAvailable
+        ? "BMI route active · complete opening fields"
+        : "Complete the three opening fields"
     : result.status === "review"
       ? "Anesthesia review flag"
       : result.status === "excluded"
@@ -210,13 +245,17 @@ function ResultPanel({ result }) {
         {statusLabel}
       </div>
       <p className="micro-label">Current highest route</p>
-      <h2>{result.completedBasics ? result.label : "Awaiting basics"}</h2>
+      <h2>{result.completedBasics || bmiRouteAvailable ? result.bmiAssessment.state === "review" ? "BMI needs review" : result.label : "Awaiting basics"}</h2>
       <OutcomeRail active={result.level} />
 
       {!result.completedBasics && (
-        <div className="empty-result">
-          <span>01</span>
-          <p>Select a procedure, location, and BMI to activate the routing rail.</p>
+        <div className={`empty-result ${bmiRouteAvailable ? "bmi-result-preview" : ""}`}>
+          <span>{result.bmiAssessment.value ? `BMI ${result.bmiAssessment.value}` : "01"}</span>
+          <p>{bmiRouteAvailable
+            ? `${bmiPreviewReason}. Complete the remaining opening fields to finalize the screen.`
+            : result.bmiAssessment.state === "needsProcedure"
+              ? `BMI ${result.bmiAssessment.value} is captured. Select the procedure to apply the correct sedation threshold.`
+              : "Select a procedure, location, and BMI to activate the routing rail."}</p>
         </div>
       )}
 
@@ -274,11 +313,12 @@ function Navigator({ state, setState, result, onReset }) {
               options={[{ value: "pleasanton", label: "Pleasanton" }, { value: "other", label: "Other DSA GI site" }]}
               onChange={(value) => set("site", value)}
             />
-            <label className="bmi-field">
+            <label className={`bmi-field bmi-field-${result.bmiAssessment.state === "review" ? "review" : result.bmiAssessment.level}`}>
               <span>BMI</span>
               <input type="number" min="1" max="120" step="0.1" inputMode="decimal" value={state.bmi} onChange={(event) => set("bmi", event.target.value)} placeholder="e.g. 46" />
               <small>Enter the measured value; boundary rules are applied exactly as written.</small>
             </label>
+            <BmiRouteSignal key={`${result.bmiAssessment.state}-${result.bmiAssessment.level}-${result.bmiAssessment.value}`} assessment={result.bmiAssessment} procedure={state.procedure} />
           </div>
         </section>
 

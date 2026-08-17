@@ -21,6 +21,21 @@ test("colonoscopy BMI boundary routes exactly as supplied", () => {
   assert.equal(evaluateCriteria(scenario({ procedure: "colonoscopy", bmi: "60.1" })).level, "or");
 });
 
+test("BMI 80 exposes an OR signal before location is selected", () => {
+  const result = evaluateCriteria({ ...initialState, procedure: "egd", bmi: "80" });
+  assert.equal(result.completedBasics, false);
+  assert.equal(result.level, "or");
+  assert.equal(result.bmiAssessment.state, "ready");
+  assert.equal(result.bmiAssessment.label, "Operating room");
+  assert.ok(result.bmiAssessment.reasons.some((reason) => reason.includes("BMI 80")));
+});
+
+test("BMI entered without a procedure explicitly requests procedure context", () => {
+  const result = evaluateCriteria({ ...initialState, bmi: "80" });
+  assert.equal(result.bmiAssessment.state, "needsProcedure");
+  assert.equal(result.bmiAssessment.value, 80);
+});
+
 test("highest-acuity criterion wins while all reasons remain", () => {
   const result = evaluateCriteria(scenario({ bmi: "52", severeGastroparesis: true, chronicLung: true }));
   assert.equal(result.level, "or");

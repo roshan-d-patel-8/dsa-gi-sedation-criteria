@@ -104,9 +104,24 @@ h1, h2, h3, p { text-wrap: pretty; }
 .essentials .segmented label.selected { background: var(--way); border-color: var(--pillar); color: var(--white); }
 
 .bmi-field { display: block; min-width: 0; }
-.bmi-field input { width: 100%; min-height: 40px; border: 1px solid rgba(255, 255, 255, .18); background: rgba(255, 255, 255, .07); color: var(--white); border-radius: 9px; padding: 5px 11px; font-size: 21px; font-weight: 700; }
+.bmi-field input { width: 100%; min-height: 40px; border: 1px solid rgba(255, 255, 255, .18); background: rgba(255, 255, 255, .07); color: var(--white); border-radius: 9px; padding: 5px 11px; font-size: 21px; font-weight: 700; transition: border-color .18s ease, box-shadow .18s ease, background .18s ease; }
 .bmi-field input::placeholder { color: rgba(255, 255, 255, .35); }
 .bmi-field small { display: block; margin-top: 4px; color: rgba(255, 255, 255, .5); font-size: 9px; }
+.bmi-field-optiflow input, .bmi-field-mac input, .bmi-field-macPom input { border-color: var(--pillar); box-shadow: 0 0 0 3px rgba(169, 198, 222, .15); background: rgba(27, 117, 187, .16); }
+.bmi-field-or input, .bmi-field-review input { border-color: #ff9b9a; box-shadow: 0 0 0 3px rgba(242, 160, 184, .16); background: rgba(185, 74, 72, .16); }
+.bmi-route-signal { grid-column: 1 / -1; min-width: 0; display: grid; grid-template-columns: 58px 22px minmax(0, 1fr); gap: 8px; align-items: center; margin-top: 4px; padding: 8px 10px; border: 1px solid rgba(255, 255, 255, .16); border-radius: 12px; background: rgba(255, 255, 255, .065); animation: bmi-pop .28s both; transition: border-color .18s ease, background .18s ease; }
+.bmi-signal-value { min-height: 43px; display: grid; place-content: center; justify-items: center; border-radius: 9px; background: rgba(255, 255, 255, .1); line-height: 1; }
+.bmi-signal-value span, .bmi-signal-route > span { color: var(--pillar); font-size: 8px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+.bmi-signal-value strong { margin-top: 3px; color: var(--white); font-size: 22px; }
+.bmi-signal-arrow { color: var(--pillar); font-size: 22px; font-weight: 400; text-align: center; }
+.bmi-signal-route { display: grid; gap: 2px; min-width: 0; }
+.bmi-signal-route strong { color: var(--white); font-size: 16px; line-height: 1.08; }
+.bmi-signal-route small { color: rgba(255, 255, 255, .62); font-size: 9px; line-height: 1.3; }
+.bmi-signal-optiflow, .bmi-signal-mac, .bmi-signal-macPom { border-color: rgba(169, 198, 222, .58); background: linear-gradient(90deg, rgba(27, 117, 187, .2), rgba(255, 255, 255, .07)); }
+.bmi-signal-or, .bmi-signal-review { border-color: rgba(242, 160, 184, .72); background: linear-gradient(90deg, rgba(185, 74, 72, .3), rgba(242, 160, 184, .08)); }
+.bmi-signal-or .bmi-signal-arrow, .bmi-signal-or .bmi-signal-route > span, .bmi-signal-review .bmi-signal-arrow, .bmi-signal-review .bmi-signal-route > span { color: var(--pink); }
+.bmi-signal-or .bmi-signal-value, .bmi-signal-review .bmi-signal-value { background: rgba(185, 74, 72, .36); }
+@keyframes bmi-pop { from { opacity: .45; transform: translateY(-3px) scale(.995); } to { opacity: 1; transform: none; } }
 
 .opioid-selector { min-width: 0; margin: 0 0 11px; padding: 0; border: 0; }
 .opioid-selector > legend { margin-bottom: 6px; color: var(--ink); font-size: 10px; font-weight: 800; }
@@ -181,6 +196,8 @@ h1, h2, h3, p { text-wrap: pretty; }
 .empty-result { display: grid; grid-template-columns: 42px 1fr; gap: 12px; align-items: start; border-top: 1px solid rgba(255, 255, 255, .1); padding: 17px 0; }
 .empty-result span { font-size: 27px; color: var(--pillar); }
 .empty-result p { margin: 2px 0; color: rgba(255, 255, 255, .64); font-size: 12px; line-height: 1.4; }
+.bmi-result-preview { border-color: rgba(242, 160, 184, .24); }
+.bmi-result-preview span { color: var(--pink); font-size: 18px; font-weight: 800; }
 .result-details { max-height: 42vh; overflow-y: auto; padding-right: 6px; scrollbar-color: rgba(255, 255, 255, .2) transparent; }
 .result-list { border-top: 1px solid rgba(255, 255, 255, .11); padding: 13px 0 4px; }
 .result-list h3 { margin: 0 0 6px; color: var(--pillar); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; }

@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.5.0 — 2026-08-17
+
+- Added an immediate BMI-to-sedation signal inside Procedure Coordinates with a visible BMI → route relationship.
+- Exposed the provisional BMI route in the result panel as soon as procedure and BMI are available, without waiting for location.
+- Added a specific procedure prompt when BMI is entered first because EGD, colonoscopy, and TURNS use different thresholds.
+- Added engine and browser regression tests for the reported BMI 80 scenario.
+
 ## 0.4.1 — 2026-08-17
 
 - Repaired the Navigator step-card grid after the taller opioid comparison disrupted its compact tile rhythm.
