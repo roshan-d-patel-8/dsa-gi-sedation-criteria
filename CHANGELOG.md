@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.6.0 — 2026-08-17
+
+- Removed the interactive Navigator and all tab and filter buttons.
+- Made the Criteria Matrix the sole page.
+- Integrated the POM naltrexone medication guide as card 07.
+- Repacked the reference into balanced desktop columns and ordered responsive grids to reduce scrolling.
+
 ## 0.5.0 — 2026-08-17
 
 - Added an immediate BMI-to-sedation signal inside Procedure Coordinates with a visible BMI → route relationship.

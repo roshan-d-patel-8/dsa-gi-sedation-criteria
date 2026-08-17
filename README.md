@@ -5,7 +5,7 @@ tags:
 
 # DSA GI Sedation Criteria
 
-An interactive, client-side navigator for the DSA GI Anesthesia Procedure Criteria revised August 2026.
+A compact, one-page clinical reference for the DSA GI Anesthesia Procedure Criteria revised August 2026.
 
 ## Live site
 
@@ -13,7 +13,7 @@ An interactive, client-side navigator for the DSA GI Anesthesia Procedure Criter
 
 ## Purpose
 
-The site converts a dense policy into a transparent routing aid. It presents the highest applicable route while preserving every triggering criterion, preparation instruction, Pleasanton exclusion, unresolved ambiguity, and remimazolam consideration.
+The site converts a dense policy into a scan-friendly criteria matrix. It preserves every criterion, preparation instruction, Pleasanton exclusion, unresolved ambiguity, remimazolam consideration, and POM medication hold.
 
 It does not clear patients, replace clinician judgment, or independently validate the clinical policy.
 
@@ -33,11 +33,11 @@ npm run build
 
 ## Privacy
 
-The application is static and has no backend, database, analytics, cookies, or persistent storage. Do not enter patient identifiers or PHI.
+The application is static and has no inputs, backend, database, analytics, cookies, or persistent storage.
 
 ## Publication
 
-The source repository and GitHub Pages website are public by explicit authorization on 2026-08-16. The public site contains the criteria and navigator only; it does not collect or retain user input.
+The source repository and GitHub Pages website are public by explicit authorization on 2026-08-16. The public site contains the criteria matrix and integrated medication guide only; it has no inputs and collects no data.
 
 ## Backlinks
 

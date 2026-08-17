@@ -1,82 +1,73 @@
 from pathlib import Path
+
 from playwright.sync_api import sync_playwright
 
 
 OUTPUT = Path("/Users/roshanpatel/.codex/visualizations/2026/08/17/01a00e0b-24f2-7521-b4c6-d94a41e34be5")
 BASE_URL = "http://127.0.0.1:5173"
+CARD_HEADINGS = [
+    "Optiflow",
+    "MAC",
+    "MAC + POM",
+    "Operating room",
+    "Pleasanton exclusions",
+    "Remimazolam considerations",
+    "Medication holds",
+]
 
 
-def fill_basics(page, procedure, site, bmi):
-    page.get_by_text(procedure, exact=True).click()
-    page.get_by_text(site, exact=True).click()
-    page.locator(".bmi-field input").fill(str(bmi))
+def capture_console_errors(page):
+    errors = []
+    page.on("console", lambda message: errors.append(message.text) if message.type == "error" else None)
+    return errors
+
+
+def assert_static_reference(page):
+    assert page.locator("button").count() == 0
+    assert page.locator("nav").count() == 0
+    assert page.locator("input, select, textarea").count() == 0
+    assert page.locator(".criteria-card").count() == 7
+    assert page.get_by_role("heading", name="Sedation criteria, at a glance.", exact=True).is_visible()
+    for heading in CARD_HEADINGS:
+        assert page.get_by_role("heading", name=heading, exact=True).is_visible()
+
+    assert page.get_by_text("Discontinue 7 days before surgery and/or opioid administration.", exact=True).is_visible()
+    assert page.get_by_text("Stop 3 days before surgery.", exact=True).is_visible()
+    assert page.get_by_text("Stop 1 month before surgery.", exact=True).is_visible()
+    assert page.get_by_text("MS Contin", exact=True).is_visible()
+    assert page.get_by_text("Oral Dilaudid", exact=True).is_visible()
+    assert page.get_by_text("Fentanyl Patch", exact=True).is_visible()
+    assert page.get_by_text("Norco, Percocet, or Vicodin >4 tabs/day", exact=True).is_visible()
 
 
 with sync_playwright() as playwright:
     browser = playwright.chromium.launch(headless=True)
+
     desktop = browser.new_page(viewport={"width": 1440, "height": 1000}, device_scale_factor=1)
-    desktop_errors = []
-    desktop.on("console", lambda message: desktop_errors.append(message.text) if message.type == "error" else None)
+    desktop_errors = capture_console_errors(desktop)
     desktop.goto(BASE_URL)
     desktop.wait_for_load_state("networkidle")
-    assert desktop.get_by_role("button", name="Copy booking summary").count() == 0
-    assert desktop.locator(".opioid-lane-moderate").get_by_text("Moderate sedation", exact=True).is_visible()
-    assert desktop.locator(".opioid-lane-heavy").get_by_text("MAC + Remimazolam signal", exact=True).is_visible()
-    assert desktop.locator(".opioid-boundary").get_by_text("Policy boundary", exact=True).is_visible()
-    desktop.locator(".bmi-field input").fill("80")
-    assert desktop.locator(".bmi-route-signal").get_by_text("Choose procedure", exact=True).is_visible()
-    desktop.get_by_text("EGD", exact=True).click()
-    assert desktop.locator(".bmi-route-signal").get_by_text("Operating room", exact=True).is_visible()
-    assert desktop.locator(".result-panel > h2").inner_text() == "Operating room"
-    assert desktop.get_by_text("BMI route active · complete opening fields", exact=True).is_visible()
-    desktop.screenshot(path=OUTPUT / "dsa-gi-sedation-bmi-80.png", full_page=False)
-    fill_basics(desktop, "EGD", "Other DSA GI site", 56)
-    assert desktop.locator(".result-panel > h2").inner_text() == "Operating room"
-    assert desktop.evaluate("document.body.scrollHeight") < 2600
-    step_04 = desktop.locator(".step-04").bounding_box()
-    step_05 = desktop.locator(".step-05").bounding_box()
-    step_06 = desktop.locator(".step-06").bounding_box()
-    step_07 = desktop.locator(".step-07").bounding_box()
-    step_08 = desktop.locator(".step-08").bounding_box()
-    assert abs(step_04["x"] - step_06["x"]) < 2
-    assert step_06["y"] < step_05["y"] + step_05["height"]
-    assert abs(step_07["y"] - step_08["y"]) < 2
-    desktop.screenshot(path=OUTPUT / "dsa-gi-sedation-desktop.png", full_page=True)
-
-    desktop.locator(".bmi-field input").fill("25")
-    desktop.locator(".opioid-lane-moderate .opioid-option").click()
-    assert desktop.locator(".result-panel > h2").inner_text() == "No listed escalation"
-    desktop.locator(".opioid-lane-heavy .opioid-option").filter(has_text="MS Contin").click()
-    assert desktop.locator(".result-panel > h2").inner_text() == "MAC"
-    assert desktop.get_by_text("Remimazolam considerations", exact=True).is_visible()
-
-    desktop.get_by_role("button", name="Criteria matrix").click()
-    assert desktop.get_by_role("heading", name="Criteria matrix", exact=True).is_visible()
-    assert desktop.get_by_text("One policy. Six lenses.").count() == 0
-    assert desktop.locator(".criteria-lane-moderate").get_by_text("Moderate sedation", exact=True).is_visible()
-    assert desktop.locator(".criteria-lane-heavy").get_by_text("MAC + Remimazolam signal", exact=True).is_visible()
-    for opioid_detail in ["MS Contin", "Oral Dilaudid", "Fentanyl Patch", "Opiate AND Benzo use"]:
-        assert desktop.get_by_text(opioid_detail, exact=True).is_visible()
-    assert desktop.get_by_text("Norco, Percocet, or Vicodin >4 tabs/day", exact=True).is_visible()
-    desktop.wait_for_timeout(900)
-    desktop.screenshot(path=OUTPUT / "dsa-gi-sedation-criteria-matrix.png", full_page=True)
-
-    desktop.get_by_role("button", name="Medication guide").click()
-    assert desktop.get_by_text("Naltrexone timing, at a glance.").is_visible()
-    desktop.screenshot(path=OUTPUT / "dsa-gi-sedation-medications.png", full_page=True)
+    assert_static_reference(desktop)
+    desktop.wait_for_timeout(700)
+    assert desktop.evaluate("document.body.scrollHeight") < 1800
+    desktop.screenshot(path=OUTPUT / "dsa-gi-sedation-reference-desktop.png", full_page=True)
 
     mobile = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
-    mobile_errors = []
-    mobile.on("console", lambda message: mobile_errors.append(message.text) if message.type == "error" else None)
+    mobile_errors = capture_console_errors(mobile)
     mobile.goto(BASE_URL)
     mobile.wait_for_load_state("networkidle")
-    fill_basics(mobile, "Colonoscopy", "Pleasanton", 52)
-    assert mobile.locator(".result-panel > h2").inner_text() == "MAC"
-    assert mobile.get_by_role("heading", name="Pleasanton exclusion", exact=True).is_visible()
-    mobile.screenshot(path=OUTPUT / "dsa-gi-sedation-mobile.png", full_page=False)
+    assert_static_reference(mobile)
+    mobile.wait_for_timeout(700)
+
+    previous_y = -1
+    for heading in CARD_HEADINGS:
+        y_position = mobile.get_by_role("heading", name=heading, exact=True).bounding_box()["y"]
+        assert y_position > previous_y
+        previous_y = y_position
+    mobile.screenshot(path=OUTPUT / "dsa-gi-sedation-reference-mobile.png", full_page=True)
 
     assert not desktop_errors, desktop_errors
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: desktop, medication guide, and mobile routing scenarios.")
+print("Visual QA passed: static criteria matrix, integrated medication holds, and responsive order.")
