@@ -6,7 +6,7 @@ import {
   policySections,
   procedureOptions,
 } from "./criteria.js";
-import { bookingSummary, evaluateCriteria } from "./engine.js";
+import { evaluateCriteria } from "./engine.js";
 
 const rail = [
   { id: "none", short: "Base", label: "No listed escalation" },
@@ -113,14 +113,7 @@ function OutcomeRail({ active }) {
   );
 }
 
-function ResultPanel({ state, result }) {
-  const [copied, setCopied] = useState(false);
-  const summary = bookingSummary(state, result);
-  const copy = async () => {
-    await navigator.clipboard.writeText(summary);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1600);
-  };
+function ResultPanel({ result }) {
   const statusLabel = result.status === "incomplete"
     ? "Complete the three opening fields"
     : result.status === "review"
@@ -157,7 +150,6 @@ function ResultPanel({ state, result }) {
       )}
 
       <div className="result-actions">
-        <button className="primary-button" onClick={copy} disabled={!result.completedBasics}>{copied ? "Copied" : "Copy booking summary"}</button>
         <button className="text-button" onClick={() => window.print()} disabled={!result.completedBasics}>Print</button>
       </div>
       <p className="clinical-note">Decision support only. Confirm against current policy and clinical judgment. Do not enter PHI.</p>
@@ -341,7 +333,7 @@ function Navigator({ state, setState, result, onReset }) {
           </section>
         )}
       </div>
-      <ResultPanel state={state} result={result} />
+      <ResultPanel result={result} />
     </main>
   );
 }
@@ -353,7 +345,7 @@ function Library() {
     <main className="library-page">
       <div className="page-heading">
         <p className="eyebrow">Full criteria matrix</p>
-        <h1>One policy. Six lenses.</h1>
+        <h1>Criteria matrix</h1>
         <p>Browse the August 2026 source criteria without running a patient scenario.</p>
       </div>
       <div className="filter-bar" aria-label="Filter criteria">
@@ -426,8 +418,8 @@ export default function App() {
       {tab === "medications" && <Medications />}
 
       <footer>
-        <div><strong>DSA GI Sedation Criteria</strong><span>Revised {POLICY_VERSION}</span></div>
-        <p>No PHI is collected, saved, or transmitted. Confirm all routes against current policy and clinical judgment.</p>
+        <div><strong>DSA GI · Trust Your Gut</strong><span>Sedation Criteria · Revised {POLICY_VERSION}</span></div>
+        <p>The DSA Way · No PHI is collected, saved, or transmitted. Confirm all routes against current policy and clinical judgment.</p>
       </footer>
     </div>
   );

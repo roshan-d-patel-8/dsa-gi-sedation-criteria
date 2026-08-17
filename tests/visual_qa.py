@@ -19,9 +19,15 @@ with sync_playwright() as playwright:
     desktop.on("console", lambda message: desktop_errors.append(message.text) if message.type == "error" else None)
     desktop.goto(BASE_URL)
     desktop.wait_for_load_state("networkidle")
+    assert desktop.get_by_role("button", name="Copy booking summary").count() == 0
     fill_basics(desktop, "EGD", "Other DSA GI site", 56)
     assert desktop.locator(".result-panel > h2").inner_text() == "Operating room"
+    assert desktop.evaluate("document.body.scrollHeight") < 2600
     desktop.screenshot(path=OUTPUT / "dsa-gi-sedation-desktop.png", full_page=True)
+
+    desktop.get_by_role("button", name="Criteria matrix").click()
+    assert desktop.get_by_role("heading", name="Criteria matrix", exact=True).is_visible()
+    assert desktop.get_by_text("One policy. Six lenses.").count() == 0
 
     desktop.get_by_role("button", name="Medication guide").click()
     assert desktop.get_by_text("Naltrexone timing, at a glance.").is_visible()

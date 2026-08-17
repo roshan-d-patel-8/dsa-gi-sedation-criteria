@@ -163,18 +163,3 @@ export function evaluateCriteria(state) {
     remimazolam,
   };
 }
-
-export function bookingSummary(state, result) {
-  if (!result.completedBasics) return "Complete procedure, site, and BMI before generating a routing summary.";
-  const procedure = state.procedure === "egd" ? "EGD" : state.procedure === "colonoscopy" ? "Colonoscopy" : "TURNS";
-  const lines = [
-    `${procedure} sedation routing support — ${result.label}.`,
-    result.reasons.length ? `Trigger(s): ${result.reasons.join("; ")}.` : "No listed escalation criterion identified from the supplied answers.",
-  ];
-  if (result.pleasantonExclusions.length) lines.push(`Pleasanton exclusion(s): ${result.pleasantonExclusions.join("; ")}.`);
-  if (result.advisories.length) lines.push(`Instructions: ${result.advisories.join("; ")}.`);
-  if (result.reviewFlags.length) lines.push(`Anesthesia review: ${result.reviewFlags.join("; ")}.`);
-  if (result.remimazolam.length) lines.push(`Remimazolam consideration(s): ${result.remimazolam.join("; ")}.`);
-  lines.push("Decision-support output only; confirm against current policy and clinical judgment.");
-  return lines.join("\n");
-}

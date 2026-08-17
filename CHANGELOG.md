@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.3.0 — 2026-08-16
+
+- Compressed the Navigator into a denser two-column clinical workstation to reduce scrolling.
+- Removed the copy-booking-summary control and its unused browser clipboard logic.
+- Simplified the Criteria Matrix heading.
+- Recolored and retyped the application using the DSA GI Aligned House brand system: Deep Navy, Pillar Blue, Band Blue, DSA Way Blue, Paper, Gut Pink, and the approved geometric sans stack.
+
 ## 0.2.0 — 2026-08-16
 
 - Added a dedicated GitHub Pages build-and-deployment workflow.
