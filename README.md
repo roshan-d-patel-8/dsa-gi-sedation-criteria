@@ -7,6 +7,10 @@ tags:
 
 An interactive, client-side navigator for the DSA GI Anesthesia Procedure Criteria revised August 2026.
 
+## Live site
+
+[Open DSA GI Sedation Criteria](https://roshan-d-patel-8.github.io/dsa-gi-sedation-criteria/)
+
 ## Purpose
 
 The site converts a dense policy into a transparent routing aid. It presents the highest applicable route while preserving every triggering criterion, preparation instruction, Pleasanton exclusion, unresolved ambiguity, and remimazolam consideration.
@@ -31,9 +35,9 @@ npm run build
 
 The application is static and has no backend, database, analytics, cookies, or persistent storage. Do not enter patient identifiers or PHI.
 
-## Publication boundary
+## Publication
 
-The repository should remain private until DSA GI confirms the intended audience and hosting access. Enabling a public website is a separate decision from creating the source repository.
+The source repository and GitHub Pages website are public by explicit authorization on 2026-08-16. The public site contains the criteria and navigator only; it does not collect or retain user input.
 
 ## Backlinks
 

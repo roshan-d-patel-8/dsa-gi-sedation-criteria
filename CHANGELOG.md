@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.2.0 — 2026-08-16
+
+- Added a dedicated GitHub Pages build-and-deployment workflow.
+- Authorized public website and source-repository access after explicit visibility approval.
+- Preserved the no-PHI, no-storage, and clinical-decision-support boundaries.
+
 ## 0.1.0 — 2026-08-16
 
 - Added the interactive Sedation Routing Rail.
