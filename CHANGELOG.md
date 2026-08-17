@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.4.1 — 2026-08-17
+
+- Repaired the Navigator step-card grid after the taller opioid comparison disrupted its compact tile rhythm.
+- Allowed Step 05 to span two layout tracks so Step 06 can rise beneath Step 04 and Steps 07–08 realign cleanly.
+- Preserved the original sequential single-column layout on mobile.
+- Added browser geometry assertions to prevent the desktop spacing regression from returning.
+
 ## 0.4.0 — 2026-08-17
 
 - Replaced the flat opioid selector with a two-lane visual contrast between lower-dose short-acting use and high-dose or long-acting use.

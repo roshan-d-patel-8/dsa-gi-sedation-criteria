@@ -26,6 +26,14 @@ with sync_playwright() as playwright:
     fill_basics(desktop, "EGD", "Other DSA GI site", 56)
     assert desktop.locator(".result-panel > h2").inner_text() == "Operating room"
     assert desktop.evaluate("document.body.scrollHeight") < 2600
+    step_04 = desktop.locator(".step-04").bounding_box()
+    step_05 = desktop.locator(".step-05").bounding_box()
+    step_06 = desktop.locator(".step-06").bounding_box()
+    step_07 = desktop.locator(".step-07").bounding_box()
+    step_08 = desktop.locator(".step-08").bounding_box()
+    assert abs(step_04["x"] - step_06["x"]) < 2
+    assert step_06["y"] < step_05["y"] + step_05["height"]
+    assert abs(step_07["y"] - step_08["y"]) < 2
     desktop.screenshot(path=OUTPUT / "dsa-gi-sedation-desktop.png", full_page=True)
 
     desktop.locator(".bmi-field input").fill("25")

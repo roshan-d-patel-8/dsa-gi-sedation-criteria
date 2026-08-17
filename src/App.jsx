@@ -282,7 +282,7 @@ function Navigator({ state, setState, result, onReset }) {
           </div>
         </section>
 
-        <section className="question-section reveal-3">
+        <section className="question-section step-02 reveal-3">
           <div className="section-number">02</div>
           <div className="section-body">
             <p className="eyebrow">Respiratory support</p>
@@ -304,7 +304,7 @@ function Navigator({ state, setState, result, onReset }) {
         </section>
 
         {clinicalGroups.slice(0, 2).map((group, groupIndex) => (
-          <section className="question-section" key={group.title}>
+          <section className={`question-section step-${String(groupIndex + 3).padStart(2, "0")}`} key={group.title}>
             <div className="section-number">{String(groupIndex + 3).padStart(2, "0")}</div>
             <div className="section-body">
               <p className="eyebrow">{group.eyebrow}</p>
@@ -325,7 +325,7 @@ function Navigator({ state, setState, result, onReset }) {
           </section>
         ))}
 
-        <section className="question-section">
+        <section className="question-section step-05">
           <div className="section-number">05</div>
           <div className="section-body">
             <p className="eyebrow">Medication & substances</p>
@@ -352,7 +352,7 @@ function Navigator({ state, setState, result, onReset }) {
         </section>
 
         {clinicalGroups.slice(2).map((group, index) => (
-          <section className="question-section" key={group.title}>
+          <section className={`question-section step-${String(index + 6).padStart(2, "0")}`} key={group.title}>
             <div className="section-number">{String(index + 6).padStart(2, "0")}</div>
             <div className="section-body">
               <p className="eyebrow">{group.eyebrow}</p>
@@ -364,7 +364,7 @@ function Navigator({ state, setState, result, onReset }) {
           </section>
         ))}
 
-        <section className="question-section">
+        <section className="question-section step-08">
           <div className="section-number">08</div>
           <div className="section-body">
             <p className="eyebrow">Renal & cognitive</p>
@@ -387,7 +387,7 @@ function Navigator({ state, setState, result, onReset }) {
         </section>
 
         {state.site === "pleasanton" && (
-          <section className="question-section pleasanton-section">
+          <section className="question-section pleasanton-section step-09">
             <div className="section-number">09</div>
             <div className="section-body">
               <p className="eyebrow">Location gate</p>
