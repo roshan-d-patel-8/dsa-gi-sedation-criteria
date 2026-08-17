@@ -99,14 +99,83 @@ function CheckCard({ checked, title, detail, onChange }) {
   );
 }
 
+function OpioidOption({ value, selected, label, detail, onChange }) {
+  return (
+    <label className={`opioid-option ${selected ? "selected" : ""}`}>
+      <input type="radio" name="Opioid use" value={value} checked={selected} onChange={() => onChange(value)} />
+      <span className="opioid-select-dot" aria-hidden="true" />
+      <span><strong>{label}</strong>{detail && <small>{detail}</small>}</span>
+    </label>
+  );
+}
+
+function OpioidSelector({ value, onChange }) {
+  const option = (optionValue, label, detail) => (
+    <OpioidOption value={optionValue} selected={value === optionValue} label={label} detail={detail} onChange={onChange} />
+  );
+
+  return (
+    <fieldset className="opioid-selector">
+      <legend>Opioid use</legend>
+      <div className="opioid-neutral">
+        {option("none", "None listed", "No opioid-related escalation")}
+      </div>
+      <div className="opioid-spectrum">
+        <section className="opioid-lane opioid-lane-moderate" aria-label="Moderate sedation lane">
+          <div className="lane-heading">
+            <span className="lane-icon" aria-hidden="true">✓</span>
+            <div><p>Moderate sedation</p><h3>Short-acting, lower-dose</h3></div>
+          </div>
+          <p className="lane-copy">Generally appropriate for moderate sedation</p>
+          {option("shortUnder4", "Norco / Percocet / Vicodin", "<4 tablets per day")}
+        </section>
+
+        <div className="spectrum-vs" aria-hidden="true">VS</div>
+
+        <section className="opioid-lane opioid-lane-heavy" aria-label="MAC and Remimazolam lane">
+          <div className="lane-heading">
+            <span className="lane-icon" aria-hidden="true">R</span>
+            <div><p>MAC + Remimazolam signal</p><h3>High-dose or long-acting</h3></div>
+          </div>
+          <p className="lane-copy">MAC criterion; may benefit from Remimazolam</p>
+          <div className="heavy-option-grid">
+            {option("msContin", "MS Contin")}
+            {option("dilaudid", "Oral Dilaudid")}
+            {option("fentanyl", "Fentanyl Patch")}
+            {option("opioidBenzo", "Opiate AND Benzo")}
+            {option("shortMore4", "Norco / Percocet / Vicodin", ">4 tablets per day")}
+          </div>
+        </section>
+      </div>
+      <div className="opioid-boundary">
+        <span><strong>Policy boundary</strong><small>Exactly 4 tabs/day is not defined—review rather than infer.</small></span>
+        {option("shortExactly4", "Exactly 4/day")}
+      </div>
+    </fieldset>
+  );
+}
+
 function CriteriaItem({ item }) {
   if (typeof item === "string") return <li>{item}</li>;
   return (
     <li>
       {item.text}
-      <ul className="criteria-details">
-        {item.details.map((detail) => <li key={detail}>{detail}</li>)}
-      </ul>
+      {item.contrast ? (
+        <div className="criteria-contrast">
+          {item.contrast.map((lane) => (
+            <section className={`criteria-lane criteria-lane-${lane.tone}`} key={lane.label}>
+              <p>{lane.label}</p>
+              <strong>{lane.title}</strong>
+              <ul>{lane.details.map((detail) => <li key={detail}>{detail}</li>)}</ul>
+            </section>
+          ))}
+          <p className="criteria-boundary"><strong>Boundary:</strong> {item.boundary}</p>
+        </div>
+      ) : (
+        <ul className="criteria-details">
+          {item.details.map((detail) => <li key={detail}>{detail}</li>)}
+        </ul>
+      )}
     </li>
   );
 }
@@ -261,23 +330,7 @@ function Navigator({ state, setState, result, onReset }) {
           <div className="section-body">
             <p className="eyebrow">Medication & substances</p>
             <h2>Sedation tolerance</h2>
-            <p className="field-guidance">MAC only for high-dose or long-acting narcotics: MS Contin, Oral Dilaudid, Fentanyl Patch, Opiate AND Benzo use, or Norco/Percocet/Vicodin &gt;4 tabs/day.</p>
-            <Segmented
-              label="Opioid use"
-              value={state.opioid}
-              columns={2}
-              options={[
-                { value: "none", label: "None listed" },
-                { value: "msContin", label: "MS Contin" },
-                { value: "dilaudid", label: "Oral Dilaudid" },
-                { value: "fentanyl", label: "Fentanyl patch" },
-                { value: "opioidBenzo", label: "Opioid + benzodiazepine" },
-                { value: "shortUnder4", label: "Norco/Percocet/Vicodin <4/day" },
-                { value: "shortExactly4", label: "Exactly 4/day" },
-                { value: "shortMore4", label: ">4/day" },
-              ]}
-              onChange={(value) => set("opioid", value)}
-            />
+            <OpioidSelector value={state.opioid} onChange={(value) => set("opioid", value)} />
             <Segmented
               label="Opioid antagonist"
               value={state.antagonist}

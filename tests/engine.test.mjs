@@ -64,6 +64,21 @@ test("exactly four short-acting opioid tablets is flagged, not guessed", () => {
   assert.ok(result.reviewFlags.some((item) => item.includes("exactly 4")));
 });
 
+test("short-acting opioid use below four tablets stays in the moderate-sedation lane", () => {
+  const result = evaluateCriteria(scenario({ opioid: "shortUnder4" }));
+  assert.equal(result.level, "none");
+  assert.equal(result.status, "ready");
+  assert.equal(result.remimazolam.length, 0);
+});
+
+test("heavy-hitter opioid choices trigger MAC and a Remimazolam consideration", () => {
+  for (const opioid of ["msContin", "dilaudid", "fentanyl", "opioidBenzo", "shortMore4"]) {
+    const result = evaluateCriteria(scenario({ opioid }));
+    assert.equal(result.level, "mac", opioid);
+    assert.ok(result.remimazolam.some((item) => item.includes("High-dose or long-acting")), opioid);
+  }
+});
+
 test("OR always adds POM instruction", () => {
   const result = evaluateCriteria(scenario({ severePulmonaryHypertension: true }));
   assert.equal(result.level, "or");

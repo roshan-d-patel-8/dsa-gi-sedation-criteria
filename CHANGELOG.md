@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.4.0 — 2026-08-17
+
+- Replaced the flat opioid selector with a two-lane visual contrast between lower-dose short-acting use and high-dose or long-acting use.
+- Added explicit Moderate Sedation and MAC + Remimazolam visual signals in both the Navigator and Criteria Matrix.
+- Preserved exactly four short-acting tablets per day as a separate policy-boundary review state.
+- Added routing tests for the moderate-sedation lane and all five heavy-hitter opioid choices.
+
 ## 0.3.1 — 2026-08-17
 
 - Restored the complete high-dose and long-acting narcotic MAC criteria in the Criteria Matrix.

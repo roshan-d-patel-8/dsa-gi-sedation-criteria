@@ -58,13 +58,21 @@ export const policySections = [
       "Severe OSA requiring CPAP/BiPAP for EGD; conscious sedation is listed for colonoscopy.",
       {
         text: "Chronic pain with high-dose narcotic dependence. MAC only if the patient is taking high-dose or long-acting narcotics:",
-        details: [
-          "MS Contin",
-          "Oral Dilaudid",
-          "Fentanyl Patch",
-          "Opiate AND Benzo use",
-          "Norco, Percocet, or Vicodin: MAC if using >4 tabs/day.",
+        contrast: [
+          {
+            tone: "moderate",
+            label: "Moderate sedation",
+            title: "Short-acting, lower-dose",
+            details: ["Norco, Percocet, or Vicodin <4 tabs/day is generally appropriate for moderate sedation."],
+          },
+          {
+            tone: "heavy",
+            label: "MAC + Remimazolam signal",
+            title: "High-dose or long-acting",
+            details: ["MS Contin", "Oral Dilaudid", "Fentanyl Patch", "Opiate AND Benzo use", "Norco, Percocet, or Vicodin >4 tabs/day"],
+          },
         ],
+        boundary: "Exactly 4 tabs/day is not defined in the supplied policy and requires review.",
       },
       "Opioid antagonist use, including naloxone, naltrexone, or buprenorphine/Suboxone.",
       "Heavy alcohol or drug use.",
