@@ -5,7 +5,7 @@ tags:
 
 # DSA GI Sedation Criteria
 
-A compact, tabbed DSA GI clinical-operations reference. The first tab contains the August 2026 anesthesia procedure criteria; the second maps MA and physician inbasket-coverage podlets.
+A compact, tabbed DSA GI clinical-operations reference. The first tab contains the August 2026 anesthesia procedure criteria; the second maps DSA GI MA–MD pod assignments.
 
 ## Live site
 
@@ -37,7 +37,7 @@ The application is static and has no clinical inputs, backend, database, analyti
 
 ## Publication
 
-The source repository and GitHub Pages website are public by explicit authorization on 2026-08-16. The MA and Inbasket Coverage Podlets roster, workday details, assignments, and physician portraits were separately authorized for public deployment on 2026-08-17.
+The source repository and GitHub Pages website are public by explicit authorization on 2026-08-16. The DSA GI MA-MD Podlets roster, workday details, assignments, and physician portraits were separately authorized for public deployment on 2026-08-17.
 
 ## Backlinks
 

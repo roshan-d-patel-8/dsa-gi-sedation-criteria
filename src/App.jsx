@@ -10,7 +10,7 @@ const columnLayout = [
 
 const tabs = [
   { id: "sedation", index: "01", label: "Procedure Sedation Criteria" },
-  { id: "coverage", index: "02", label: "MA and Inbasket Coverage Podlets" },
+  { id: "coverage", index: "02", label: "DSA GI MA-MD Podlets" },
 ];
 
 function CriteriaItem({ item }) {
@@ -195,7 +195,7 @@ function CoveragePodlets() {
       <header className="coverage-heading">
         <div>
           <p className="eyebrow">DSA GI clinical operations · MA–MD alignment · 2026 assignments</p>
-          <h1>MA and Inbasket<br />Coverage Podlets</h1>
+          <h1>DSA GI<br />MA-MD Podlets</h1>
         </div>
         <div className="coverage-key" aria-label="Coverage key">
           <span><i className="key-ma" />MA ownership</span>
@@ -253,7 +253,7 @@ export default function App() {
       </div>
 
       <footer>
-        <div><strong>DSA GI · Trust Your Gut</strong><span>{isSedation ? `Sedation Criteria · Revised ${POLICY_VERSION}` : "MA and Inbasket Coverage Podlets"}</span></div>
+        <div><strong>DSA GI · Trust Your Gut</strong><span>{isSedation ? `Sedation Criteria · Revised ${POLICY_VERSION}` : "DSA GI MA-MD Podlets"}</span></div>
         <p>The DSA Way · Physician-led, team-owned clinical operations.</p>
       </footer>
     </div>

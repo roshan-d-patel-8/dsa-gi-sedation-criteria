@@ -5,11 +5,15 @@ tags:
 
 # Changelog
 
+## 0.7.1 — 2026-08-17
+
+- Renamed the second tab and page to DSA GI MA-MD Podlets so the title matches the represented scope.
+
 ## 0.7.0 — 2026-08-17
 
 - Reframed the site as a file-folder interface with two clickable top tabs.
 - Preserved the Procedure Sedation Criteria matrix as tab 01.
-- Added MA and Inbasket Coverage Podlets as tab 02 with DRV and WCR pod cards.
+- Added DSA GI MA-MD Podlets as tab 02 with DRV and WCR pod cards.
 - Expanded screenshot abbreviations into vault-verified provider names.
 - Added 23 optimized local physician portraits and branded initial medallions for providers without vault portraits.
 - Labeled the podlet roster broadly as 2026 assignments and omitted the empty DRV Pod 4.

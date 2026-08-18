@@ -53,7 +53,7 @@ def capture_console_errors(page):
 def assert_tabs(page):
     assert page.get_by_role("tab").count() == 2
     assert page.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).is_visible()
-    assert page.get_by_role("tab", name="MA and Inbasket Coverage Podlets", exact=False).is_visible()
+    assert page.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).is_visible()
 
 
 def assert_sedation_reference(page):
@@ -67,7 +67,7 @@ def assert_sedation_reference(page):
 
 
 def assert_coverage_reference(page):
-    assert page.get_by_role("heading", name="MA and Inbasket Coverage Podlets", exact=True).is_visible()
+    assert page.get_by_role("heading", name="DSA GI MA-MD Podlets", exact=True).is_visible()
     assert page.get_by_text("2026 assignments", exact=False).is_visible()
     assert page.locator(".site-podlets").count() == 2
     assert page.locator(".pod-card").count() == 6
@@ -94,10 +94,10 @@ with sync_playwright() as playwright:
     assert desktop.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).get_attribute("aria-selected") == "true"
     desktop.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-sedation-desktop.png", full_page=True)
 
-    desktop.get_by_role("tab", name="MA and Inbasket Coverage Podlets", exact=False).click()
+    desktop.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).click()
     desktop.wait_for_timeout(700)
     assert_coverage_reference(desktop)
-    assert desktop.get_by_role("tab", name="MA and Inbasket Coverage Podlets", exact=False).get_attribute("aria-selected") == "true"
+    assert desktop.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).get_attribute("aria-selected") == "true"
     assert desktop.evaluate("document.body.scrollHeight") < 1900
     desktop.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-podlets-desktop.png", full_page=True)
 
@@ -106,7 +106,7 @@ with sync_playwright() as playwright:
     mobile.goto(BASE_URL)
     mobile.wait_for_load_state("networkidle")
     assert_tabs(mobile)
-    mobile.get_by_role("tab", name="MA and Inbasket Coverage Podlets", exact=False).click()
+    mobile.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).click()
     mobile.wait_for_timeout(700)
     assert_coverage_reference(mobile)
     assert mobile.locator(".pod-card").nth(0).get_by_text("Pod 01", exact=True).is_visible()
