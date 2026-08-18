@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.8.0 — 2026-08-17
+
+- Removed the redundant Coverage Rhythm footer from every pod.
+- Moved MA workday, float, and coverage details into hover and keyboard-focus tooltips on MA Responsible chips.
+- Kept coverage-only MAs within the MA Responsible block so every assignment remains visible while each panel uses less space.
+
 ## 0.7.1 — 2026-08-17
 
 - Renamed the second tab and page to DSA GI MA-MD Podlets so the title matches the represented scope.

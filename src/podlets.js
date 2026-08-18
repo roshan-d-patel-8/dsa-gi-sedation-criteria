@@ -30,7 +30,7 @@ export const coverageSites = [
           { name: "Kay Ozeki", photo: "kay-ozeki.webp" },
         ],
         schedule: [
-          { name: "Elizabeth", days: "Mon · Tue · Thu · Fri", note: "32 hours · off Wednesday" },
+          { name: "Elizabeth Sanchez", days: "Mon · Tue · Thu · Fri", note: "32 hours · off Wednesday" },
         ],
       },
       {

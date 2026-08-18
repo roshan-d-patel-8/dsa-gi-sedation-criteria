@@ -71,6 +71,9 @@ def assert_coverage_reference(page):
     assert page.get_by_text("2026 assignments", exact=False).is_visible()
     assert page.locator(".site-podlets").count() == 2
     assert page.locator(".pod-card").count() == 6
+    assert page.locator(".pod-schedule").count() == 0
+    assert page.locator(".ma-chip").count() == 11
+    assert page.locator(".ma-assignment > small").count() == 0
     assert page.get_by_text("Pod 04", exact=True).count() == 0
     assert page.locator(".provider-avatar img").count() == 23
     assert page.locator(".provider-initials").count() == 3
@@ -98,7 +101,21 @@ with sync_playwright() as playwright:
     desktop.wait_for_timeout(700)
     assert_coverage_reference(desktop)
     assert desktop.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).get_attribute("aria-selected") == "true"
-    assert desktop.evaluate("document.body.scrollHeight") < 1900
+    george = desktop.locator(".site-drv .pod-card").nth(0).locator(".ma-chip", has_text="George")
+    george.hover()
+    assert george.get_by_role("tooltip").is_visible()
+    assert "Float" in george.get_by_role("tooltip").inner_text()
+    assert "Mon PM" in george.get_by_role("tooltip").inner_text()
+    desktop.wait_for_timeout(200)
+    desktop.screenshot(path=OUTPUT / "dsa-gi-ma-coverage-tooltip.png", full_page=False)
+    desktop.get_by_role("heading", name="DSA GI MA-MD Podlets", exact=True).hover()
+
+    marissa = desktop.locator(".site-wcr .pod-card").nth(1).locator(".ma-chip", has_text="Marissa")
+    marissa.focus()
+    assert marissa.get_by_role("tooltip").is_visible()
+    assert "Coverage" in marissa.get_by_role("tooltip").inner_text()
+    assert desktop.evaluate("document.body.scrollHeight") < 1700
+    desktop.get_by_role("heading", name="DSA GI MA-MD Podlets", exact=True).focus()
     desktop.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-podlets-desktop.png", full_page=True)
 
     mobile = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
@@ -116,4 +133,4 @@ with sync_playwright() as playwright:
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: folder tabs, sedation reference, podlet rosters, portraits, and mobile layout.")
+print("Visual QA passed: folder tabs, compact podlets, MA coverage tooltips, portraits, and mobile layout.")

@@ -128,7 +128,26 @@ function Provider({ provider }) {
   );
 }
 
+function maCoverageDetails(item, coverageOnly) {
+  if (!item) return "";
+
+  return [item.label || (coverageOnly ? "Coverage" : "Assigned days"), item.days, item.note]
+    .filter(Boolean)
+    .join(" · ");
+}
+
 function PodCard({ pod, siteCode }) {
+  const maAssignments = [
+    ...pod.mas.map((name) => ({
+      name,
+      coverageOnly: false,
+      schedule: pod.schedule.find((item) => item.name === name),
+    })),
+    ...pod.schedule
+      .filter((item) => !pod.mas.includes(item.name))
+      .map((item) => ({ name: item.name, coverageOnly: true, schedule: item })),
+  ];
+
   return (
     <article className="pod-card" style={{ "--pod-delay": `${pod.number * 55}ms` }}>
       <header className="pod-header">
@@ -139,25 +158,28 @@ function PodCard({ pod, siteCode }) {
       <section className="ma-assignment">
         <p>MA responsible</p>
         <div className="ma-roster">
-          {pod.mas.map((ma) => <strong key={ma}>{ma}</strong>)}
+          {maAssignments.map((ma) => {
+            const details = maCoverageDetails(ma.schedule, ma.coverageOnly);
+            const tooltipId = `${siteCode}-pod-${pod.number}-${ma.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-coverage`;
+
+            return (
+              <span
+                className={`ma-chip${ma.coverageOnly ? " ma-chip-coverage" : ""}${details ? " has-tooltip" : ""}`}
+                tabIndex={details ? 0 : undefined}
+                aria-describedby={details ? tooltipId : undefined}
+                key={ma.name}
+              >
+                <strong>{ma.name}</strong>
+                {details && <span className="ma-tooltip" role="tooltip" id={tooltipId}>{details}</span>}
+              </span>
+            );
+          })}
         </div>
-        {pod.maNote && <small>{pod.maNote}</small>}
       </section>
 
       <section className="provider-panel">
         <div className="pod-section-label"><span>Physician panel</span><b>{pod.providers.length}</b></div>
         <ul>{pod.providers.map((provider) => <Provider provider={provider} key={provider.name} />)}</ul>
-      </section>
-
-      <section className="pod-schedule">
-        <p>Coverage rhythm</p>
-        {pod.schedule.map((item) => (
-          <div key={`${item.name}-${item.days}`}>
-            <span><strong>{item.name}</strong>{item.label && <small>{item.label}</small>}</span>
-            <b>{item.days}</b>
-            {item.note && <em>{item.note}</em>}
-          </div>
-        ))}
       </section>
     </article>
   );
