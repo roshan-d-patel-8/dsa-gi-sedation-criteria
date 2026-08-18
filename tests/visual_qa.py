@@ -14,6 +14,34 @@ CARD_HEADINGS = [
     "Remimazolam considerations",
     "Medication holds",
 ]
+PROVIDERS = [
+    "Suk Seo",
+    "Maureen Morgan",
+    "Dan Chung",
+    "Erina Foster",
+    "Courtney Gonzales",
+    "Arun Suryaprasad",
+    "Roshan Patel",
+    "Kay Ozeki",
+    "Patrick McKenzie",
+    "Simon Chan",
+    "Omar Al-Shuwaykh",
+    "Sabrina Han",
+    "Steve Cheng",
+    "Ahilan Arulanandan",
+    "Ed Ouyang",
+    "Kirsten Regalia",
+    "T.R. Levin",
+    "Liz Clark",
+    "Anish Patel",
+    "Tom Haddad",
+    "Aysha Aslam",
+    "Jay Garuda",
+    "Ying Wang",
+    "Jag Mathur",
+    "Sammy Tesfay",
+    "Mariel Bailey",
+]
 
 
 def capture_console_errors(page):
@@ -22,25 +50,36 @@ def capture_console_errors(page):
     return errors
 
 
-def assert_static_reference(page):
-    assert page.locator("button").count() == 0
-    assert page.locator("nav").count() == 0
+def assert_tabs(page):
+    assert page.get_by_role("tab").count() == 2
+    assert page.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).is_visible()
+    assert page.get_by_role("tab", name="MA and Inbasket Coverage Podlets", exact=False).is_visible()
+
+
+def assert_sedation_reference(page):
     assert page.locator("input, select, textarea").count() == 0
     assert page.locator(".criteria-card").count() == 7
     assert page.get_by_role("heading", name="Sedation criteria, at a glance.", exact=True).is_visible()
-    assert page.get_by_text("One-page clinical reference.", exact=False).count() == 0
     for heading in CARD_HEADINGS:
         assert page.get_by_role("heading", name=heading, exact=True).is_visible()
-
-    assert page.get_by_text("Discontinue 7 days before surgery and/or opioid administration.", exact=True).is_visible()
-    assert page.get_by_text("Stop 3 days before surgery.", exact=True).is_visible()
-    assert page.get_by_text("Stop 1 month before surgery.", exact=True).is_visible()
-    assert page.get_by_text("MS Contin", exact=True).is_visible()
-    assert page.get_by_text("Oral Dilaudid", exact=True).is_visible()
-    assert page.get_by_text("Fentanyl Patch", exact=True).is_visible()
-    assert page.get_by_text("Norco, Percocet, or Vicodin >4 tabs/day", exact=True).is_visible()
+    assert page.get_by_text("One-page clinical reference.", exact=False).count() == 0
     assert page.get_by_text("Boundary:", exact=True).count() == 0
-    assert page.get_by_text("Exactly 4 tabs/day is not defined in the supplied policy and requires review.", exact=True).count() == 0
+
+
+def assert_coverage_reference(page):
+    assert page.get_by_role("heading", name="MA and Inbasket Coverage Podlets", exact=True).is_visible()
+    assert page.get_by_text("2026 assignments", exact=False).is_visible()
+    assert page.locator(".site-podlets").count() == 2
+    assert page.locator(".pod-card").count() == 6
+    assert page.get_by_text("Pod 04", exact=True).count() == 0
+    assert page.locator(".provider-avatar img").count() == 23
+    assert page.locator(".provider-initials").count() == 3
+    for provider in PROVIDERS:
+        assert page.locator(".provider-panel").get_by_text(provider, exact=True).first.is_visible()
+    assert page.get_by_text("Anarosa Mejia", exact=False).is_visible()
+    assert page.get_by_text("Robbie Molden", exact=False).is_visible()
+    assert page.get_by_text("Megan Palsa", exact=False).is_visible()
+    assert page.evaluate("Array.from(document.images).every((image) => image.complete && image.naturalWidth > 0)")
 
 
 with sync_playwright() as playwright:
@@ -50,27 +89,31 @@ with sync_playwright() as playwright:
     desktop_errors = capture_console_errors(desktop)
     desktop.goto(BASE_URL)
     desktop.wait_for_load_state("networkidle")
-    assert_static_reference(desktop)
+    assert_tabs(desktop)
+    assert_sedation_reference(desktop)
+    assert desktop.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).get_attribute("aria-selected") == "true"
+    desktop.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-sedation-desktop.png", full_page=True)
+
+    desktop.get_by_role("tab", name="MA and Inbasket Coverage Podlets", exact=False).click()
     desktop.wait_for_timeout(700)
-    assert desktop.evaluate("document.body.scrollHeight") < 1800
-    desktop.screenshot(path=OUTPUT / "dsa-gi-sedation-reference-desktop.png", full_page=True)
+    assert_coverage_reference(desktop)
+    assert desktop.get_by_role("tab", name="MA and Inbasket Coverage Podlets", exact=False).get_attribute("aria-selected") == "true"
+    assert desktop.evaluate("document.body.scrollHeight") < 1900
+    desktop.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-podlets-desktop.png", full_page=True)
 
     mobile = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
     mobile_errors = capture_console_errors(mobile)
     mobile.goto(BASE_URL)
     mobile.wait_for_load_state("networkidle")
-    assert_static_reference(mobile)
+    assert_tabs(mobile)
+    mobile.get_by_role("tab", name="MA and Inbasket Coverage Podlets", exact=False).click()
     mobile.wait_for_timeout(700)
-
-    previous_y = -1
-    for heading in CARD_HEADINGS:
-        y_position = mobile.get_by_role("heading", name=heading, exact=True).bounding_box()["y"]
-        assert y_position > previous_y
-        previous_y = y_position
-    mobile.screenshot(path=OUTPUT / "dsa-gi-sedation-reference-mobile.png", full_page=True)
+    assert_coverage_reference(mobile)
+    assert mobile.locator(".pod-card").nth(0).get_by_text("Pod 01", exact=True).is_visible()
+    mobile.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-podlets-mobile.png", full_page=True)
 
     assert not desktop_errors, desktop_errors
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: static criteria matrix, integrated medication holds, and responsive order.")
+print("Visual QA passed: folder tabs, sedation reference, podlet rosters, portraits, and mobile layout.")
