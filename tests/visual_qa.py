@@ -38,6 +38,8 @@ def assert_static_reference(page):
     assert page.get_by_text("Oral Dilaudid", exact=True).is_visible()
     assert page.get_by_text("Fentanyl Patch", exact=True).is_visible()
     assert page.get_by_text("Norco, Percocet, or Vicodin >4 tabs/day", exact=True).is_visible()
+    assert page.get_by_text("Boundary:", exact=True).count() == 0
+    assert page.get_by_text("Exactly 4 tabs/day is not defined in the supplied policy and requires review.", exact=True).count() == 0
 
 
 with sync_playwright() as playwright:

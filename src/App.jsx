@@ -19,7 +19,6 @@ function CriteriaItem({ item }) {
             <ul>{lane.details.map((detail) => <li key={detail}>{detail}</li>)}</ul>
           </section>
         ))}
-        <p className="criteria-boundary"><strong>Boundary:</strong> {item.boundary}</p>
       </div>
     </li>
   );

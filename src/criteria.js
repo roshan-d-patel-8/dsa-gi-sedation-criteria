@@ -72,7 +72,6 @@ export const policySections = [
             details: ["MS Contin", "Oral Dilaudid", "Fentanyl Patch", "Opiate AND Benzo use", "Norco, Percocet, or Vicodin >4 tabs/day"],
           },
         ],
-        boundary: "Exactly 4 tabs/day is not defined in the supplied policy and requires review.",
       },
       "Opioid antagonist use, including naloxone, naltrexone, or buprenorphine/Suboxone.",
       "Heavy alcohol or drug use.",

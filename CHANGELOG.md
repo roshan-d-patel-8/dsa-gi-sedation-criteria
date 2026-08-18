@@ -5,6 +5,10 @@ tags:
 
 # Changelog
 
+## 0.6.1 — 2026-08-17
+
+- Removed the undefined exactly-four-tablets-per-day boundary callout from the MAC opioid comparison.
+
 ## 0.6.0 — 2026-08-17
 
 - Removed the interactive Navigator and all tab and filter buttons.
