@@ -76,7 +76,6 @@ function CriteriaMatrix() {
           <p className="eyebrow">DSA GI procedural sedation · Revised {POLICY_VERSION}</p>
           <h1>Sedation criteria, at a glance.</h1>
         </div>
-        <p>One-page clinical reference. The highest-acuity applicable criterion leads; confirm all decisions against current policy and clinical judgment.</p>
       </header>
 
       <div className="criteria-columns">

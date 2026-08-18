@@ -5,6 +5,10 @@ tags:
 
 # Changelog
 
+## 0.6.2 — 2026-08-17
+
+- Removed the explanatory sentence beside the criteria-matrix heading and collapsed the unused heading space.
+
 ## 0.6.1 — 2026-08-17
 
 - Removed the undefined exactly-four-tablets-per-day boundary callout from the MAC opioid comparison.

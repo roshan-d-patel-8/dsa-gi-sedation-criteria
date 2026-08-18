@@ -28,6 +28,7 @@ def assert_static_reference(page):
     assert page.locator("input, select, textarea").count() == 0
     assert page.locator(".criteria-card").count() == 7
     assert page.get_by_role("heading", name="Sedation criteria, at a glance.", exact=True).is_visible()
+    assert page.get_by_text("One-page clinical reference.", exact=False).count() == 0
     for heading in CARD_HEADINGS:
         assert page.get_by_role("heading", name=heading, exact=True).is_visible()
 
