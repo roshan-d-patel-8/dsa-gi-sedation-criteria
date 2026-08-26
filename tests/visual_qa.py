@@ -97,6 +97,25 @@ def assert_orientation_reference(page):
     assert page.get_by_text("WCR Door Codes: 6210", exact=True).count() == 0
     assert float(page.locator(".orientation-content").evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 14
     assert page.locator(".orientation-content > .orientation-list-grid > li").count() >= 4
+    first_list_paragraph = page.locator(".orientation-content li > p").first
+    assert first_list_paragraph.evaluate("element => getComputedStyle(element).display") == "inline"
+    assert first_list_paragraph.evaluate("element => getComputedStyle(element).marginTop") == "0px"
+    assert first_list_paragraph.evaluate("element => getComputedStyle(element).marginBottom") == "0px"
+
+
+def assert_all_orientation_sections_are_clean(page):
+    for index in range(page.locator(".orientation-subtab").count()):
+        page.locator(".orientation-subtab").nth(index).click()
+        assert page.locator(".orientation-content li > p").evaluate_all(
+            "elements => elements.every((element) => getComputedStyle(element).display === 'inline' && getComputedStyle(element).marginTop === '0px' && getComputedStyle(element).marginBottom === '0px')"
+        )
+        assert page.locator(".orientation-content p").evaluate_all(
+            """elements => elements.every((paragraph) => {
+              if (!/^\\s*[^:\\n]{1,90}:(?=\\s|$)/.test(paragraph.textContent)) return true;
+              const first = Array.from(paragraph.childNodes).find((node) => node.textContent.trim());
+              return first?.nodeType === Node.ELEMENT_NODE && ['STRONG', 'B'].includes(first.tagName);
+            })"""
+        )
 
 
 with sync_playwright() as playwright:
@@ -135,6 +154,7 @@ with sync_playwright() as playwright:
     desktop.get_by_role("tab", name="New Physician Orientation Materials", exact=False).click()
     desktop.wait_for_timeout(300)
     assert_orientation_reference(desktop)
+    assert_all_orientation_sections_are_clean(desktop)
     assert desktop.get_by_role("tab", name="New Physician Orientation Materials", exact=False).get_attribute("aria-selected") == "true"
     desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-desktop.png", full_page=False)
 
@@ -143,10 +163,26 @@ with sync_playwright() as playwright:
     assert desktop.get_by_text("WCR Door Codes: 6210", exact=True).is_visible()
     assert desktop.get_by_text("DSA GI PAs: Sabrina Han, Megan Palsa, Robbie Molden", exact=True).is_visible()
     assert desktop.locator(".orientation-card-sensitive").count() == 1
+    assert desktop.locator(".orientation-group-grid").count() == 1
+    assert desktop.locator(".orientation-site-group").count() == 3
+    assert desktop.get_by_role("heading", name="Walnut Creek", exact=True).is_visible()
+    assert desktop.get_by_role("heading", name="Deer Valley", exact=True).is_visible()
+    assert desktop.get_by_role("heading", name="Departmentwide & regional", exact=True).is_visible()
+    assert desktop.locator(".site-group-wcr").get_by_text("WCR Door Codes: 6210", exact=True).is_visible()
+    assert desktop.locator(".site-group-wcr").get_by_text("DRV Door Codes", exact=False).count() == 0
+    assert desktop.get_by_text("WCR Door Codes:", exact=True).evaluate("element => element.tagName") == "STRONG"
+    desktop.wait_for_timeout(350)
+    desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-people-grouped.png", full_page=False)
 
     people_tab.press("ArrowRight")
     assert desktop.get_by_role("tab", name="Contacts Phone and voicemail directory", exact=False).get_attribute("aria-selected") == "true"
     assert desktop.get_by_text("DSA General GI number (for patients): (925) 295-4080", exact=True).is_visible()
+    assert desktop.locator(".orientation-site-group").count() == 4
+    assert desktop.get_by_role("heading", name="Dublin", exact=True).is_visible()
+    assert desktop.locator(".site-group-dublin").get_by_text("James Patricio", exact=False).is_visible()
+    assert desktop.get_by_text("DSA General GI number (for patients):", exact=True).evaluate("element => element.tagName") == "STRONG"
+    desktop.wait_for_timeout(350)
+    desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-contacts-grouped.png", full_page=False)
 
     search = desktop.get_by_role("searchbox", name="Search the field guide")
     search.fill("QuikAction")

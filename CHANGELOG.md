@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.10.1 — 2026-08-26
+
+- Removed list-marker gaps by keeping bullets and numbered labels on the same line as their text at every nesting level.
+- Bolded colon-delimited labels at the start of orientation lines while preserving the supplied wording and links.
+- Grouped management roles and contact details into Walnut Creek, Deer Valley, Dublin, and departmentwide panels.
+- Added browser checks for list alignment, label emphasis, site grouping, and cross-site content separation.
+
 ## 0.10.0 — 2026-08-26
 
 - Replaced orientation quick-jump links and the long 11-section document stack with a true accessible sub-tab interface that displays one section at a time.

@@ -47,6 +47,85 @@ function sectionId(label) {
   return `orientation-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`;
 }
 
+const siteGroupDetails = {
+  wcr: { code: "WCR", name: "Walnut Creek" },
+  drv: { code: "DRV", name: "Deer Valley" },
+  dublin: { code: "DUB", name: "Dublin" },
+  departmentwide: { code: "DSA", name: "Departmentwide & regional" },
+};
+
+function emphasizeLeadingLabel(paragraph, doc) {
+  const firstContentNode = Array.from(paragraph.childNodes).find((node) => node.textContent.trim());
+  if (firstContentNode?.nodeType === Node.ELEMENT_NODE && firstContentNode.matches("strong, b")) return;
+
+  const match = paragraph.textContent.match(/^\s*([^:\n]{1,90}):(?=\s|$)/);
+  if (!match) return;
+
+  const range = doc.createRange();
+  range.setStart(paragraph, 0);
+  let remaining = match[0].length;
+  const walker = doc.createTreeWalker(paragraph, NodeFilter.SHOW_TEXT);
+  let textNode = walker.nextNode();
+
+  while (textNode) {
+    if (remaining <= textNode.data.length) {
+      range.setEnd(textNode, remaining);
+      const label = doc.createElement("strong");
+      label.className = "orientation-inline-label";
+      label.append(range.extractContents());
+      range.insertNode(label);
+      return;
+    }
+    remaining -= textNode.data.length;
+    textNode = walker.nextNode();
+  }
+}
+
+function siteBucket(text) {
+  const normalized = text.toUpperCase();
+  if (normalized.includes("DUBLIN") || /\bDUB\b/.test(normalized)) return "dublin";
+  if (normalized.includes("WALNUT CREEK") || /\bWCR\b/.test(normalized)) return "wcr";
+  if (normalized.includes("DEER VALLEY") || /\bDRV\b/.test(normalized)) return "drv";
+  return "departmentwide";
+}
+
+function groupDirectoryBySite(container, doc, sectionShort) {
+  if (!["People", "Contacts"].includes(sectionShort)) return;
+  const sourceList = Array.from(container.children).find((node) => node.matches("ul"));
+  if (!sourceList) return;
+
+  const buckets = new Map();
+  Array.from(sourceList.children).forEach((item) => {
+    const bucket = siteBucket(item.textContent);
+    if (!buckets.has(bucket)) buckets.set(bucket, []);
+    buckets.get(bucket).push(item);
+  });
+
+  const groupGrid = doc.createElement("div");
+  groupGrid.className = "orientation-group-grid";
+  ["wcr", "drv", "dublin", "departmentwide"].forEach((key) => {
+    const items = buckets.get(key);
+    if (!items?.length) return;
+
+    const details = siteGroupDetails[key];
+    const group = doc.createElement("section");
+    group.className = `orientation-site-group site-group-${key}`;
+    group.innerHTML = `
+      <header>
+        <span>${details.code}</span>
+        <div><h3>${details.name}</h3><small>${sectionShort === "People" ? "Roles, leadership and access" : "Direct lines and operational contacts"}</small></div>
+      </header>
+    `;
+    const list = doc.createElement("ul");
+    list.className = "orientation-site-list";
+    items.forEach((item) => list.append(item));
+    group.append(list);
+    groupGrid.append(group);
+  });
+
+  sourceList.replaceWith(groupGrid);
+}
+
 function parseOrientationSource(source) {
   const doc = new DOMParser().parseFromString(source, "text/html");
   doc.querySelectorAll("img").forEach((image) => image.closest("p")?.remove());
@@ -60,6 +139,9 @@ function parseOrientationSource(source) {
     const contentNodes = children.slice(start + 1, end).filter((node) => !/^_{8,}$/.test(node.textContent.trim()));
     const container = doc.createElement("div");
     contentNodes.forEach((node) => container.append(node.cloneNode(true)));
+    const meta = orientationSectionMeta[index];
+    container.querySelectorAll("p").forEach((paragraph) => emphasizeLeadingLabel(paragraph, doc));
+    groupDirectoryBySite(container, doc, meta.short);
     Array.from(container.children).forEach((node) => {
       if (node.matches("ol, ul")) node.classList.add("orientation-list-grid");
       if (node.matches("blockquote")) node.classList.add("orientation-callout");
@@ -69,7 +151,6 @@ function parseOrientationSource(source) {
         if (node.querySelector("em")) node.classList.add("orientation-callout");
       }
     });
-    const meta = orientationSectionMeta[index];
 
     return {
       ...meta,

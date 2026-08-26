@@ -389,13 +389,38 @@ body::before {
 .orientation-content > .orientation-list-grid > li { margin: 0; padding: 14px 17px; border: 1px solid color-mix(in srgb, var(--section-accent) 20%, var(--line)); border-left: 5px solid var(--section-accent); border-radius: 11px; background: linear-gradient(145deg, color-mix(in srgb, var(--section-tint) 72%, white), rgba(255, 255, 255, .94)); box-shadow: 0 5px 14px color-mix(in srgb, var(--section-accent) 7%, transparent); }
 .orientation-content > .orientation-list-grid > li::marker { color: var(--section-accent); font-weight: 950; }
 .orientation-content li { margin: 7px 0; }
+.orientation-content li > p:first-child { display: inline; margin: 0; }
+.orientation-content li > p + ol,
+.orientation-content li > p + ul { margin-top: 10px; }
 .orientation-content li li { padding: 3px 0; }
 .orientation-content li li::marker { color: var(--section-accent); }
 .orientation-content strong { color: var(--section-ink); }
+.orientation-content .orientation-inline-label { color: var(--section-ink); font-weight: 900; }
 .orientation-content a { color: var(--section-accent); font-size: inherit; }
 .orientation-content em { color: var(--section-ink); }
 .orientation-content u { text-decoration-color: var(--section-accent); }
 .orientation-content blockquote { background: var(--section-tint); border-left-color: var(--section-accent); }
+.orientation-group-grid { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.orientation-site-group {
+  --site-color: var(--section-accent);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--site-color) 27%, var(--line));
+  border-radius: 13px;
+  background: rgba(255, 255, 255, .94);
+  box-shadow: 0 7px 18px color-mix(in srgb, var(--site-color) 9%, transparent);
+}
+.orientation-site-group.site-group-wcr { --site-color: #1b75bb; }
+.orientation-site-group.site-group-drv { --site-color: #bd665c; }
+.orientation-site-group.site-group-dublin { --site-color: #3c8f82; }
+.orientation-site-group.site-group-departmentwide { --site-color: #8a5f9f; }
+.orientation-site-group > header { min-height: 68px; padding: 12px 14px; display: grid; grid-template-columns: 42px minmax(0, 1fr); align-items: center; gap: 11px; border-bottom: 1px solid color-mix(in srgb, var(--site-color) 22%, var(--line)); background: linear-gradient(115deg, color-mix(in srgb, var(--site-color) 13%, white), rgba(255, 255, 255, .94)); }
+.orientation-site-group > header > span { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 10px; background: var(--site-color); color: white; font-size: 10px; font-weight: 950; letter-spacing: .08em; }
+.orientation-site-group h3 { margin: 0; color: color-mix(in srgb, var(--site-color) 78%, var(--navy)); font-size: 18px; line-height: 1.12; letter-spacing: -.015em; }
+.orientation-site-group header small { display: block; margin-top: 3px; color: var(--muted); font-size: 9px; font-weight: 750; }
+.orientation-site-list { margin: 0 !important; padding: 0 !important; list-style: none; }
+.orientation-site-list > li { margin: 0; padding: 12px 15px; border-bottom: 1px solid color-mix(in srgb, var(--site-color) 12%, var(--line)); }
+.orientation-site-list > li:last-child { border-bottom: 0; }
+.orientation-site-list > li::before { width: 6px; height: 6px; margin: 0 9px 2px 0; display: inline-block; border-radius: 50%; background: var(--site-color); content: ""; }
 @keyframes orientation-panel-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
 footer { min-height: 78px; padding: 20px clamp(18px, 3.5vw, 52px); display: flex; justify-content: space-between; align-items: center; gap: 24px; background: var(--navy); color: var(--white); }
@@ -467,6 +492,7 @@ footer p { max-width: 600px; margin: 0; text-align: right; line-height: 1.4; }
   .orientation-content { padding: 15px; grid-template-columns: 1fr; gap: 10px; font-size: 14.25px; line-height: 1.62; }
   .orientation-content > .orientation-prose-block { padding: 13px 14px; }
   .orientation-content > .orientation-list-grid > li { padding: 13px 14px; }
+  .orientation-group-grid { grid-template-columns: 1fr; gap: 10px; }
   .orientation-content ol, .orientation-content ul { padding-left: 0; }
   .orientation-content li ol, .orientation-content li ul { padding-left: 19px; }
   .site-ribbon { grid-template-columns: 48px 1fr; padding: 11px 12px; }
