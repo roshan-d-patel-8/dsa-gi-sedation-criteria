@@ -88,13 +88,15 @@ def assert_coverage_reference(page):
 
 def assert_orientation_reference(page):
     assert page.get_by_role("heading", name="Your field guide to the first 90 days.", exact=True).is_visible()
-    assert page.locator(".orientation-card").count() == 11
-    assert page.locator(".orientation-card[open]").count() == 11
+    assert page.locator(".orientation-subtab").count() == 11
+    assert page.locator(".orientation-subtab[aria-selected='true']").count() == 1
+    assert page.locator(".orientation-card").count() == 1
+    assert page.locator("details.orientation-card").count() == 0
     assert page.locator(".orientation-content img").count() == 0
-    assert page.get_by_text("WCR Door Codes: 6210", exact=True).is_visible()
-    assert page.get_by_text("DSA GI PAs: Sabrina Han, Megan Palsa, Robbie Molden", exact=True).is_visible()
-    assert page.get_by_text("Please feel free to send any questions or concerns about performance issues to Dr. Gonzales", exact=False).is_visible()
-    assert page.locator(".orientation-card-sensitive").count() == 2
+    assert page.get_by_text("Call Schedule", exact=True).is_visible()
+    assert page.get_by_text("WCR Door Codes: 6210", exact=True).count() == 0
+    assert float(page.locator(".orientation-content").evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 14
+    assert page.locator(".orientation-content > .orientation-list-grid > li").count() >= 4
 
 
 with sync_playwright() as playwright:
@@ -136,19 +138,28 @@ with sync_playwright() as playwright:
     assert desktop.get_by_role("tab", name="New Physician Orientation Materials", exact=False).get_attribute("aria-selected") == "true"
     desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-desktop.png", full_page=False)
 
+    people_tab = desktop.get_by_role("tab", name="People Management staff and PAs", exact=False)
+    people_tab.click()
+    assert desktop.get_by_text("WCR Door Codes: 6210", exact=True).is_visible()
+    assert desktop.get_by_text("DSA GI PAs: Sabrina Han, Megan Palsa, Robbie Molden", exact=True).is_visible()
+    assert desktop.locator(".orientation-card-sensitive").count() == 1
+
+    people_tab.press("ArrowRight")
+    assert desktop.get_by_role("tab", name="Contacts Phone and voicemail directory", exact=False).get_attribute("aria-selected") == "true"
+    assert desktop.get_by_text("DSA General GI number (for patients): (925) 295-4080", exact=True).is_visible()
+
     search = desktop.get_by_role("searchbox", name="Search the field guide")
     search.fill("QuikAction")
+    desktop.wait_for_timeout(400)
+    assert desktop.locator(".orientation-subtab").count() == 1
     assert desktop.locator(".orientation-card").count() == 1
     assert desktop.locator(".orientation-card").get_by_text("MA-MD Partnership", exact=True).is_visible()
+    assert desktop.locator(".orientation-card").evaluate("element => getComputedStyle(element).getPropertyValue('--section-accent').trim()") == "#c65f82"
+    assert desktop.get_by_text("Please feel free to send any questions or concerns about performance issues to Dr. Gonzales", exact=False).is_visible()
     desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-search.png", full_page=False)
     desktop.get_by_role("button", name="Clear search").click()
-    assert desktop.locator(".orientation-card").count() == 11
-
-    first_orientation_summary = desktop.locator(".orientation-card").first.locator("summary")
-    first_orientation_summary.click()
-    assert desktop.locator(".orientation-card").first.get_attribute("open") is None
-    first_orientation_summary.click()
-    assert desktop.locator(".orientation-card").first.get_attribute("open") is not None
+    assert desktop.locator(".orientation-subtab").count() == 11
+    assert desktop.locator(".orientation-card").count() == 1
 
     mobile = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
     mobile_errors = capture_console_errors(mobile)
@@ -165,10 +176,11 @@ with sync_playwright() as playwright:
     mobile.wait_for_timeout(300)
     assert_orientation_reference(mobile)
     assert mobile.locator(".orientation-tools").is_visible()
+    assert mobile.locator(".orientation-subtabs").evaluate("element => element.scrollWidth > element.clientWidth")
     mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-mobile.png", full_page=False)
 
     assert not desktop_errors, desktop_errors
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: three folder tabs, orientation search/accordions, podlet tooltips, portraits, and mobile layout.")
+print("Visual QA passed: three folder tabs, orientation sub-tabs/cards/search, larger type, podlet tooltips, portraits, and mobile layout.")

@@ -5,7 +5,7 @@ tags:
 
 # DSA GI Sedation Criteria
 
-A compact, tabbed DSA GI clinical-operations reference. The first tab contains the August 2026 anesthesia procedure criteria; the second maps DSA GI MA–MD pod assignments; the third is a searchable New Physician Orientation field guide.
+A compact, tabbed DSA GI clinical-operations reference. The first tab contains the August 2026 anesthesia procedure criteria; the second maps DSA GI MA–MD pod assignments; the third is a searchable, sub-tabbed New Physician Orientation field guide.
 
 ## Live site
 
@@ -13,7 +13,7 @@ A compact, tabbed DSA GI clinical-operations reference. The first tab contains t
 
 ## Purpose
 
-The site converts dense operational material into scan-friendly references. The sedation tab preserves every criterion, preparation instruction, Pleasanton exclusion, remimazolam consideration, and POM medication hold. The coverage tab expands screenshot abbreviations into vault-verified provider names and pairs locally sourced physician portraits with each podlet. The orientation tab preserves the complete text of the supplied 2024 guide in 11 searchable, collapsible sections.
+The site converts dense operational material into scan-friendly references. The sedation tab preserves every criterion, preparation instruction, Pleasanton exclusion, remimazolam consideration, and POM medication hold. The coverage tab expands screenshot abbreviations into vault-verified provider names and pairs locally sourced physician portraits with each podlet. The orientation tab preserves the complete text of the supplied 2024 guide in 11 searchable sub-tabs, displaying one color-coded section at a time.
 
 It does not clear patients, replace clinician judgment, or independently validate the clinical policy.
 

@@ -5,6 +5,14 @@ tags:
 
 # Changelog
 
+## 0.10.0 — 2026-08-26
+
+- Replaced orientation quick-jump links and the long 11-section document stack with a true accessible sub-tab interface that displays one section at a time.
+- Increased orientation body copy from 11.5px to 15.25px on desktop and 14.25px on mobile.
+- Added six section-specific color systems and reformatted top-level lists, facts, warnings, and subheadings as colored cards and callouts.
+- Preserved guide-wide search by filtering the section tabs and automatically presenting the first matching section.
+- Added arrow, Home, and End keyboard navigation across the orientation sub-tabs.
+
 ## 0.9.0 — 2026-08-26
 
 - Added New Physician Orientation Materials as a third folder tab.

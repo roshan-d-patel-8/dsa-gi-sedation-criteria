@@ -30,17 +30,17 @@ const orientationSectionNames = [
 ];
 
 const orientationSectionMeta = [
-  { short: "Schedules", descriptor: "Call, vacation and meetings" },
-  { short: "Communication", descriptor: "Approved channels" },
-  { short: "People", descriptor: "Management staff and PAs", sensitive: true },
-  { short: "Contacts", descriptor: "Phone and voicemail directory", sensitive: true },
-  { short: "Services", descriptor: "Regional capabilities and referrals" },
-  { short: "Clinic", descriptor: "Visits, referrals and follow-up" },
-  { short: "Procedures", descriptor: "Appointment types and documentation" },
-  { short: "Orders", descriptor: "E-consult and E2K" },
-  { short: "OR workflow", descriptor: "Outpatient case booking" },
-  { short: "Ergonomics", descriptor: "Early-career evaluation" },
-  { short: "MA-MD", descriptor: "Partnership playbook" },
+  { short: "Schedules", descriptor: "Call, vacation and meetings", tone: "blue" },
+  { short: "Communication", descriptor: "Approved channels", tone: "aqua" },
+  { short: "People", descriptor: "Management staff and PAs", sensitive: true, tone: "pink" },
+  { short: "Contacts", descriptor: "Phone and voicemail directory", sensitive: true, tone: "coral" },
+  { short: "Services", descriptor: "Regional capabilities and referrals", tone: "teal" },
+  { short: "Clinic", descriptor: "Visits, referrals and follow-up", tone: "blue" },
+  { short: "Procedures", descriptor: "Appointment types and documentation", tone: "gold" },
+  { short: "Orders", descriptor: "E-consult and E2K", tone: "aqua" },
+  { short: "OR workflow", descriptor: "Outpatient case booking", tone: "coral" },
+  { short: "Ergonomics", descriptor: "Early-career evaluation", tone: "teal" },
+  { short: "MA-MD", descriptor: "Partnership playbook", tone: "pink" },
 ];
 
 function sectionId(label) {
@@ -60,6 +60,15 @@ function parseOrientationSource(source) {
     const contentNodes = children.slice(start + 1, end).filter((node) => !/^_{8,}$/.test(node.textContent.trim()));
     const container = doc.createElement("div");
     contentNodes.forEach((node) => container.append(node.cloneNode(true)));
+    Array.from(container.children).forEach((node) => {
+      if (node.matches("ol, ul")) node.classList.add("orientation-list-grid");
+      if (node.matches("blockquote")) node.classList.add("orientation-callout");
+      if (node.matches("p")) {
+        const onlyStrong = node.children.length === 1 && node.firstElementChild?.tagName === "STRONG";
+        node.classList.add(onlyStrong ? "orientation-subheading" : "orientation-prose-block");
+        if (node.querySelector("em")) node.classList.add("orientation-callout");
+      }
+    });
     const meta = orientationSectionMeta[index];
 
     return {
@@ -295,13 +304,24 @@ function CoveragePodlets() {
 function OrientationMaterials() {
   const sections = useMemo(() => parseOrientationSource(orientationSource), []);
   const [query, setQuery] = useState("");
+  const [activeSectionId, setActiveSectionId] = useState(sections[0]?.id);
   const normalizedQuery = query.trim().toLowerCase();
   const visibleSections = normalizedQuery
     ? sections.filter((section) => `${section.sourceLabel} ${section.descriptor} ${section.text}`.toLowerCase().includes(normalizedQuery))
     : sections;
+  const activeSection = visibleSections.find((section) => section.id === activeSectionId) || visibleSections[0];
 
-  function jumpTo(id) {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  function handleSectionKeyDown(event, currentIndex) {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    let nextIndex = currentIndex;
+    if (event.key === "ArrowLeft") nextIndex = (currentIndex - 1 + visibleSections.length) % visibleSections.length;
+    if (event.key === "ArrowRight") nextIndex = (currentIndex + 1) % visibleSections.length;
+    if (event.key === "Home") nextIndex = 0;
+    if (event.key === "End") nextIndex = visibleSections.length - 1;
+    const nextSection = visibleSections[nextIndex];
+    setActiveSectionId(nextSection.id);
+    requestAnimationFrame(() => document.getElementById(`${nextSection.id}-tab`)?.focus());
   }
 
   return (
@@ -315,7 +335,7 @@ function OrientationMaterials() {
         <div className="orientation-stats" aria-label="Orientation guide summary">
           <span><strong>{sections.length}</strong><small>reference sections</small></span>
           <span><strong>2024</strong><small>source edition</small></span>
-          <span><strong>Live</strong><small>search + quick jumps</small></span>
+          <span><strong>Live</strong><small>search + section tabs</small></span>
         </div>
       </header>
 
@@ -339,32 +359,50 @@ function OrientationMaterials() {
           </div>
         </label>
 
-        <nav className="orientation-jumps" aria-label="Jump to orientation section">
-          {sections.map((section, index) => (
-            <button type="button" onClick={() => jumpTo(section.id)} key={section.id}>
-              <span>{String(index + 1).padStart(2, "0")}</span>{section.short}
+        <nav className="orientation-subtabs" role="tablist" aria-label="Orientation sections">
+          {visibleSections.map((section, index) => (
+            <button
+              className={`orientation-subtab tone-${section.tone}${activeSection?.id === section.id ? " active" : ""}`}
+              id={`${section.id}-tab`}
+              type="button"
+              role="tab"
+              aria-selected={activeSection?.id === section.id}
+              aria-controls={`${section.id}-panel`}
+              tabIndex={activeSection?.id === section.id ? 0 : -1}
+              onClick={() => setActiveSectionId(section.id)}
+              onKeyDown={(event) => handleSectionKeyDown(event, index)}
+              key={section.id}
+            >
+              <span>{String(sections.indexOf(section) + 1).padStart(2, "0")}</span>
+              <strong>{section.short}</strong>
+              <small>{section.descriptor}</small>
             </button>
           ))}
         </nav>
       </section>
 
       <div className="orientation-results" aria-live="polite">
-        <span>{normalizedQuery ? `${visibleSections.length} of ${sections.length} sections match “${query.trim()}”` : "All orientation sections"}</span>
-        <small>Open any section to focus the guide.</small>
+        <span>{normalizedQuery ? `${visibleSections.length} of ${sections.length} section tabs match “${query.trim()}”` : "Choose a section tab to change the field below"}</span>
+        {activeSection && <small>Viewing {activeSection.sourceLabel}</small>}
       </div>
 
       <div className="orientation-sections">
-        {visibleSections.map((section, index) => (
-          <details className={`orientation-card${section.sensitive ? " orientation-card-sensitive" : ""}`} id={section.id} open key={section.id}>
-            <summary>
-              <span className="orientation-number">{String(sections.indexOf(section) + 1).padStart(2, "0")}</span>
-              <span><strong>{section.sourceLabel}</strong><small>{section.descriptor}</small></span>
-              {section.sensitive && <b>Internal details</b>}
-              <i aria-hidden="true" />
-            </summary>
-            <div className="orientation-content" dangerouslySetInnerHTML={{ __html: section.html }} />
-          </details>
-        ))}
+        {activeSection && (
+          <section
+            className={`orientation-card tone-${activeSection.tone}${activeSection.sensitive ? " orientation-card-sensitive" : ""}`}
+            id={`${activeSection.id}-panel`}
+            role="tabpanel"
+            aria-labelledby={`${activeSection.id}-tab`}
+            key={activeSection.id}
+          >
+            <header className="orientation-card-header">
+              <span className="orientation-number">{String(sections.indexOf(activeSection) + 1).padStart(2, "0")}</span>
+              <span><strong>{activeSection.sourceLabel}</strong><small>{activeSection.descriptor}</small></span>
+              {activeSection.sensitive && <b>Internal details</b>}
+            </header>
+            <div className="orientation-content" dangerouslySetInnerHTML={{ __html: activeSection.html }} />
+          </section>
+        )}
         {visibleSections.length === 0 && (
           <div className="orientation-empty">
             <span aria-hidden="true">0</span>
