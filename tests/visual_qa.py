@@ -3,7 +3,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 
-OUTPUT = Path("/Users/roshanpatel/.codex/visualizations/2026/08/17/01a00e0b-24f2-7521-b4c6-d94a41e34be5")
+OUTPUT = Path("/Users/roshanpatel/.codex/visualizations/2026/08/26/01a0400c-bddd-77a3-8ade-1e0e824ba005")
 BASE_URL = "http://127.0.0.1:5173"
 CARD_HEADINGS = [
     "Optiflow",
@@ -51,9 +51,10 @@ def capture_console_errors(page):
 
 
 def assert_tabs(page):
-    assert page.get_by_role("tab").count() == 2
+    assert page.get_by_role("tab").count() == 3
     assert page.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).is_visible()
     assert page.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).is_visible()
+    assert page.get_by_role("tab", name="New Physician Orientation Materials", exact=False).is_visible()
 
 
 def assert_sedation_reference(page):
@@ -83,6 +84,17 @@ def assert_coverage_reference(page):
     assert page.get_by_text("Robbie Molden", exact=False).is_visible()
     assert page.get_by_text("Megan Palsa", exact=False).is_visible()
     assert page.evaluate("Array.from(document.images).every((image) => image.complete && image.naturalWidth > 0)")
+
+
+def assert_orientation_reference(page):
+    assert page.get_by_role("heading", name="Your field guide to the first 90 days.", exact=True).is_visible()
+    assert page.locator(".orientation-card").count() == 11
+    assert page.locator(".orientation-card[open]").count() == 11
+    assert page.locator(".orientation-content img").count() == 0
+    assert page.get_by_text("WCR Door Codes: 6210", exact=True).is_visible()
+    assert page.get_by_text("DSA GI PAs: Sabrina Han, Megan Palsa, Robbie Molden", exact=True).is_visible()
+    assert page.get_by_text("Please feel free to send any questions or concerns about performance issues to Dr. Gonzales", exact=False).is_visible()
+    assert page.locator(".orientation-card-sensitive").count() == 2
 
 
 with sync_playwright() as playwright:
@@ -118,6 +130,26 @@ with sync_playwright() as playwright:
     desktop.get_by_role("heading", name="DSA GI MA-MD Podlets", exact=True).focus()
     desktop.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-podlets-desktop.png", full_page=True)
 
+    desktop.get_by_role("tab", name="New Physician Orientation Materials", exact=False).click()
+    desktop.wait_for_timeout(300)
+    assert_orientation_reference(desktop)
+    assert desktop.get_by_role("tab", name="New Physician Orientation Materials", exact=False).get_attribute("aria-selected") == "true"
+    desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-desktop.png", full_page=False)
+
+    search = desktop.get_by_role("searchbox", name="Search the field guide")
+    search.fill("QuikAction")
+    assert desktop.locator(".orientation-card").count() == 1
+    assert desktop.locator(".orientation-card").get_by_text("MA-MD Partnership", exact=True).is_visible()
+    desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-search.png", full_page=False)
+    desktop.get_by_role("button", name="Clear search").click()
+    assert desktop.locator(".orientation-card").count() == 11
+
+    first_orientation_summary = desktop.locator(".orientation-card").first.locator("summary")
+    first_orientation_summary.click()
+    assert desktop.locator(".orientation-card").first.get_attribute("open") is None
+    first_orientation_summary.click()
+    assert desktop.locator(".orientation-card").first.get_attribute("open") is not None
+
     mobile = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
     mobile_errors = capture_console_errors(mobile)
     mobile.goto(BASE_URL)
@@ -129,8 +161,14 @@ with sync_playwright() as playwright:
     assert mobile.locator(".pod-card").nth(0).get_by_text("Pod 01", exact=True).is_visible()
     mobile.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-podlets-mobile.png", full_page=True)
 
+    mobile.get_by_role("tab", name="New Physician Orientation Materials", exact=False).click()
+    mobile.wait_for_timeout(300)
+    assert_orientation_reference(mobile)
+    assert mobile.locator(".orientation-tools").is_visible()
+    mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-mobile.png", full_page=False)
+
     assert not desktop_errors, desktop_errors
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: folder tabs, compact podlets, MA coverage tooltips, portraits, and mobile layout.")
+print("Visual QA passed: three folder tabs, orientation search/accordions, podlet tooltips, portraits, and mobile layout.")

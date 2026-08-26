@@ -5,6 +5,14 @@ tags:
 
 # Changelog
 
+## 0.9.0 — 2026-08-26
+
+- Added New Physician Orientation Materials as a third folder tab.
+- Preserved the full supplied GI Orientation 2024 text across 11 collapsible reference sections.
+- Added guide search, section quick jumps, keyboard tab navigation, responsive layouts, and internal-detail markers.
+- Excluded two HealthConnect screenshots because they display patient names.
+- Published the complete text after explicit public-visibility authorization on 2026-08-26; the two HealthConnect screenshots remain excluded because they display patient names.
+
 ## 0.8.0 — 2026-08-17
 
 - Removed the redundant Coverage Rhythm footer from every pod.
