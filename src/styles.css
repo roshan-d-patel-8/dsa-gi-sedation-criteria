@@ -389,9 +389,9 @@ body::before {
 .orientation-content > .orientation-list-grid > li { margin: 0; padding: 14px 17px; border: 1px solid color-mix(in srgb, var(--section-accent) 20%, var(--line)); border-left: 5px solid var(--section-accent); border-radius: 11px; background: linear-gradient(145deg, color-mix(in srgb, var(--section-tint) 72%, white), rgba(255, 255, 255, .94)); box-shadow: 0 5px 14px color-mix(in srgb, var(--section-accent) 7%, transparent); }
 .orientation-content > .orientation-list-grid > li::marker { color: var(--section-accent); font-weight: 950; }
 .orientation-content li { margin: 7px 0; }
-.orientation-content li > p:first-child { display: inline; margin: 0; }
-.orientation-content li > p + ol,
-.orientation-content li > p + ul { margin-top: 10px; }
+.orientation-content li > .orientation-list-line { display: inline; margin: 0; }
+.orientation-content li > .orientation-list-line + ol,
+.orientation-content li > .orientation-list-line + ul { margin-top: 10px; }
 .orientation-content li li { padding: 3px 0; }
 .orientation-content li li::marker { color: var(--section-accent); }
 .orientation-content strong { color: var(--section-ink); }

@@ -97,19 +97,24 @@ def assert_orientation_reference(page):
     assert page.get_by_text("WCR Door Codes: 6210", exact=True).count() == 0
     assert float(page.locator(".orientation-content").evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 14
     assert page.locator(".orientation-content > .orientation-list-grid > li").count() >= 4
-    first_list_paragraph = page.locator(".orientation-content li > p").first
-    assert first_list_paragraph.evaluate("element => getComputedStyle(element).display") == "inline"
-    assert first_list_paragraph.evaluate("element => getComputedStyle(element).marginTop") == "0px"
-    assert first_list_paragraph.evaluate("element => getComputedStyle(element).marginBottom") == "0px"
+    assert page.locator(".orientation-content li > p").count() == 0
+    first_list_line = page.locator(".orientation-content li > .orientation-list-line").first
+    assert first_list_line.evaluate("element => getComputedStyle(element).display") == "inline"
+    assert first_list_line.evaluate("element => getComputedStyle(element).marginTop") == "0px"
+    assert first_list_line.evaluate("element => getComputedStyle(element).marginBottom") == "0px"
 
 
 def assert_all_orientation_sections_are_clean(page):
     for index in range(page.locator(".orientation-subtab").count()):
         page.locator(".orientation-subtab").nth(index).click()
-        assert page.locator(".orientation-content li > p").evaluate_all(
+        assert page.locator(".orientation-content li > p").count() == 0
+        assert page.locator(".orientation-content li").evaluate_all(
+            "elements => elements.every((element) => element.firstElementChild?.classList.contains('orientation-list-line'))"
+        )
+        assert page.locator(".orientation-content li > .orientation-list-line").evaluate_all(
             "elements => elements.every((element) => getComputedStyle(element).display === 'inline' && getComputedStyle(element).marginTop === '0px' && getComputedStyle(element).marginBottom === '0px')"
         )
-        assert page.locator(".orientation-content p").evaluate_all(
+        assert page.locator(".orientation-content p, .orientation-content .orientation-list-line").evaluate_all(
             """elements => elements.every((paragraph) => {
               if (!/^\\s*[^:\\n]{1,90}:(?=\\s|$)/.test(paragraph.textContent)) return true;
               const first = Array.from(paragraph.childNodes).find((node) => node.textContent.trim());

@@ -81,6 +81,15 @@ function emphasizeLeadingLabel(paragraph, doc) {
   }
 }
 
+function normalizeListItemLines(container, doc) {
+  container.querySelectorAll("li > p:first-child").forEach((paragraph) => {
+    const line = doc.createElement("span");
+    line.className = "orientation-list-line";
+    while (paragraph.firstChild) line.append(paragraph.firstChild);
+    paragraph.replaceWith(line);
+  });
+}
+
 function siteBucket(text) {
   const normalized = text.toUpperCase();
   if (normalized.includes("DUBLIN") || /\bDUB\b/.test(normalized)) return "dublin";
@@ -141,6 +150,7 @@ function parseOrientationSource(source) {
     contentNodes.forEach((node) => container.append(node.cloneNode(true)));
     const meta = orientationSectionMeta[index];
     container.querySelectorAll("p").forEach((paragraph) => emphasizeLeadingLabel(paragraph, doc));
+    normalizeListItemLines(container, doc);
     groupDirectoryBySite(container, doc, meta.short);
     Array.from(container.children).forEach((node) => {
       if (node.matches("ol, ul")) node.classList.add("orientation-list-grid");

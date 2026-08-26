@@ -5,6 +5,11 @@ tags:
 
 # Changelog
 
+## 0.10.2 — 2026-08-26
+
+- Replaced every paragraph wrapper inside orientation list items with a true inline text span so markers and first-line text share one browser-independent line box.
+- Expanded browser QA across all 11 orientation sections to reject any remaining list-item paragraph wrappers.
+
 ## 0.10.1 — 2026-08-26
 
 - Removed list-marker gaps by keeping bullets and numbered labels on the same line as their text at every nesting level.
