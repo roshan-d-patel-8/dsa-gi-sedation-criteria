@@ -27,8 +27,9 @@ This file preserves the policy text supplied for implementation. The application
 - Heavy alcohol or drug use.
 - Excessive pain/anxiety or prior intolerance to moderate sedation.
 - History of sexual/physical trauma.
-- ESRD on HD: arrive 2 hours early for potassium check.
-- ESRD on peritoneal dialysis: arrive 2 hours early for antibiotics and potassium check.
+- ESRD on HD: arrive 2 hours early.
+- ESRD on peritoneal dialysis: book at Antioch only, not Walnut Creek; arrive 2 hours early for antibiotics.
+- All ESRD patients on HD or peritoneal dialysis require a STAT potassium order.
 
 ## Criteria for MAC with POM clinic
 

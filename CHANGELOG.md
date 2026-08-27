@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.10.4 — 2026-08-27
+
+- Clarified the MAC ESRD criterion: peritoneal-dialysis cases must be booked at Antioch only, not Walnut Creek.
+- Added the requirement for a STAT potassium order for every hemodialysis and peritoneal-dialysis patient.
+- Updated the preserved policy source, routing advisories, and regression checks together.
+
 ## 0.10.3 — 2026-08-27
 
 - Added the black “next review date February 2027” label to the upper-right of the Procedure Sedation Criteria header.

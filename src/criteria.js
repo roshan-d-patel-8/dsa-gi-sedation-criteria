@@ -77,7 +77,7 @@ export const policySections = [
       "Heavy alcohol or drug use.",
       "Excessive pain/anxiety or prior intolerance to moderate sedation.",
       "History of sexual or physical trauma.",
-      "ESRD on hemodialysis or peritoneal dialysis, with two-hour early-arrival instructions.",
+      "ESRD on hemodialysis or peritoneal dialysis: arrive two hours early. Peritoneal-dialysis cases must be booked at Antioch only—not Walnut Creek. All hemodialysis and peritoneal-dialysis patients require a STAT potassium order.",
     ],
   },
   {

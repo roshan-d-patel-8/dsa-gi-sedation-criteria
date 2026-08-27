@@ -60,9 +60,11 @@ test("dialysis produces MAC and correct preparation instructions", () => {
   const hd = evaluateCriteria(scenario({ dialysis: "hd" }));
   const pd = evaluateCriteria(scenario({ dialysis: "pd" }));
   assert.equal(hd.level, "mac");
-  assert.ok(hd.advisories.some((item) => item.includes("potassium")));
+  assert.ok(hd.advisories.some((item) => item.includes("STAT potassium order")));
   assert.equal(pd.level, "mac");
   assert.ok(pd.advisories.some((item) => item.includes("antibiotics")));
+  assert.ok(pd.advisories.some((item) => item.includes("Antioch only") && item.includes("not Walnut Creek")));
+  assert.ok(pd.advisories.some((item) => item.includes("STAT potassium order")));
 });
 
 test("Pleasanton exclusion does not silently alter sedation level", () => {

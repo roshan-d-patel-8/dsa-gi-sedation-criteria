@@ -69,6 +69,8 @@ def assert_sedation_reference(page):
         assert page.get_by_role("heading", name=heading, exact=True).is_visible()
     assert page.get_by_text("One-page clinical reference.", exact=False).count() == 0
     assert page.get_by_text("Boundary:", exact=True).count() == 0
+    assert page.get_by_text("Peritoneal-dialysis cases must be booked at Antioch only—not Walnut Creek.", exact=False).is_visible()
+    assert page.get_by_text("All hemodialysis and peritoneal-dialysis patients require a STAT potassium order.", exact=False).is_visible()
 
 
 def assert_coverage_reference(page):

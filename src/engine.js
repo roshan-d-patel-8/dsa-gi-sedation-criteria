@@ -127,11 +127,11 @@ export function evaluateCriteria(state) {
 
   if (state.dialysis === "hd") {
     elevate("mac", "ESRD on hemodialysis");
-    addUnique(advisories, "Arrive 2 hours early for potassium check");
+    addUnique(advisories, "Arrive 2 hours early; a STAT potassium order is required");
   }
   if (state.dialysis === "pd") {
     elevate("mac", "ESRD on peritoneal dialysis");
-    addUnique(advisories, "Arrive 2 hours early for antibiotics and potassium check");
+    addUnique(advisories, "Book at Antioch only, not Walnut Creek; arrive 2 hours early for antibiotics; a STAT potassium order is required");
   }
   if (state.dialysis !== "none" && state.site === "pleasanton") addUnique(pleasantonExclusions, "Dialysis or renal failure");
   if (state.dialysis !== "none" && state.chf !== "none") addUnique(reviewFlags, "Combined CHF and ESRD may warrant OR; individualized anesthesia input is advised");
