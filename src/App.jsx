@@ -238,10 +238,11 @@ function CriteriaMatrix() {
   return (
     <main className="reference-page" id="sedation-panel" role="tabpanel" aria-labelledby="sedation-tab">
       <header className="reference-heading">
-        <div>
+        <div className="reference-meta-row">
           <p className="eyebrow">DSA GI procedural sedation · Revised {POLICY_VERSION}</p>
-          <h1>Sedation criteria, at a glance.</h1>
+          <p className="reference-review-date">next review date February 2027</p>
         </div>
+        <h1>Sedation criteria, at a glance.</h1>
       </header>
 
       <div className="criteria-columns">

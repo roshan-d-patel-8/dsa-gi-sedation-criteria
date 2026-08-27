@@ -61,6 +61,10 @@ def assert_sedation_reference(page):
     assert page.locator("input, select, textarea").count() == 0
     assert page.locator(".criteria-card").count() == 7
     assert page.get_by_role("heading", name="Sedation criteria, at a glance.", exact=True).is_visible()
+    review_date = page.get_by_text("next review date February 2027", exact=True)
+    assert review_date.is_visible()
+    assert review_date.evaluate("element => getComputedStyle(element).color") == "rgb(0, 0, 0)"
+    assert abs(review_date.bounding_box()["x"] + review_date.bounding_box()["width"] - page.locator(".reference-heading").bounding_box()["x"] - page.locator(".reference-heading").bounding_box()["width"]) < 2
     for heading in CARD_HEADINGS:
         assert page.get_by_role("heading", name=heading, exact=True).is_visible()
     assert page.get_by_text("One-page clinical reference.", exact=False).count() == 0
@@ -207,6 +211,8 @@ with sync_playwright() as playwright:
     mobile.goto(BASE_URL)
     mobile.wait_for_load_state("networkidle")
     assert_tabs(mobile)
+    assert_sedation_reference(mobile)
+    mobile.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-sedation-mobile.png", full_page=False)
     mobile.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).click()
     mobile.wait_for_timeout(700)
     assert_coverage_reference(mobile)

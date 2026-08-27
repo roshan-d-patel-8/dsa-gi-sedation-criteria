@@ -5,6 +5,10 @@ tags:
 
 # Changelog
 
+## 0.10.3 — 2026-08-27
+
+- Added the black “next review date February 2027” label to the upper-right of the Procedure Sedation Criteria header.
+
 ## 0.10.2 — 2026-08-26
 
 - Replaced every paragraph wrapper inside orientation list items with a true inline text span so markers and first-line text share one browser-independent line box.

@@ -116,8 +116,11 @@ body::before {
 /* Procedure sedation tab */
 .reference-page { width: min(1480px, 100%); margin: 0 auto; padding: clamp(22px, 3vw, 40px) clamp(16px, 3.5vw, 52px) clamp(28px, 4vw, 54px); }
 .reference-heading { margin-bottom: 20px; }
+.reference-meta-row { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; }
+.reference-meta-row .eyebrow { margin-bottom: 0; }
+.reference-review-date { margin: 0; color: #000; font-size: 13px; font-weight: 800; line-height: 1.2; text-align: right; white-space: nowrap; }
 .eyebrow, .card-kicker { margin: 0 0 6px; color: var(--way); font-size: 9px; line-height: 1.2; font-weight: 900; letter-spacing: .15em; text-transform: uppercase; }
-.reference-heading h1 { margin: 0; color: var(--navy); font-size: clamp(34px, 4vw, 54px); line-height: .98; letter-spacing: -.035em; }
+.reference-heading h1 { margin: 6px 0 0; color: var(--navy); font-size: clamp(34px, 4vw, 54px); line-height: .98; letter-spacing: -.035em; }
 
 .criteria-columns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: start; }
 .criteria-column { min-width: 0; display: flex; flex-direction: column; gap: 12px; }
@@ -464,6 +467,7 @@ footer p { max-width: 600px; margin: 0; text-align: right; line-height: 1.4; }
   .folder-tab > strong { font-size: 11px; }
   .reference-page, .coverage-page, .orientation-page { padding: 18px 12px 28px; }
   .reference-heading { margin-bottom: 14px; }
+  .reference-review-date { font-size: 11px; }
   .reference-heading h1, .coverage-heading h1 { font-size: 36px; }
   .criteria-columns, .pod-grid { grid-template-columns: 1fr; gap: 10px; }
   .criteria-card { padding: 16px 16px 17px; border-radius: 13px; }
