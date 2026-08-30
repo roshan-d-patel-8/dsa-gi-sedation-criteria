@@ -424,11 +424,6 @@ function OrientationMaterials() {
           <h1>Your field guide<br />to the first 90 days.</h1>
           <p className="orientation-lede">A searchable, section-by-section reference for schedules, clinical workflows, people and partnership practices.</p>
         </div>
-        <div className="orientation-stats" aria-label="Orientation guide summary">
-          <span><strong>{sections.length}</strong><small>reference sections</small></span>
-          <span><strong>2024</strong><small>source edition</small></span>
-          <span><strong>Live</strong><small>search + section tabs</small></span>
-        </div>
       </header>
 
       <aside className="orientation-notice">

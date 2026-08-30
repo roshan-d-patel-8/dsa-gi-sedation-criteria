@@ -229,14 +229,9 @@ body::before {
 
 /* New physician orientation tab */
 .orientation-page { width: min(1480px, 100%); margin: 0 auto; padding: clamp(24px, 3vw, 42px) clamp(16px, 3.5vw, 52px) clamp(34px, 4vw, 60px); }
-.orientation-heading { display: grid; grid-template-columns: minmax(0, 1fr) max-content; align-items: end; gap: 42px; margin-bottom: 22px; }
+.orientation-heading { margin-bottom: 22px; }
 .orientation-heading h1 { margin: 0; color: var(--navy); font-size: clamp(38px, 4.5vw, 64px); line-height: .92; letter-spacing: -.045em; }
 .orientation-lede { max-width: 710px; margin: 17px 0 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
-.orientation-stats { display: grid; grid-template-columns: repeat(3, minmax(82px, 1fr)); overflow: hidden; border: 1px solid var(--line); border-radius: 15px; background: rgba(255, 255, 255, .82); box-shadow: var(--shadow); }
-.orientation-stats span { min-height: 86px; padding: 15px 14px; display: grid; align-content: center; border-left: 1px solid var(--line); }
-.orientation-stats span:first-child { border-left: 0; }
-.orientation-stats strong { color: var(--navy); font-size: 22px; letter-spacing: -.03em; }
-.orientation-stats small { margin-top: 3px; color: var(--muted); font-size: 7px; font-weight: 900; letter-spacing: .09em; text-transform: uppercase; }
 .orientation-notice { margin-bottom: 14px; padding: 11px 14px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(217, 164, 65, .38); border-radius: 12px; background: linear-gradient(100deg, rgba(217, 164, 65, .14), rgba(255, 255, 255, .72)); }
 .orientation-notice > span { padding: 5px 7px; border-radius: 6px; background: var(--gold); color: #fff; font-size: 7px; font-weight: 950; letter-spacing: .12em; }
 .orientation-notice p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.45; }
@@ -441,8 +436,6 @@ footer p { max-width: 600px; margin: 0; text-align: right; line-height: 1.4; }
   .folder-tab:nth-child(2) { min-width: 310px; }
   .folder-tab:nth-child(3) { min-width: 338px; }
   .coverage-heading { align-items: start; }
-  .orientation-heading { grid-template-columns: 1fr; align-items: start; gap: 20px; }
-  .orientation-stats { width: min(440px, 100%); }
   .orientation-tools { top: 130px; grid-template-columns: 1fr; }
   .orientation-subtabs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
@@ -478,9 +471,6 @@ footer p { max-width: 600px; margin: 0; text-align: right; line-height: 1.4; }
   .orientation-heading h1 { font-size: 39px; }
   .orientation-heading { gap: 16px; margin-bottom: 16px; }
   .orientation-lede { margin-top: 12px; font-size: 13.5px; }
-  .orientation-stats { grid-template-columns: repeat(3, 1fr); }
-  .orientation-stats span { min-height: 72px; padding: 11px 9px; }
-  .orientation-stats strong { font-size: 18px; }
   .orientation-notice { align-items: start; }
   .orientation-notice p { font-size: 11.5px; }
   .orientation-tools { top: 110px; padding: 9px; }

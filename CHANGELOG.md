@@ -5,6 +5,10 @@ tags:
 
 # Changelog
 
+## 0.11.1 — 2026-08-29
+
+- Removed the orientation header stat strip (reference-section count / source edition / live search) and its styles; the heading column now spans full width.
+
 ## 0.11.0 — 2026-08-29
 
 - Renamed the site from "DSA GI Sedation Criteria" to "DSA GI Resources" — browser-tab title, header brand ("DSA GI · Resources"), meta description, and README. The name now reflects all three tabs rather than the sedation tab alone. The repository slug and public URL are unchanged so existing links keep working.
