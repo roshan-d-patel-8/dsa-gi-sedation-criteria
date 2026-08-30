@@ -5,6 +5,10 @@ tags:
 
 # Changelog
 
+## 0.12.3 — 2026-08-29
+
+- Expanded the KPATHS facility-directory access note: reachable from a KP device on site or via GlobalProtect offsite.
+
 ## 0.12.2 — 2026-08-29
 
 - Updated the orientation tab eyebrow's source-material year from "GI Orientation 2024" to "GI Orientation 2026".
