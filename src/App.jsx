@@ -548,7 +548,7 @@ export default function App() {
     <div className={`app-shell active-${activeTab}`}>
       <header className="site-header">
         <div className="brand" aria-label="DSA GI Resources">
-          <span className="brand-mark"><i /><i /><i /></span>
+          <img className="brand-mark" src={`${import.meta.env.BASE_URL}dsa-gi-logo.png`} alt="DSA GI logo" />
           <span><strong>DSA GI</strong><small>Resources</small></span>
         </div>
         <FolderTabs activeTab={activeTab} onChange={setActiveTab} />

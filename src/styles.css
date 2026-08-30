@@ -58,10 +58,7 @@ body::before {
 .brand > span:last-child { display: grid; line-height: 1.08; }
 .brand strong { font-size: 12px; letter-spacing: .13em; }
 .brand small { color: var(--muted); font-size: 14px; font-weight: 650; }
-.brand-mark { width: 36px; height: 36px; border-radius: 10px; background: var(--navy); display: flex; align-items: end; gap: 3px; padding: 8px; transform: rotate(-2deg); }
-.brand-mark i { flex: 1; height: 55%; border-radius: 3px 3px 1px 1px; background: var(--pillar); }
-.brand-mark i:nth-child(2) { height: 82%; background: var(--way); }
-.brand-mark i:nth-child(3) { height: 38%; background: var(--white); }
+.brand-mark { width: 36px; height: 36px; border-radius: 10px; object-fit: cover; transform: rotate(-2deg); box-shadow: 0 0 0 1px rgba(31, 68, 100, .18); }
 
 .folder-tabs {
   min-width: 0;
