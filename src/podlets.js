@@ -40,7 +40,7 @@ export const coverageSites = [
         providers: [
           { name: "Patrick McKenzie", photo: "patrick-mckenzie.webp" },
           { name: "Simon Chan", photo: "simon-chan.webp" },
-          { name: "Omar Al-Shuwaykh", initials: "OA", tag: "New" },
+          { name: "Omar Al-Shuwaykh", photo: "omar-al-shuwaykh.webp", tag: "New" },
           { name: "Sabrina Han", initials: "SH", role: "PA" },
         ],
         schedule: [

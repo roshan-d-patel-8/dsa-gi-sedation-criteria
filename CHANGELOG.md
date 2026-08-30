@@ -5,6 +5,10 @@ tags:
 
 # Changelog
 
+## 0.10.5 — 2026-08-29
+
+- Added Omar Al-Shuwaykh's portrait to the Deer Valley Pod 3 roster (144×173 webp from his vault contact-card photo), replacing the "OA" initials avatar. The "New" tag is unchanged.
+
 ## 0.10.4 — 2026-08-27
 
 - Clarified the MAC ESRD criterion: peritoneal-dialysis cases must be booked at Antioch only, not Walnut Creek.
