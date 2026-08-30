@@ -420,7 +420,7 @@ function OrientationMaterials() {
     <main className="orientation-page" id="orientation-panel" role="tabpanel" aria-labelledby="orientation-tab">
       <header className="orientation-heading">
         <div>
-          <p className="eyebrow">DSA GI ORIENTATION · Physician onboarding · Source material: GI Orientation 2024</p>
+          <p className="eyebrow">DSA GI ORIENTATION · Physician onboarding · Source material: GI Orientation 2026</p>
           <h1>Your field guide<br />to the first 90 days.</h1>
           <p className="orientation-lede">A searchable, section-by-section reference for schedules, clinical workflows, people and partnership practices.</p>
         </div>

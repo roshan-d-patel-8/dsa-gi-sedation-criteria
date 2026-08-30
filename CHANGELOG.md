@@ -5,6 +5,10 @@ tags:
 
 # Changelog
 
+## 0.12.2 — 2026-08-29
+
+- Updated the orientation tab eyebrow's source-material year from "GI Orientation 2024" to "GI Orientation 2026".
+
 ## 0.12.1 — 2026-08-29
 
 - Added the KPATHS Facility Information directory link in parentheses directly under the "Helpful Phone Numbers" heading in orientation Section 4 (Contacts), noted as accessible only from a KP device.
