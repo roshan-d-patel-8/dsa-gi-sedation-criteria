@@ -5,6 +5,10 @@ tags:
 
 # Changelog
 
+## 0.12.1 — 2026-08-29
+
+- Added the KPATHS Facility Information directory link in parentheses directly under the "Helpful Phone Numbers" heading in orientation Section 4 (Contacts), noted as accessible only from a KP device.
+
 ## 0.12.0 — 2026-08-29
 
 - Replaced the top-left brand mark (the three-bar CSS glyph) with the official DSA GI "Trust Your Gut" logo, served as `public/dsa-gi-logo.png` (180×180, downscaled from the Propaganda master). The mark keeps its 36px rounded frame and −2° tilt, with a subtle navy ring instead of the solid navy background.
