@@ -552,9 +552,9 @@ export default function App() {
   return (
     <div className={`app-shell active-${activeTab}`}>
       <header className="site-header">
-        <div className="brand" aria-label="DSA GI Clinical Operations">
+        <div className="brand" aria-label="DSA GI Resources">
           <span className="brand-mark"><i /><i /><i /></span>
-          <span><strong>DSA GI</strong><small>Clinical Operations</small></span>
+          <span><strong>DSA GI</strong><small>Resources</small></span>
         </div>
         <FolderTabs activeTab={activeTab} onChange={setActiveTab} />
       </header>

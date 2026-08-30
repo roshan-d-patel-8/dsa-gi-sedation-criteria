@@ -3,13 +3,13 @@ tags:
   - ClaudeAI
 ---
 
-# DSA GI Sedation Criteria
+# DSA GI Resources
 
 A compact, tabbed DSA GI clinical-operations reference. The first tab contains the August 2026 anesthesia procedure criteria; the second maps DSA GI MA–MD pod assignments; the third is a searchable, sub-tabbed New Physician Orientation field guide.
 
 ## Live site
 
-[Open DSA GI Sedation Criteria](https://roshan-d-patel-8.github.io/dsa-gi-sedation-criteria/)
+[Open DSA GI Resources](https://roshan-d-patel-8.github.io/dsa-gi-sedation-criteria/)
 
 ## Purpose
 

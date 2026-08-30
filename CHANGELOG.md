@@ -5,6 +5,10 @@ tags:
 
 # Changelog
 
+## 0.11.0 — 2026-08-29
+
+- Renamed the site from "DSA GI Sedation Criteria" to "DSA GI Resources" — browser-tab title, header brand ("DSA GI · Resources"), meta description, and README. The name now reflects all three tabs rather than the sedation tab alone. The repository slug and public URL are unchanged so existing links keep working.
+
 ## 0.10.5 — 2026-08-29
 
 - Added Omar Al-Shuwaykh's portrait to the Deer Valley Pod 3 roster (144×173 webp from his vault contact-card photo), replacing the "OA" initials avatar. The "New" tag is unchanged.
