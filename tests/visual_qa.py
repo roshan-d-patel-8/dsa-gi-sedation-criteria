@@ -65,12 +65,15 @@ def assert_home(page):
     assert page.locator(".countdown-card").count() == 7
     assert page.get_by_text("Sheikah Slate", exact=False).count() == 0
     assert page.locator(".countdown-strip").get_by_text("Tom Haddad — last on-site day", exact=True).is_visible()
+    assert page.locator(".countdown-strip").get_by_text("Thu · Sep 17, 2026", exact=True).is_visible()
     assert page.locator(".countdown-strip").get_by_text("E2K — GI go-live", exact=True).is_visible()
     assert page.locator(".countdown-card time").count() == 7
     assert page.get_by_role("heading", name="Rest of 2026", exact=True).is_visible()
     assert page.get_by_role("grid", name="September 2026", exact=True).is_visible()
     assert page.locator(".calendar-weekday").count() == 7
     assert page.locator(".calendar-day:not(.calendar-day-empty)").count() == 30
+    assert page.get_by_role("gridcell", name="September 2026 17: Tom Haddad — last on-site day", exact=True).is_visible()
+    assert page.get_by_role("gridcell", name="September 2026 18", exact=True).is_visible()
     assert page.get_by_role("button", name="Previous month", exact=True).is_disabled()
     assert page.get_by_role("button", name="Next month", exact=True).is_enabled()
 

@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.14.2 — 2026-09-09
+
+- Corrected Tom Haddad's last on-site day from Friday, September 18 to Thursday, September 17, 2026.
+- Moved the corresponding Home countdown and September calendar marker to the corrected date.
+- Added browser checks confirming the milestone appears on September 17 and no longer appears on September 18.
+
 ## 0.14.1 — 2026-09-09
 
 - Removed the complete orientation hero/banner area, including the oversized field-guide heading, description, and operational-reference strip.

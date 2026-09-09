@@ -17,7 +17,7 @@ const tabs = [
 ];
 
 const countdowns = [
-  { label: "Tom Haddad — last on-site day", date: "2026-09-18", displayDate: "Fri · Sep 18, 2026" },
+  { label: "Tom Haddad — last on-site day", date: "2026-09-17", displayDate: "Thu · Sep 17, 2026" },
   { label: "Aysha Aslam — first day", date: "2026-09-28", displayDate: "Mon · Sep 28, 2026" },
   { label: "Dublin — closure / last booking day", date: "2026-10-02", displayDate: "Fri · Oct 2, 2026", tone: "gold" },
   { label: "NorCal in-person TPIP — Oakland", date: "2026-10-17", displayDate: "Sat · Oct 17, 2026" },
