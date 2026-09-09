@@ -79,6 +79,10 @@ def assert_home(page):
     assert page.get_by_label("Happy Birthday, Sammy Tesfay!", exact=True).is_visible()
     assert page.get_by_label("Happy Birthday, Ahilan Arulanandan!", exact=True).is_visible()
     assert page.get_by_label("Happy Birthday, Tom Haddad!", exact=True).is_visible()
+    farewell = page.get_by_label("Tom's Farewell Happy Hour, Thu · Sep 10, 2026, Barebottle Brewing Co. · Walnut Creek Taproom & Kitchen", exact=True)
+    assert farewell.is_visible()
+    assert page.locator(".calendar-social-marker").count() == 1
+    assert page.get_by_role("gridcell", name="September 2026 10: Tom's Farewell Happy Hour", exact=True).is_visible()
     assert float(page.locator(".calendar-controls strong").evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 24
     assert float(page.locator(".calendar-weekday").first.evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 10
     assert float(page.locator(".calendar-day > time").first.evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 13
@@ -264,6 +268,16 @@ with sync_playwright() as playwright:
     assert birthday_tooltip.locator("img").evaluate("image => image.complete && image.naturalWidth > 0")
     desktop.screenshot(path=OUTPUT / "dsa-gi-calendar-birthday-desktop.png", full_page=False)
     desktop.locator(".year-calendar").focus()
+    farewell = desktop.get_by_label("Tom's Farewell Happy Hour, Thu · Sep 10, 2026, Barebottle Brewing Co. · Walnut Creek Taproom & Kitchen", exact=True)
+    farewell.hover()
+    desktop.wait_for_timeout(200)
+    farewell_tooltip = farewell.get_by_role("tooltip")
+    assert farewell_tooltip.is_visible()
+    assert farewell_tooltip.get_by_text("Tom's Farewell Happy Hour", exact=True).is_visible()
+    assert farewell_tooltip.get_by_text("Barebottle Brewing Co. · Walnut Creek Taproom & Kitchen", exact=True).is_visible()
+    assert farewell_tooltip.locator("img").evaluate("image => image.decode().then(() => image.naturalWidth == 1672 && image.naturalHeight == 941)")
+    desktop.screenshot(path=OUTPUT / "dsa-gi-calendar-tom-farewell-desktop.png", full_page=False)
+    desktop.locator(".year-calendar").focus()
     tom_event = desktop.locator(".calendar-event-marker").first
     assert float(tom_event.evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 12
     tom_event.focus()
@@ -390,6 +404,13 @@ with sync_playwright() as playwright:
     assert mobile_birthday.get_by_role("tooltip").locator("img").evaluate("image => image.complete && image.naturalWidth > 0")
     mobile.screenshot(path=OUTPUT / "dsa-gi-calendar-birthday-mobile.png", full_page=False)
     mobile.locator(".year-calendar").focus()
+    mobile_farewell = mobile.get_by_label("Tom's Farewell Happy Hour, Thu · Sep 10, 2026, Barebottle Brewing Co. · Walnut Creek Taproom & Kitchen", exact=True)
+    mobile_farewell.focus()
+    mobile.wait_for_timeout(200)
+    assert mobile_farewell.get_by_role("tooltip").is_visible()
+    assert mobile_farewell.get_by_role("tooltip").locator("img").evaluate("image => image.complete && image.naturalWidth == 1672")
+    mobile.screenshot(path=OUTPUT / "dsa-gi-calendar-tom-farewell-mobile.png", full_page=False)
+    mobile.locator(".year-calendar").focus()
     mobile_event = mobile.locator(".calendar-event-marker").first
     mobile_event.focus()
     mobile.wait_for_timeout(200)
@@ -429,4 +450,4 @@ with sync_playwright() as playwright:
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: Home countdowns, September–December GI birthdays, four folder tabs, 12-section field guide including Choosing Wisely with expandable infographic, nested People foldouts, Skills Day video, podlet tooltips, portraits, and mobile layout.")
+print("Visual QA passed: Home countdowns, September–December GI birthdays, Tom farewell cocktail event, four folder tabs, 12-section field guide including Choosing Wisely with expandable infographic, nested People foldouts, Skills Day video, podlet tooltips, portraits, and mobile layout.")

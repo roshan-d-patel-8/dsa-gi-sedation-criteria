@@ -169,6 +169,25 @@ body::before {
 .birthday-tooltip small { color: #f8d9e4; font-size: 9px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
 .birthday-tooltip strong { color: var(--white); font-size: 15px; line-height: 1.25; letter-spacing: -.01em; }
 .birthday-marker:hover .birthday-tooltip, .birthday-marker:focus .birthday-tooltip { visibility: visible; opacity: 1; transform: none; }
+.calendar-social-cluster { position: absolute; z-index: 7; right: 7px; bottom: 7px; }
+.calendar-social-cluster:has(.calendar-social-marker:hover), .calendar-social-cluster:has(.calendar-social-marker:focus) { z-index: 90; }
+.calendar-social-marker { position: relative; width: 41px; height: 41px; display: grid; place-items: center; border: 1px solid rgba(219, 142, 36, .42); border-radius: 13px; background: linear-gradient(145deg, #fff7df, #ffe0a1); box-shadow: 0 6px 14px rgba(109, 62, 15, .14); cursor: help; transition: transform .18s ease, box-shadow .18s ease; }
+.calendar-social-marker:hover { transform: translateY(-2px) rotate(2deg); box-shadow: 0 9px 20px rgba(109, 62, 15, .2); }
+.calendar-social-marker:focus-visible { outline: 3px solid rgba(219, 142, 36, .34); outline-offset: 2px; }
+.cocktail-icon { width: 31px; height: 31px; overflow: visible; }
+.cocktail-glass { fill: #fff9ed; stroke: #174f7d; stroke-width: 1.4; stroke-linejoin: round; }
+.cocktail-drink { fill: #e89d25; }
+.cocktail-straw { fill: none; stroke: #c84f36; stroke-width: 2.1; stroke-linecap: round; }
+.cocktail-garnish { fill: #f1bd45; stroke: #b96824; stroke-width: 1.1; }
+.calendar-social-tooltip { position: absolute; z-index: 45; width: min(370px, calc(100vw - 48px)); right: -3px; bottom: calc(100% + 10px); display: grid; visibility: hidden; overflow: hidden; border: 1px solid rgba(255, 188, 73, .35); border-radius: 14px; background: #0c2946; color: white; box-shadow: 0 18px 40px rgba(7, 28, 49, .34); opacity: 0; pointer-events: none; transform: translateY(6px) scale(.985); transform-origin: bottom right; transition: opacity .16s ease, transform .16s ease, visibility .16s; }
+.calendar-social-tooltip::after { position: absolute; width: 12px; height: 12px; right: 15px; bottom: -6px; background: #0c2946; content: ""; transform: rotate(45deg); }
+.calendar-social-tooltip > img { width: 100%; display: block; aspect-ratio: 1672 / 941; object-fit: cover; }
+.calendar-social-tooltip > span { padding: 13px 15px 15px; display: grid; gap: 4px; text-align: left; }
+.calendar-social-tooltip small { color: #f3b847; font-size: 8px; font-weight: 950; letter-spacing: .11em; text-transform: uppercase; }
+.calendar-social-tooltip strong { color: white; font-size: 17px; line-height: 1.2; }
+.calendar-social-tooltip time { color: #ffe0a1; font-size: 12px; font-weight: 850; }
+.calendar-social-tooltip em { color: rgba(255, 255, 255, .72); font-size: 11px; font-style: normal; font-weight: 700; line-height: 1.35; }
+.calendar-social-marker:hover .calendar-social-tooltip, .calendar-social-marker:focus .calendar-social-tooltip { visibility: visible; opacity: 1; transform: none; }
 .calendar-event-marker { --event-accent: var(--way); position: relative; margin-top: 9px; padding-left: 13px; display: block; color: var(--navy); font-size: 12px; font-weight: 850; line-height: 1.28; cursor: help; }
 .calendar-event-marker::before { position: absolute; width: 7px; height: 7px; top: .35em; left: 0; border-radius: 50%; background: var(--event-accent); content: ""; }
 .calendar-event-marker.tone-gold { --event-accent: var(--gold); }
@@ -619,6 +638,14 @@ footer p { max-width: 600px; margin: 0; text-align: right; line-height: 1.4; }
   .birthday-tooltip small { font-size: 10px; }
   .birthday-tooltip strong { font-size: 16px; }
   .calendar-grid:has(.birthday-marker:focus) .birthday-marker:not(:focus) { opacity: 0; }
+  .calendar-social-cluster { right: 4px; bottom: 4px; }
+  .calendar-social-marker { width: 29px; height: 29px; border-radius: 9px; cursor: pointer; }
+  .cocktail-icon { width: 24px; height: 24px; }
+  .calendar-social-tooltip { position: fixed; width: auto; max-height: calc(100vh - 40px); left: 16px; right: 16px; bottom: 20px; overflow: auto; transform-origin: bottom center; }
+  .calendar-social-tooltip::after { display: none; }
+  .calendar-social-tooltip strong { font-size: 16px; }
+  .calendar-social-tooltip time { font-size: 13px; }
+  .calendar-grid:has(.calendar-social-marker:focus) :is(.birthday-marker, .calendar-event-marker) { opacity: 0; }
   .calendar-event-marker { position: absolute; width: 27px; height: 27px; left: 4px; bottom: 4px; margin: 0; padding: 0; display: grid; place-items: center; border-radius: 50%; cursor: pointer; }
   .calendar-event-marker::before { position: static; width: 10px; height: 10px; }
   .calendar-event-label { display: none; }

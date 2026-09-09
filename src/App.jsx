@@ -27,6 +27,16 @@ const countdowns = [
   { label: "E2K — GI go-live", date: "2026-11-18", displayDate: "Wed · Nov 18, 2026 · confirmed", tone: "way" },
 ];
 
+const socialEvents = [
+  {
+    label: "Tom's Farewell Happy Hour",
+    date: "2026-09-10",
+    displayDate: "Thu · Sep 10, 2026",
+    venue: "Barebottle Brewing Co. · Walnut Creek Taproom & Kitchen",
+    image: "toms-farewell-happy-hour-2026-09-10.png",
+  },
+];
+
 function pacificToday() {
   const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: "America/Los_Angeles",
@@ -66,6 +76,17 @@ function BirthdayCupcakeIcon() {
   );
 }
 
+function CocktailIcon() {
+  return (
+    <svg className="cocktail-icon" viewBox="0 0 44 44" aria-hidden="true">
+      <path className="cocktail-glass" d="M7.5 8.2h29L23.8 23.8v10.5h7.1v3.2H13.2v-3.2h7.1V23.8L7.5 8.2Z" />
+      <path className="cocktail-drink" d="M12.3 12.2h19.4l-4.4 5.4H16.7l-4.4-5.4Z" />
+      <path className="cocktail-straw" d="m27.7 18.1 6.6-11.3" />
+      <circle className="cocktail-garnish" cx="32.9" cy="9.1" r="3.8" />
+    </svg>
+  );
+}
+
 const calendarMonths = [8, 9, 10, 11];
 const weekdayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -79,6 +100,7 @@ function Calendar2026() {
   const cellCount = Math.ceil((leadingDays + daysInMonth) / 7) * 7;
   const monthEvents = countdowns.filter(({ date }) => Number(date.slice(5, 7)) - 1 === monthIndex);
   const monthBirthdays = birthdayEvents.filter(({ date }) => Number(date.slice(5, 7)) - 1 === monthIndex);
+  const monthSocialEvents = socialEvents.filter(({ date }) => Number(date.slice(5, 7)) - 1 === monthIndex);
 
   function moveMonth(direction) {
     setMonthPosition((position) => Math.min(calendarMonths.length - 1, Math.max(0, position + direction)));
@@ -112,12 +134,14 @@ function Calendar2026() {
           const date = `2026-${String(monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
           const events = monthEvents.filter((item) => item.date === date);
           const birthdays = monthBirthdays.filter((item) => item.date === date);
+          const socials = monthSocialEvents.filter((item) => item.date === date);
           const dayDetails = [
             ...events.map((event) => event.label),
+            ...socials.map((event) => event.label),
             ...birthdays.map((birthday) => `${birthday.name} birthday`),
           ];
           return (
-            <div className={`calendar-day${events.length ? " has-event" : ""}${birthdays.length ? " has-birthday" : ""}`} role="gridcell" aria-label={`${monthLabel} ${day}${dayDetails.length ? `: ${dayDetails.join(", ")}` : ""}`} key={date}>
+            <div className={`calendar-day${events.length ? " has-event" : ""}${socials.length ? " has-social-event" : ""}${birthdays.length ? " has-birthday" : ""}`} role="gridcell" aria-label={`${monthLabel} ${day}${dayDetails.length ? `: ${dayDetails.join(", ")}` : ""}`} key={date}>
               <time dateTime={date}>{day}</time>
               {birthdays.length > 0 && (
                 <span className="calendar-birthday-cluster">
@@ -137,6 +161,33 @@ function Calendar2026() {
                           <span>
                             <small>Celebrate a colleague</small>
                             <strong>Happy Birthday, {birthday.name}!</strong>
+                          </span>
+                        </span>
+                      </span>
+                    );
+                  })}
+                </span>
+              )}
+              {socials.length > 0 && (
+                <span className="calendar-social-cluster">
+                  {socials.map((event, eventIndex) => {
+                    const tooltipId = `social-event-${date}-${eventIndex}`;
+                    return (
+                      <span
+                        className="calendar-social-marker"
+                        tabIndex="0"
+                        aria-label={`${event.label}, ${event.displayDate}, ${event.venue}`}
+                        aria-describedby={tooltipId}
+                        key={event.label}
+                      >
+                        <CocktailIcon />
+                        <span className="calendar-social-tooltip" id={tooltipId} role="tooltip">
+                          <img src={`${import.meta.env.BASE_URL}${event.image}`} alt="" loading="lazy" />
+                          <span>
+                            <small>Raise a glass for Tom</small>
+                            <strong>{event.label}</strong>
+                            <time dateTime={event.date}>{event.displayDate}</time>
+                            <em>{event.venue}</em>
                           </span>
                         </span>
                       </span>

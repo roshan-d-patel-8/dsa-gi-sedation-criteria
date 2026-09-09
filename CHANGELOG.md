@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.20.0 — 2026-09-09
+
+- Added a dedicated cocktail marker to September 10 for Tom's Farewell Happy Hour without adding the social event to the countdown strip.
+- Added an image-rich hover, keyboard-focus, and tap card using the supplied farewell artwork, date, Barebottle Brewing Co., and Walnut Creek Taproom & Kitchen details.
+- Added desktop/mobile browser checks for the calendar date, cocktail marker, full event text, source-artwork dimensions, and responsive tooltip behavior.
+
 ## 0.19.0 — 2026-09-09
 
 - Added the January–July 2026 Choosing Wisely graduation infographic as a proportional thumbnail in the Choosing Wisely panel header.
