@@ -131,7 +131,9 @@ def assert_coverage_reference(page):
 
 
 def assert_orientation_reference(page):
-    assert page.get_by_role("heading", name="Your field guide to the first 90 days.", exact=True).is_visible()
+    assert page.get_by_role("heading", name="New Physician Orientation Materials", exact=True).count() == 1
+    assert page.get_by_text("Your field guide to the first 90 days.", exact=True).count() == 0
+    assert page.locator(".orientation-heading, .orientation-notice").count() == 0
     assert page.locator(".orientation-subtab").count() == 11
     assert page.locator(".orientation-subtab[aria-selected='true']").count() == 1
     assert page.locator(".orientation-card").count() == 1
@@ -142,6 +144,11 @@ def assert_orientation_reference(page):
     assert float(page.locator(".orientation-content").evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 14
     assert page.locator(".orientation-content > .orientation-list-grid > li").count() >= 4
     assert page.locator(".orientation-content li > p").count() == 0
+    first_subtab = page.locator(".orientation-subtab").first
+    assert float(first_subtab.locator("strong").evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 14
+    assert float(first_subtab.locator("small").evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 10
+    assert float(first_subtab.locator("span").evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 10
+    assert float(first_subtab.evaluate("element => getComputedStyle(element).minHeight.replace('px', '')")) >= 78
     first_list_line = page.locator(".orientation-content li > .orientation-list-line").first
     assert first_list_line.evaluate("element => getComputedStyle(element).display") == "inline"
     assert first_list_line.evaluate("element => getComputedStyle(element).marginTop") == "0px"
@@ -215,6 +222,7 @@ with sync_playwright() as playwright:
     assert_orientation_reference(desktop)
     assert_all_orientation_sections_are_clean(desktop)
     assert desktop.get_by_role("tab", name="New Physician Orientation Materials", exact=False).get_attribute("aria-selected") == "true"
+    desktop.wait_for_timeout(350)
     desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-desktop.png", full_page=False)
 
     people_tab = desktop.get_by_role("tab", name="People Management staff and PAs", exact=False)

@@ -5,6 +5,14 @@ tags:
 
 # Changelog
 
+## 0.14.1 — 2026-09-09
+
+- Removed the complete orientation hero/banner area, including the oversized field-guide heading, description, and operational-reference strip.
+- Kept an accessible screen-reader-only page title while moving the search and section tabs to the top of the orientation view.
+- Increased orientation subtab title text to 14px, descriptors to 10px, and section numbers to 10.5px.
+- Increased subtab height and mobile width so larger labels wrap cleanly without truncation.
+- Added browser regression checks for banner removal and minimum subtab typography sizes.
+
 ## 0.14.0 — 2026-09-09
 
 - Removed the Sheikah Slate attribution from the public Home page.

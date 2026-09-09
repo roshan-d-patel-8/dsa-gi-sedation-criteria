@@ -562,18 +562,7 @@ function OrientationMaterials() {
 
   return (
     <main className="orientation-page" id="orientation-panel" role="tabpanel" aria-labelledby="orientation-tab">
-      <header className="orientation-heading">
-        <div>
-          <p className="eyebrow">DSA GI ORIENTATION · Physician onboarding · Source material: GI Orientation 2026</p>
-          <h1>Your field guide<br />to the first 90 days.</h1>
-          <p className="orientation-lede">A searchable, section-by-section reference for schedules, clinical workflows, people and partnership practices.</p>
-        </div>
-      </header>
-
-      <aside className="orientation-notice">
-        <span aria-hidden="true">INTERNAL</span>
-        <p><strong>Operational reference.</strong> This guide reproduces the supplied orientation text. Confirm time-sensitive names, schedules and workflows with current departmental sources.</p>
-      </aside>
+      <h1 className="sr-only">New Physician Orientation Materials</h1>
 
       <section className="orientation-tools" aria-label="Orientation guide tools">
         <label className="orientation-search">
