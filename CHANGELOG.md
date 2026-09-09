@@ -5,6 +5,14 @@ tags:
 
 # Changelog
 
+## 0.16.0 — 2026-09-09
+
+- Added a dedicated Choosing Wisely Field Guide section immediately after Procedures.
+- Preserved all non-checkboxed content from the four-page GI Choosing Wisely TPIP consensus presentation, including age-based recommendations, risk/benefit scripting, patient-facing copy, procedural-note language, and the PROMPT outreach letter.
+- Elevated `DSAGIGRADNOTE`, `DSAGIGRADLETTER`, `DSAGIGRADMA`, and `DSAGIGRADDC` in a prominent SmartPhrase panel.
+- Omitted the presentation's four checkbox-status lines as requested.
+- Added responsive decision cards and browser checks for source completeness, SmartPhrase emphasis, omission rules, the UCSF ePrognosis link, section count, and mobile layout.
+
 ## 0.15.0 — 2026-09-09
 
 - Removed the redundant “Rest of 2026” title, date-range label, and duplicate monthly milestone sidebar.

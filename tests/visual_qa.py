@@ -145,7 +145,7 @@ def assert_orientation_reference(page):
     assert page.get_by_role("heading", name="New Physician Orientation Materials", exact=True).count() == 1
     assert page.get_by_text("Your field guide to the first 90 days.", exact=True).count() == 0
     assert page.locator(".orientation-heading, .orientation-notice").count() == 0
-    assert page.locator(".orientation-subtab").count() == 11
+    assert page.locator(".orientation-subtab").count() == 12
     assert page.locator(".orientation-subtab[aria-selected='true']").count() == 1
     assert page.locator(".orientation-card").count() == 1
     assert page.locator("details.orientation-card").count() == 0
@@ -164,6 +164,30 @@ def assert_orientation_reference(page):
     assert first_list_line.evaluate("element => getComputedStyle(element).display") == "inline"
     assert first_list_line.evaluate("element => getComputedStyle(element).marginTop") == "0px"
     assert first_list_line.evaluate("element => getComputedStyle(element).marginBottom") == "0px"
+
+
+def assert_choosing_wisely(page):
+    choosing_wisely_tab = page.get_by_role("tab", name="Choosing Wisely CRC surveillance graduation", exact=False)
+    choosing_wisely_tab.click()
+    assert choosing_wisely_tab.get_attribute("aria-selected") == "true"
+    panel = page.get_by_role("tabpanel", name="Choosing Wisely CRC surveillance graduation", exact=False)
+    assert panel.get_by_role("heading", name="GI Choosing Wisely TPIP Consensus Recommendations and Implementation", exact=True).is_visible()
+    assert panel.locator(".cw-smartphrase-code").count() == 4
+    for smartphrase in ["DSAGIGRADNOTE", "DSAGIGRADLETTER", "DSAGIGRADMA", "DSAGIGRADDC"]:
+        phrase = panel.get_by_text(smartphrase, exact=True)
+        assert phrase.is_visible()
+        assert int(phrase.evaluate("element => getComputedStyle(element).fontWeight")) >= 700
+    assert panel.get_by_text("Continue routine screening and surveillance colonoscopies in patients aged 70-75", exact=True).is_visible()
+    assert panel.get_by_text("Discontinue surveillance colonoscopies for all patients age > 85", exact=True).is_visible()
+    assert panel.get_by_text("Based on a careful review of this patient's age, medical history, and prior colon cancer screening, no further colon cancer screening indicated (PROMPT updated).", exact=True).is_visible()
+    assert panel.get_by_role("heading", name="Graduation Smartphrase for Patient Discharge Instructions", exact=True).is_visible()
+    assert panel.get_by_role("heading", name="Graduation Smartphrase for Procedural Note", exact=True).is_visible()
+    assert panel.get_by_role("heading", name="PROMPT Outreach Discontinuation Letter", exact=True).is_visible()
+    assert panel.get_by_text("No further colon cancer screening indicated due to age. Can consider surveillance colonoscopy in *** years depending on patient preferences, health status and discussion with PCP at that time.", exact=True).is_visible()
+    assert panel.get_by_text("Dear @Fname@ @Lname@,", exact=True).is_visible()
+    assert panel.get_by_role("link", name="UCSF ePrognosis colorectal cancer screening tool", exact=True).get_attribute("href") == "https://eprognosis.ucsf.edu/cancer/partials/colorectal-cancer.php"
+    for omitted_line in ["AFM email", "Smartphrase sharing", "Communication with PA", "CW-PROMPT list"]:
+        assert panel.get_by_text(omitted_line, exact=False).count() == 0
 
 
 def assert_all_orientation_sections_are_clean(page):
@@ -238,6 +262,9 @@ with sync_playwright() as playwright:
     desktop.get_by_role("tab", name="New Physician Orientation Materials", exact=False).click()
     desktop.wait_for_timeout(300)
     assert_orientation_reference(desktop)
+    assert_choosing_wisely(desktop)
+    desktop.locator(".cw-smartphrase-panel").scroll_into_view_if_needed()
+    desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-choosing-wisely.png", full_page=False)
     assert_all_orientation_sections_are_clean(desktop)
     assert desktop.get_by_role("tab", name="New Physician Orientation Materials", exact=False).get_attribute("aria-selected") == "true"
     desktop.wait_for_timeout(350)
@@ -279,7 +306,7 @@ with sync_playwright() as playwright:
     assert desktop.get_by_text("Please feel free to send any questions or concerns about performance issues to Dr. Gonzales", exact=False).is_visible()
     desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-search.png", full_page=False)
     desktop.get_by_role("button", name="Clear search").click()
-    assert desktop.locator(".orientation-subtab").count() == 11
+    assert desktop.locator(".orientation-subtab").count() == 12
     assert desktop.locator(".orientation-card").count() == 1
 
     mobile = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
@@ -313,9 +340,13 @@ with sync_playwright() as playwright:
     assert mobile.locator(".orientation-tools").is_visible()
     assert mobile.locator(".orientation-subtabs").evaluate("element => element.scrollWidth > element.clientWidth")
     mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-mobile.png", full_page=False)
+    assert_choosing_wisely(mobile)
+    assert mobile.locator(".cw-smartphrase-grid").evaluate("element => getComputedStyle(element).gridTemplateColumns.split(' ').length") == 1
+    mobile.locator(".cw-smartphrase-panel").scroll_into_view_if_needed()
+    mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-choosing-wisely-mobile.png", full_page=False)
 
     assert not desktop_errors, desktop_errors
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: Home countdowns, four folder tabs, orientation sub-tabs/cards/search, podlet tooltips, portraits, and mobile layout.")
+print("Visual QA passed: Home countdowns, four folder tabs, 12-section field guide including Choosing Wisely, podlet tooltips, portraits, and mobile layout.")
