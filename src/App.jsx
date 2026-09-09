@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { medicationGuidance, POLICY_VERSION, policySections } from "./criteria.js";
 import { coverageSites } from "./podlets.js";
+import { birthdayEvents } from "./birthdays.js";
 import orientationSource from "./orientation-source.html?raw";
 
 const columnLayout = [
@@ -50,6 +51,21 @@ function HomeIcon() {
   );
 }
 
+function BirthdayCupcakeIcon() {
+  return (
+    <svg className="birthday-cupcake-icon" viewBox="0 0 44 44" aria-hidden="true">
+      <path className="birthday-flame" d="M22 2.8c3.1 3.2 3.2 6.1.2 8.6-3.4-2.2-3.5-5.3-.2-8.6Z" />
+      <path className="birthday-candle" d="M19.7 10.5h4.7v10.2h-4.7z" />
+      <path className="birthday-frosting" d="M10.2 25.1c0-3.2 2.5-5.7 5.6-5.7.7-3 3.3-5.2 6.5-5.2 3.3 0 6.1 2.5 6.6 5.8 2.8.4 4.9 2.8 4.9 5.7 0 1.4-.5 2.7-1.3 3.7H11.7c-.9-1.1-1.5-2.6-1.5-4.3Z" />
+      <path className="birthday-wrapper" d="m13.4 28.4 2.3 12.1h13l2.2-12.1H13.4Z" />
+      <path className="birthday-wrapper-line" d="m18 29.6.8 9.4m7.2-9.4-.8 9.4" />
+      <circle className="birthday-sprinkle sprinkle-one" cx="17.2" cy="23.3" r="1.2" />
+      <circle className="birthday-sprinkle sprinkle-two" cx="23" cy="19.7" r="1.2" />
+      <circle className="birthday-sprinkle sprinkle-three" cx="28.2" cy="24" r="1.2" />
+    </svg>
+  );
+}
+
 const calendarMonths = [8, 9, 10, 11];
 const weekdayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -62,6 +78,7 @@ function Calendar2026() {
   const daysInMonth = new Date(Date.UTC(2026, monthIndex + 1, 0)).getUTCDate();
   const cellCount = Math.ceil((leadingDays + daysInMonth) / 7) * 7;
   const monthEvents = countdowns.filter(({ date }) => Number(date.slice(5, 7)) - 1 === monthIndex);
+  const monthBirthdays = birthdayEvents.filter(({ date }) => Number(date.slice(5, 7)) - 1 === monthIndex);
 
   function moveMonth(direction) {
     setMonthPosition((position) => Math.min(calendarMonths.length - 1, Math.max(0, position + direction)));
@@ -94,9 +111,39 @@ function Calendar2026() {
           if (day < 1 || day > daysInMonth) return <span className="calendar-day calendar-day-empty" aria-hidden="true" key={`empty-${index}`} />;
           const date = `2026-${String(monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
           const events = monthEvents.filter((item) => item.date === date);
+          const birthdays = monthBirthdays.filter((item) => item.date === date);
+          const dayDetails = [
+            ...events.map((event) => event.label),
+            ...birthdays.map((birthday) => `${birthday.name} birthday`),
+          ];
           return (
-            <div className={`calendar-day${events.length ? " has-event" : ""}`} role="gridcell" aria-label={`${monthLabel} ${day}${events.length ? `: ${events.map((event) => event.label).join(", ")}` : ""}`} key={date}>
+            <div className={`calendar-day${events.length ? " has-event" : ""}${birthdays.length ? " has-birthday" : ""}`} role="gridcell" aria-label={`${monthLabel} ${day}${dayDetails.length ? `: ${dayDetails.join(", ")}` : ""}`} key={date}>
               <time dateTime={date}>{day}</time>
+              {birthdays.length > 0 && (
+                <span className="calendar-birthday-cluster">
+                  {birthdays.map((birthday, birthdayIndex) => {
+                    const tooltipId = `birthday-${date}-${birthdayIndex}`;
+                    return (
+                      <span
+                        className="birthday-marker"
+                        tabIndex="0"
+                        aria-label={`Happy Birthday, ${birthday.name}!`}
+                        aria-describedby={tooltipId}
+                        key={birthday.name}
+                      >
+                        <BirthdayCupcakeIcon />
+                        <span className="birthday-tooltip" id={tooltipId} role="tooltip">
+                          <img src={`${import.meta.env.BASE_URL}portraits/${birthday.photo}`} alt="" loading="lazy" />
+                          <span>
+                            <small>Celebrate a colleague</small>
+                            <strong>Happy Birthday, {birthday.name}!</strong>
+                          </span>
+                        </span>
+                      </span>
+                    );
+                  })}
+                </span>
+              )}
               {events.map((event, eventIndex) => {
                 const tooltipId = `calendar-event-${date}-${eventIndex}`;
                 return (

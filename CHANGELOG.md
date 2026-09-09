@@ -5,6 +5,14 @@ tags:
 
 # Changelog
 
+## 0.17.0 — 2026-09-09
+
+- Added cupcake-and-candle birthday markers to the September–December Home calendar for 10 DSA Gastroenterology colleagues identified from their vault contact cards.
+- Added portrait birthday cards reading “Happy Birthday, Name!” on hover, keyboard focus, or tap.
+- Preserved operational milestones on dates that also contain birthdays, including September 28.
+- Added source-integrity tests that verify every birthday against the colleague's Markdown card, DSA Gastroenterology role, and matched portrait.
+- Added desktop/mobile browser checks for birthday counts, portraits, accessible interactions, and the celebratory calendar treatment.
+
 ## 0.16.0 — 2026-09-09
 
 - Added a dedicated Choosing Wisely Field Guide section immediately after Procedures.

@@ -145,7 +145,30 @@ body::before {
 .calendar-day > time { width: 31px; height: 31px; display: grid; place-items: center; border-radius: 9px; color: var(--navy); font-size: 14px; font-weight: 900; }
 .calendar-day.has-event { border-color: rgba(27, 117, 187, .28); background: linear-gradient(145deg, rgba(27, 117, 187, .08), rgba(255, 255, 255, .94)); }
 .calendar-day.has-event > time { background: var(--way); color: var(--white); }
+.calendar-day.has-birthday { border-color: rgba(198, 95, 130, .3); background: radial-gradient(circle at 88% 13%, rgba(242, 160, 184, .16), transparent 30%), linear-gradient(145deg, rgba(217, 164, 65, .07), rgba(255, 255, 255, .96)); }
+.calendar-day.has-event.has-birthday { background: radial-gradient(circle at 88% 13%, rgba(242, 160, 184, .18), transparent 29%), linear-gradient(145deg, rgba(27, 117, 187, .08), rgba(255, 255, 255, .96)); }
 .calendar-day-empty { border-color: transparent; background: transparent; }
+.calendar-birthday-cluster { position: absolute; z-index: 6; top: 7px; right: 7px; display: flex; gap: 4px; }
+.calendar-birthday-cluster:has(.birthday-marker:hover), .calendar-birthday-cluster:has(.birthday-marker:focus) { z-index: 80; }
+.birthday-marker { position: relative; width: 39px; height: 39px; display: grid; place-items: center; border: 1px solid rgba(198, 95, 130, .3); border-radius: 12px; background: linear-gradient(145deg, #fff8ef, #fdeaf0); box-shadow: 0 5px 12px rgba(120, 62, 82, .1); cursor: help; transition: transform .18s ease, box-shadow .18s ease; }
+.birthday-marker:hover { z-index: 8; transform: translateY(-2px) rotate(-2deg); box-shadow: 0 8px 18px rgba(120, 62, 82, .17); }
+.birthday-marker:focus-visible { z-index: 8; outline: 3px solid rgba(198, 95, 130, .28); outline-offset: 2px; }
+.birthday-cupcake-icon { width: 31px; height: 31px; overflow: visible; }
+.birthday-flame { fill: #f5a623; transform-box: fill-box; transform-origin: 50% 100%; animation: birthday-flame 1.15s ease-in-out infinite alternate; }
+.birthday-candle { fill: #69a9ce; }
+.birthday-frosting { fill: #f4a9bf; stroke: #b95378; stroke-width: 1.25; stroke-linejoin: round; }
+.birthday-wrapper { fill: #e0a64a; stroke: #a86f19; stroke-width: 1.25; stroke-linejoin: round; }
+.birthday-wrapper-line { fill: none; stroke: rgba(255, 255, 255, .78); stroke-width: 1.2; stroke-linecap: round; }
+.birthday-sprinkle { fill: #fff; }
+.birthday-sprinkle.sprinkle-two { fill: #5b8fc1; }
+.birthday-sprinkle.sprinkle-three { fill: #f7d56d; }
+.birthday-tooltip { position: absolute; z-index: 40; width: 245px; top: calc(100% + 9px); right: -2px; padding: 13px; display: grid; grid-template-columns: 54px minmax(0, 1fr); align-items: center; gap: 12px; visibility: hidden; border: 1px solid rgba(255, 255, 255, .16); border-radius: 13px; background: linear-gradient(135deg, #6e3651, #9c496b); color: var(--white); box-shadow: 0 15px 32px rgba(73, 32, 51, .26); opacity: 0; pointer-events: none; transform: translateY(-5px) scale(.98); transform-origin: top right; transition: opacity .16s ease, transform .16s ease, visibility .16s; }
+.birthday-tooltip::before { position: absolute; width: 12px; height: 12px; top: -6px; right: 14px; background: #743851; content: ""; transform: rotate(45deg); }
+.birthday-tooltip img { position: relative; z-index: 1; width: 54px; height: 54px; object-fit: cover; border: 3px solid rgba(255, 255, 255, .72); border-radius: 50%; background: var(--white); }
+.birthday-tooltip > span { position: relative; z-index: 1; display: grid; gap: 3px; text-align: left; }
+.birthday-tooltip small { color: #f8d9e4; font-size: 9px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+.birthday-tooltip strong { color: var(--white); font-size: 15px; line-height: 1.25; letter-spacing: -.01em; }
+.birthday-marker:hover .birthday-tooltip, .birthday-marker:focus .birthday-tooltip { visibility: visible; opacity: 1; transform: none; }
 .calendar-event-marker { --event-accent: var(--way); position: relative; margin-top: 9px; padding-left: 13px; display: block; color: var(--navy); font-size: 12px; font-weight: 850; line-height: 1.28; cursor: help; }
 .calendar-event-marker::before { position: absolute; width: 7px; height: 7px; top: .35em; left: 0; border-radius: 50%; background: var(--event-accent); content: ""; }
 .calendar-event-marker.tone-gold { --event-accent: var(--gold); }
@@ -503,6 +526,7 @@ footer p { max-width: 600px; margin: 0; text-align: right; line-height: 1.4; }
 
 @keyframes card-in { from { opacity: 0; transform: translateY(8px) scale(.995); } to { opacity: 1; transform: none; } }
 @keyframes pod-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes birthday-flame { from { transform: rotate(-5deg) scale(.94); } to { transform: rotate(5deg) scale(1.06); } }
 
 @media (max-width: 1120px) {
   .site-header { grid-template-columns: 1fr; gap: 5px; }
@@ -554,7 +578,16 @@ footer p { max-width: 600px; margin: 0; text-align: right; line-height: 1.4; }
   .calendar-weekday { padding-inline: 0; font-size: 10px; letter-spacing: .04em; }
   .calendar-day { min-height: 66px; padding: 5px; border-radius: 8px; }
   .calendar-day > time { width: 27px; height: 27px; font-size: 13px; }
-  .calendar-event-marker { width: 28px; height: 28px; margin-top: 4px; padding: 0; display: grid; place-items: center; border-radius: 50%; cursor: pointer; }
+  .calendar-birthday-cluster { top: auto; right: 4px; bottom: 4px; }
+  .birthday-marker { width: 27px; height: 27px; border-radius: 9px; cursor: pointer; }
+  .birthday-cupcake-icon { width: 23px; height: 23px; }
+  .birthday-tooltip { position: fixed; width: auto; top: auto; left: 16px; right: 16px; bottom: 20px; padding: 15px; grid-template-columns: 58px minmax(0, 1fr); transform-origin: bottom center; }
+  .birthday-tooltip::before { display: none; }
+  .birthday-tooltip img { width: 58px; height: 58px; }
+  .birthday-tooltip small { font-size: 10px; }
+  .birthday-tooltip strong { font-size: 16px; }
+  .calendar-grid:has(.birthday-marker:focus) .birthday-marker:not(:focus) { opacity: 0; }
+  .calendar-event-marker { position: absolute; width: 27px; height: 27px; left: 4px; bottom: 4px; margin: 0; padding: 0; display: grid; place-items: center; border-radius: 50%; cursor: pointer; }
   .calendar-event-marker::before { position: static; width: 10px; height: 10px; }
   .calendar-event-label { display: none; }
   .calendar-event-tooltip { position: fixed; width: auto; left: 16px; right: 16px; bottom: 20px; padding: 15px 17px; }
