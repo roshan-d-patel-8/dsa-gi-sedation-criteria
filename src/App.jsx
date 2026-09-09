@@ -10,10 +10,90 @@ const columnLayout = [
 ];
 
 const tabs = [
+  { id: "home", label: "Home", icon: true },
   { id: "sedation", index: "01", label: "Procedure Sedation Criteria" },
   { id: "coverage", index: "02", label: "DSA GI MA-MD Podlets" },
   { id: "orientation", index: "03", label: "New Physician Orientation Materials" },
 ];
+
+const countdowns = [
+  { label: "Tom Haddad — last on-site day", date: "2026-09-18", displayDate: "Fri · Sep 18, 2026" },
+  { label: "Aysha Aslam — first day", date: "2026-09-28", displayDate: "Mon · Sep 28, 2026" },
+  { label: "Dublin — closure / last booking day", date: "2026-10-02", displayDate: "Fri · Oct 2, 2026", tone: "gold" },
+  { label: "NorCal in-person TPIP — Oakland", date: "2026-10-17", displayDate: "Sat · Oct 17, 2026" },
+  { label: "Pleasanton soft launch — Room 1", date: "2026-10-19", displayDate: "Mon · Oct 19, 2026", tone: "gold" },
+  { label: "Pleasanton — Room 2 opens", date: "2026-11-02", displayDate: "Mon · Nov 2, 2026", tone: "gold" },
+  { label: "E2K — GI go-live", date: "2026-11-18", displayDate: "Wed · Nov 18, 2026 · confirmed", tone: "way" },
+];
+
+function pacificToday() {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Los_Angeles",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const values = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
+  return Date.UTC(Number(values.year), Number(values.month) - 1, Number(values.day));
+}
+
+function daysUntil(date) {
+  const [year, month, day] = date.split("-").map(Number);
+  return Math.ceil((Date.UTC(year, month - 1, day) - pacificToday()) / 86_400_000);
+}
+
+function HomeIcon() {
+  return (
+    <svg className="home-tab-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M3.75 10.5 12 3.75l8.25 6.75v8.25a1.5 1.5 0 0 1-1.5 1.5h-4.5v-6h-4.5v6h-4.5a1.5 1.5 0 0 1-1.5-1.5V10.5Z" />
+    </svg>
+  );
+}
+
+function HomePage() {
+  return (
+    <main className="home-page" id="home-panel" role="tabpanel" aria-labelledby="home-tab">
+      <header className="home-heading">
+        <div>
+          <p className="eyebrow">DSA GI command deck · Operational horizon</p>
+          <h1>The next markers<br />on the map.</h1>
+          <p className="home-lede">A live Pacific-time countdown to the department’s nearest milestones.</p>
+        </div>
+        <div className="slate-stamp">
+          <span>Source</span>
+          <strong>Sheikah Slate</strong>
+          <small>Refreshed Sep 8, 2026</small>
+        </div>
+      </header>
+
+      <section className="countdown-section" aria-labelledby="countdown-title">
+        <div className="countdown-heading">
+          <div>
+            <span>01 / Notable countdowns</span>
+            <h2 id="countdown-title">What is approaching.</h2>
+          </div>
+          <p>Days remaining update automatically at midnight Pacific.</p>
+        </div>
+        <div className="countdown-strip">
+          {countdowns.map((item, index) => {
+            const days = daysUntil(item.date);
+            return (
+              <article className={`countdown-card tone-${item.tone || "blue"}`} style={{ "--delay": `${index * 55}ms` }} key={item.label}>
+                <span className="countdown-sequence">{String(index + 1).padStart(2, "0")}</span>
+                <div className="countdown-number">
+                  <strong>{Math.max(days, 0)}</strong>
+                  <span>{days === 1 ? "day" : "days"}</span>
+                </div>
+                <h3>{item.label}</h3>
+                <time dateTime={item.date}>{item.displayDate}</time>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    </main>
+  );
+}
 
 const orientationSectionNames = [
   "Schedules:",
@@ -520,7 +600,7 @@ function FolderTabs({ activeTab, onChange }) {
     <nav className="folder-tabs" role="tablist" aria-label="DSA GI reference sections">
       {tabs.map((tab, index) => (
         <button
-          className={`folder-tab ${activeTab === tab.id ? "active" : ""}`}
+          className={`folder-tab${tab.icon ? " folder-tab-home" : ""} ${activeTab === tab.id ? "active" : ""}`}
           id={`${tab.id}-tab`}
           type="button"
           role="tab"
@@ -531,8 +611,8 @@ function FolderTabs({ activeTab, onChange }) {
           onKeyDown={(event) => handleKeyDown(event, index)}
           key={tab.id}
         >
-          <span>{tab.index}</span>
-          <strong>{tab.label}</strong>
+          {tab.icon ? <HomeIcon /> : <span>{tab.index}</span>}
+          <strong className={tab.icon ? "sr-only" : undefined}>{tab.label}</strong>
         </button>
       ))}
     </nav>
@@ -540,7 +620,7 @@ function FolderTabs({ activeTab, onChange }) {
 }
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState("sedation");
+  const [activeTab, setActiveTab] = useState("home");
   const isSedation = activeTab === "sedation";
   const activeTabLabel = tabs.find((tab) => tab.id === activeTab)?.label;
 
@@ -555,6 +635,7 @@ export default function App() {
       </header>
 
       <div className="folder-sheet">
+        {activeTab === "home" && <HomePage />}
         {activeTab === "sedation" && <CriteriaMatrix />}
         {activeTab === "coverage" && <CoveragePodlets />}
         {activeTab === "orientation" && <OrientationMaterials />}

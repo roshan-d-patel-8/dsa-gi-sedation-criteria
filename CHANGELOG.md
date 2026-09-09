@@ -5,6 +5,14 @@ tags:
 
 # Changelog
 
+## 0.13.0 — 2026-09-09
+
+- Added a new primary Home tab with a blue house icon and made it the default landing view.
+- Added a seven-card countdown strip sourced from the Sheikah Slate's September 8 countdown section.
+- Made countdown values update automatically against the current Pacific date while preserving the Slate's labels, dates, priority colors, and confirmed E2K status.
+- Added desktop and mobile browser checks for the Home tab, countdown content, tab state, and small-screen horizontal scrolling.
+- Brought the existing podlet portrait regression count in line with Omar Al-Shuwaykh's previously added portrait.
+
 ## 0.12.4 — 2026-08-29
 
 - Added a "best viewed on desktop rather than mobile" note to the KPATHS facility-directory link.

@@ -5,7 +5,7 @@ tags:
 
 # DSA GI Resources
 
-A compact, tabbed DSA GI clinical-operations reference. The first tab contains the August 2026 anesthesia procedure criteria; the second maps DSA GI MA–MD pod assignments; the third is a searchable, sub-tabbed New Physician Orientation field guide.
+A compact, tabbed DSA GI clinical-operations reference. The primary Home tab carries a Pacific-time countdown strip sourced from the Sheikah Slate; the remaining tabs contain the August 2026 anesthesia procedure criteria, DSA GI MA–MD pod assignments, and a searchable New Physician Orientation field guide.
 
 ## Live site
 
@@ -13,7 +13,7 @@ A compact, tabbed DSA GI clinical-operations reference. The first tab contains t
 
 ## Purpose
 
-The site converts dense operational material into scan-friendly references. The sedation tab preserves every criterion, preparation instruction, Pleasanton exclusion, remimazolam consideration, and POM medication hold. The coverage tab expands screenshot abbreviations into vault-verified provider names and pairs locally sourced physician portraits with each podlet. The orientation tab preserves the complete text of the supplied 2024 guide in 11 searchable sub-tabs, displaying one color-coded section at a time.
+The site converts dense operational material into scan-friendly references. The Home tab surfaces seven dated departmental milestones from the September 8, 2026 Sheikah Slate and updates days remaining at midnight Pacific. The sedation tab preserves every criterion, preparation instruction, Pleasanton exclusion, remimazolam consideration, and POM medication hold. The coverage tab expands screenshot abbreviations into vault-verified provider names and pairs locally sourced physician portraits with each podlet. The orientation tab preserves the complete text of the supplied 2026 guide in 11 searchable sub-tabs, displaying one color-coded section at a time.
 
 It does not clear patients, replace clinician judgment, or independently validate the clinical policy.
 
@@ -41,8 +41,11 @@ The source repository and GitHub Pages website are public by explicit authorizat
 
 The complete orientation text—including facility door codes, internal contact details, inbox names, schedules, and operational workflows—was explicitly authorized for public deployment on 2026-08-26. The two HealthConnect screenshots remain excluded because they display patient names.
 
+The seven Sheikah Slate countdown labels and dates were explicitly requested for this public site on 2026-09-09.
+
 ## Backlinks
 
 - [[2026-06-16 DSA GI Sedation Driver Workflow]]
 - [[Physician DEX]]
 - [[DSAGI House]]
+- [[Sheikah Slate]]

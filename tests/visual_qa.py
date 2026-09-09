@@ -3,7 +3,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 
-OUTPUT = Path("/Users/roshanpatel/.codex/visualizations/2026/08/26/01a0400c-bddd-77a3-8ade-1e0e824ba005")
+OUTPUT = Path("/Users/roshanpatel/.codex/visualizations/2026/09/09/01a085c2-6b70-7660-831a-ff30ef2728c4")
 BASE_URL = "http://127.0.0.1:5173"
 CARD_HEADINGS = [
     "Optiflow",
@@ -51,10 +51,21 @@ def capture_console_errors(page):
 
 
 def assert_tabs(page):
-    assert page.get_by_role("tab").count() == 3
+    assert page.get_by_role("tab").count() == 4
+    assert page.get_by_role("tab", name="Home", exact=True).is_visible()
     assert page.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).is_visible()
     assert page.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).is_visible()
     assert page.get_by_role("tab", name="New Physician Orientation Materials", exact=False).is_visible()
+
+
+def assert_home(page):
+    assert page.get_by_role("heading", name="The next markers on the map.", exact=True).is_visible()
+    assert page.locator(".home-tab-icon").is_visible()
+    assert page.locator(".countdown-card").count() == 7
+    assert page.get_by_text("Sheikah Slate", exact=True).is_visible()
+    assert page.get_by_text("Tom Haddad — last on-site day", exact=True).is_visible()
+    assert page.get_by_text("E2K — GI go-live", exact=True).is_visible()
+    assert page.locator(".countdown-card time").count() == 7
 
 
 def assert_sedation_reference(page):
@@ -82,8 +93,8 @@ def assert_coverage_reference(page):
     assert page.locator(".ma-chip").count() == 11
     assert page.locator(".ma-assignment > small").count() == 0
     assert page.get_by_text("Pod 04", exact=True).count() == 0
-    assert page.locator(".provider-avatar img").count() == 23
-    assert page.locator(".provider-initials").count() == 3
+    assert page.locator(".provider-avatar img").count() == 24
+    assert page.locator(".provider-initials").count() == 2
     for provider in PROVIDERS:
         assert page.locator(".provider-panel").get_by_text(provider, exact=True).first.is_visible()
     assert page.get_by_text("Anarosa Mejia", exact=False).is_visible()
@@ -137,6 +148,11 @@ with sync_playwright() as playwright:
     desktop.goto(BASE_URL)
     desktop.wait_for_load_state("networkidle")
     assert_tabs(desktop)
+    assert_home(desktop)
+    assert desktop.get_by_role("tab", name="Home", exact=True).get_attribute("aria-selected") == "true"
+    desktop.screenshot(path=OUTPUT / "dsa-gi-home-countdowns-desktop.png", full_page=True)
+
+    desktop.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).click()
     assert_sedation_reference(desktop)
     assert desktop.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).get_attribute("aria-selected") == "true"
     desktop.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-sedation-desktop.png", full_page=True)
@@ -213,6 +229,10 @@ with sync_playwright() as playwright:
     mobile.goto(BASE_URL)
     mobile.wait_for_load_state("networkidle")
     assert_tabs(mobile)
+    assert_home(mobile)
+    assert mobile.locator(".countdown-strip").evaluate("element => element.scrollWidth > element.clientWidth")
+    mobile.screenshot(path=OUTPUT / "dsa-gi-home-countdowns-mobile.png", full_page=False)
+    mobile.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).click()
     assert_sedation_reference(mobile)
     mobile.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-sedation-mobile.png", full_page=False)
     mobile.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).click()
@@ -232,4 +252,4 @@ with sync_playwright() as playwright:
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: three folder tabs, orientation sub-tabs/cards/search, larger type, podlet tooltips, portraits, and mobile layout.")
+print("Visual QA passed: Home countdowns, four folder tabs, orientation sub-tabs/cards/search, podlet tooltips, portraits, and mobile layout.")
