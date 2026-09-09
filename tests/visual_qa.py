@@ -299,6 +299,10 @@ with sync_playwright() as playwright:
     assert desktop.get_by_role("heading", name="Departmentwide & regional", exact=True).is_visible()
     assert desktop.locator(".site-group-wcr").get_by_text("WCR Door Codes: 6210", exact=True).is_visible()
     assert desktop.locator(".site-group-wcr").get_by_text("DRV Door Codes", exact=False).count() == 0
+    assert desktop.locator(".site-group-drv").get_by_text(
+        "DRV Door Codes: 6363 (GI office), 3636 (GI unit), 2525 (staff break room/scrubs), 7343 (additional DRV office space)",
+        exact=True,
+    ).is_visible()
     assert desktop.get_by_text("WCR Door Codes:", exact=True).evaluate("element => element.tagName") == "STRONG"
     desktop.wait_for_timeout(350)
     desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-people-grouped.png", full_page=False)

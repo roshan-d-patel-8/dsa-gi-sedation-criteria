@@ -5,6 +5,11 @@ tags:
 
 # Changelog
 
+## 0.17.1 — 2026-09-09
+
+- Added door code 7343 for the additional DRV office space to the Field Guide's People section.
+- Added a browser regression check for the complete Deer Valley door-code line.
+
 ## 0.17.0 — 2026-09-09
 
 - Added cupcake-and-candle birthday markers to the September–December Home calendar for 10 DSA Gastroenterology colleagues identified from their vault contact cards.
