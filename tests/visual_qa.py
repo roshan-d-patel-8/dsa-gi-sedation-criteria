@@ -104,7 +104,7 @@ def assert_calendar_navigation(page):
     assert page.locator(".birthday-marker").count() == 4
     roshan_birthday = page.get_by_label("Happy Birthday, Roshan Patel!", exact=True)
     assert roshan_birthday.is_visible()
-    roshan_birthday.hover()
+    roshan_birthday.focus()
     page.wait_for_timeout(200)
     assert roshan_birthday.get_by_role("tooltip").get_by_text("Happy Birthday, Roshan Patel!", exact=True).is_visible()
     assert roshan_birthday.get_by_role("tooltip").locator("img").evaluate("image => image.complete && image.naturalWidth > 0")
@@ -189,6 +189,19 @@ def assert_choosing_wisely(page):
     choosing_wisely_tab.click()
     assert choosing_wisely_tab.get_attribute("aria-selected") == "true"
     panel = page.get_by_role("tabpanel", name="Choosing Wisely CRC surveillance graduation", exact=False)
+    infographic_button = panel.get_by_role("button", name="Expand Choosing Wisely graduation infographic", exact=True)
+    assert infographic_button.is_visible()
+    assert infographic_button.locator("img").evaluate("image => image.decode().then(() => image.naturalWidth == 5504 && image.naturalHeight == 3072)")
+    infographic_button.click()
+    infographic_dialog = page.get_by_role("dialog", name="Choosing Wisely · Graduation from Surveillance Colonoscopy · January–July 2026", exact=True)
+    assert infographic_dialog.is_visible()
+    assert infographic_dialog.locator("img").evaluate("image => image.decode().then(() => image.naturalWidth == 5504 && image.naturalHeight == 3072)")
+    assert page.get_by_role("button", name="Close Choosing Wisely infographic", exact=True).is_visible()
+    page.keyboard.press("Escape")
+    assert infographic_dialog.count() == 0
+    infographic_button.click()
+    page.locator(".cw-infographic-backdrop").click(position={"x": 5, "y": 5})
+    assert infographic_dialog.count() == 0
     assert panel.get_by_role("heading", name="GI Choosing Wisely TPIP Consensus Recommendations and Implementation", exact=True).is_visible()
     assert panel.locator(".cw-smartphrase-code").count() == 4
     for smartphrase in ["DSAGIGRADNOTE", "DSAGIGRADLETTER", "DSAGIGRADMA", "DSAGIGRADDC"]:
@@ -290,6 +303,11 @@ with sync_playwright() as playwright:
     desktop.wait_for_timeout(300)
     assert_orientation_reference(desktop)
     assert_choosing_wisely(desktop)
+    desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-choosing-wisely-thumbnail.png", full_page=False)
+    desktop.get_by_role("button", name="Expand Choosing Wisely graduation infographic", exact=True).click()
+    desktop.wait_for_timeout(250)
+    desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-choosing-wisely-infographic.png", full_page=False)
+    desktop.get_by_role("button", name="Close Choosing Wisely infographic", exact=True).click()
     desktop.locator(".cw-smartphrase-panel").scroll_into_view_if_needed()
     desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-choosing-wisely.png", full_page=False)
     assert_all_orientation_sections_are_clean(desktop)
@@ -395,6 +413,7 @@ with sync_playwright() as playwright:
     assert mobile.locator(".orientation-subtabs").evaluate("element => element.scrollWidth > element.clientWidth")
     mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-mobile.png", full_page=False)
     assert_choosing_wisely(mobile)
+    assert mobile.get_by_role("button", name="Expand Choosing Wisely graduation infographic", exact=True).bounding_box()["width"] <= 110
     assert mobile.locator(".cw-smartphrase-grid").evaluate("element => getComputedStyle(element).gridTemplateColumns.split(' ').length") == 1
     mobile.locator(".cw-smartphrase-panel").scroll_into_view_if_needed()
     mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-choosing-wisely-mobile.png", full_page=False)
@@ -410,4 +429,4 @@ with sync_playwright() as playwright:
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: Home countdowns, September–December GI birthdays, four folder tabs, 12-section field guide including Choosing Wisely, nested People foldouts, Skills Day video, podlet tooltips, portraits, and mobile layout.")
+print("Visual QA passed: Home countdowns, September–December GI birthdays, four folder tabs, 12-section field guide including Choosing Wisely with expandable infographic, nested People foldouts, Skills Day video, podlet tooltips, portraits, and mobile layout.")

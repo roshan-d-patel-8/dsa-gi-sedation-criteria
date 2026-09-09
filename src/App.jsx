@@ -621,11 +621,14 @@ function OrientationMaterials() {
   const sections = useMemo(() => parseOrientationSource(orientationSource), []);
   const [query, setQuery] = useState("");
   const [activeSectionId, setActiveSectionId] = useState(sections[0]?.id);
+  const [showChoosingWiselyInfographic, setShowChoosingWiselyInfographic] = useState(false);
   const normalizedQuery = query.trim().toLowerCase();
   const visibleSections = normalizedQuery
     ? sections.filter((section) => `${section.sourceLabel} ${section.descriptor} ${section.text}`.toLowerCase().includes(normalizedQuery))
     : sections;
   const activeSection = visibleSections.find((section) => section.id === activeSectionId) || visibleSections[0];
+  const isChoosingWisely = activeSection?.short === "Choosing Wisely";
+  const choosingWiselyInfographic = `${import.meta.env.BASE_URL}choosing-wisely-graduation-jan-jul-2026.jpg`;
 
   function handleSectionKeyDown(event, currentIndex) {
     if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
@@ -695,10 +698,22 @@ function OrientationMaterials() {
             aria-labelledby={`${activeSection.id}-tab`}
             key={activeSection.id}
           >
-            <header className="orientation-card-header">
+            <header className={`orientation-card-header${isChoosingWisely ? " has-infographic" : ""}`}>
               <span className="orientation-number">{String(sections.indexOf(activeSection) + 1).padStart(2, "0")}</span>
               <span><strong>{activeSection.sourceLabel}</strong><small>{activeSection.descriptor}</small></span>
               {activeSection.sensitive && <b>Internal details</b>}
+              {isChoosingWisely && (
+                <button
+                  className="cw-infographic-launch"
+                  type="button"
+                  aria-haspopup="dialog"
+                  aria-label="Expand Choosing Wisely graduation infographic"
+                  onClick={() => setShowChoosingWiselyInfographic(true)}
+                >
+                  <img src={choosingWiselyInfographic} alt="" loading="lazy" />
+                  <span aria-hidden="true">Expand</span>
+                </button>
+              )}
             </header>
             <div className="orientation-content" dangerouslySetInnerHTML={{ __html: activeSection.html }} />
           </section>
@@ -712,6 +727,41 @@ function OrientationMaterials() {
           </div>
         )}
       </div>
+
+      {showChoosingWiselyInfographic && (
+        <div
+          className="cw-infographic-backdrop"
+          role="presentation"
+          onClick={(event) => {
+            if (event.target === event.currentTarget) setShowChoosingWiselyInfographic(false);
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Escape") setShowChoosingWiselyInfographic(false);
+          }}
+        >
+          <figure
+            className="cw-infographic-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="cw-infographic-title"
+          >
+            <button
+              className="cw-infographic-close"
+              type="button"
+              aria-label="Close Choosing Wisely infographic"
+              autoFocus
+              onClick={() => setShowChoosingWiselyInfographic(false)}
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+            <img
+              src={choosingWiselyInfographic}
+              alt="Choosing Wisely year-to-date infographic: 203 patients graduated from surveillance colonoscopy from January through July 2026, freeing 40 procedure units."
+            />
+            <figcaption id="cw-infographic-title">Choosing Wisely · Graduation from Surveillance Colonoscopy · January–July 2026</figcaption>
+          </figure>
+        </div>
+      )}
     </main>
   );
 }

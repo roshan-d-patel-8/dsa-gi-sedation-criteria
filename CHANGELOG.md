@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.19.0 — 2026-09-09
+
+- Added the January–July 2026 Choosing Wisely graduation infographic as a proportional thumbnail in the Choosing Wisely panel header.
+- Added an accessible full-size lightbox with mouse, keyboard, Escape, close-button, and backdrop interactions.
+- Added desktop/mobile browser checks for source-image fidelity, responsive thumbnail sizing, expanded image display, and close behavior.
+
 ## 0.18.2 — 2026-09-09
 
 - Replaced Natalie with Martha in the Walnut Creek Pod 03 MA roster.
