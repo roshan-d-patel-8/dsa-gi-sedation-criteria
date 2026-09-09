@@ -5,6 +5,11 @@ tags:
 
 # Changelog
 
+## 0.23.1 — 2026-09-09
+
+- Fixed Tom's September 10 farewell hover card being clipped at the calendar's top boundary after the announcements-rail layout change.
+- Preserved the rounded calendar shell while allowing image-rich calendar overlays to extend beyond it, with a focused browser regression check.
+
 ## 0.23.0 — 2026-09-09
 
 - Added the video’s nine published chapter markers beside the embedded Skills Day player, from Variceal banding through Trapezoid basket.

@@ -291,6 +291,11 @@ with sync_playwright() as playwright:
     desktop.wait_for_timeout(200)
     farewell_tooltip = farewell.get_by_role("tooltip")
     assert farewell_tooltip.is_visible()
+    assert desktop.locator(".calendar-main").evaluate("element => getComputedStyle(element).overflow") == "visible"
+    farewell_tooltip_box = farewell_tooltip.bounding_box()
+    calendar_main_box = desktop.locator(".calendar-main").bounding_box()
+    assert farewell_tooltip_box["y"] < calendar_main_box["y"]
+    assert farewell_tooltip_box["y"] >= 0
     assert farewell_tooltip.get_by_text("Tom's Farewell Happy Hour", exact=True).is_visible()
     assert farewell_tooltip.get_by_text("Barebottle Brewing Co. · Walnut Creek Taproom & Kitchen", exact=True).is_visible()
     assert farewell_tooltip.locator("img").evaluate("image => image.decode().then(() => image.naturalWidth == 1672 && image.naturalHeight == 941)")
