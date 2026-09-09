@@ -68,10 +68,15 @@ def assert_home(page):
     assert page.locator(".countdown-strip").get_by_text("Thu · Sep 17, 2026", exact=True).is_visible()
     assert page.locator(".countdown-strip").get_by_text("E2K — GI go-live", exact=True).is_visible()
     assert page.locator(".countdown-card time").count() == 7
-    assert page.get_by_role("heading", name="Rest of 2026", exact=True).is_visible()
+    assert page.get_by_text("Rest of 2026", exact=True).count() == 0
+    assert page.get_by_text("September—December", exact=True).count() == 0
+    assert page.get_by_text("September 2026", exact=True).count() == 1
     assert page.get_by_role("grid", name="September 2026", exact=True).is_visible()
     assert page.locator(".calendar-weekday").count() == 7
     assert page.locator(".calendar-day:not(.calendar-day-empty)").count() == 30
+    assert float(page.locator(".calendar-controls strong").evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 24
+    assert float(page.locator(".calendar-weekday").first.evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 10
+    assert float(page.locator(".calendar-day > time").first.evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 13
     assert page.get_by_role("gridcell", name="September 2026 17: Tom Haddad — last on-site day", exact=True).is_visible()
     assert page.get_by_role("gridcell", name="September 2026 18", exact=True).is_visible()
     assert page.get_by_role("button", name="Previous month", exact=True).is_disabled()
@@ -83,15 +88,18 @@ def assert_calendar_navigation(page):
     next_month = page.get_by_role("button", name="Next month", exact=True)
     next_month.click()
     assert page.get_by_role("grid", name="October 2026", exact=True).is_visible()
-    assert page.locator(".month-milestones li").count() == 3
+    assert page.get_by_text("October 2026", exact=True).count() == 1
+    assert page.locator(".calendar-event-marker").count() == 3
     assert previous.is_enabled()
     next_month.click()
     assert page.get_by_role("grid", name="November 2026", exact=True).is_visible()
-    assert page.locator(".month-milestones li").count() == 2
+    assert page.get_by_text("November 2026", exact=True).count() == 1
+    assert page.locator(".calendar-event-marker").count() == 2
     next_month.click()
     assert page.get_by_role("grid", name="December 2026", exact=True).is_visible()
+    assert page.get_by_text("December 2026", exact=True).count() == 1
+    assert page.locator(".calendar-event-marker").count() == 0
     assert next_month.is_disabled()
-    assert page.get_by_text("No countdown milestones currently listed.", exact=True).is_visible()
     previous.click()
     previous.click()
     previous.click()
@@ -192,7 +200,14 @@ with sync_playwright() as playwright:
     desktop.wait_for_timeout(100)
     desktop.screenshot(path=OUTPUT / "dsa-gi-home-countdowns-desktop.png", full_page=False)
     desktop.locator(".year-calendar").scroll_into_view_if_needed()
+    tom_event = desktop.locator(".calendar-event-marker").first
+    assert float(tom_event.evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 12
+    tom_event.focus()
+    desktop.wait_for_timeout(200)
+    assert tom_event.get_by_role("tooltip").is_visible()
+    assert float(tom_event.get_by_role("tooltip").locator("strong").evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 13
     desktop.screenshot(path=OUTPUT / "dsa-gi-calendar-desktop.png", full_page=False)
+    desktop.locator(".year-calendar").focus()
 
     desktop.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).click()
     assert_sedation_reference(desktop)
@@ -276,7 +291,13 @@ with sync_playwright() as playwright:
     assert mobile.locator(".countdown-strip").evaluate("element => element.scrollWidth > element.clientWidth")
     mobile.screenshot(path=OUTPUT / "dsa-gi-home-countdowns-mobile.png", full_page=False)
     mobile.locator(".year-calendar").scroll_into_view_if_needed()
+    mobile_event = mobile.locator(".calendar-event-marker").first
+    mobile_event.focus()
+    mobile.wait_for_timeout(200)
+    assert mobile_event.get_by_role("tooltip").is_visible()
+    assert float(mobile_event.get_by_role("tooltip").locator("strong").evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 15
     mobile.screenshot(path=OUTPUT / "dsa-gi-calendar-mobile.png", full_page=False)
+    mobile.locator(".year-calendar").focus()
     mobile.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).click()
     assert_sedation_reference(mobile)
     mobile.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-sedation-mobile.png", full_page=False)

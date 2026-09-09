@@ -5,6 +5,14 @@ tags:
 
 # Changelog
 
+## 0.15.0 — 2026-09-09
+
+- Removed the redundant “Rest of 2026” title, date-range label, and duplicate monthly milestone sidebar.
+- Centered one prominent month label immediately above a full-width calendar grid.
+- Increased the month, weekday, date, and event typography for faster scanning.
+- Kept event names readable in desktop cells and added large hover, keyboard-focus, and tap details for constrained screens.
+- Expanded browser QA to enforce the simplified labels, month-specific event counts, minimum font sizes, and desktop/mobile tooltip behavior.
+
 ## 0.14.2 — 2026-09-09
 
 - Corrected Tom Haddad's last on-site day from Friday, September 18 to Thursday, September 17, 2026.

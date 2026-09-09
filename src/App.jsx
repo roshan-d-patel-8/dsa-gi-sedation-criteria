@@ -78,11 +78,8 @@ function Calendar2026() {
 
   return (
     <section className="year-calendar" aria-labelledby="calendar-title" tabIndex="0" onKeyDown={handleCalendarKeyDown}>
+      <h2 id="calendar-title" className="sr-only">2026 calendar</h2>
       <header className="calendar-header">
-        <div>
-          <p>September—December</p>
-          <h2 id="calendar-title">Rest of 2026</h2>
-        </div>
         <div className="calendar-controls" aria-label="Calendar month controls">
           <button type="button" onClick={() => moveMonth(-1)} disabled={monthPosition === 0} aria-label="Previous month">←</button>
           <strong aria-live="polite">{monthLabel}</strong>
@@ -90,40 +87,37 @@ function Calendar2026() {
         </div>
       </header>
 
-      <div className="calendar-layout">
-        <div className="calendar-grid" role="grid" aria-label={monthLabel}>
-          {weekdayLabels.map((weekday) => <span className="calendar-weekday" role="columnheader" key={weekday}>{weekday}</span>)}
-          {Array.from({ length: cellCount }, (_, index) => {
-            const day = index - leadingDays + 1;
-            if (day < 1 || day > daysInMonth) return <span className="calendar-day calendar-day-empty" aria-hidden="true" key={`empty-${index}`} />;
-            const date = `2026-${String(monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-            const events = monthEvents.filter((item) => item.date === date);
-            return (
-              <div className={`calendar-day${events.length ? " has-event" : ""}`} role="gridcell" aria-label={`${monthLabel} ${day}${events.length ? `: ${events.map((event) => event.label).join(", ")}` : ""}`} key={date}>
-                <time dateTime={date}>{day}</time>
-                {events.map((event) => <span className={`calendar-event-tag tone-${event.tone || "blue"}`} key={event.label}>{event.label}</span>)}
-              </div>
-            );
-          })}
-        </div>
-
-        <aside className="month-milestones" aria-label={`${monthLabel} milestones`}>
-          <span className="milestone-count">{String(monthEvents.length).padStart(2, "0")}</span>
-          <div>
-            <p>Marked this month</p>
-            <h3>{monthLabel}</h3>
-          </div>
-          {monthEvents.length ? (
-            <ol>
-              {monthEvents.map((event) => (
-                <li key={event.label}>
-                  <time dateTime={event.date}>{event.displayDate.replace(" · confirmed", "")}</time>
-                  <strong>{event.label}</strong>
-                </li>
-              ))}
-            </ol>
-          ) : <p className="calendar-empty-state">No countdown milestones currently listed.</p>}
-        </aside>
+      <div className="calendar-grid" role="grid" aria-label={monthLabel}>
+        {weekdayLabels.map((weekday) => <span className="calendar-weekday" role="columnheader" key={weekday}>{weekday}</span>)}
+        {Array.from({ length: cellCount }, (_, index) => {
+          const day = index - leadingDays + 1;
+          if (day < 1 || day > daysInMonth) return <span className="calendar-day calendar-day-empty" aria-hidden="true" key={`empty-${index}`} />;
+          const date = `2026-${String(monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+          const events = monthEvents.filter((item) => item.date === date);
+          return (
+            <div className={`calendar-day${events.length ? " has-event" : ""}`} role="gridcell" aria-label={`${monthLabel} ${day}${events.length ? `: ${events.map((event) => event.label).join(", ")}` : ""}`} key={date}>
+              <time dateTime={date}>{day}</time>
+              {events.map((event, eventIndex) => {
+                const tooltipId = `calendar-event-${date}-${eventIndex}`;
+                return (
+                  <span
+                    className={`calendar-event-marker tone-${event.tone || "blue"}`}
+                    tabIndex="0"
+                    aria-label={`${event.label}, ${event.displayDate.replace(" · confirmed", "")}`}
+                    aria-describedby={tooltipId}
+                    key={event.label}
+                  >
+                    <span className="calendar-event-label">{event.label}</span>
+                    <span className="calendar-event-tooltip" id={tooltipId} role="tooltip">
+                      <strong>{event.label}</strong>
+                      <small>{event.displayDate.replace(" · confirmed", "")}</small>
+                    </span>
+                  </span>
+                );
+              })}
+            </div>
+          );
+        })}
       </div>
     </section>
   );
