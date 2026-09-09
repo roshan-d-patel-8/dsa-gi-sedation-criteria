@@ -336,11 +336,12 @@ with sync_playwright() as playwright:
     people_tab.click()
     assert desktop.locator(".orientation-card-sensitive").count() == 1
     assert desktop.locator(".orientation-group-grid").count() == 1
-    assert desktop.locator("details.orientation-site-group").count() == 4
+    assert desktop.locator("details.orientation-site-group").count() == 3
     assert desktop.get_by_role("heading", name="Walnut Creek", exact=True).is_visible()
     assert desktop.get_by_role("heading", name="Deer Valley", exact=True).is_visible()
     assert desktop.get_by_role("heading", name="Departmentwide & regional", exact=True).is_visible()
-    assert desktop.get_by_role("heading", name="Skills Day", exact=True).is_visible()
+    assert desktop.get_by_role("heading", name="Skills Day", exact=True).count() == 0
+    assert desktop.locator(".orientation-skills-day").count() == 0
     assert desktop.locator("details.orientation-site-group[open]").count() == 0
     wcr_group = desktop.locator(".site-group-wcr")
     wcr_group.locator("summary").press("Enter")
@@ -356,14 +357,8 @@ with sync_playwright() as playwright:
     departmentwide_group = desktop.locator(".site-group-departmentwide")
     departmentwide_group.locator("summary").click()
     assert departmentwide_group.get_by_text("DSA GI PAs: Sabrina Han, Megan Palsa, Robbie Molden", exact=True).is_visible()
-    skills_day = desktop.locator(".orientation-skills-day")
-    skills_day.locator("summary").click()
-    assert skills_day.locator("iframe").is_visible()
-    assert skills_day.locator("iframe").get_attribute("title") == "DSA GI Skills Day 2025"
-    assert skills_day.locator("iframe").get_attribute("src") == "https://www.youtube-nocookie.com/embed/WYdP1js9NPk?rel=0"
-    assert skills_day.get_by_role("link", name="Open on YouTube", exact=True).get_attribute("href") == "https://youtu.be/WYdP1js9NPk"
     assert desktop.get_by_text("WCR Door Codes:", exact=True).evaluate("element => element.tagName") == "STRONG"
-    skills_day.scroll_into_view_if_needed()
+    departmentwide_group.scroll_into_view_if_needed()
     desktop.wait_for_timeout(350)
     desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-people-grouped.png", full_page=False)
 
@@ -376,6 +371,39 @@ with sync_playwright() as playwright:
     assert desktop.get_by_text("DSA General GI number (for patients):", exact=True).evaluate("element => element.tagName") == "STRONG"
     desktop.wait_for_timeout(350)
     desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-contacts-grouped.png", full_page=False)
+
+    procedures_tab = desktop.get_by_role("tab", name="Procedures Appointment types and documentation", exact=False)
+    procedures_tab.click()
+    assert desktop.locator(".orientation-procedure-grid").count() == 1
+    assert desktop.locator("details.orientation-procedure-group").count() == 3
+    assert desktop.locator("details.orientation-site-group").count() == 4
+    assert desktop.locator("details.orientation-site-group[open]").count() == 0
+    assert desktop.locator(".orientation-procedure-grid summary > i").count() == 4
+    for heading in ["Appointment types", "Sedation & flex-sig routing", "Procedure documentation", "Skills Day"]:
+        assert desktop.get_by_role("heading", name=heading, exact=True).is_visible()
+    desktop.locator(".orientation-card").scroll_into_view_if_needed()
+    desktop.wait_for_timeout(250)
+    desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-procedures-collapsed.png", full_page=False)
+
+    type_group = desktop.locator(".procedure-group-types")
+    type_group.locator("summary").press("Enter")
+    assert type_group.get_by_text("CLNS – Screening/surveillance colonoscopy", exact=True).is_visible()
+    routing_group = desktop.locator(".procedure-group-routing")
+    routing_group.locator("summary").click()
+    assert routing_group.get_by_text("if a patient has ESRD on HD/ PD", exact=False).is_visible()
+    assert routing_group.get_by_text("We have flex-sig units", exact=False).is_visible()
+    documentation_group = desktop.locator(".procedure-group-documentation")
+    documentation_group.locator("summary").click()
+    assert documentation_group.get_by_text("For pre-procedure H&P, use .prochpamb smartphrase.", exact=True).is_visible()
+    skills_day = desktop.locator(".orientation-skills-day")
+    skills_day.locator("summary").click()
+    assert skills_day.locator("iframe").is_visible()
+    assert skills_day.locator("iframe").get_attribute("title") == "DSA GI Skills Day 2025"
+    assert skills_day.locator("iframe").get_attribute("src") == "https://www.youtube-nocookie.com/embed/WYdP1js9NPk?rel=0"
+    assert skills_day.get_by_role("link", name="Open on YouTube", exact=True).get_attribute("href") == "https://youtu.be/WYdP1js9NPk"
+    procedures_tab.scroll_into_view_if_needed()
+    desktop.wait_for_timeout(350)
+    desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-procedures-accordion.png", full_page=True)
 
     search = desktop.get_by_role("searchbox", name="Search the field guide")
     search.fill("QuikAction")
@@ -441,7 +469,9 @@ with sync_playwright() as playwright:
     assert mobile.locator(".cw-smartphrase-grid").evaluate("element => getComputedStyle(element).gridTemplateColumns.split(' ').length") == 1
     mobile.locator(".cw-smartphrase-panel").scroll_into_view_if_needed()
     mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-choosing-wisely-mobile.png", full_page=False)
-    mobile.get_by_role("tab", name="People Management staff and PAs", exact=False).click()
+    mobile.get_by_role("tab", name="Procedures Appointment types and documentation", exact=False).click()
+    assert mobile.locator(".orientation-procedure-grid").count() == 1
+    assert mobile.locator("details.orientation-site-group[open]").count() == 0
     mobile_skills_day = mobile.locator(".orientation-skills-day")
     mobile_skills_day.locator("summary").click()
     assert mobile_skills_day.locator("iframe").is_visible()
@@ -453,4 +483,4 @@ with sync_playwright() as playwright:
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: Home countdowns, September–December GI birthdays, Tom farewell cocktail event, four folder tabs, 12-section field guide including Choosing Wisely with expandable infographic, nested People foldouts, Skills Day video, podlet tooltips, portraits, and mobile layout.")
+print("Visual QA passed: Home countdowns, September–December GI birthdays, Tom farewell cocktail event, four folder tabs, 12-section field guide including Choosing Wisely with expandable infographic, nested People and Procedures foldouts, Skills Day video, podlet tooltips, portraits, and mobile layout.")

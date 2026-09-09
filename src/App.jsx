@@ -298,6 +298,35 @@ const skillsDayVideo = {
   watchUrl: "https://youtu.be/WYdP1js9NPk",
 };
 
+function createSkillsDayFoldout(doc) {
+  const skillsDay = doc.createElement("details");
+  skillsDay.className = "orientation-site-group orientation-skills-day";
+  skillsDay.innerHTML = `
+    <summary>
+      <span>PLAY</span>
+      <div><h3>Skills Day</h3><small>Watch the team training session</small></div>
+      <i aria-hidden="true"></i>
+    </summary>
+    <div class="skills-day-body">
+      <div class="skills-day-video">
+        <iframe
+          src="${skillsDayVideo.embedUrl}"
+          title="${skillsDayVideo.title}"
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <div class="skills-day-caption">
+        <div><span>Training library</span><strong>${skillsDayVideo.title}</strong></div>
+        <a href="${skillsDayVideo.watchUrl}" target="_blank" rel="noreferrer">Open on YouTube</a>
+      </div>
+    </div>
+  `;
+  return skillsDay;
+}
+
 function emphasizeLeadingLabel(paragraph, doc) {
   const firstContentNode = Array.from(paragraph.childNodes).find((node) => node.textContent.trim());
   if (firstContentNode?.nodeType === Node.ELEMENT_NODE && firstContentNode.matches("strong, b")) return;
@@ -378,36 +407,66 @@ function groupDirectoryBySite(container, doc, sectionShort) {
     groupGrid.append(group);
   });
 
-  if (sectionShort === "People") {
-    const skillsDay = doc.createElement("details");
-    skillsDay.className = "orientation-site-group orientation-skills-day";
-    skillsDay.innerHTML = `
-      <summary>
-        <span>PLAY</span>
-        <div><h3>Skills Day</h3><small>Watch the team training session</small></div>
-        <i aria-hidden="true"></i>
-      </summary>
-      <div class="skills-day-body">
-        <div class="skills-day-video">
-          <iframe
-            src="${skillsDayVideo.embedUrl}"
-            title="${skillsDayVideo.title}"
-            loading="lazy"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-          ></iframe>
-        </div>
-        <div class="skills-day-caption">
-          <div><span>Training library</span><strong>${skillsDayVideo.title}</strong></div>
-          <a href="${skillsDayVideo.watchUrl}" target="_blank" rel="noreferrer">Open on YouTube</a>
-        </div>
-      </div>
-    `;
-    groupGrid.append(skillsDay);
-  }
-
   sourceList.replaceWith(groupGrid);
+}
+
+function createProcedureFoldout(doc, { code, title, description, className, nodes }) {
+  const foldout = doc.createElement("details");
+  foldout.className = `orientation-site-group orientation-procedure-group ${className}`;
+  foldout.innerHTML = `
+    <summary>
+      <span>${code}</span>
+      <div><h3>${title}</h3><small>${description}</small></div>
+      <i aria-hidden="true"></i>
+    </summary>
+  `;
+  const body = doc.createElement("div");
+  body.className = "orientation-procedure-body";
+  nodes.forEach((node) => {
+    if (node.matches("ol, ul")) node.classList.add("orientation-list-grid");
+    if (node.matches("p")) {
+      node.classList.add(node.querySelector("em") ? "orientation-callout" : "orientation-prose-block");
+    }
+    body.append(node);
+  });
+  foldout.append(body);
+  return foldout;
+}
+
+function groupProcedures(container, doc, sectionShort) {
+  if (sectionShort !== "Procedures") return;
+  const nodes = Array.from(container.children);
+  const firstListIndex = nodes.findIndex((node) => node.matches("ol, ul"));
+  const documentationIndex = nodes.findIndex((node) => node.textContent.trim() === "Procedure documentation");
+  if (firstListIndex < 0 || documentationIndex < 0) return;
+
+  const groupGrid = doc.createElement("div");
+  groupGrid.className = "orientation-procedure-grid";
+  groupGrid.append(
+    createProcedureFoldout(doc, {
+      code: "TYPE",
+      title: "Appointment types",
+      description: "Procedure codes and scheduling categories",
+      className: "procedure-group-types",
+      nodes: nodes.slice(0, firstListIndex + 1),
+    }),
+    createProcedureFoldout(doc, {
+      code: "FLOW",
+      title: "Sedation & flex-sig routing",
+      description: "Location, preparation and special-case guidance",
+      className: "procedure-group-routing",
+      nodes: nodes.slice(firstListIndex + 1, documentationIndex),
+    }),
+    createProcedureFoldout(doc, {
+      code: "DOC",
+      title: "Procedure documentation",
+      description: "Assessment, SmartSets, pathology and follow-up",
+      className: "procedure-group-documentation",
+      nodes: nodes.slice(documentationIndex + 1),
+    }),
+    createSkillsDayFoldout(doc),
+  );
+  container.replaceChildren(groupGrid);
 }
 
 function parseOrientationSource(source) {
@@ -427,6 +486,7 @@ function parseOrientationSource(source) {
     container.querySelectorAll("p").forEach((paragraph) => emphasizeLeadingLabel(paragraph, doc));
     normalizeListItemLines(container, doc);
     groupDirectoryBySite(container, doc, meta.short);
+    groupProcedures(container, doc, meta.short);
     Array.from(container.children).forEach((node) => {
       if (node.matches("ol, ul")) node.classList.add("orientation-list-grid");
       if (node.matches("blockquote")) node.classList.add("orientation-callout");

@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.21.0 — 2026-09-09
+
+- Moved Skills Day from People to Procedures while preserving the privacy-enhanced YouTube embed and direct video link.
+- Converted Procedures into four nested keyboard-accessible foldouts for appointment types, sedation and flex-sig routing, documentation, and Skills Day.
+- Added desktop and mobile browser coverage for the new location, collapsed defaults, arrow controls, retained procedure content, and video behavior.
+
 ## 0.20.1 — 2026-09-09
 
 - Removed the standalone Medication holds card from the Procedure Sedation Criteria tab.
