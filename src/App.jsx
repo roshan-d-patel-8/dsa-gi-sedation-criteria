@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { POLICY_VERSION, policySections } from "./criteria.js";
 import { coverageSites } from "./podlets.js";
 import { birthdayEvents } from "./birthdays.js";
@@ -16,6 +16,9 @@ const tabs = [
   { id: "coverage", index: "02", label: "DSA GI MA-MD Podlets" },
   { id: "orientation", index: "03", label: "New Physician Orientation Materials" },
 ];
+
+const zoomLevels = [90, 100, 110, 125, 140];
+const zoomStorageKey = "dsa-gi-page-zoom";
 
 const countdowns = [
   { label: "Tom Haddad — last on-site day", date: "2026-09-17", displayDate: "Thu · Sep 17, 2026" },
@@ -80,6 +83,15 @@ function HomeIcon() {
   return (
     <svg className="home-tab-icon" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M3.75 10.5 12 3.75l8.25 6.75v8.25a1.5 1.5 0 0 1-1.5 1.5h-4.5v-6h-4.5v6h-4.5a1.5 1.5 0 0 1-1.5-1.5V10.5Z" />
+    </svg>
+  );
+}
+
+function ZoomIcon() {
+  return (
+    <svg className="zoom-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="10.5" cy="10.5" r="6.25" />
+      <path d="m15.2 15.2 4.6 4.6M10.5 7.6v5.8M7.6 10.5h5.8" />
     </svg>
   );
 }
@@ -1422,10 +1434,69 @@ function FolderTabs({ activeTab, onChange }) {
   );
 }
 
+function ZoomControl({ zoom, onZoomChange }) {
+  const [open, setOpen] = useState(false);
+  const currentIndex = zoomLevels.indexOf(zoom);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    function closeOnEscape(event) {
+      if (event.key === "Escape") setOpen(false);
+    }
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [open]);
+
+  return (
+    <div className={`zoom-control${open ? " is-open" : ""}`}>
+      <button
+        className="zoom-trigger"
+        type="button"
+        aria-label={`Zoom page, currently ${zoom}%`}
+        aria-expanded={open}
+        aria-controls="zoom-panel"
+        onClick={() => setOpen((value) => !value)}
+      >
+        <ZoomIcon />
+        <span>{zoom}%</span>
+      </button>
+      {open && (
+        <div className="zoom-panel" id="zoom-panel" role="group" aria-label="Page zoom controls">
+          <header><strong>Page zoom</strong><span>{zoom}%</span></header>
+          <div>
+            <button
+              type="button"
+              aria-label="Zoom out"
+              disabled={currentIndex === 0}
+              onClick={() => onZoomChange(zoomLevels[currentIndex - 1])}
+            >−</button>
+            <output aria-live="polite">{zoom}%</output>
+            <button
+              type="button"
+              aria-label="Zoom in"
+              disabled={currentIndex === zoomLevels.length - 1}
+              onClick={() => onZoomChange(zoomLevels[currentIndex + 1])}
+            >+</button>
+          </div>
+          <button className="zoom-reset" type="button" disabled={zoom === 100} onClick={() => onZoomChange(100)}>Reset to 100%</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function App() {
   const [activeTab, setActiveTab] = useState("home");
+  const [zoom, setZoom] = useState(() => {
+    const storedZoom = Number(window.localStorage.getItem(zoomStorageKey));
+    return zoomLevels.includes(storedZoom) ? storedZoom : 100;
+  });
   const isSedation = activeTab === "sedation";
   const activeTabLabel = tabs.find((tab) => tab.id === activeTab)?.label;
+
+  useEffect(() => {
+    window.localStorage.setItem(zoomStorageKey, String(zoom));
+  }, [zoom]);
 
   return (
     <div className={`app-shell active-${activeTab}`}>
@@ -1435,19 +1506,26 @@ export default function App() {
           <span><strong>DSA GI</strong><small>Resources</small></span>
         </div>
         <FolderTabs activeTab={activeTab} onChange={setActiveTab} />
+        <ZoomControl zoom={zoom} onZoomChange={setZoom} />
       </header>
 
-      <div className="folder-sheet">
-        {activeTab === "home" && <HomePage />}
-        {activeTab === "sedation" && <CriteriaMatrix />}
-        {activeTab === "coverage" && <CoveragePodlets />}
-        {activeTab === "orientation" && <OrientationMaterials />}
-      </div>
+      <div
+        className="page-zoom-surface"
+        data-zoom={zoom}
+        style={{ "--page-zoom": zoom / 100, "--page-zoom-width": `${10000 / zoom}%` }}
+      >
+        <div className="folder-sheet">
+          {activeTab === "home" && <HomePage />}
+          {activeTab === "sedation" && <CriteriaMatrix />}
+          {activeTab === "coverage" && <CoveragePodlets />}
+          {activeTab === "orientation" && <OrientationMaterials />}
+        </div>
 
-      <footer>
-        <div><strong>DSA GI · Trust Your Gut</strong><span>{isSedation ? `Sedation Criteria · Revised ${POLICY_VERSION}` : activeTabLabel}</span></div>
-        <p>The DSA Way · Physician-led, team-owned clinical operations.</p>
-      </footer>
+        <footer>
+          <div><strong>DSA GI · Trust Your Gut</strong><span>{isSedation ? `Sedation Criteria · Revised ${POLICY_VERSION}` : activeTabLabel}</span></div>
+          <p>The DSA Way · Physician-led, team-owned clinical operations.</p>
+        </footer>
+      </div>
     </div>
   );
 }

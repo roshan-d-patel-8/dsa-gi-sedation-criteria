@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.27.0 — 2026-09-09
+
+- Added a persistent Zoom control in the upper-right of the global header, available from every primary page.
+- Added 90%, 100%, 110%, 125%, and 140% levels with zoom-in, zoom-out, reset, keyboard dismissal, and saved preference support.
+- Kept the control itself fixed-size and outside the zoomed content surface so the page reflows without introducing horizontal scrolling on desktop or mobile.
+
 ## 0.26.0 — 2026-09-09
 
 - Extended the nested accordion system to every Field Guide tab while preserving all source content and existing interactive tools.

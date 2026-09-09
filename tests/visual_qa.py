@@ -58,6 +58,40 @@ def assert_tabs(page):
     assert page.get_by_role("tab", name="New Physician Orientation Materials", exact=False).is_visible()
 
 
+def assert_global_zoom(page, mobile=False):
+    zoom_trigger = page.get_by_role("button", name="Zoom page", exact=False)
+    assert zoom_trigger.is_visible()
+    assert zoom_trigger.get_attribute("aria-expanded") == "false"
+    zoom_trigger.click()
+    zoom_panel = page.get_by_role("group", name="Page zoom controls", exact=True)
+    assert zoom_panel.is_visible()
+    assert zoom_panel.locator("output").inner_text() == "100%"
+    assert zoom_panel.get_by_role("button", name="Reset to 100%", exact=True).is_disabled()
+    zoom_panel.get_by_role("button", name="Zoom in", exact=True).click()
+    surface = page.locator(".page-zoom-surface")
+    assert surface.get_attribute("data-zoom") == "110"
+    assert surface.evaluate("element => getComputedStyle(element).zoom") == "1.1"
+    assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
+    assert zoom_panel.locator("output").inner_text() == "110%"
+    page.screenshot(path=OUTPUT / ("dsa-gi-zoom-control-mobile.png" if mobile else "dsa-gi-zoom-control-desktop.png"), full_page=False)
+    page.keyboard.press("Escape")
+    assert zoom_panel.count() == 0
+
+    for tab_name in ["Home", "Procedure Sedation Criteria", "DSA GI MA-MD Podlets", "New Physician Orientation Materials"]:
+        page.get_by_role("tab", name=tab_name, exact=False).click()
+        assert page.get_by_role("button", name="Zoom page, currently 110%", exact=True).is_visible()
+        assert page.locator(".page-zoom-surface").get_attribute("data-zoom") == "110"
+
+    page.reload()
+    page.wait_for_load_state("networkidle")
+    assert page.get_by_role("button", name="Zoom page, currently 110%", exact=True).is_visible()
+    page.get_by_role("button", name="Zoom page, currently 110%", exact=True).click()
+    page.get_by_role("button", name="Reset to 100%", exact=True).click()
+    assert page.locator(".page-zoom-surface").get_attribute("data-zoom") == "100"
+    assert page.evaluate("localStorage.getItem('dsa-gi-page-zoom')") == "100"
+    page.keyboard.press("Escape")
+
+
 def assert_home(page):
     assert page.get_by_role("heading", name="Countdowns!", exact=True).is_visible()
     assert page.get_by_text("The next markers on the map.", exact=True).count() == 0
@@ -284,6 +318,7 @@ with sync_playwright() as playwright:
     desktop.goto(BASE_URL)
     desktop.wait_for_load_state("networkidle")
     assert_tabs(desktop)
+    assert_global_zoom(desktop)
     assert_home(desktop)
     assert_calendar_navigation(desktop)
     assert desktop.get_by_role("tab", name="Home", exact=True).get_attribute("aria-selected") == "true"
@@ -568,6 +603,7 @@ with sync_playwright() as playwright:
     mobile.goto(BASE_URL)
     mobile.wait_for_load_state("networkidle")
     assert_tabs(mobile)
+    assert_global_zoom(mobile, mobile=True)
     assert_home(mobile)
     assert mobile.locator(".countdown-strip").evaluate("element => element.scrollWidth > element.clientWidth")
     mobile.screenshot(path=OUTPUT / "dsa-gi-home-countdowns-mobile.png", full_page=False)
@@ -652,4 +688,4 @@ with sync_playwright() as playwright:
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: Home countdowns, September announcements, September–December GI birthdays, Tom farewell cocktail event, four folder tabs, all 12 Field Guide sections with collapsed nested accordions, complete email and pool copy controls, Choosing Wisely with expandable infographic and topic folds, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")
+print("Visual QA passed: persistent upper-right zoom controls across all four primary pages, Home countdowns, September announcements, September–December GI birthdays, Tom farewell cocktail event, all 12 Field Guide sections with collapsed nested accordions, complete email and pool copy controls, Choosing Wisely with expandable infographic and topic folds, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")
