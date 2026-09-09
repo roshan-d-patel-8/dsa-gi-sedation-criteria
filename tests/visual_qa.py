@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
@@ -356,6 +357,38 @@ with sync_playwright() as playwright:
 
     communication_tab = desktop.get_by_role("tab", name="Communication Approved channels", exact=False)
     communication_tab.click()
+    communication_content = desktop.locator("#orientation-communication-panel .orientation-content")
+    communication_accordions = communication_content.locator(":scope > details")
+    assert communication_accordions.count() == 3
+    assert communication_accordions.evaluate_all("elements => elements.every((element) => !element.open)")
+    assert communication_content.locator(":scope > :not(details)").count() == 0
+
+    email_directory = desktop.locator(".orientation-email-directory")
+    assert email_directory.get_by_role("heading", name="Email Directory", exact=True).is_visible()
+    email_directory.locator("summary").press("Enter")
+    source_html = (Path(__file__).parents[1] / "src" / "orientation-source.html").read_text()
+    source_emails = set(re.findall(r'href="mailto:([^\"]+)"', source_html, flags=re.IGNORECASE))
+    rendered_emails = set(email_directory.locator('a[href^="mailto:"]').all_text_contents())
+    assert source_emails == rendered_emails == {"dsagimdtimeoffrequests@kp.org", "dsagimds@kp.org"}
+    assert email_directory.locator("tbody tr").count() == len(source_emails)
+    assert email_directory.get_by_text("Physician schedule & time-off requests", exact=True).is_visible()
+    assert email_directory.get_by_text("Centralized requests outside the annual vacation draft", exact=True).is_visible()
+    assert email_directory.get_by_text("DSA GI MDs group email", exact=True).is_visible()
+    assert email_directory.get_by_text("Put (PHI) in the subject line", exact=False).is_visible()
+    desktop.context.grant_permissions(["clipboard-read", "clipboard-write"], origin=BASE_URL)
+    copy_schedule_email = email_directory.get_by_role("button", name="Copy dsagimdtimeoffrequests@kp.org to clipboard", exact=True)
+    copy_schedule_email.click()
+    desktop.wait_for_timeout(120)
+    assert copy_schedule_email.inner_text().strip() == "Copied"
+    assert desktop.evaluate("navigator.clipboard.readText()") == "dsagimdtimeoffrequests@kp.org"
+
+    secure_channels = desktop.locator(".orientation-secure-channels")
+    secure_channels.locator("summary").press("Enter")
+    assert secure_channels.get_by_text("Microsoft Teams: HIPAA compliant", exact=True).is_visible()
+    assert secure_channels.get_by_text("KP iPhone", exact=True).is_visible()
+    assert secure_channels.get_by_text("Health Connect Chart Chat", exact=True).is_visible()
+    assert secure_channels.get_by_text("Outlook:", exact=False).count() == 0
+
     pool_party = desktop.locator(".orientation-pool-party")
     assert pool_party.count() == 1
     assert pool_party.get_by_role("heading", name="Pool Party", exact=True).is_visible()
@@ -379,7 +412,6 @@ with sync_playwright() as playwright:
         assert row.get_by_text(pool, exact=True).is_visible()
         assert purpose in row.locator("td").nth(1).inner_text()
         assert row.get_by_role("button", name=f"Copy {pool} to clipboard", exact=True).is_visible()
-    desktop.context.grant_permissions(["clipboard-read", "clipboard-write"], origin=BASE_URL)
     copy_pool = pool_party.get_by_role("button", name="Copy P WCR GI APPT to clipboard", exact=True)
     copy_pool.click()
     desktop.wait_for_timeout(120)
@@ -387,8 +419,8 @@ with sync_playwright() as playwright:
     assert desktop.evaluate("navigator.clipboard.readText()") == "P WCR GI APPT"
     assert pool_party.locator(".pool-reference-only").count() == 3
     assert pool_party.get_by_text("routine infusion requests no longer need to be routed to them", exact=False).is_visible()
-    pool_party.scroll_into_view_if_needed()
-    desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-pool-party-desktop.png", full_page=False)
+    email_directory.scroll_into_view_if_needed()
+    desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-communications-desktop.png", full_page=True)
 
     people_tab = desktop.get_by_role("tab", name="People Management staff and PAs", exact=False)
     people_tab.click()
@@ -556,13 +588,18 @@ with sync_playwright() as playwright:
     assert mobile.locator(".orientation-subtabs").evaluate("element => element.scrollWidth > element.clientWidth")
     mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-mobile.png", full_page=False)
     mobile.get_by_role("tab", name="Communication Approved channels", exact=False).click()
+    mobile_email_directory = mobile.locator(".orientation-email-directory")
+    mobile_email_directory.locator("summary").click()
+    assert mobile_email_directory.locator("tbody tr").count() == 2
+    assert mobile_email_directory.locator(".email-directory-body").evaluate("element => element.scrollWidth <= element.clientWidth")
+    assert mobile_email_directory.get_by_role("button", name="Copy dsagimdtimeoffrequests@kp.org to clipboard", exact=True).is_visible()
     mobile_pool_party = mobile.locator(".orientation-pool-party")
     mobile_pool_party.locator("summary").click()
     assert mobile_pool_party.locator("tbody tr").count() == 9
     assert mobile_pool_party.locator(".pool-party-body").evaluate("element => element.scrollWidth <= element.clientWidth")
     assert mobile_pool_party.get_by_role("button", name="Copy P NCAL REG THERAPY PLAN to clipboard", exact=True).is_visible()
-    mobile_pool_party.scroll_into_view_if_needed()
-    mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-pool-party-mobile.png", full_page=False)
+    mobile_email_directory.scroll_into_view_if_needed()
+    mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-communications-mobile.png", full_page=False)
     assert_choosing_wisely(mobile)
     assert mobile.get_by_role("button", name="Expand Choosing Wisely graduation infographic", exact=True).bounding_box()["width"] <= 110
     assert mobile.locator(".cw-smartphrase-grid").evaluate("element => getComputedStyle(element).gridTemplateColumns.split(' ').length") == 1
@@ -588,4 +625,4 @@ with sync_playwright() as playwright:
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: Home countdowns, September announcements, September–December GI birthdays, Tom farewell cocktail event, four folder tabs, 12-section field guide including Pool Party copy controls, Choosing Wisely with expandable infographic, nested People and Procedures foldouts, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")
+print("Visual QA passed: Home countdowns, September announcements, September–December GI birthdays, Tom farewell cocktail event, four folder tabs, 12-section field guide including nested Communication accordions with complete email and pool copy controls, Choosing Wisely with expandable infographic, nested People and Procedures foldouts, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")

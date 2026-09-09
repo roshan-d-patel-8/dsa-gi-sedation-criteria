@@ -357,6 +357,17 @@ const communicationPools = [
   { pool: "P DUB INF RN", purpose: "Dublin infusion RN inbox", referenceOnly: true },
 ];
 
+const communicationEmailDetails = {
+  "dsagimdtimeoffrequests@kp.org": {
+    label: "Physician schedule & time-off requests",
+    purpose: "Centralized requests outside the annual vacation draft",
+  },
+  "dsagimds@kp.org": {
+    label: "DSA GI MDs group email",
+    purpose: "Departmentwide physician group email",
+  },
+};
+
 const skillsDayVideo = {
   title: "DSA GI Skills Day 2025",
   embedUrl: "https://www.youtube-nocookie.com/embed/WYdP1js9NPk?rel=0",
@@ -514,6 +525,78 @@ function groupDirectoryBySite(container, doc, sectionShort) {
   sourceList.replaceWith(groupGrid);
 }
 
+function createCommunicationFoldout(doc, { code, title, description, className }) {
+  const foldout = doc.createElement("details");
+  foldout.className = `orientation-site-group orientation-communication-group ${className}`;
+  foldout.innerHTML = `
+    <summary>
+      <span>${code}</span>
+      <div><h3>${title}</h3><small>${description}</small></div>
+      <i aria-hidden="true"></i>
+    </summary>
+  `;
+  return foldout;
+}
+
+function groupCommunicationContent(container, doc, sectionShort) {
+  if (sectionShort !== "Communication") return;
+
+  const addresses = Array.from(doc.querySelectorAll('a[href^="mailto:"]'))
+    .map((link) => link.getAttribute("href").replace(/^mailto:/i, "").trim())
+    .filter((address, index, all) => address && all.indexOf(address) === index);
+  const emailRows = addresses.map((address) => {
+    const details = communicationEmailDetails[address] ?? {
+      label: address,
+      purpose: "Email address listed in the Field Guide",
+    };
+    return `
+      <tr>
+        <td><strong>${details.label}</strong><a href="mailto:${address}">${address}</a></td>
+        <td>${details.purpose}</td>
+        <td>
+          <button type="button" class="pool-copy-button email-copy-button" data-copy-value="${address}" aria-label="Copy ${address} to clipboard">
+            <span aria-hidden="true"></span><strong class="copy-button-label">Copy</strong>
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  const emailDirectory = createCommunicationFoldout(doc, {
+    code: "MAIL",
+    title: "Email Directory",
+    description: "Every mailbox listed in the Field Guide",
+    className: "orientation-email-directory",
+  });
+  const emailBody = doc.createElement("div");
+  emailBody.className = "communication-accordion-body email-directory-body";
+  emailBody.innerHTML = `
+    <p class="communication-privacy-note"><strong>Outlook:</strong> Put <code>(PHI)</code> in the subject line whenever patient information is included.</p>
+    <table>
+      <thead><tr><th scope="col">Email</th><th scope="col">Use</th><th scope="col"><span class="sr-only">Copy address</span></th></tr></thead>
+      <tbody>${emailRows}</tbody>
+    </table>
+    <p class="copy-status sr-only" aria-live="polite"></p>
+  `;
+  emailDirectory.append(emailBody);
+
+  const secureChannels = createCommunicationFoldout(doc, {
+    code: "CHAT",
+    title: "Secure Channels",
+    description: "Approved clinical communication options",
+    className: "orientation-secure-channels",
+  });
+  const channelBody = doc.createElement("div");
+  channelBody.className = "communication-accordion-body secure-channels-body";
+  Array.from(container.children)
+    .filter((node) => !node.querySelector('a[href^="mailto:"]') && !/^Outlook:/i.test(node.textContent.trim()))
+    .forEach((node) => channelBody.append(node));
+  channelBody.querySelectorAll("ol, ul").forEach((list) => list.classList.add("orientation-list-grid"));
+  secureChannels.append(channelBody);
+
+  container.replaceChildren(emailDirectory, secureChannels);
+}
+
 function addPoolParty(container, doc, sectionShort) {
   if (sectionShort !== "Communication") return;
 
@@ -522,8 +605,8 @@ function addPoolParty(container, doc, sectionShort) {
       <td><code>${pool}</code></td>
       <td>${purpose}${referenceOnly ? '<small>Reference only</small>' : ""}</td>
       <td>
-        <button type="button" class="pool-copy-button" data-pool-copy="${pool}" aria-label="Copy ${pool} to clipboard">
-          <span aria-hidden="true"></span><strong class="pool-copy-label">Copy</strong>
+        <button type="button" class="pool-copy-button" data-copy-value="${pool}" aria-label="Copy ${pool} to clipboard">
+          <span aria-hidden="true"></span><strong class="copy-button-label">Copy</strong>
         </button>
       </td>
     </tr>
@@ -543,7 +626,7 @@ function addPoolParty(container, doc, sectionShort) {
         <tbody>${rows}</tbody>
       </table>
       <aside><strong>Infusion note</strong> The three infusion RN destinations are retained for reference; the Field Guide says routine infusion requests no longer need to be routed to them.</aside>
-      <p class="pool-copy-status sr-only" aria-live="polite"></p>
+      <p class="copy-status sr-only" aria-live="polite"></p>
     </div>
   `;
   container.append(poolParty);
@@ -625,6 +708,7 @@ function parseOrientationSource(source) {
     container.querySelectorAll("p").forEach((paragraph) => emphasizeLeadingLabel(paragraph, doc));
     normalizeListItemLines(container, doc);
     groupDirectoryBySite(container, doc, meta.short);
+    groupCommunicationContent(container, doc, meta.short);
     addPoolParty(container, doc, meta.short);
     groupProcedures(container, doc, meta.short);
     Array.from(container.children).forEach((node) => {
@@ -869,16 +953,16 @@ function OrientationMaterials() {
     requestAnimationFrame(() => document.getElementById(`${nextSection.id}-tab`)?.focus());
   }
 
-  async function copyPoolAddress(button, content) {
-    const pool = button.dataset.poolCopy;
-    const label = button.querySelector(".pool-copy-label");
-    const status = content.querySelector(".pool-copy-status");
+  async function copyCommunicationValue(button) {
+    const value = button.dataset.copyValue;
+    const label = button.querySelector(".copy-button-label");
+    const status = button.closest("details")?.querySelector(".copy-status");
 
     try {
-      await navigator.clipboard.writeText(pool);
+      await navigator.clipboard.writeText(value);
       button.classList.add("is-copied");
       label.textContent = "Copied";
-      if (status) status.textContent = `Copied ${pool} to the clipboard.`;
+      if (status) status.textContent = `Copied ${value} to the clipboard.`;
       window.setTimeout(() => {
         if (!button.isConnected) return;
         button.classList.remove("is-copied");
@@ -886,15 +970,15 @@ function OrientationMaterials() {
       }, 1800);
     } catch {
       label.textContent = "Try again";
-      if (status) status.textContent = `${pool} could not be copied. Select the pool name and copy it manually.`;
+      if (status) status.textContent = `${value} could not be copied. Select it and copy it manually.`;
     }
   }
 
   function handleOrientationContentClick(event) {
-    const poolCopyButton = event.target.closest("[data-pool-copy]");
-    if (poolCopyButton) {
+    const copyButton = event.target.closest("[data-copy-value]");
+    if (copyButton) {
       event.preventDefault();
-      void copyPoolAddress(poolCopyButton, event.currentTarget);
+      void copyCommunicationValue(copyButton);
       return;
     }
 

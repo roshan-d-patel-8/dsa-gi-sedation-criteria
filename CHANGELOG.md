@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.25.0 — 2026-09-09
+
+- Reorganized every item in Communication into three collapsed nested accordions: Email Directory, Secure Channels, and Pool Party.
+- Consolidated every email address found across the Field Guide into Email Directory, including the centralized physician schedule and time-off request mailbox.
+- Added one-click clipboard controls for both email addresses and responsive stacked rows that keep those controls visible on mobile.
+
 ## 0.24.0 — 2026-09-09
 
 - Added a nested Pool Party accordion beneath Communication with all nine normalized Health Connect pool addresses and their Field Guide uses.
