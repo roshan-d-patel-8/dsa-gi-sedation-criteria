@@ -261,11 +261,10 @@ def assert_choosing_wisely(page):
     infographic_button.click()
     page.locator(".cw-infographic-backdrop").click(position={"x": 5, "y": 5})
     assert infographic_dialog.count() == 0
-    cw_topics = panel.locator(".orientation-cw-topic")
-    assert cw_topics.count() == 8
-    assert cw_topics.evaluate_all("elements => elements.every((element) => !element.open)")
-    for index in range(cw_topics.count()):
-        cw_topics.nth(index).locator("summary").click()
+    assert panel.locator(".orientation-cw-topic, .choosing-wisely-accordion-guide").count() == 0
+    assert panel.locator(".choosing-wisely-guide").is_visible()
+    assert panel.locator(".cw-overview").is_visible()
+    assert panel.locator(".cw-smartphrase-panel").is_visible()
     assert panel.get_by_role("heading", name="GI Choosing Wisely TPIP Consensus Recommendations and Implementation", exact=True).is_visible()
     assert panel.locator(".cw-smartphrase-code").count() == 4
     for smartphrase in ["DSAGIGRADNOTE", "DSAGIGRADLETTER", "DSAGIGRADMA", "DSAGIGRADDC"]:
@@ -286,14 +285,17 @@ def assert_choosing_wisely(page):
 
 
 def assert_all_orientation_sections_are_clean(page):
-    expected_accordion_counts = [3, 3, 3, 5, 2, 3, 4, 8, 1, 1, 1, 5]
+    expected_accordion_counts = [3, 3, 3, 5, 2, 3, 4, 0, 1, 1, 1, 5]
     for index in range(page.locator(".orientation-subtab").count()):
         page.locator(".orientation-subtab").nth(index).click()
         accordions = page.locator(".orientation-content details.orientation-site-group")
         assert accordions.count() == expected_accordion_counts[index]
         assert accordions.evaluate_all("elements => elements.every((element) => !element.open)")
-        accordions.first.locator("summary").press("Enter")
-        assert accordions.first.get_attribute("open") == ""
+        if accordions.count():
+            accordions.first.locator("summary").press("Enter")
+            assert accordions.first.get_attribute("open") == ""
+        else:
+            assert page.locator(".choosing-wisely-guide").is_visible()
         assert page.locator(".orientation-content li > p").count() == 0
         assert page.locator(".orientation-content li:not(.skills-day-chapter)").evaluate_all(
             "elements => elements.every((element) => element.firstElementChild?.classList.contains('orientation-list-line'))"
@@ -615,6 +617,15 @@ with sync_playwright() as playwright:
     assert desktop.locator(".orientation-content mark.search-highlight").count() > 0
     desktop.get_by_role("button", name="Clear search").click()
 
+    search.fill("DSAGIGRADNOTE")
+    desktop.wait_for_timeout(300)
+    assert desktop.locator(".orientation-subtab").count() == 1
+    assert desktop.locator(".orientation-card").get_by_text("Choosing Wisely", exact=True).is_visible()
+    assert desktop.locator(".orientation-content details").count() == 0
+    assert desktop.locator(".orientation-content mark.search-highlight").count() > 0
+    assert desktop.get_by_text("DSAGIGRADNOTE", exact=True).is_visible()
+    desktop.get_by_role("button", name="Clear search").click()
+
     mobile = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
     mobile_errors = capture_console_errors(mobile)
     mobile.goto(BASE_URL)
@@ -716,4 +727,4 @@ with sync_playwright() as playwright:
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: persistent upper-right zoom controls across all four primary pages, Home countdowns, September announcements, September–December GI birthdays, Tom farewell cocktail event, all 12 Field Guide sections with collapsed nested accordions, highlighted search matches with automatic accordion reveal, complete email and pool copy controls, Choosing Wisely with expandable infographic and topic folds, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")
+print("Visual QA passed: persistent upper-right zoom controls across all four primary pages, Home countdowns, September announcements, September–December GI birthdays, Tom farewell cocktail event, all 12 Field Guide sections with nested accordions except the restored open Choosing Wisely layout, highlighted search matches with automatic accordion reveal, complete email and pool copy controls, Choosing Wisely with expandable infographic, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")

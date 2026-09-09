@@ -883,38 +883,6 @@ function groupStandardSections(container, doc, sectionShort) {
   }
 }
 
-function groupChoosingWisely(container, doc, sectionShort) {
-  if (sectionShort !== "Choosing Wisely") return;
-  const guide = container.querySelector(".choosing-wisely-guide");
-  if (!guide) return;
-  const groupedGuide = doc.createElement("div");
-  groupedGuide.className = "choosing-wisely-guide choosing-wisely-accordion-guide";
-  const codeLabels = ["START", "PHRASE", "PROMPT", "TALK", "DC", "CAMPAIGN", "NOTE", "LETTER"];
-
-  Array.from(guide.children).forEach((sourceSection, index) => {
-    const heading = sourceSection.querySelector("h2, h3");
-    const eyebrow = sourceSection.querySelector("header > span, :scope > span");
-    const title = heading?.textContent.trim() || eyebrow?.textContent.trim() || `Choosing Wisely topic ${index + 1}`;
-    const description = eyebrow?.textContent.trim() || "Choosing Wisely campaign guidance";
-    const bodyNodes = Array.from(sourceSection.children).filter((node) => node !== heading?.closest("header") && node !== eyebrow);
-    let bodyClass = "cw-topic-body";
-    if (sourceSection.classList.contains("cw-overview")) bodyClass += " cw-overview-body";
-    if (sourceSection.classList.contains("cw-smartphrase-panel")) bodyClass += " cw-smartphrase-panel";
-    if (sourceSection.classList.contains("cw-section")) bodyClass += " cw-section";
-    if (sourceSection.classList.contains("cw-campaign-copy")) bodyClass += " cw-campaign-copy";
-    groupedGuide.append(createTopicFoldout(doc, {
-      code: codeLabels[index] || `CW${index + 1}`,
-      title,
-      description,
-      className: "orientation-cw-topic",
-      nodes: bodyNodes,
-      bodyClass,
-    }));
-  });
-
-  container.replaceChildren(groupedGuide);
-}
-
 function createProcedureFoldout(doc, { code, title, description, className, nodes }) {
   const foldout = doc.createElement("details");
   foldout.className = `orientation-site-group orientation-procedure-group ${className}`;
@@ -996,7 +964,6 @@ function parseOrientationSource(source) {
     groupProcedures(container, doc, meta.short);
     groupSchedules(container, doc, meta.short);
     groupStandardSections(container, doc, meta.short);
-    groupChoosingWisely(container, doc, meta.short);
     Array.from(container.children).forEach((node) => {
       if (node.matches("ol, ul")) node.classList.add("orientation-list-grid");
       if (node.matches("blockquote")) node.classList.add("orientation-callout");

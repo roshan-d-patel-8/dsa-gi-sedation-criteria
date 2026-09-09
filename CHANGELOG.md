@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.28.1 — 2026-09-09
+
+- Restored Choosing Wisely to its original fully open campaign layout, removing the eight accordion wrappers introduced in version 0.26.0.
+- Preserved the complete Choosing Wisely content, bold Smartphrases, expandable infographic, and new search highlighting.
+- Kept nested accordions unchanged across the other eleven Field Guide sections.
+
 ## 0.28.0 — 2026-09-09
 
 - Added visible, case-insensitive highlighting for every literal Field Guide search match in the active section, section tab, and section heading.
