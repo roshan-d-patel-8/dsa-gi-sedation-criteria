@@ -101,7 +101,14 @@ def assert_calendar_navigation(page):
     assert page.get_by_role("grid", name="November 2026", exact=True).is_visible()
     assert page.get_by_text("November 2026", exact=True).count() == 1
     assert page.locator(".calendar-event-marker").count() == 2
-    assert page.locator(".birthday-marker").count() == 3
+    assert page.locator(".birthday-marker").count() == 4
+    roshan_birthday = page.get_by_label("Happy Birthday, Roshan Patel!", exact=True)
+    assert roshan_birthday.is_visible()
+    roshan_birthday.hover()
+    page.wait_for_timeout(200)
+    assert roshan_birthday.get_by_role("tooltip").get_by_text("Happy Birthday, Roshan Patel!", exact=True).is_visible()
+    assert roshan_birthday.get_by_role("tooltip").locator("img").evaluate("image => image.complete && image.naturalWidth > 0")
+    page.screenshot(path=OUTPUT / "dsa-gi-calendar-roshan-birthday-desktop.png", full_page=False)
     next_month.click()
     assert page.get_by_role("grid", name="December 2026", exact=True).is_visible()
     assert page.get_by_text("December 2026", exact=True).count() == 1

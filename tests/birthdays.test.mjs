@@ -10,7 +10,7 @@ const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const contactsRoot = resolve(repoRoot, "..", "Contacts");
 
 test("September through December GI birthday data is complete and has portraits", () => {
-  assert.equal(birthdayEvents.length, 10);
+  assert.equal(birthdayEvents.length, 11);
   assert.deepEqual([...birthdayEvents].sort((a, b) => a.date.localeCompare(b.date)), birthdayEvents);
   assert.equal(new Set(birthdayEvents.map(({ name }) => name)).size, birthdayEvents.length);
 
@@ -21,7 +21,7 @@ test("September through December GI birthday data is complete and has portraits"
 });
 
 test("GI birthdays match their vault contact cards when the vault is available", { skip: !existsSync(contactsRoot) }, () => {
-  for (const birthday of birthdayEvents) {
+  for (const birthday of birthdayEvents.filter(({ sourceNote }) => sourceNote)) {
     const contactPath = resolve(contactsRoot, birthday.sourceNote);
     const contact = readFileSync(contactPath, "utf8");
     assert.match(contact, /^relationship: colleague$/m, `${birthday.name} must be a colleague`);
@@ -29,4 +29,17 @@ test("GI birthdays match their vault contact cards when the vault is available",
     assert.match(contact, /^organization: DSA Gastroenterology$/m, `${birthday.name} must be in DSA Gastroenterology`);
     assert.equal(contact.match(/^birthday:\s*(.+)$/m)?.[1], birthday.displayDate, `${birthday.name}'s birthday must match the vault`);
   }
+});
+
+test("Roshan Patel's user-supplied birthday is represented", () => {
+  assert.deepEqual(
+    birthdayEvents.find(({ name }) => name === "Roshan Patel"),
+    {
+      name: "Roshan Patel",
+      date: "2026-11-21",
+      displayDate: "November 21",
+      photo: "roshan-patel.webp",
+      source: "user",
+    },
+  );
 });

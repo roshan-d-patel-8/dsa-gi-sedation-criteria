@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.18.1 — 2026-09-09
+
+- Added Roshan Patel's November 21 birthday to the Home calendar using his existing portrait and the cupcake hover/focus interaction.
+- Kept the ten colleague birthdays vault-verified while explicitly recording Roshan's date as user-supplied.
+- Updated November browser coverage to require all four birthday markers and Roshan's birthday label.
+
 ## 0.18.0 — 2026-09-09
 
 - Converted the People section's Walnut Creek, Deer Valley, and departmentwide groups into nested native foldouts with visible arrow controls and keyboard support.
