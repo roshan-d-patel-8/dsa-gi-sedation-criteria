@@ -490,6 +490,9 @@ function groupDirectoryBySite(container, doc, sectionShort) {
   if (!["People", "Contacts"].includes(sectionShort)) return;
   const sourceList = Array.from(container.children).find((node) => node.matches("ul"));
   if (!sourceList) return;
+  const supplementalNodes = sectionShort === "Contacts"
+    ? Array.from(container.children).filter((node) => node !== sourceList)
+    : [];
 
   const buckets = new Map();
   Array.from(sourceList.children).forEach((item) => {
@@ -505,15 +508,14 @@ function groupDirectoryBySite(container, doc, sectionShort) {
     if (!items?.length) return;
 
     const details = siteGroupDetails[key];
-    const group = doc.createElement(sectionShort === "People" ? "details" : "section");
+    const group = doc.createElement("details");
     group.className = `orientation-site-group site-group-${key}`;
-    const headingTag = sectionShort === "People" ? "summary" : "header";
     group.innerHTML = `
-      <${headingTag}>
+      <summary>
         <span>${details.code}</span>
         <div><h3>${details.name}</h3><small>${sectionShort === "People" ? "Roles, leadership and access" : "Direct lines and operational contacts"}</small></div>
-        ${sectionShort === "People" ? '<i aria-hidden="true"></i>' : ""}
-      </${headingTag}>
+        <i aria-hidden="true"></i>
+      </summary>
     `;
     const list = doc.createElement("ul");
     list.className = "orientation-site-list";
@@ -522,7 +524,20 @@ function groupDirectoryBySite(container, doc, sectionShort) {
     groupGrid.append(group);
   });
 
-  sourceList.replaceWith(groupGrid);
+  if (sectionShort === "Contacts" && supplementalNodes.length) {
+    container.replaceChildren(
+      createTopicFoldout(doc, {
+        code: "LINK",
+        title: "Directory Access",
+        description: "KPATHS access requirements",
+        className: "topic-contact-directory",
+        nodes: supplementalNodes,
+      }),
+      groupGrid,
+    );
+  } else {
+    sourceList.replaceWith(groupGrid);
+  }
 }
 
 function createCommunicationFoldout(doc, { code, title, description, className }) {
@@ -632,6 +647,247 @@ function addPoolParty(container, doc, sectionShort) {
   container.append(poolParty);
 }
 
+function decorateTopicBody(body) {
+  Array.from(body.children).forEach((node) => {
+    if (node.matches("ol, ul")) node.classList.add("orientation-list-grid");
+    if (node.matches("blockquote")) node.classList.add("orientation-callout");
+    if (!node.matches("p")) return;
+    const onlyStrong = node.children.length === 1 && node.firstElementChild?.tagName === "STRONG";
+    node.classList.add(onlyStrong ? "orientation-subheading" : "orientation-prose-block");
+    if (node.querySelector("em")) node.classList.add("orientation-callout");
+  });
+}
+
+function createTopicFoldout(doc, { code, title, description, className = "", nodes = [], bodyClass = "" }) {
+  const foldout = doc.createElement("details");
+  foldout.className = `orientation-site-group orientation-topic-group ${className}`.trim();
+  foldout.innerHTML = `
+    <summary>
+      <span>${code}</span>
+      <div><h3>${title}</h3><small>${description}</small></div>
+      <i aria-hidden="true"></i>
+    </summary>
+  `;
+  const body = doc.createElement("div");
+  body.className = `orientation-topic-body ${bodyClass}`.trim();
+  nodes.forEach((node) => body.append(node));
+  decorateTopicBody(body);
+  foldout.append(body);
+  return foldout;
+}
+
+function listWithItems(doc, sourceList, items) {
+  const list = doc.createElement(sourceList.tagName.toLowerCase());
+  Array.from(sourceList.attributes).forEach((attribute) => list.setAttribute(attribute.name, attribute.value));
+  items.forEach((item) => list.append(item));
+  return list;
+}
+
+function nestedListFromItem(item) {
+  return item.querySelector(":scope > ol, :scope > ul");
+}
+
+function groupSchedules(container, doc, sectionShort) {
+  if (sectionShort !== "Schedules") return;
+  const sourceList = container.querySelector(":scope > ol, :scope > ul");
+  const items = sourceList ? Array.from(sourceList.children) : [];
+  if (items.length < 4) return;
+  container.replaceChildren(
+    createTopicFoldout(doc, {
+      code: "CALL",
+      title: "Call Schedule",
+      description: "Weekday, weekend, ERCP and backup coverage",
+      className: "topic-schedule-call",
+      nodes: [nestedListFromItem(items[0]) || listWithItems(doc, sourceList, items.slice(0, 1))],
+    }),
+    createTopicFoldout(doc, {
+      code: "PTO",
+      title: "Scheduling & Time Off",
+      description: "Lightning Bolt, vacation draft and request mailbox",
+      className: "topic-schedule-timeoff",
+      nodes: [listWithItems(doc, sourceList, items.slice(1, 3))],
+    }),
+    createTopicFoldout(doc, {
+      code: "MEET",
+      title: "Department Meetings",
+      description: "Recurring GI physician meeting cadence",
+      className: "topic-schedule-meetings",
+      nodes: [nestedListFromItem(items[3]) || listWithItems(doc, sourceList, items.slice(3))],
+    }),
+  );
+}
+
+function findNodeIndex(nodes, pattern) {
+  return nodes.findIndex((node) => pattern.test(node.textContent.trim()));
+}
+
+function groupStandardSections(container, doc, sectionShort) {
+  const nodes = Array.from(container.children);
+  if (!nodes.length) return;
+
+  if (sectionShort === "Services") {
+    const specialists = findNodeIndex(nodes, /^GI Subspecialists within our Department:/i);
+    if (specialists < 0) return;
+    container.replaceChildren(
+      createTopicFoldout(doc, {
+        code: "MAP",
+        title: "Regional Services & Referrals",
+        description: "Procedure locations, referral routes and conferences",
+        className: "topic-services-regional",
+        nodes: nodes.slice(0, specialists),
+      }),
+      createTopicFoldout(doc, {
+        code: "WHO",
+        title: "DSA GI Subspecialists",
+        description: "Department experts by clinical focus",
+        className: "topic-services-specialists",
+        nodes: nodes.slice(specialists + 1),
+      }),
+    );
+    return;
+  }
+
+  if (sectionShort === "Clinic") {
+    const secondOpinions = findNodeIndex(nodes, /opinions:$/i);
+    const physicianAssistants = findNodeIndex(nodes, /^Physician Assistants \(PAs\):/i);
+    if (secondOpinions < 0 || physicianAssistants < 0) return;
+    container.replaceChildren(
+      createTopicFoldout(doc, {
+        code: "VISIT",
+        title: "Appointments & Access",
+        description: "Visit types, direct booking and follow-up",
+        className: "topic-clinic-appointments",
+        nodes: nodes.slice(0, secondOpinions),
+      }),
+      createTopicFoldout(doc, {
+        code: "2ND",
+        title: "Second Opinions",
+        description: "Department and regional review pathways",
+        className: "topic-clinic-opinions",
+        nodes: nodes.slice(secondOpinions + 1, physicianAssistants),
+      }),
+      createTopicFoldout(doc, {
+        code: "PA",
+        title: "Physician Assistants",
+        description: "Team members, hours and responsibilities",
+        className: "topic-clinic-pas",
+        nodes: nodes.slice(physicianAssistants + 1),
+      }),
+    );
+    return;
+  }
+
+  if (sectionShort === "Orders") {
+    container.replaceChildren(createTopicFoldout(doc, {
+      code: "E2K",
+      title: "Orders & E-consults",
+      description: "Radiology, diagnostics, labs and infusion orders",
+      className: "topic-orders",
+      nodes,
+    }));
+    return;
+  }
+
+  if (sectionShort === "OR workflow") {
+    container.replaceChildren(createTopicFoldout(doc, {
+      code: "OR",
+      title: "Case Booking Workflow",
+      description: "From case request through patient confirmation",
+      className: "topic-or-workflow",
+      nodes,
+    }));
+    return;
+  }
+
+  if (sectionShort === "Ergonomics") {
+    container.replaceChildren(createTopicFoldout(doc, {
+      code: "ERGO",
+      title: "Ergonomic Evaluation",
+      description: "Early-career assessment and follow-up",
+      className: "topic-ergonomics",
+      nodes,
+    }));
+    return;
+  }
+
+  if (sectionShort === "MA-MD") {
+    const support = findNodeIndex(nodes, /^What can MA’s help me with\?/i);
+    const conversions = findNodeIndex(nodes, /^Appt conversion rules:/i);
+    const messaging = findNodeIndex(nodes, /^Ask MA’s to call patients/i);
+    const expectations = findNodeIndex(nodes, /^MA Expectations for virtual clinic/i);
+    if ([support, conversions, messaging, expectations].some((index) => index < 0)) return;
+    container.replaceChildren(
+      createTopicFoldout(doc, {
+        code: "TEAM",
+        title: "Program & MA Teams",
+        description: "Purpose, project lead and site staffing",
+        className: "topic-ma-team",
+        nodes: nodes.slice(0, support),
+      }),
+      createTopicFoldout(doc, {
+        code: "HELP",
+        title: "How MAs Can Help",
+        description: "Rooming, inbox work and administrative support",
+        className: "topic-ma-support",
+        nodes: nodes.slice(support, conversions),
+      }),
+      createTopicFoldout(doc, {
+        code: "BOOK",
+        title: "Conversions & Booking",
+        description: "Appointment conversions, timing and urgent access",
+        className: "topic-ma-booking",
+        nodes: nodes.slice(conversions, messaging),
+      }),
+      createTopicFoldout(doc, {
+        code: "NOTE",
+        title: "Messages & Result Notes",
+        description: "Patient outreach, pathology and QuikActions",
+        className: "topic-ma-results",
+        nodes: nodes.slice(messaging, expectations),
+      }),
+      createTopicFoldout(doc, {
+        code: "VIRT",
+        title: "Virtual Clinic Expectations",
+        description: "Check-ins, escalation and performance support",
+        className: "topic-ma-virtual",
+        nodes: nodes.slice(expectations),
+      }),
+    );
+  }
+}
+
+function groupChoosingWisely(container, doc, sectionShort) {
+  if (sectionShort !== "Choosing Wisely") return;
+  const guide = container.querySelector(".choosing-wisely-guide");
+  if (!guide) return;
+  const groupedGuide = doc.createElement("div");
+  groupedGuide.className = "choosing-wisely-guide choosing-wisely-accordion-guide";
+  const codeLabels = ["START", "PHRASE", "PROMPT", "TALK", "DC", "CAMPAIGN", "NOTE", "LETTER"];
+
+  Array.from(guide.children).forEach((sourceSection, index) => {
+    const heading = sourceSection.querySelector("h2, h3");
+    const eyebrow = sourceSection.querySelector("header > span, :scope > span");
+    const title = heading?.textContent.trim() || eyebrow?.textContent.trim() || `Choosing Wisely topic ${index + 1}`;
+    const description = eyebrow?.textContent.trim() || "Choosing Wisely campaign guidance";
+    const bodyNodes = Array.from(sourceSection.children).filter((node) => node !== heading?.closest("header") && node !== eyebrow);
+    let bodyClass = "cw-topic-body";
+    if (sourceSection.classList.contains("cw-overview")) bodyClass += " cw-overview-body";
+    if (sourceSection.classList.contains("cw-smartphrase-panel")) bodyClass += " cw-smartphrase-panel";
+    if (sourceSection.classList.contains("cw-section")) bodyClass += " cw-section";
+    if (sourceSection.classList.contains("cw-campaign-copy")) bodyClass += " cw-campaign-copy";
+    groupedGuide.append(createTopicFoldout(doc, {
+      code: codeLabels[index] || `CW${index + 1}`,
+      title,
+      description,
+      className: "orientation-cw-topic",
+      nodes: bodyNodes,
+      bodyClass,
+    }));
+  });
+
+  container.replaceChildren(groupedGuide);
+}
+
 function createProcedureFoldout(doc, { code, title, description, className, nodes }) {
   const foldout = doc.createElement("details");
   foldout.className = `orientation-site-group orientation-procedure-group ${className}`;
@@ -711,6 +967,9 @@ function parseOrientationSource(source) {
     groupCommunicationContent(container, doc, meta.short);
     addPoolParty(container, doc, meta.short);
     groupProcedures(container, doc, meta.short);
+    groupSchedules(container, doc, meta.short);
+    groupStandardSections(container, doc, meta.short);
+    groupChoosingWisely(container, doc, meta.short);
     Array.from(container.children).forEach((node) => {
       if (node.matches("ol, ul")) node.classList.add("orientation-list-grid");
       if (node.matches("blockquote")) node.classList.add("orientation-callout");

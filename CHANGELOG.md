@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.26.0 — 2026-09-09
+
+- Extended the nested accordion system to every Field Guide tab while preserving all source content and existing interactive tools.
+- Added topic-specific folds for Schedules, Contacts, Services, Clinic, Orders, OR workflow, Ergonomics, MA-MD Partnership, and Choosing Wisely; existing Communication, People, and Procedures folds remain intact.
+- Added full-guide regression coverage for collapsed defaults, keyboard expansion, source-text preservation, and mobile accordion layout.
+
 ## 0.25.0 — 2026-09-09
 
 - Reorganized every item in Communication into three collapsed nested accordions: Email Directory, Secure Channels, and Pool Party.

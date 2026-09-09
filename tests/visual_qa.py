@@ -187,10 +187,16 @@ def assert_orientation_reference(page):
     assert page.locator(".orientation-card").count() == 1
     assert page.locator("details.orientation-card").count() == 0
     assert page.locator(".orientation-content img").count() == 0
-    assert page.get_by_text("Call Schedule", exact=True).is_visible()
+    schedule_accordions = page.locator(".orientation-content > details.orientation-topic-group")
+    assert schedule_accordions.count() == 3
+    assert schedule_accordions.evaluate_all("elements => elements.every((element) => !element.open)")
+    call_schedule = page.locator(".topic-schedule-call")
+    assert call_schedule.get_by_role("heading", name="Call Schedule", exact=True).is_visible()
+    call_schedule.locator("summary").press("Enter")
+    assert call_schedule.get_by_text("Weekday call Mon 8:30 AM - Fri 5:30 PM", exact=True).is_visible()
     assert page.get_by_text("WCR Door Codes: 6210", exact=True).count() == 0
     assert float(page.locator(".orientation-content").evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 14
-    assert page.locator(".orientation-content > .orientation-list-grid > li").count() >= 4
+    assert call_schedule.locator(".orientation-list-grid > li").count() >= 6
     assert page.locator(".orientation-content li > p").count() == 0
     first_subtab = page.locator(".orientation-subtab").first
     assert float(first_subtab.locator("strong").evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 14
@@ -221,6 +227,11 @@ def assert_choosing_wisely(page):
     infographic_button.click()
     page.locator(".cw-infographic-backdrop").click(position={"x": 5, "y": 5})
     assert infographic_dialog.count() == 0
+    cw_topics = panel.locator(".orientation-cw-topic")
+    assert cw_topics.count() == 8
+    assert cw_topics.evaluate_all("elements => elements.every((element) => !element.open)")
+    for index in range(cw_topics.count()):
+        cw_topics.nth(index).locator("summary").click()
     assert panel.get_by_role("heading", name="GI Choosing Wisely TPIP Consensus Recommendations and Implementation", exact=True).is_visible()
     assert panel.locator(".cw-smartphrase-code").count() == 4
     for smartphrase in ["DSAGIGRADNOTE", "DSAGIGRADLETTER", "DSAGIGRADMA", "DSAGIGRADDC"]:
@@ -241,8 +252,14 @@ def assert_choosing_wisely(page):
 
 
 def assert_all_orientation_sections_are_clean(page):
+    expected_accordion_counts = [3, 3, 3, 5, 2, 3, 4, 8, 1, 1, 1, 5]
     for index in range(page.locator(".orientation-subtab").count()):
         page.locator(".orientation-subtab").nth(index).click()
+        accordions = page.locator(".orientation-content details.orientation-site-group")
+        assert accordions.count() == expected_accordion_counts[index]
+        assert accordions.evaluate_all("elements => elements.every((element) => !element.open)")
+        accordions.first.locator("summary").press("Enter")
+        assert accordions.first.get_attribute("open") == ""
         assert page.locator(".orientation-content li > p").count() == 0
         assert page.locator(".orientation-content li:not(.skills-day-chapter)").evaluate_all(
             "elements => elements.every((element) => element.firstElementChild?.classList.contains('orientation-list-line'))"
@@ -454,9 +471,18 @@ with sync_playwright() as playwright:
 
     people_tab.press("ArrowRight")
     assert desktop.get_by_role("tab", name="Contacts Phone and voicemail directory", exact=False).get_attribute("aria-selected") == "true"
-    assert desktop.get_by_text("DSA General GI number (for patients): (925) 295-4080", exact=True).is_visible()
-    assert desktop.locator(".orientation-site-group").count() == 4
+    assert desktop.locator(".orientation-site-group").count() == 5
+    assert desktop.locator("details.orientation-site-group[open]").count() == 0
+    directory_access = desktop.locator(".topic-contact-directory")
+    directory_access.locator("summary").press("Enter")
+    assert directory_access.get_by_role("link", name="KPATHS Facility Information directory", exact=True).is_visible()
     assert desktop.get_by_role("heading", name="Dublin", exact=True).is_visible()
+    contacts_departmentwide = desktop.locator(".site-group-departmentwide")
+    contacts_departmentwide.locator("summary").click()
+    assert contacts_departmentwide.get_attribute("open") == ""
+    assert "DSA General GI number (for patients): (925) 295-4080" in contacts_departmentwide.inner_text()
+    contacts_dublin = desktop.locator(".site-group-dublin")
+    contacts_dublin.locator("summary").click()
     assert desktop.locator(".site-group-dublin").get_by_text("James Patricio", exact=False).is_visible()
     assert desktop.get_by_text("DSA General GI number (for patients):", exact=True).evaluate("element => element.tagName") == "STRONG"
     desktop.wait_for_timeout(350)
@@ -530,6 +556,7 @@ with sync_playwright() as playwright:
     assert desktop.locator(".orientation-card").count() == 1
     assert desktop.locator(".orientation-card").get_by_text("MA-MD Partnership", exact=True).is_visible()
     assert desktop.locator(".orientation-card").evaluate("element => getComputedStyle(element).getPropertyValue('--section-accent').trim()") == "#c65f82"
+    desktop.locator(".orientation-topic-group summary").evaluate_all("elements => elements.forEach((element) => element.click())")
     assert desktop.get_by_text("Please feel free to send any questions or concerns about performance issues to Dr. Gonzales", exact=False).is_visible()
     desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-search.png", full_page=False)
     desktop.get_by_role("button", name="Clear search").click()
@@ -625,4 +652,4 @@ with sync_playwright() as playwright:
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: Home countdowns, September announcements, September–December GI birthdays, Tom farewell cocktail event, four folder tabs, 12-section field guide including nested Communication accordions with complete email and pool copy controls, Choosing Wisely with expandable infographic, nested People and Procedures foldouts, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")
+print("Visual QA passed: Home countdowns, September announcements, September–December GI birthdays, Tom farewell cocktail event, four folder tabs, all 12 Field Guide sections with collapsed nested accordions, complete email and pool copy controls, Choosing Wisely with expandable infographic and topic folds, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")
