@@ -5,6 +5,11 @@ tags:
 
 # Changelog
 
+## 0.18.2 — 2026-09-09
+
+- Replaced Natalie with Martha in the Walnut Creek Pod 03 MA roster.
+- Added browser coverage confirming Martha appears in the intended podlet and Natalie no longer appears anywhere in the MA-MD Podlets view.
+
 ## 0.18.1 — 2026-09-09
 
 - Added Roshan Patel's November 21 birthday to the Home calendar using his existing portrait and the cupcake hover/focus interaction.

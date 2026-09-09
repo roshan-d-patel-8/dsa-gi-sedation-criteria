@@ -153,6 +153,9 @@ def assert_coverage_reference(page):
     assert page.get_by_text("Anarosa Mejia", exact=False).is_visible()
     assert page.get_by_text("Robbie Molden", exact=False).is_visible()
     assert page.get_by_text("Megan Palsa", exact=False).is_visible()
+    wcr_pod_three = page.locator(".site-wcr .pod-card").filter(has_text="Pod 03")
+    assert wcr_pod_three.locator(".ma-roster").get_by_text("Martha", exact=True).is_visible()
+    assert page.get_by_text("Natalie", exact=True).count() == 0
     assert page.evaluate("Array.from(document.images).every((image) => image.complete && image.naturalWidth > 0)")
 
 
