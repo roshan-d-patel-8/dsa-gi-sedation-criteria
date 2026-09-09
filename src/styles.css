@@ -440,6 +440,20 @@ body::before {
 .orientation-results { min-height: 30px; }
 .orientation-results span { font-size: 11px; }
 .orientation-results small { color: var(--section-ink, var(--muted)); font-size: 10px; font-weight: 800; }
+.search-highlight {
+  padding: .04em .18em;
+  border: 1px solid rgba(178, 117, 6, .28);
+  border-radius: .28em;
+  background: linear-gradient(180deg, #fff2a8 0%, #ffd45f 100%);
+  box-shadow: 0 1px 0 rgba(120, 76, 0, .12), inset 0 -1px 0 rgba(162, 102, 0, .14);
+  color: #3d2a05;
+  font: inherit;
+  font-weight: 900;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.search-highlight-inline { padding-block: 0; }
+.orientation-subtab.active .search-highlight { border-color: rgba(255, 255, 255, .36); background: #fff0a0; color: #433006; }
 .orientation-sections { display: block; }
 .orientation-card {
   --section-accent: var(--way);

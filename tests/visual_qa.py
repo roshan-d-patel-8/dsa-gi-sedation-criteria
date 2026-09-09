@@ -591,12 +591,29 @@ with sync_playwright() as playwright:
     assert desktop.locator(".orientation-card").count() == 1
     assert desktop.locator(".orientation-card").get_by_text("MA-MD Partnership", exact=True).is_visible()
     assert desktop.locator(".orientation-card").evaluate("element => getComputedStyle(element).getPropertyValue('--section-accent').trim()") == "#c65f82"
-    desktop.locator(".orientation-topic-group summary").evaluate_all("elements => elements.forEach((element) => element.click())")
-    assert desktop.get_by_text("Please feel free to send any questions or concerns about performance issues to Dr. Gonzales", exact=False).is_visible()
+    search_highlights = desktop.locator(".orientation-content mark.search-highlight")
+    assert search_highlights.count() > 0
+    assert search_highlights.evaluate_all("elements => elements.every((element) => element.textContent.toLowerCase() === 'quikaction')")
+    assert search_highlights.evaluate_all("elements => elements.every((element) => getComputedStyle(element).backgroundImage !== 'none')")
+    assert desktop.locator(".topic-ma-results[open]").count() == 1
+    assert desktop.locator(".orientation-topic-group[open]").count() == 1
+    assert search_highlights.first.is_visible()
+    assert search_highlights.first.evaluate("element => { const box = element.getBoundingClientRect(); return box.top >= 0 && box.bottom <= innerHeight; }")
+    assert desktop.locator(".orientation-results").get_by_text("highlighted", exact=False).is_visible()
     desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-search.png", full_page=False)
     desktop.get_by_role("button", name="Clear search").click()
     assert desktop.locator(".orientation-subtab").count() == 12
     assert desktop.locator(".orientation-card").count() == 1
+    assert desktop.locator("mark.search-highlight").count() == 0
+    assert desktop.locator(".orientation-content details[open]").count() == 0
+
+    search.fill("prochpamb")
+    desktop.wait_for_timeout(300)
+    assert desktop.locator(".orientation-subtab").count() == 1
+    assert desktop.locator(".procedure-group-documentation[open]").count() == 1
+    assert desktop.locator(".orientation-content details[open]").count() == 1
+    assert desktop.locator(".orientation-content mark.search-highlight").count() > 0
+    desktop.get_by_role("button", name="Clear search").click()
 
     mobile = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
     mobile_errors = capture_console_errors(mobile)
@@ -650,6 +667,17 @@ with sync_playwright() as playwright:
     assert mobile.locator(".orientation-tools").is_visible()
     assert mobile.locator(".orientation-subtabs").evaluate("element => element.scrollWidth > element.clientWidth")
     mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-mobile.png", full_page=False)
+    mobile_search = mobile.get_by_role("searchbox", name="Search the field guide")
+    mobile_search.fill("QuikAction")
+    mobile.wait_for_timeout(300)
+    assert mobile.locator(".orientation-subtab").count() == 1
+    assert mobile.locator(".topic-ma-results[open]").count() == 1
+    assert mobile.locator(".orientation-content mark.search-highlight").count() > 0
+    assert mobile.locator(".orientation-content mark.search-highlight").first.is_visible()
+    assert mobile.locator(".orientation-content mark.search-highlight").first.evaluate("element => { const box = element.getBoundingClientRect(); return box.top >= 0 && box.bottom <= innerHeight; }")
+    mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-search-mobile.png", full_page=False)
+    mobile.get_by_role("button", name="Clear search").click()
+    assert mobile.locator(".orientation-content details[open]").count() == 0
     mobile.get_by_role("tab", name="Communication Approved channels", exact=False).click()
     mobile_email_directory = mobile.locator(".orientation-email-directory")
     mobile_email_directory.locator("summary").click()
@@ -688,4 +716,4 @@ with sync_playwright() as playwright:
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: persistent upper-right zoom controls across all four primary pages, Home countdowns, September announcements, September–December GI birthdays, Tom farewell cocktail event, all 12 Field Guide sections with collapsed nested accordions, complete email and pool copy controls, Choosing Wisely with expandable infographic and topic folds, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")
+print("Visual QA passed: persistent upper-right zoom controls across all four primary pages, Home countdowns, September announcements, September–December GI birthdays, Tom farewell cocktail event, all 12 Field Guide sections with collapsed nested accordions, highlighted search matches with automatic accordion reveal, complete email and pool copy controls, Choosing Wisely with expandable infographic and topic folds, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")

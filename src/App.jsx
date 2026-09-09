@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { POLICY_VERSION, policySections } from "./criteria.js";
 import { coverageSites } from "./podlets.js";
 import { birthdayEvents } from "./birthdays.js";
@@ -19,6 +19,21 @@ const tabs = [
 
 const zoomLevels = [90, 100, 110, 125, 140];
 const zoomStorageKey = "dsa-gi-page-zoom";
+
+function escapeSearchPattern(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function highlightSearchText(text, query) {
+  if (!query) return text;
+
+  const matcher = new RegExp(`(${escapeSearchPattern(query)})`, "gi");
+  return String(text).split(matcher).map((part, index) => (
+    part.toLowerCase() === query.toLowerCase()
+      ? <mark className="search-highlight search-highlight-inline" key={`${part}-${index}`}>{part}</mark>
+      : part
+  ));
+}
 
 const countdowns = [
   { label: "Tom Haddad — last on-site day", date: "2026-09-17", displayDate: "Thu · Sep 17, 2026" },
@@ -1203,13 +1218,86 @@ function OrientationMaterials() {
   const [query, setQuery] = useState("");
   const [activeSectionId, setActiveSectionId] = useState(sections[0]?.id);
   const [showChoosingWiselyInfographic, setShowChoosingWiselyInfographic] = useState(false);
+  const [visibleMatchCount, setVisibleMatchCount] = useState(0);
+  const orientationContentRef = useRef(null);
   const normalizedQuery = query.trim().toLowerCase();
   const visibleSections = normalizedQuery
     ? sections.filter((section) => `${section.sourceLabel} ${section.descriptor} ${section.text}`.toLowerCase().includes(normalizedQuery))
     : sections;
   const activeSection = visibleSections.find((section) => section.id === activeSectionId) || visibleSections[0];
+  const activeSectionMarkup = useMemo(() => ({ __html: activeSection?.html || "" }), [activeSection?.html]);
   const isChoosingWisely = activeSection?.short === "Choosing Wisely";
   const choosingWiselyInfographic = `${import.meta.env.BASE_URL}choosing-wisely-graduation-jan-jul-2026.jpg`;
+
+  useEffect(() => {
+    const content = orientationContentRef.current;
+    if (!content || !activeSection) {
+      setVisibleMatchCount(0);
+      return;
+    }
+
+    content.innerHTML = activeSection.html;
+    if (!normalizedQuery) {
+      setVisibleMatchCount(0);
+      return;
+    }
+
+    const documentView = content.ownerDocument.defaultView;
+    const textWalker = content.ownerDocument.createTreeWalker(
+      content,
+      documentView.NodeFilter.SHOW_TEXT,
+      {
+        acceptNode(node) {
+          const parent = node.parentElement;
+          if (!parent || !node.nodeValue.toLowerCase().includes(normalizedQuery)) {
+            return documentView.NodeFilter.FILTER_REJECT;
+          }
+          if (parent.closest("script, style, iframe, button, input, textarea, option, mark.search-highlight, .sr-only")) {
+            return documentView.NodeFilter.FILTER_REJECT;
+          }
+          return documentView.NodeFilter.FILTER_ACCEPT;
+        },
+      },
+    );
+    const matchingTextNodes = [];
+    while (textWalker.nextNode()) matchingTextNodes.push(textWalker.currentNode);
+
+    const matcher = new RegExp(escapeSearchPattern(normalizedQuery), "gi");
+    let nextMatchCount = 0;
+    matchingTextNodes.forEach((textNode) => {
+      const fragment = content.ownerDocument.createDocumentFragment();
+      const text = textNode.nodeValue;
+      let previousIndex = 0;
+
+      text.replace(matcher, (match, matchIndex) => {
+        fragment.append(text.slice(previousIndex, matchIndex));
+        const mark = content.ownerDocument.createElement("mark");
+        mark.className = "search-highlight";
+        mark.textContent = match;
+        fragment.append(mark);
+        previousIndex = matchIndex + match.length;
+        nextMatchCount += 1;
+        return match;
+      });
+      fragment.append(text.slice(previousIndex));
+      textNode.replaceWith(fragment);
+    });
+
+    content.querySelectorAll("mark.search-highlight").forEach((mark) => {
+      let parentAccordion = mark.closest("details");
+      while (parentAccordion && content.contains(parentAccordion)) {
+        parentAccordion.open = true;
+        parentAccordion = parentAccordion.parentElement?.closest("details");
+      }
+    });
+    const firstContentMatch = content.querySelector("mark.search-highlight");
+    if (firstContentMatch) {
+      requestAnimationFrame(() => {
+        if (firstContentMatch.isConnected) firstContentMatch.scrollIntoView({ block: "center", inline: "nearest" });
+      });
+    }
+    setVisibleMatchCount(nextMatchCount);
+  }, [activeSection, normalizedQuery]);
 
   function handleSectionKeyDown(event, currentIndex) {
     if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
@@ -1305,15 +1393,15 @@ function OrientationMaterials() {
               key={section.id}
             >
               <span>{String(sections.indexOf(section) + 1).padStart(2, "0")}</span>
-              <strong>{section.short}</strong>
-              <small>{section.descriptor}</small>
+              <strong>{highlightSearchText(section.short, normalizedQuery)}</strong>
+              <small>{highlightSearchText(section.descriptor, normalizedQuery)}</small>
             </button>
           ))}
         </nav>
       </section>
 
       <div className="orientation-results" aria-live="polite">
-        <span>{normalizedQuery ? `${visibleSections.length} of ${sections.length} section tabs match “${query.trim()}”` : "Choose a section tab to change the field below"}</span>
+        <span>{normalizedQuery ? `${visibleSections.length} of ${sections.length} section tabs match “${query.trim()}” · ${visibleMatchCount} highlighted ${visibleMatchCount === 1 ? "match" : "matches"} in this section` : "Choose a section tab to change the field below"}</span>
         {activeSection && <small>Viewing {activeSection.sourceLabel}</small>}
       </div>
 
@@ -1328,7 +1416,7 @@ function OrientationMaterials() {
           >
             <header className={`orientation-card-header${isChoosingWisely ? " has-infographic" : ""}`}>
               <span className="orientation-number">{String(sections.indexOf(activeSection) + 1).padStart(2, "0")}</span>
-              <span><strong>{activeSection.sourceLabel}</strong><small>{activeSection.descriptor}</small></span>
+              <span><strong>{highlightSearchText(activeSection.sourceLabel, normalizedQuery)}</strong><small>{highlightSearchText(activeSection.descriptor, normalizedQuery)}</small></span>
               {activeSection.sensitive && <b>Internal details</b>}
               {isChoosingWisely && (
                 <button
@@ -1345,8 +1433,9 @@ function OrientationMaterials() {
             </header>
             <div
               className="orientation-content"
+              ref={orientationContentRef}
               onClick={handleOrientationContentClick}
-              dangerouslySetInnerHTML={{ __html: activeSection.html }}
+              dangerouslySetInnerHTML={activeSectionMarkup}
             />
           </section>
         )}

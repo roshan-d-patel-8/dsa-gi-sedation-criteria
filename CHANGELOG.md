@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.28.0 — 2026-09-09
+
+- Added visible, case-insensitive highlighting for every literal Field Guide search match in the active section, section tab, and section heading.
+- Automatically opens only the nested accordion branches containing a matching term and brings the first hit into view so filtered results are immediately readable.
+- Clearing the search removes all highlights and restores the Field Guide's normal collapsed accordion state.
+
 ## 0.27.0 — 2026-09-09
 
 - Added a persistent Zoom control in the upper-right of the global header, available from every primary page.
