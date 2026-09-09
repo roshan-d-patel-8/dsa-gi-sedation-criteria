@@ -289,21 +289,36 @@ with sync_playwright() as playwright:
 
     people_tab = desktop.get_by_role("tab", name="People Management staff and PAs", exact=False)
     people_tab.click()
-    assert desktop.get_by_text("WCR Door Codes: 6210", exact=True).is_visible()
-    assert desktop.get_by_text("DSA GI PAs: Sabrina Han, Megan Palsa, Robbie Molden", exact=True).is_visible()
     assert desktop.locator(".orientation-card-sensitive").count() == 1
     assert desktop.locator(".orientation-group-grid").count() == 1
-    assert desktop.locator(".orientation-site-group").count() == 3
+    assert desktop.locator("details.orientation-site-group").count() == 4
     assert desktop.get_by_role("heading", name="Walnut Creek", exact=True).is_visible()
     assert desktop.get_by_role("heading", name="Deer Valley", exact=True).is_visible()
     assert desktop.get_by_role("heading", name="Departmentwide & regional", exact=True).is_visible()
+    assert desktop.get_by_role("heading", name="Skills Day", exact=True).is_visible()
+    assert desktop.locator("details.orientation-site-group[open]").count() == 0
+    wcr_group = desktop.locator(".site-group-wcr")
+    wcr_group.locator("summary").press("Enter")
+    assert wcr_group.get_by_text("WCR Door Codes: 6210", exact=True).is_visible()
     assert desktop.locator(".site-group-wcr").get_by_text("WCR Door Codes: 6210", exact=True).is_visible()
     assert desktop.locator(".site-group-wcr").get_by_text("DRV Door Codes", exact=False).count() == 0
-    assert desktop.locator(".site-group-drv").get_by_text(
+    drv_group = desktop.locator(".site-group-drv")
+    drv_group.locator("summary").click()
+    assert drv_group.get_by_text(
         "DRV Door Codes: 6363 (GI office), 3636 (GI unit), 2525 (staff break room/scrubs), 7343 (additional DRV office space)",
         exact=True,
     ).is_visible()
+    departmentwide_group = desktop.locator(".site-group-departmentwide")
+    departmentwide_group.locator("summary").click()
+    assert departmentwide_group.get_by_text("DSA GI PAs: Sabrina Han, Megan Palsa, Robbie Molden", exact=True).is_visible()
+    skills_day = desktop.locator(".orientation-skills-day")
+    skills_day.locator("summary").click()
+    assert skills_day.locator("iframe").is_visible()
+    assert skills_day.locator("iframe").get_attribute("title") == "DSA GI Skills Day 2025"
+    assert skills_day.locator("iframe").get_attribute("src") == "https://www.youtube-nocookie.com/embed/WYdP1js9NPk?rel=0"
+    assert skills_day.get_by_role("link", name="Open on YouTube", exact=True).get_attribute("href") == "https://youtu.be/WYdP1js9NPk"
     assert desktop.get_by_text("WCR Door Codes:", exact=True).evaluate("element => element.tagName") == "STRONG"
+    skills_day.scroll_into_view_if_needed()
     desktop.wait_for_timeout(350)
     desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-people-grouped.png", full_page=False)
 
@@ -373,9 +388,16 @@ with sync_playwright() as playwright:
     assert mobile.locator(".cw-smartphrase-grid").evaluate("element => getComputedStyle(element).gridTemplateColumns.split(' ').length") == 1
     mobile.locator(".cw-smartphrase-panel").scroll_into_view_if_needed()
     mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-choosing-wisely-mobile.png", full_page=False)
+    mobile.get_by_role("tab", name="People Management staff and PAs", exact=False).click()
+    mobile_skills_day = mobile.locator(".orientation-skills-day")
+    mobile_skills_day.locator("summary").click()
+    assert mobile_skills_day.locator("iframe").is_visible()
+    assert mobile_skills_day.evaluate("element => element.getBoundingClientRect().width <= document.documentElement.clientWidth")
+    mobile_skills_day.scroll_into_view_if_needed()
+    mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-skills-day-mobile.png", full_page=False)
 
     assert not desktop_errors, desktop_errors
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: Home countdowns, September–December GI birthdays, four folder tabs, 12-section field guide including Choosing Wisely, podlet tooltips, portraits, and mobile layout.")
+print("Visual QA passed: Home countdowns, September–December GI birthdays, four folder tabs, 12-section field guide including Choosing Wisely, nested People foldouts, Skills Day video, podlet tooltips, portraits, and mobile layout.")

@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.18.0 — 2026-09-09
+
+- Converted the People section's Walnut Creek, Deer Valley, and departmentwide groups into nested native foldouts with visible arrow controls and keyboard support.
+- Added a full-width Skills Day foldout with a responsive, privacy-enhanced embed of “DSA GI Skills Day 2025” and a direct YouTube link.
+- Added desktop and mobile browser checks for accordion behavior, retained directory content, embed metadata, and responsive width.
+
 ## 0.17.1 — 2026-09-09
 
 - Added door code 7343 for the additional DRV office space to the Field Guide's People section.

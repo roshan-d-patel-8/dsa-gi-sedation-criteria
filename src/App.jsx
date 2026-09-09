@@ -241,6 +241,12 @@ const siteGroupDetails = {
   departmentwide: { code: "DSA", name: "Departmentwide & regional" },
 };
 
+const skillsDayVideo = {
+  title: "DSA GI Skills Day 2025",
+  embedUrl: "https://www.youtube-nocookie.com/embed/WYdP1js9NPk?rel=0",
+  watchUrl: "https://youtu.be/WYdP1js9NPk",
+};
+
 function emphasizeLeadingLabel(paragraph, doc) {
   const firstContentNode = Array.from(paragraph.childNodes).find((node) => node.textContent.trim());
   if (firstContentNode?.nodeType === Node.ELEMENT_NODE && firstContentNode.matches("strong, b")) return;
@@ -304,13 +310,15 @@ function groupDirectoryBySite(container, doc, sectionShort) {
     if (!items?.length) return;
 
     const details = siteGroupDetails[key];
-    const group = doc.createElement("section");
+    const group = doc.createElement(sectionShort === "People" ? "details" : "section");
     group.className = `orientation-site-group site-group-${key}`;
+    const headingTag = sectionShort === "People" ? "summary" : "header";
     group.innerHTML = `
-      <header>
+      <${headingTag}>
         <span>${details.code}</span>
         <div><h3>${details.name}</h3><small>${sectionShort === "People" ? "Roles, leadership and access" : "Direct lines and operational contacts"}</small></div>
-      </header>
+        ${sectionShort === "People" ? '<i aria-hidden="true"></i>' : ""}
+      </${headingTag}>
     `;
     const list = doc.createElement("ul");
     list.className = "orientation-site-list";
@@ -318,6 +326,35 @@ function groupDirectoryBySite(container, doc, sectionShort) {
     group.append(list);
     groupGrid.append(group);
   });
+
+  if (sectionShort === "People") {
+    const skillsDay = doc.createElement("details");
+    skillsDay.className = "orientation-site-group orientation-skills-day";
+    skillsDay.innerHTML = `
+      <summary>
+        <span>PLAY</span>
+        <div><h3>Skills Day</h3><small>Watch the team training session</small></div>
+        <i aria-hidden="true"></i>
+      </summary>
+      <div class="skills-day-body">
+        <div class="skills-day-video">
+          <iframe
+            src="${skillsDayVideo.embedUrl}"
+            title="${skillsDayVideo.title}"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div class="skills-day-caption">
+          <div><span>Training library</span><strong>${skillsDayVideo.title}</strong></div>
+          <a href="${skillsDayVideo.watchUrl}" target="_blank" rel="noreferrer">Open on YouTube</a>
+        </div>
+      </div>
+    `;
+    groupGrid.append(skillsDay);
+  }
 
   sourceList.replaceWith(groupGrid);
 }
