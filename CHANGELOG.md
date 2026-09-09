@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.22.0 — 2026-09-09
+
+- Added a month-aware Announcements rail to the right of the desktop calendar with a stacked responsive layout on smaller screens.
+- Added September reminders for the September 14 Desktop Medicine pharmacy authorization deadline and the November 5, 6–8 PM NCAL GI TPIP makeup.
+- Added browser coverage for announcement content, dates, month navigation, responsive positioning, and the empty state in later months.
+
 ## 0.21.0 — 2026-09-09
 
 - Moved Skills Day from People to Procedures while preserving the privacy-enhanced YouTube embed and direct video link.

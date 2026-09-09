@@ -71,6 +71,14 @@ def assert_home(page):
     assert page.get_by_text("September—December", exact=True).count() == 0
     assert page.get_by_text("September 2026", exact=True).count() == 1
     assert page.get_by_role("grid", name="September 2026", exact=True).is_visible()
+    announcements = page.locator(".calendar-announcements")
+    assert announcements.get_attribute("aria-label") == "Announcements for September 2026"
+    assert announcements.get_by_role("heading", name="Announcements", exact=True).is_visible()
+    assert announcements.locator(".announcement-card").count() == 2
+    assert announcements.get_by_text("Pharmacy Authorization form for Desktop Medicine", exact=True).is_visible()
+    assert announcements.get_by_text("Due Sep 14", exact=True).get_attribute("datetime") == "2026-09-14"
+    assert announcements.get_by_text("NCAL GI 2-hour TPIP makeup", exact=True).is_visible()
+    assert announcements.get_by_text("Nov 5 · 6–8 PM", exact=True).get_attribute("datetime") == "2026-11-05T18:00:00-08:00"
     assert page.locator(".calendar-weekday").count() == 7
     assert page.locator(".calendar-day:not(.calendar-day-empty)").count() == 30
     assert page.locator(".birthday-marker").count() == 4
@@ -97,12 +105,16 @@ def assert_calendar_navigation(page):
     next_month.click()
     assert page.get_by_role("grid", name="October 2026", exact=True).is_visible()
     assert page.get_by_text("October 2026", exact=True).count() == 1
+    assert page.locator(".calendar-announcements").get_attribute("aria-label") == "Announcements for October 2026"
+    assert page.locator(".announcement-card").count() == 0
+    assert page.get_by_text("No announcements for this month.", exact=True).is_visible()
     assert page.locator(".calendar-event-marker").count() == 3
     assert page.locator(".birthday-marker").count() == 2
     assert previous.is_enabled()
     next_month.click()
     assert page.get_by_role("grid", name="November 2026", exact=True).is_visible()
     assert page.get_by_text("November 2026", exact=True).count() == 1
+    assert page.locator(".announcement-card").count() == 0
     assert page.locator(".calendar-event-marker").count() == 2
     assert page.locator(".birthday-marker").count() == 4
     roshan_birthday = page.get_by_label("Happy Birthday, Roshan Patel!", exact=True)
@@ -122,6 +134,7 @@ def assert_calendar_navigation(page):
     previous.click()
     previous.click()
     assert page.get_by_role("grid", name="September 2026", exact=True).is_visible()
+    assert page.locator(".announcement-card").count() == 2
 
 
 def assert_sedation_reference(page):
@@ -260,6 +273,10 @@ with sync_playwright() as playwright:
     desktop.wait_for_timeout(100)
     desktop.screenshot(path=OUTPUT / "dsa-gi-home-countdowns-desktop.png", full_page=False)
     desktop.locator(".year-calendar").scroll_into_view_if_needed()
+    calendar_box = desktop.locator(".calendar-main").bounding_box()
+    announcements_box = desktop.locator(".calendar-announcements").bounding_box()
+    assert announcements_box["x"] > calendar_box["x"] + calendar_box["width"]
+    desktop.screenshot(path=OUTPUT / "dsa-gi-calendar-announcements-desktop.png", full_page=False)
     steve_birthday = desktop.get_by_label("Happy Birthday, Steve Cheng!", exact=True)
     steve_birthday.hover()
     desktop.wait_for_timeout(200)
@@ -427,6 +444,11 @@ with sync_playwright() as playwright:
     assert mobile.locator(".countdown-strip").evaluate("element => element.scrollWidth > element.clientWidth")
     mobile.screenshot(path=OUTPUT / "dsa-gi-home-countdowns-mobile.png", full_page=False)
     mobile.locator(".year-calendar").scroll_into_view_if_needed()
+    mobile_calendar_box = mobile.locator(".calendar-main").bounding_box()
+    mobile_announcements_box = mobile.locator(".calendar-announcements").bounding_box()
+    assert mobile_announcements_box["y"] >= mobile_calendar_box["y"] + mobile_calendar_box["height"]
+    mobile.locator(".calendar-announcements").scroll_into_view_if_needed()
+    mobile.screenshot(path=OUTPUT / "dsa-gi-calendar-announcements-mobile.png", full_page=False)
     mobile_birthday = mobile.get_by_label("Happy Birthday, Steve Cheng!", exact=True)
     mobile_birthday.focus()
     mobile.wait_for_timeout(200)
@@ -483,4 +505,4 @@ with sync_playwright() as playwright:
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: Home countdowns, September–December GI birthdays, Tom farewell cocktail event, four folder tabs, 12-section field guide including Choosing Wisely with expandable infographic, nested People and Procedures foldouts, Skills Day video, podlet tooltips, portraits, and mobile layout.")
+print("Visual QA passed: Home countdowns, September announcements, September–December GI birthdays, Tom farewell cocktail event, four folder tabs, 12-section field guide including Choosing Wisely with expandable infographic, nested People and Procedures foldouts, Skills Day video, podlet tooltips, portraits, and mobile layout.")

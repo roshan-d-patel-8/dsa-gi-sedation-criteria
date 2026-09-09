@@ -37,6 +37,29 @@ const socialEvents = [
   },
 ];
 
+const monthlyAnnouncements = {
+  8: [
+    {
+      label: "Pharmacy Authorization form for Desktop Medicine",
+      kind: "Reminder",
+      date: "2026-09-14",
+      displayDate: "Due Sep 14",
+      month: "SEP",
+      day: "14",
+      tone: "deadline",
+    },
+    {
+      label: "NCAL GI 2-hour TPIP makeup",
+      kind: "Save the date",
+      date: "2026-11-05T18:00:00-08:00",
+      displayDate: "Nov 5 · 6–8 PM",
+      month: "NOV",
+      day: "05",
+      tone: "save-date",
+    },
+  ],
+};
+
 function pacificToday() {
   const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: "America/Los_Angeles",
@@ -101,6 +124,7 @@ function Calendar2026() {
   const monthEvents = countdowns.filter(({ date }) => Number(date.slice(5, 7)) - 1 === monthIndex);
   const monthBirthdays = birthdayEvents.filter(({ date }) => Number(date.slice(5, 7)) - 1 === monthIndex);
   const monthSocialEvents = socialEvents.filter(({ date }) => Number(date.slice(5, 7)) - 1 === monthIndex);
+  const announcements = monthlyAnnouncements[monthIndex] || [];
 
   function moveMonth(direction) {
     setMonthPosition((position) => Math.min(calendarMonths.length - 1, Math.max(0, position + direction)));
@@ -117,18 +141,19 @@ function Calendar2026() {
 
   return (
     <section className="year-calendar" aria-labelledby="calendar-title" tabIndex="0" onKeyDown={handleCalendarKeyDown}>
-      <h2 id="calendar-title" className="sr-only">2026 calendar</h2>
-      <header className="calendar-header">
-        <div className="calendar-controls" aria-label="Calendar month controls">
-          <button type="button" onClick={() => moveMonth(-1)} disabled={monthPosition === 0} aria-label="Previous month">←</button>
-          <strong aria-live="polite">{monthLabel}</strong>
-          <button type="button" onClick={() => moveMonth(1)} disabled={monthPosition === calendarMonths.length - 1} aria-label="Next month">→</button>
-        </div>
-      </header>
+      <h2 id="calendar-title" className="sr-only">2026 calendar with monthly announcements</h2>
+      <div className="calendar-main">
+        <header className="calendar-header">
+          <div className="calendar-controls" aria-label="Calendar month controls">
+            <button type="button" onClick={() => moveMonth(-1)} disabled={monthPosition === 0} aria-label="Previous month">←</button>
+            <strong aria-live="polite">{monthLabel}</strong>
+            <button type="button" onClick={() => moveMonth(1)} disabled={monthPosition === calendarMonths.length - 1} aria-label="Next month">→</button>
+          </div>
+        </header>
 
-      <div className="calendar-grid" role="grid" aria-label={monthLabel}>
-        {weekdayLabels.map((weekday) => <span className="calendar-weekday" role="columnheader" key={weekday}>{weekday}</span>)}
-        {Array.from({ length: cellCount }, (_, index) => {
+        <div className="calendar-grid" role="grid" aria-label={monthLabel}>
+          {weekdayLabels.map((weekday) => <span className="calendar-weekday" role="columnheader" key={weekday}>{weekday}</span>)}
+          {Array.from({ length: cellCount }, (_, index) => {
           const day = index - leadingDays + 1;
           if (day < 1 || day > daysInMonth) return <span className="calendar-day calendar-day-empty" aria-hidden="true" key={`empty-${index}`} />;
           const date = `2026-${String(monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
@@ -215,8 +240,36 @@ function Calendar2026() {
               })}
             </div>
           );
-        })}
+          })}
+        </div>
       </div>
+
+      <aside className="calendar-announcements" aria-label={`Announcements for ${monthLabel}`}>
+        <header className="calendar-announcements-header">
+          <span>Bulletin</span>
+          <h2>Announcements</h2>
+          <small>{announcements.length ? `${announcements.length} items` : "All clear"}</small>
+        </header>
+        {announcements.length > 0 ? (
+          <div className="announcement-list">
+            {announcements.map((announcement) => (
+              <article className={`announcement-card tone-${announcement.tone}`} key={announcement.label}>
+                <time className="announcement-date" dateTime={announcement.date}>
+                  <span>{announcement.month}</span>
+                  <strong>{announcement.day}</strong>
+                </time>
+                <div>
+                  <small>{announcement.kind}</small>
+                  <h3>{announcement.label}</h3>
+                  <time dateTime={announcement.date}>{announcement.displayDate}</time>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p className="announcements-empty">No announcements for this month.</p>
+        )}
+      </aside>
     </section>
   );
 }
