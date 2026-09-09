@@ -5,6 +5,14 @@ tags:
 
 # Changelog
 
+## 0.14.0 — 2026-09-09
+
+- Removed the Sheikah Slate attribution from the public Home page.
+- Added a navigable September–December 2026 calendar beneath the countdown strip.
+- Marked countdown milestones on their calendar dates and added a month-specific milestone summary.
+- Added Previous/Next controls, disabled September/December boundaries, keyboard navigation, accessible month grids, and responsive mobile treatment.
+- Expanded browser QA to traverse all four remaining months and verify event counts, calendar boundaries, and the absence of the removed attribution.
+
 ## 0.13.1 — 2026-09-09
 
 - Removed the oversized Home-page hero, descriptive lede, and separate source card.

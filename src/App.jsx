@@ -50,15 +50,91 @@ function HomeIcon() {
   );
 }
 
+const calendarMonths = [8, 9, 10, 11];
+const weekdayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+function Calendar2026() {
+  const [monthPosition, setMonthPosition] = useState(0);
+  const monthIndex = calendarMonths[monthPosition];
+  const monthLabel = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric", timeZone: "UTC" })
+    .format(new Date(Date.UTC(2026, monthIndex, 1)));
+  const leadingDays = new Date(Date.UTC(2026, monthIndex, 1)).getUTCDay();
+  const daysInMonth = new Date(Date.UTC(2026, monthIndex + 1, 0)).getUTCDate();
+  const cellCount = Math.ceil((leadingDays + daysInMonth) / 7) * 7;
+  const monthEvents = countdowns.filter(({ date }) => Number(date.slice(5, 7)) - 1 === monthIndex);
+
+  function moveMonth(direction) {
+    setMonthPosition((position) => Math.min(calendarMonths.length - 1, Math.max(0, position + direction)));
+  }
+
+  function handleCalendarKeyDown(event) {
+    if (event.target !== event.currentTarget || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    if (event.key === "ArrowLeft") moveMonth(-1);
+    if (event.key === "ArrowRight") moveMonth(1);
+    if (event.key === "Home") setMonthPosition(0);
+    if (event.key === "End") setMonthPosition(calendarMonths.length - 1);
+  }
+
+  return (
+    <section className="year-calendar" aria-labelledby="calendar-title" tabIndex="0" onKeyDown={handleCalendarKeyDown}>
+      <header className="calendar-header">
+        <div>
+          <p>September—December</p>
+          <h2 id="calendar-title">Rest of 2026</h2>
+        </div>
+        <div className="calendar-controls" aria-label="Calendar month controls">
+          <button type="button" onClick={() => moveMonth(-1)} disabled={monthPosition === 0} aria-label="Previous month">←</button>
+          <strong aria-live="polite">{monthLabel}</strong>
+          <button type="button" onClick={() => moveMonth(1)} disabled={monthPosition === calendarMonths.length - 1} aria-label="Next month">→</button>
+        </div>
+      </header>
+
+      <div className="calendar-layout">
+        <div className="calendar-grid" role="grid" aria-label={monthLabel}>
+          {weekdayLabels.map((weekday) => <span className="calendar-weekday" role="columnheader" key={weekday}>{weekday}</span>)}
+          {Array.from({ length: cellCount }, (_, index) => {
+            const day = index - leadingDays + 1;
+            if (day < 1 || day > daysInMonth) return <span className="calendar-day calendar-day-empty" aria-hidden="true" key={`empty-${index}`} />;
+            const date = `2026-${String(monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+            const events = monthEvents.filter((item) => item.date === date);
+            return (
+              <div className={`calendar-day${events.length ? " has-event" : ""}`} role="gridcell" aria-label={`${monthLabel} ${day}${events.length ? `: ${events.map((event) => event.label).join(", ")}` : ""}`} key={date}>
+                <time dateTime={date}>{day}</time>
+                {events.map((event) => <span className={`calendar-event-tag tone-${event.tone || "blue"}`} key={event.label}>{event.label}</span>)}
+              </div>
+            );
+          })}
+        </div>
+
+        <aside className="month-milestones" aria-label={`${monthLabel} milestones`}>
+          <span className="milestone-count">{String(monthEvents.length).padStart(2, "0")}</span>
+          <div>
+            <p>Marked this month</p>
+            <h3>{monthLabel}</h3>
+          </div>
+          {monthEvents.length ? (
+            <ol>
+              {monthEvents.map((event) => (
+                <li key={event.label}>
+                  <time dateTime={event.date}>{event.displayDate.replace(" · confirmed", "")}</time>
+                  <strong>{event.label}</strong>
+                </li>
+              ))}
+            </ol>
+          ) : <p className="calendar-empty-state">No countdown milestones currently listed.</p>}
+        </aside>
+      </div>
+    </section>
+  );
+}
+
 function HomePage() {
   return (
     <main className="home-page" id="home-panel" role="tabpanel" aria-labelledby="home-tab">
       <section className="countdown-section" aria-labelledby="countdown-title">
         <div className="countdown-heading">
-          <div>
-            <h1 id="countdown-title">Countdowns!</h1>
-            <p className="countdown-source"><strong>Sheikah Slate</strong> · As of Sep 8, 2026</p>
-          </div>
+          <h1 id="countdown-title">Countdowns!</h1>
           <p>Days remaining update automatically at midnight Pacific.</p>
         </div>
         <div className="countdown-strip">
@@ -78,6 +154,7 @@ function HomePage() {
           })}
         </div>
       </section>
+      <Calendar2026 />
     </main>
   );
 }

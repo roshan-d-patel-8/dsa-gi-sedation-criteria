@@ -119,8 +119,6 @@ body::before {
 .countdown-heading { margin-bottom: 20px; display: flex; align-items: end; justify-content: space-between; gap: 24px; }
 .countdown-heading h1 { margin: 0; color: var(--navy); font-size: clamp(36px, 4vw, 58px); line-height: .95; letter-spacing: -.045em; }
 .countdown-heading p { margin: 0; color: var(--muted); font-size: 10px; font-weight: 700; }
-.countdown-heading .countdown-source { margin-top: 8px; color: var(--muted); font-size: 10px; letter-spacing: .02em; }
-.countdown-source strong { color: var(--way); }
 .countdown-strip { display: grid; grid-template-columns: repeat(7, minmax(158px, 1fr)); gap: 10px; }
 .countdown-card { --card-accent: var(--way); position: relative; min-width: 0; min-height: 228px; padding: 17px 15px 16px; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-top: 5px solid var(--card-accent); border-radius: 13px; background: rgba(255, 255, 255, .93); box-shadow: var(--shadow); animation: card-in .48s both; animation-delay: var(--delay); }
 .countdown-card::after { position: absolute; width: 82px; height: 82px; top: -38px; right: -36px; border-radius: 50%; background: color-mix(in srgb, var(--card-accent) 11%, transparent); content: ""; }
@@ -132,6 +130,40 @@ body::before {
 .countdown-number span { font-size: 8px; font-weight: 950; letter-spacing: .1em; text-transform: uppercase; }
 .countdown-card h3 { margin: auto 0 10px; color: var(--navy); font-size: 13px; line-height: 1.22; letter-spacing: -.01em; }
 .countdown-card time { min-height: 25px; padding-top: 9px; border-top: 1px solid color-mix(in srgb, var(--card-accent) 18%, var(--line)); color: var(--muted); font-size: 8.5px; font-weight: 750; line-height: 1.25; }
+.year-calendar { margin-top: clamp(28px, 4vw, 50px); overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: rgba(255, 255, 255, .9); box-shadow: var(--shadow); }
+.year-calendar:focus-visible { outline: 3px solid rgba(27, 117, 187, .3); outline-offset: 4px; }
+.calendar-header { min-height: 82px; padding: 17px 20px; display: flex; align-items: center; justify-content: space-between; gap: 22px; border-bottom: 1px solid var(--line); background: linear-gradient(110deg, rgba(169, 198, 222, .2), rgba(255, 255, 255, .94)); }
+.calendar-header p, .month-milestones > div > p { margin: 0 0 3px; color: var(--way); font-size: 8px; font-weight: 950; letter-spacing: .13em; text-transform: uppercase; }
+.calendar-header h2 { margin: 0; color: var(--navy); font-size: 27px; line-height: 1; letter-spacing: -.035em; }
+.calendar-controls { min-width: 300px; display: grid; grid-template-columns: 38px minmax(160px, 1fr) 38px; align-items: center; gap: 7px; }
+.calendar-controls strong { color: var(--navy); font-size: 15px; text-align: center; }
+.calendar-controls button { width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid rgba(27, 117, 187, .25); border-radius: 10px; background: var(--white); color: var(--way); font-size: 19px; font-weight: 900; cursor: pointer; transition: transform .16s ease, background .16s ease, color .16s ease; }
+.calendar-controls button:hover:not(:disabled) { transform: translateY(-2px); background: var(--way); color: var(--white); }
+.calendar-controls button:focus-visible { outline: 3px solid rgba(27, 117, 187, .28); outline-offset: 2px; }
+.calendar-controls button:disabled { color: #b6c2ce; border-color: var(--line); background: #f2f4f6; cursor: not-allowed; }
+.calendar-layout { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(270px, .45fr); }
+.calendar-grid { padding: 16px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; border-right: 1px solid var(--line); }
+.calendar-weekday { padding: 4px 4px 7px; color: var(--muted); font-size: 8px; font-weight: 950; letter-spacing: .11em; text-align: center; text-transform: uppercase; }
+.calendar-day { min-height: 84px; padding: 8px; overflow: hidden; border: 1px solid rgba(217, 226, 234, .8); border-radius: 9px; background: rgba(244, 246, 248, .62); }
+.calendar-day > time { width: 25px; height: 25px; display: grid; place-items: center; border-radius: 8px; color: var(--navy); font-size: 10px; font-weight: 900; }
+.calendar-day.has-event { border-color: rgba(27, 117, 187, .28); background: linear-gradient(145deg, rgba(27, 117, 187, .08), rgba(255, 255, 255, .94)); }
+.calendar-day.has-event > time { background: var(--way); color: var(--white); }
+.calendar-day-empty { border-color: transparent; background: transparent; }
+.calendar-event-tag { margin-top: 6px; display: -webkit-box; overflow: hidden; color: var(--navy); font-size: 7.5px; font-weight: 800; line-height: 1.25; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+.calendar-event-tag::before { width: 5px; height: 5px; margin: 0 5px 1px 0; display: inline-block; border-radius: 50%; background: var(--way); content: ""; }
+.calendar-event-tag.tone-gold::before { background: var(--gold); }
+.calendar-event-tag.tone-way::before { background: var(--navy); }
+.month-milestones { position: relative; padding: 22px; overflow: hidden; background: var(--navy); color: var(--white); }
+.month-milestones::after { position: absolute; width: 180px; height: 180px; right: -90px; bottom: -100px; border: 1px solid rgba(255, 255, 255, .1); border-radius: 50%; content: ""; }
+.milestone-count { position: absolute; top: 14px; right: 17px; color: rgba(255, 255, 255, .13); font-size: 58px; font-weight: 900; line-height: 1; letter-spacing: -.06em; }
+.month-milestones > div { position: relative; z-index: 1; }
+.month-milestones > div > p { color: var(--pillar); }
+.month-milestones h3 { margin: 0; color: var(--white); font-size: 24px; letter-spacing: -.03em; }
+.month-milestones ol { position: relative; z-index: 1; margin: 22px 0 0; padding: 0; display: grid; gap: 13px; list-style: none; }
+.month-milestones li { padding-top: 12px; display: grid; gap: 4px; border-top: 1px solid rgba(255, 255, 255, .15); }
+.month-milestones li time { color: var(--pillar); font-size: 8px; font-weight: 850; letter-spacing: .04em; }
+.month-milestones li strong { color: var(--white); font-size: 11px; line-height: 1.3; }
+.calendar-empty-state { position: relative; z-index: 1; max-width: 190px; margin: 24px 0 0; color: rgba(255, 255, 255, .62); font-size: 11px; font-weight: 700; line-height: 1.5; }
 
 /* Procedure sedation tab */
 .reference-page { width: min(1480px, 100%); margin: 0 auto; padding: clamp(22px, 3vw, 40px) clamp(16px, 3.5vw, 52px) clamp(28px, 4vw, 54px); }
@@ -469,6 +501,9 @@ footer p { max-width: 600px; margin: 0; text-align: right; line-height: 1.4; }
   .criteria-card { order: var(--order); }
   .pod-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .pod-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .calendar-layout { grid-template-columns: 1fr; }
+  .calendar-grid { border-right: 0; border-bottom: 1px solid var(--line); }
+  .month-milestones { min-height: 190px; }
 }
 
 @media (max-width: 680px) {
@@ -488,6 +523,17 @@ footer p { max-width: 600px; margin: 0; text-align: right; line-height: 1.4; }
   .countdown-heading p { line-height: 1.35; }
   .countdown-strip { margin-right: -12px; padding-right: 12px; }
   .countdown-card { min-width: 184px; min-height: 216px; }
+  .year-calendar { margin-top: 30px; border-radius: 14px; }
+  .calendar-header { padding: 14px; align-items: stretch; flex-direction: column; gap: 14px; }
+  .calendar-header h2 { font-size: 24px; }
+  .calendar-controls { min-width: 0; grid-template-columns: 38px minmax(0, 1fr) 38px; }
+  .calendar-grid { padding: 9px; gap: 3px; }
+  .calendar-weekday { font-size: 7px; }
+  .calendar-day { min-height: 58px; padding: 5px; border-radius: 7px; }
+  .calendar-day > time { width: 22px; height: 22px; font-size: 9px; }
+  .calendar-event-tag { font-size: 0; }
+  .calendar-event-tag::before { width: 7px; height: 7px; margin: 4px 0 0; }
+  .month-milestones { min-height: 180px; padding: 18px; }
   .reference-heading { margin-bottom: 14px; }
   .reference-review-date { font-size: 11px; }
   .reference-heading h1, .coverage-heading h1 { font-size: 36px; }

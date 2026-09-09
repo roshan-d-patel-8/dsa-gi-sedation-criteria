@@ -5,7 +5,7 @@ tags:
 
 # DSA GI Resources
 
-A compact, tabbed DSA GI clinical-operations reference. The primary Home tab carries a Pacific-time countdown strip sourced from the Sheikah Slate; the remaining tabs contain the August 2026 anesthesia procedure criteria, DSA GI MA–MD pod assignments, and a searchable New Physician Orientation field guide.
+A compact, tabbed DSA GI clinical-operations reference. The primary Home tab carries a Pacific-time countdown strip and a navigable September–December 2026 milestone calendar; the remaining tabs contain the August 2026 anesthesia procedure criteria, DSA GI MA–MD pod assignments, and a searchable New Physician Orientation field guide.
 
 ## Live site
 

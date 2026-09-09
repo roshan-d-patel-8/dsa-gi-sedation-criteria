@@ -63,11 +63,36 @@ def assert_home(page):
     assert page.get_by_text("The next markers on the map.", exact=True).count() == 0
     assert page.locator(".home-tab-icon").is_visible()
     assert page.locator(".countdown-card").count() == 7
-    assert page.get_by_text("Sheikah Slate", exact=True).is_visible()
-    assert page.get_by_text("As of Sep 8, 2026", exact=False).is_visible()
-    assert page.get_by_text("Tom Haddad — last on-site day", exact=True).is_visible()
-    assert page.get_by_text("E2K — GI go-live", exact=True).is_visible()
+    assert page.get_by_text("Sheikah Slate", exact=False).count() == 0
+    assert page.locator(".countdown-strip").get_by_text("Tom Haddad — last on-site day", exact=True).is_visible()
+    assert page.locator(".countdown-strip").get_by_text("E2K — GI go-live", exact=True).is_visible()
     assert page.locator(".countdown-card time").count() == 7
+    assert page.get_by_role("heading", name="Rest of 2026", exact=True).is_visible()
+    assert page.get_by_role("grid", name="September 2026", exact=True).is_visible()
+    assert page.locator(".calendar-weekday").count() == 7
+    assert page.locator(".calendar-day:not(.calendar-day-empty)").count() == 30
+    assert page.get_by_role("button", name="Previous month", exact=True).is_disabled()
+    assert page.get_by_role("button", name="Next month", exact=True).is_enabled()
+
+
+def assert_calendar_navigation(page):
+    previous = page.get_by_role("button", name="Previous month", exact=True)
+    next_month = page.get_by_role("button", name="Next month", exact=True)
+    next_month.click()
+    assert page.get_by_role("grid", name="October 2026", exact=True).is_visible()
+    assert page.locator(".month-milestones li").count() == 3
+    assert previous.is_enabled()
+    next_month.click()
+    assert page.get_by_role("grid", name="November 2026", exact=True).is_visible()
+    assert page.locator(".month-milestones li").count() == 2
+    next_month.click()
+    assert page.get_by_role("grid", name="December 2026", exact=True).is_visible()
+    assert next_month.is_disabled()
+    assert page.get_by_text("No countdown milestones currently listed.", exact=True).is_visible()
+    previous.click()
+    previous.click()
+    previous.click()
+    assert page.get_by_role("grid", name="September 2026", exact=True).is_visible()
 
 
 def assert_sedation_reference(page):
@@ -151,8 +176,13 @@ with sync_playwright() as playwright:
     desktop.wait_for_load_state("networkidle")
     assert_tabs(desktop)
     assert_home(desktop)
+    assert_calendar_navigation(desktop)
     assert desktop.get_by_role("tab", name="Home", exact=True).get_attribute("aria-selected") == "true"
-    desktop.screenshot(path=OUTPUT / "dsa-gi-home-countdowns-desktop.png", full_page=True)
+    desktop.evaluate("document.documentElement.style.scrollBehavior = 'auto'; window.scrollTo(0, 0)")
+    desktop.wait_for_timeout(100)
+    desktop.screenshot(path=OUTPUT / "dsa-gi-home-countdowns-desktop.png", full_page=False)
+    desktop.locator(".year-calendar").scroll_into_view_if_needed()
+    desktop.screenshot(path=OUTPUT / "dsa-gi-calendar-desktop.png", full_page=False)
 
     desktop.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).click()
     assert_sedation_reference(desktop)
@@ -234,6 +264,8 @@ with sync_playwright() as playwright:
     assert_home(mobile)
     assert mobile.locator(".countdown-strip").evaluate("element => element.scrollWidth > element.clientWidth")
     mobile.screenshot(path=OUTPUT / "dsa-gi-home-countdowns-mobile.png", full_page=False)
+    mobile.locator(".year-calendar").scroll_into_view_if_needed()
+    mobile.screenshot(path=OUTPUT / "dsa-gi-calendar-mobile.png", full_page=False)
     mobile.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).click()
     assert_sedation_reference(mobile)
     mobile.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-sedation-mobile.png", full_page=False)
