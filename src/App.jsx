@@ -53,24 +53,11 @@ function HomeIcon() {
 function HomePage() {
   return (
     <main className="home-page" id="home-panel" role="tabpanel" aria-labelledby="home-tab">
-      <header className="home-heading">
-        <div>
-          <p className="eyebrow">DSA GI command deck · Operational horizon</p>
-          <h1>The next markers<br />on the map.</h1>
-          <p className="home-lede">A live Pacific-time countdown to the department’s nearest milestones.</p>
-        </div>
-        <div className="slate-stamp">
-          <span>Source</span>
-          <strong>Sheikah Slate</strong>
-          <small>Refreshed Sep 8, 2026</small>
-        </div>
-      </header>
-
       <section className="countdown-section" aria-labelledby="countdown-title">
         <div className="countdown-heading">
           <div>
-            <span>01 / Notable countdowns</span>
-            <h2 id="countdown-title">What is approaching.</h2>
+            <h1 id="countdown-title">Countdowns!</h1>
+            <p className="countdown-source"><strong>Sheikah Slate</strong> · As of Sep 8, 2026</p>
           </div>
           <p>Days remaining update automatically at midnight Pacific.</p>
         </div>

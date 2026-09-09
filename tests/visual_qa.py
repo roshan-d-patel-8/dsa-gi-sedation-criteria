@@ -59,10 +59,12 @@ def assert_tabs(page):
 
 
 def assert_home(page):
-    assert page.get_by_role("heading", name="The next markers on the map.", exact=True).is_visible()
+    assert page.get_by_role("heading", name="Countdowns!", exact=True).is_visible()
+    assert page.get_by_text("The next markers on the map.", exact=True).count() == 0
     assert page.locator(".home-tab-icon").is_visible()
     assert page.locator(".countdown-card").count() == 7
     assert page.get_by_text("Sheikah Slate", exact=True).is_visible()
+    assert page.get_by_text("As of Sep 8, 2026", exact=False).is_visible()
     assert page.get_by_text("Tom Haddad — last on-site day", exact=True).is_visible()
     assert page.get_by_text("E2K — GI go-live", exact=True).is_visible()
     assert page.locator(".countdown-card time").count() == 7

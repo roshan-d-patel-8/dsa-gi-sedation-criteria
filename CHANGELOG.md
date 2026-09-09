@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.13.1 — 2026-09-09
+
+- Removed the oversized Home-page hero, descriptive lede, and separate source card.
+- Replaced “What is approaching.” with the compact header “Countdowns!” and an inline “Sheikah Slate · As of Sep 8, 2026” reference.
+- Moved the countdown cards directly beneath the site tabs to prioritize operational information above decorative copy.
+
 ## 0.13.0 — 2026-09-09
 
 - Added a new primary Home tab with a blue house icon and made it the default landing view.

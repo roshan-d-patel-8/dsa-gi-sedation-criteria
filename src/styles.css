@@ -114,19 +114,13 @@ body::before {
 .folder-sheet { min-height: calc(100vh - 160px); border-top: 1px solid rgba(27, 58, 95, .04); }
 
 /* Home command deck */
-.home-page { width: min(1580px, 100%); margin: 0 auto; padding: clamp(34px, 5vw, 76px) clamp(16px, 3.5vw, 52px) clamp(46px, 6vw, 90px); }
-.home-heading { margin-bottom: clamp(30px, 5vw, 66px); display: grid; grid-template-columns: minmax(0, 1fr) max-content; align-items: end; gap: 30px; }
-.home-heading h1 { margin: 9px 0 0; color: var(--navy); font-size: clamp(48px, 6.2vw, 90px); font-weight: 760; line-height: .9; letter-spacing: -.055em; }
-.home-lede { max-width: 660px; margin: 20px 0 0; color: var(--muted); font-size: clamp(15px, 1.4vw, 19px); line-height: 1.45; }
-.slate-stamp { min-width: 220px; padding: 18px 20px; display: grid; gap: 3px; border: 1px solid rgba(27, 117, 187, .22); border-left: 5px solid var(--way); border-radius: 0 14px 14px 0; background: rgba(255, 255, 255, .78); box-shadow: var(--shadow); }
-.slate-stamp span { color: var(--way); font-size: 8px; font-weight: 950; letter-spacing: .15em; text-transform: uppercase; }
-.slate-stamp strong { color: var(--navy); font-size: 17px; }
-.slate-stamp small { color: var(--muted); font-size: 10px; font-weight: 700; }
+.home-page { width: min(1580px, 100%); margin: 0 auto; padding: clamp(30px, 3.5vw, 50px) clamp(16px, 3.5vw, 52px) clamp(46px, 6vw, 90px); }
 .countdown-section { position: relative; }
-.countdown-heading { margin-bottom: 16px; display: flex; align-items: end; justify-content: space-between; gap: 24px; }
-.countdown-heading span { color: var(--way); font-size: 8px; font-weight: 950; letter-spacing: .15em; text-transform: uppercase; }
-.countdown-heading h2 { margin: 4px 0 0; color: var(--navy); font-size: clamp(24px, 2.6vw, 38px); line-height: 1; letter-spacing: -.035em; }
+.countdown-heading { margin-bottom: 20px; display: flex; align-items: end; justify-content: space-between; gap: 24px; }
+.countdown-heading h1 { margin: 0; color: var(--navy); font-size: clamp(36px, 4vw, 58px); line-height: .95; letter-spacing: -.045em; }
 .countdown-heading p { margin: 0; color: var(--muted); font-size: 10px; font-weight: 700; }
+.countdown-heading .countdown-source { margin-top: 8px; color: var(--muted); font-size: 10px; letter-spacing: .02em; }
+.countdown-source strong { color: var(--way); }
 .countdown-strip { display: grid; grid-template-columns: repeat(7, minmax(158px, 1fr)); gap: 10px; }
 .countdown-card { --card-accent: var(--way); position: relative; min-width: 0; min-height: 228px; padding: 17px 15px 16px; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-top: 5px solid var(--card-accent); border-radius: 13px; background: rgba(255, 255, 255, .93); box-shadow: var(--shadow); animation: card-in .48s both; animation-delay: var(--delay); }
 .countdown-card::after { position: absolute; width: 82px; height: 82px; top: -38px; right: -36px; border-radius: 50%; background: color-mix(in srgb, var(--card-accent) 11%, transparent); content: ""; }
@@ -489,11 +483,8 @@ footer p { max-width: 600px; margin: 0; text-align: right; line-height: 1.4; }
   .folder-tab:nth-child(4) { min-width: 320px; }
   .folder-tab > strong { font-size: 11px; }
   .home-page, .reference-page, .coverage-page, .orientation-page { padding: 18px 12px 28px; }
-  .home-heading { margin-bottom: 34px; grid-template-columns: 1fr; gap: 22px; }
-  .home-heading h1 { font-size: 52px; }
-  .home-lede { margin-top: 15px; font-size: 14px; }
-  .slate-stamp { min-width: 0; width: 100%; }
   .countdown-heading { align-items: start; flex-direction: column; gap: 8px; }
+  .countdown-heading h1 { font-size: 42px; }
   .countdown-heading p { line-height: 1.35; }
   .countdown-strip { margin-right: -12px; padding-right: 12px; }
   .countdown-card { min-width: 184px; min-height: 216px; }
