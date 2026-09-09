@@ -572,15 +572,35 @@ body::before {
 .orientation-procedure-body > .orientation-callout { margin: 0; padding: 14px 16px; border: 1px solid color-mix(in srgb, var(--site-color) 30%, var(--line)); border-left: 5px solid var(--site-color); border-radius: 10px; background: color-mix(in srgb, var(--site-color) 9%, white); color: color-mix(in srgb, var(--site-color) 70%, var(--navy)); }
 .orientation-skills-day { --site-color: #bd8a2e; grid-column: 1 / -1; }
 .orientation-skills-day > summary > span { background: linear-gradient(145deg, #d5a33f, #9b6815); font-size: 8px; }
-.skills-day-body { padding: clamp(14px, 2.5vw, 24px); display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(220px, .75fr); align-items: center; gap: clamp(18px, 3vw, 34px); background: linear-gradient(145deg, #fffaf0, rgba(255, 255, 255, .98)); }
+.skills-day-body { padding: clamp(14px, 2.5vw, 24px); display: grid; grid-template-columns: minmax(0, 1.42fr) minmax(310px, .82fr); align-items: start; gap: clamp(18px, 2.5vw, 28px); background: linear-gradient(145deg, #fffaf0, rgba(255, 255, 255, .98)); }
+.skills-day-media { min-width: 0; display: grid; gap: 12px; }
 .skills-day-video { position: relative; overflow: hidden; aspect-ratio: 16 / 9; border: 1px solid rgba(27, 58, 95, .16); border-radius: 13px; background: #102b47; box-shadow: 0 15px 28px rgba(27, 58, 95, .16); }
 .skills-day-video iframe { position: absolute; width: 100%; height: 100%; inset: 0; border: 0; }
-.skills-day-caption { display: flex; align-items: flex-start; flex-direction: column; gap: 16px; }
+.skills-day-caption { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .skills-day-caption > div { display: grid; gap: 3px; }
 .skills-day-caption span { color: #9b6815; font-size: 8px; font-weight: 950; letter-spacing: .11em; text-transform: uppercase; }
-.skills-day-caption strong { color: var(--navy); font-size: 16px; }
+.skills-day-caption strong { color: var(--navy); font-size: 14px; }
 .skills-day-caption a { min-width: max-content; padding: 8px 11px; border: 1px solid rgba(27, 117, 187, .25); border-radius: 8px; background: white; color: var(--way); font-size: 10px; font-weight: 900; text-decoration: none; }
 .skills-day-caption a:hover { border-color: var(--way); background: #f2f8fc; }
+.skills-day-chapters { overflow: hidden; border: 1px solid rgba(189, 138, 46, .3); border-radius: 13px; background: rgba(255, 255, 255, .86); box-shadow: 0 12px 26px rgba(91, 65, 19, .1); }
+.skills-day-chapters > header { min-height: 62px; padding: 12px 14px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; border-bottom: 1px solid rgba(189, 138, 46, .2); background: linear-gradient(115deg, rgba(213, 163, 63, .2), rgba(255, 255, 255, .96)); }
+.skills-day-chapters > header > div { display: grid; gap: 3px; }
+.skills-day-chapters > header span { color: #9b6815; font-size: 8px; font-weight: 950; letter-spacing: .11em; text-transform: uppercase; }
+.skills-day-chapters > header strong { color: var(--navy); font-size: 15px; line-height: 1.15; }
+.skills-day-chapters > header small { flex: none; color: #7c6741; font-size: 8px; font-weight: 850; }
+.skills-day-chapters ol { margin: 0 !important; padding: 5px !important; display: grid; gap: 2px; list-style: none; }
+.skills-day-chapters li { margin: 0 !important; padding: 0 !important; }
+.skills-day-chapters li::before { content: none !important; }
+.skills-day-chapters li a { min-height: 34px; padding: 6px 8px; display: grid; grid-template-columns: 42px minmax(0, 1fr) 13px; align-items: center; gap: 9px; border-radius: 8px; color: var(--navy); text-decoration: none; transition: color .16s ease, background .16s ease, transform .16s ease; }
+.skills-day-chapters li a:hover { background: rgba(213, 163, 63, .13); color: #7d5514; transform: translateX(2px); }
+.skills-day-chapters li a:focus-visible { outline: 3px solid rgba(27, 117, 187, .28); outline-offset: -2px; }
+.skills-day-chapters li a[aria-current="true"] { background: #173b61; color: white; }
+.skills-day-chapters li a > span { color: #a46f16; font-size: 10px; font-variant-numeric: tabular-nums; font-weight: 950; letter-spacing: .03em; }
+.skills-day-chapters li a[aria-current="true"] > span { color: #ffd36d; }
+.skills-day-chapters li a > strong { overflow: hidden; font-size: 11px; font-weight: 850; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
+.skills-day-chapters li a > i { color: #bd8a2e; font-size: 8px; font-style: normal; }
+.skills-day-chapters li a[aria-current="true"] > i { color: #ffd36d; }
+.skills-day-now-playing { min-height: 30px; margin: 0 !important; padding: 8px 13px; border-top: 1px solid rgba(189, 138, 46, .18); background: #fffaf0; color: #76561d; font-size: 9px; font-weight: 800; line-height: 1.35; }
 @keyframes orientation-panel-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
 footer { min-height: 78px; padding: 20px clamp(18px, 3.5vw, 52px); display: flex; justify-content: space-between; align-items: center; gap: 24px; background: var(--navy); color: var(--white); }
@@ -705,6 +725,8 @@ footer p { max-width: 600px; margin: 0; text-align: right; line-height: 1.4; }
   .orientation-group-grid { grid-template-columns: 1fr; gap: 10px; }
   .orientation-skills-day { grid-column: auto; }
   .skills-day-body { grid-template-columns: 1fr; gap: 14px; }
+  .skills-day-chapters li a { min-height: 40px; }
+  .skills-day-chapters li a > strong { font-size: 12px; text-overflow: clip; white-space: normal; }
   .orientation-content ol, .orientation-content ul { padding-left: 0; }
   .orientation-content li ol, .orientation-content li ul { padding-left: 19px; }
   .cw-title-block h2 { font-size: 27px; }

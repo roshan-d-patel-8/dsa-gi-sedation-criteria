@@ -243,7 +243,7 @@ def assert_all_orientation_sections_are_clean(page):
     for index in range(page.locator(".orientation-subtab").count()):
         page.locator(".orientation-subtab").nth(index).click()
         assert page.locator(".orientation-content li > p").count() == 0
-        assert page.locator(".orientation-content li").evaluate_all(
+        assert page.locator(".orientation-content li:not(.skills-day-chapter)").evaluate_all(
             "elements => elements.every((element) => element.firstElementChild?.classList.contains('orientation-list-line'))"
         )
         assert page.locator(".orientation-content li > .orientation-list-line").evaluate_all(
@@ -418,6 +418,34 @@ with sync_playwright() as playwright:
     assert skills_day.locator("iframe").get_attribute("title") == "DSA GI Skills Day 2025"
     assert skills_day.locator("iframe").get_attribute("src") == "https://www.youtube-nocookie.com/embed/WYdP1js9NPk?rel=0"
     assert skills_day.get_by_role("link", name="Open on YouTube", exact=True).get_attribute("href") == "https://youtu.be/WYdP1js9NPk"
+    chapter_titles = [
+        ("Variceal banding", "0:05", 5),
+        ("Balloon dilation", "8:57", 537),
+        ("Savary dilation", "15:30", 930),
+        ("Swimmer's Position for Colonoscopy", "26:37", 1597),
+        ("Clipping", "27:15", 1635),
+        ("Endoloop", "31:02", 1862),
+        ("ERBE Principles", "33:13", 1993),
+        ("Spyglass (cholangioscopy)", "35:22", 2122),
+        ("Trapezoid basket", "46:56", 2816),
+    ]
+    chapter_nav = skills_day.get_by_role("navigation", name="Skills Day video chapters")
+    assert chapter_nav.is_visible()
+    assert chapter_nav.get_by_role("link").count() == 9
+    video_box = skills_day.locator(".skills-day-video").bounding_box()
+    chapter_box = chapter_nav.bounding_box()
+    assert chapter_box["x"] >= video_box["x"] + video_box["width"]
+    for title, timestamp, seconds in chapter_titles:
+        chapter_link = chapter_nav.get_by_role("link", name=f"{timestamp} {title}", exact=False)
+        assert chapter_link.is_visible()
+        assert chapter_link.get_attribute("href") == f"https://youtu.be/WYdP1js9NPk?t={seconds}s"
+    balloon_chapter = chapter_nav.get_by_role("link", name="8:57 Balloon dilation", exact=False)
+    balloon_chapter.click()
+    chapter_player_src = skills_day.locator("iframe").get_attribute("src")
+    assert chapter_player_src == "https://www.youtube-nocookie.com/embed/WYdP1js9NPk?rel=0&start=537&autoplay=1", chapter_player_src
+    assert skills_day.locator("iframe").get_attribute("title") == "DSA GI Skills Day 2025 — Balloon dilation"
+    assert balloon_chapter.get_attribute("aria-current") == "true"
+    assert chapter_nav.get_by_text("Now playing: Balloon dilation (8:57)", exact=True).is_visible()
     procedures_tab.scroll_into_view_if_needed()
     desktop.wait_for_timeout(350)
     desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-procedures-accordion.png", full_page=True)
@@ -498,6 +526,12 @@ with sync_playwright() as playwright:
     mobile_skills_day.locator("summary").click()
     assert mobile_skills_day.locator("iframe").is_visible()
     assert mobile_skills_day.evaluate("element => element.getBoundingClientRect().width <= document.documentElement.clientWidth")
+    mobile_video_box = mobile_skills_day.locator(".skills-day-video").bounding_box()
+    mobile_chapter_box = mobile_skills_day.locator(".skills-day-chapters").bounding_box()
+    assert mobile_chapter_box["y"] >= mobile_video_box["y"] + mobile_video_box["height"]
+    assert mobile_skills_day.get_by_role("navigation", name="Skills Day video chapters").get_by_role("link").count() == 9
+    assert mobile_skills_day.locator(".skills-day-chapters").evaluate("element => element.scrollWidth <= element.clientWidth")
+    assert mobile_skills_day.get_by_role("link", name="26:37 Swimmer's Position for Colonoscopy", exact=False).is_visible()
     mobile_skills_day.scroll_into_view_if_needed()
     mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-skills-day-mobile.png", full_page=False)
 
@@ -505,4 +539,4 @@ with sync_playwright() as playwright:
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: Home countdowns, September announcements, September–December GI birthdays, Tom farewell cocktail event, four folder tabs, 12-section field guide including Choosing Wisely with expandable infographic, nested People and Procedures foldouts, Skills Day video, podlet tooltips, portraits, and mobile layout.")
+print("Visual QA passed: Home countdowns, September announcements, September–December GI birthdays, Tom farewell cocktail event, four folder tabs, 12-section field guide including Choosing Wisely with expandable infographic, nested People and Procedures foldouts, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")

@@ -349,11 +349,39 @@ const skillsDayVideo = {
   title: "DSA GI Skills Day 2025",
   embedUrl: "https://www.youtube-nocookie.com/embed/WYdP1js9NPk?rel=0",
   watchUrl: "https://youtu.be/WYdP1js9NPk",
+  duration: "50:33",
+  chapters: [
+    { time: "0:05", seconds: 5, title: "Variceal banding" },
+    { time: "8:57", seconds: 537, title: "Balloon dilation" },
+    { time: "15:30", seconds: 930, title: "Savary dilation" },
+    { time: "26:37", seconds: 1597, title: "Swimmer's Position for Colonoscopy" },
+    { time: "27:15", seconds: 1635, title: "Clipping" },
+    { time: "31:02", seconds: 1862, title: "Endoloop" },
+    { time: "33:13", seconds: 1993, title: "ERBE Principles" },
+    { time: "35:22", seconds: 2122, title: "Spyglass (cholangioscopy)" },
+    { time: "46:56", seconds: 2816, title: "Trapezoid basket" },
+  ],
 };
 
 function createSkillsDayFoldout(doc) {
   const skillsDay = doc.createElement("details");
   skillsDay.className = "orientation-site-group orientation-skills-day";
+  const chapterLinks = skillsDayVideo.chapters.map((chapter) => `
+    <li class="skills-day-chapter">
+      <a
+        href="${skillsDayVideo.watchUrl}?t=${chapter.seconds}s"
+        target="_blank"
+        rel="noreferrer"
+        data-skills-day-start="${chapter.seconds}"
+        data-skills-day-title="${chapter.title}"
+        aria-controls="skills-day-player"
+      >
+        <span>${chapter.time}</span>
+        <strong>${chapter.title}</strong>
+        <i aria-hidden="true">\u25b6</i>
+      </a>
+    </li>
+  `).join("");
   skillsDay.innerHTML = `
     <summary>
       <span>PLAY</span>
@@ -361,20 +389,31 @@ function createSkillsDayFoldout(doc) {
       <i aria-hidden="true"></i>
     </summary>
     <div class="skills-day-body">
-      <div class="skills-day-video">
-        <iframe
-          src="${skillsDayVideo.embedUrl}"
-          title="${skillsDayVideo.title}"
-          loading="lazy"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
-        ></iframe>
+      <div class="skills-day-media">
+        <div class="skills-day-video">
+          <iframe
+            id="skills-day-player"
+            src="${skillsDayVideo.embedUrl}"
+            title="${skillsDayVideo.title}"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div class="skills-day-caption">
+          <div><span>Training library</span><strong>${skillsDayVideo.title}</strong></div>
+          <a href="${skillsDayVideo.watchUrl}" target="_blank" rel="noreferrer">Open on YouTube</a>
+        </div>
       </div>
-      <div class="skills-day-caption">
-        <div><span>Training library</span><strong>${skillsDayVideo.title}</strong></div>
-        <a href="${skillsDayVideo.watchUrl}" target="_blank" rel="noreferrer">Open on YouTube</a>
-      </div>
+      <nav class="skills-day-chapters" aria-label="Skills Day video chapters">
+        <header>
+          <div><span>Chapter index</span><strong>Jump straight to a skill</strong></div>
+          <small>${skillsDayVideo.chapters.length} chapters · ${skillsDayVideo.duration}</small>
+        </header>
+        <ol>${chapterLinks}</ol>
+        <p class="skills-day-now-playing" aria-live="polite">Select a chapter to play it here.</p>
+      </nav>
     </div>
   `;
   return skillsDay;
@@ -782,6 +821,25 @@ function OrientationMaterials() {
     requestAnimationFrame(() => document.getElementById(`${nextSection.id}-tab`)?.focus());
   }
 
+  function handleOrientationContentClick(event) {
+    const chapterLink = event.target.closest("[data-skills-day-start]");
+    if (!chapterLink || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+
+    const content = event.currentTarget;
+    const player = content.querySelector("#skills-day-player");
+    const nowPlaying = content.querySelector(".skills-day-now-playing");
+    if (!player || !nowPlaying) return;
+
+    const seconds = chapterLink.dataset.skillsDayStart;
+    const chapterTitle = chapterLink.dataset.skillsDayTitle;
+    player.src = `${skillsDayVideo.embedUrl}&start=${seconds}&autoplay=1`;
+    player.title = `${skillsDayVideo.title} — ${chapterTitle}`;
+    content.querySelectorAll("[data-skills-day-start]").forEach((link) => link.removeAttribute("aria-current"));
+    chapterLink.setAttribute("aria-current", "true");
+    nowPlaying.textContent = `Now playing: ${chapterTitle} (${chapterLink.querySelector("span").textContent})`;
+  }
+
   return (
     <main className="orientation-page" id="orientation-panel" role="tabpanel" aria-labelledby="orientation-tab">
       <h1 className="sr-only">New Physician Orientation Materials</h1>
@@ -854,7 +912,11 @@ function OrientationMaterials() {
                 </button>
               )}
             </header>
-            <div className="orientation-content" dangerouslySetInnerHTML={{ __html: activeSection.html }} />
+            <div
+              className="orientation-content"
+              onClick={handleOrientationContentClick}
+              dangerouslySetInnerHTML={{ __html: activeSection.html }}
+            />
           </section>
         )}
         {visibleSections.length === 0 && (

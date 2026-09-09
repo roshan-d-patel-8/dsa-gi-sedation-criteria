@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.23.0 — 2026-09-09
+
+- Added the video’s nine published chapter markers beside the embedded Skills Day player, from Variceal banding through Trapezoid basket.
+- Made every timestamp a direct YouTube hyperlink while keeping ordinary clicks in the Field Guide by jumping the embedded player to the selected chapter.
+- Added visible current-chapter feedback and desktop/mobile browser coverage for chapter text, source timestamps, links, layout, and in-place playback.
+
 ## 0.22.0 — 2026-09-09
 
 - Added a month-aware Announcements rail to the right of the desktop calendar with a stacked responsive layout on smaller screens.
