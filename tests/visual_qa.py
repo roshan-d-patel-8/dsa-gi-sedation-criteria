@@ -354,6 +354,42 @@ with sync_playwright() as playwright:
     desktop.wait_for_timeout(350)
     desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-desktop.png", full_page=False)
 
+    communication_tab = desktop.get_by_role("tab", name="Communication Approved channels", exact=False)
+    communication_tab.click()
+    pool_party = desktop.locator(".orientation-pool-party")
+    assert pool_party.count() == 1
+    assert pool_party.get_by_role("heading", name="Pool Party", exact=True).is_visible()
+    assert pool_party.get_attribute("open") is None
+    pool_party.locator("summary").press("Enter")
+    pool_rows = [
+        ("P WCR GI APPT", "Urgent procedure scheduling requests"),
+        ("P WCR GI MA", "Walnut Creek MA inbox"),
+        ("P DRV GI MA", "Deer Valley MA inbox"),
+        ("P WCR GI ADV", "Walnut Creek GI Advice RN"),
+        ("P NCAL IBD PHARM", "Regional IBD pharmacy referrals"),
+        ("P NCAL REG THERAPY PLAN", "Biologic infusion-order renewals"),
+        ("P WCR INF RN", "Walnut Creek infusion RN inbox"),
+        ("P DRV ONC RN", "Deer Valley infusion/oncology RN inbox"),
+        ("P DUB INF RN", "Dublin infusion RN inbox"),
+    ]
+    assert pool_party.locator("tbody tr").count() == 9
+    assert pool_party.get_by_role("button").count() == 9
+    for pool, purpose in pool_rows:
+        row = pool_party.locator("tr", has_text=pool)
+        assert row.get_by_text(pool, exact=True).is_visible()
+        assert purpose in row.locator("td").nth(1).inner_text()
+        assert row.get_by_role("button", name=f"Copy {pool} to clipboard", exact=True).is_visible()
+    desktop.context.grant_permissions(["clipboard-read", "clipboard-write"], origin=BASE_URL)
+    copy_pool = pool_party.get_by_role("button", name="Copy P WCR GI APPT to clipboard", exact=True)
+    copy_pool.click()
+    desktop.wait_for_timeout(120)
+    assert copy_pool.inner_text().strip() == "Copied"
+    assert desktop.evaluate("navigator.clipboard.readText()") == "P WCR GI APPT"
+    assert pool_party.locator(".pool-reference-only").count() == 3
+    assert pool_party.get_by_text("routine infusion requests no longer need to be routed to them", exact=False).is_visible()
+    pool_party.scroll_into_view_if_needed()
+    desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-pool-party-desktop.png", full_page=False)
+
     people_tab = desktop.get_by_role("tab", name="People Management staff and PAs", exact=False)
     people_tab.click()
     assert desktop.locator(".orientation-card-sensitive").count() == 1
@@ -519,6 +555,14 @@ with sync_playwright() as playwright:
     assert mobile.locator(".orientation-tools").is_visible()
     assert mobile.locator(".orientation-subtabs").evaluate("element => element.scrollWidth > element.clientWidth")
     mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-mobile.png", full_page=False)
+    mobile.get_by_role("tab", name="Communication Approved channels", exact=False).click()
+    mobile_pool_party = mobile.locator(".orientation-pool-party")
+    mobile_pool_party.locator("summary").click()
+    assert mobile_pool_party.locator("tbody tr").count() == 9
+    assert mobile_pool_party.locator(".pool-party-body").evaluate("element => element.scrollWidth <= element.clientWidth")
+    assert mobile_pool_party.get_by_role("button", name="Copy P NCAL REG THERAPY PLAN to clipboard", exact=True).is_visible()
+    mobile_pool_party.scroll_into_view_if_needed()
+    mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-pool-party-mobile.png", full_page=False)
     assert_choosing_wisely(mobile)
     assert mobile.get_by_role("button", name="Expand Choosing Wisely graduation infographic", exact=True).bounding_box()["width"] <= 110
     assert mobile.locator(".cw-smartphrase-grid").evaluate("element => getComputedStyle(element).gridTemplateColumns.split(' ').length") == 1
@@ -544,4 +588,4 @@ with sync_playwright() as playwright:
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: Home countdowns, September announcements, September–December GI birthdays, Tom farewell cocktail event, four folder tabs, 12-section field guide including Choosing Wisely with expandable infographic, nested People and Procedures foldouts, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")
+print("Visual QA passed: Home countdowns, September announcements, September–December GI birthdays, Tom farewell cocktail event, four folder tabs, 12-section field guide including Pool Party copy controls, Choosing Wisely with expandable infographic, nested People and Procedures foldouts, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")

@@ -345,6 +345,18 @@ const siteGroupDetails = {
   departmentwide: { code: "DSA", name: "Departmentwide & regional" },
 };
 
+const communicationPools = [
+  { pool: "P WCR GI APPT", purpose: "Urgent procedure scheduling requests" },
+  { pool: "P WCR GI MA", purpose: "Walnut Creek MA inbox" },
+  { pool: "P DRV GI MA", purpose: "Deer Valley MA inbox" },
+  { pool: "P WCR GI ADV", purpose: "Walnut Creek GI Advice RN" },
+  { pool: "P NCAL IBD PHARM", purpose: "Regional IBD pharmacy referrals" },
+  { pool: "P NCAL REG THERAPY PLAN", purpose: "Biologic infusion-order renewals" },
+  { pool: "P WCR INF RN", purpose: "Walnut Creek infusion RN inbox", referenceOnly: true },
+  { pool: "P DRV ONC RN", purpose: "Deer Valley infusion/oncology RN inbox", referenceOnly: true },
+  { pool: "P DUB INF RN", purpose: "Dublin infusion RN inbox", referenceOnly: true },
+];
+
 const skillsDayVideo = {
   title: "DSA GI Skills Day 2025",
   embedUrl: "https://www.youtube-nocookie.com/embed/WYdP1js9NPk?rel=0",
@@ -502,6 +514,41 @@ function groupDirectoryBySite(container, doc, sectionShort) {
   sourceList.replaceWith(groupGrid);
 }
 
+function addPoolParty(container, doc, sectionShort) {
+  if (sectionShort !== "Communication") return;
+
+  const rows = communicationPools.map(({ pool, purpose, referenceOnly }) => `
+    <tr${referenceOnly ? ' class="pool-reference-only"' : ""}>
+      <td><code>${pool}</code></td>
+      <td>${purpose}${referenceOnly ? '<small>Reference only</small>' : ""}</td>
+      <td>
+        <button type="button" class="pool-copy-button" data-pool-copy="${pool}" aria-label="Copy ${pool} to clipboard">
+          <span aria-hidden="true"></span><strong class="pool-copy-label">Copy</strong>
+        </button>
+      </td>
+    </tr>
+  `).join("");
+
+  const poolParty = doc.createElement("details");
+  poolParty.className = "orientation-site-group orientation-pool-party";
+  poolParty.innerHTML = `
+    <summary>
+      <span>POOL</span>
+      <div><h3>Pool Party</h3><small>Copy-ready Health Connect destinations</small></div>
+      <i aria-hidden="true"></i>
+    </summary>
+    <div class="pool-party-body">
+      <table>
+        <thead><tr><th scope="col">Pool</th><th scope="col">Purpose</th><th scope="col"><span class="sr-only">Copy address</span></th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <aside><strong>Infusion note</strong> The three infusion RN destinations are retained for reference; the Field Guide says routine infusion requests no longer need to be routed to them.</aside>
+      <p class="pool-copy-status sr-only" aria-live="polite"></p>
+    </div>
+  `;
+  container.append(poolParty);
+}
+
 function createProcedureFoldout(doc, { code, title, description, className, nodes }) {
   const foldout = doc.createElement("details");
   foldout.className = `orientation-site-group orientation-procedure-group ${className}`;
@@ -578,6 +625,7 @@ function parseOrientationSource(source) {
     container.querySelectorAll("p").forEach((paragraph) => emphasizeLeadingLabel(paragraph, doc));
     normalizeListItemLines(container, doc);
     groupDirectoryBySite(container, doc, meta.short);
+    addPoolParty(container, doc, meta.short);
     groupProcedures(container, doc, meta.short);
     Array.from(container.children).forEach((node) => {
       if (node.matches("ol, ul")) node.classList.add("orientation-list-grid");
@@ -821,7 +869,35 @@ function OrientationMaterials() {
     requestAnimationFrame(() => document.getElementById(`${nextSection.id}-tab`)?.focus());
   }
 
+  async function copyPoolAddress(button, content) {
+    const pool = button.dataset.poolCopy;
+    const label = button.querySelector(".pool-copy-label");
+    const status = content.querySelector(".pool-copy-status");
+
+    try {
+      await navigator.clipboard.writeText(pool);
+      button.classList.add("is-copied");
+      label.textContent = "Copied";
+      if (status) status.textContent = `Copied ${pool} to the clipboard.`;
+      window.setTimeout(() => {
+        if (!button.isConnected) return;
+        button.classList.remove("is-copied");
+        label.textContent = "Copy";
+      }, 1800);
+    } catch {
+      label.textContent = "Try again";
+      if (status) status.textContent = `${pool} could not be copied. Select the pool name and copy it manually.`;
+    }
+  }
+
   function handleOrientationContentClick(event) {
+    const poolCopyButton = event.target.closest("[data-pool-copy]");
+    if (poolCopyButton) {
+      event.preventDefault();
+      void copyPoolAddress(poolCopyButton, event.currentTarget);
+      return;
+    }
+
     const chapterLink = event.target.closest("[data-skills-day-start]");
     if (!chapterLink || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();

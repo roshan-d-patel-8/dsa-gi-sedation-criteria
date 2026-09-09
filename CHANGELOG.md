@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.24.0 — 2026-09-09
+
+- Added a nested Pool Party accordion beneath Communication with all nine normalized Health Connect pool addresses and their Field Guide uses.
+- Added an individual clipboard button and visible confirmation state for every pool, plus the source warning that the three infusion RN destinations are reference-only.
+- Added desktop and mobile browser coverage for accordion behavior, table completeness, exact copy output, and responsive access to every row.
+
 ## 0.23.1 — 2026-09-09
 
 - Fixed Tom's September 10 farewell hover card being clipped at the calendar's top boundary after the announcements-rail layout change.
