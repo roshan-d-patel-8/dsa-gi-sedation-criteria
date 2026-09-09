@@ -5,6 +5,11 @@ tags:
 
 # Changelog
 
+## 0.20.1 — 2026-09-09
+
+- Removed the standalone Medication holds card from the Procedure Sedation Criteria tab.
+- Rebalanced the reference layout to six cards and added browser coverage confirming that the removed card and POM guidance label no longer render.
+
 ## 0.20.0 — 2026-09-09
 
 - Added a dedicated cocktail marker to September 10 for Tom's Farewell Happy Hour without adding the social event to the countdown strip.

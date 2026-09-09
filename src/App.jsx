@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
-import { medicationGuidance, POLICY_VERSION, policySections } from "./criteria.js";
+import { POLICY_VERSION, policySections } from "./criteria.js";
 import { coverageSites } from "./podlets.js";
 import { birthdayEvents } from "./birthdays.js";
 import orientationSource from "./orientation-source.html?raw";
 
 const columnLayout = [
-  ["optiflow", "or", "medications"],
+  ["optiflow", "or"],
   ["mac", "remimazolam"],
   ["mac-pom", "pleasanton"],
 ];
@@ -478,32 +478,7 @@ function CriteriaCard({ section, index }) {
   );
 }
 
-function MedicationCard() {
-  return (
-    <article className="criteria-card medication-guide-card" style={{ "--order": 7, "--delay": "270ms" }}>
-      <span className="card-index">07</span>
-      <p className="card-kicker">POM guidance</p>
-      <h2>Medication holds</h2>
-      <p className="medication-intro">Naltrexone timing depends on formulation.</p>
-      <div className="medication-holds">
-        {medicationGuidance.map((item) => (
-          <section className="medication-hold" key={item.brand}>
-            <div>
-              <span>{item.brand}</span>
-              <strong>{item.medication}</strong>
-            </div>
-            <b>{item.instruction}</b>
-            <small>{item.risk}</small>
-          </section>
-        ))}
-      </div>
-      <p className="suboxone-note"><strong>Buprenorphine/Suboxone:</strong> MAC criterion; no medication-hold instruction was supplied. Obtain individualized guidance.</p>
-    </article>
-  );
-}
-
 function cardFor(id) {
-  if (id === "medications") return <MedicationCard key={id} />;
   const section = policySections.find((candidate) => candidate.id === id);
   const index = policySections.findIndex((candidate) => candidate.id === id) + 1;
   return <CriteriaCard section={section} index={index} key={id} />;

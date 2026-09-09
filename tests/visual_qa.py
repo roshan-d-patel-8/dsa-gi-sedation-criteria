@@ -12,7 +12,6 @@ CARD_HEADINGS = [
     "Operating room",
     "Pleasanton exclusions",
     "Remimazolam considerations",
-    "Medication holds",
 ]
 PROVIDERS = [
     "Suk Seo",
@@ -127,7 +126,7 @@ def assert_calendar_navigation(page):
 
 def assert_sedation_reference(page):
     assert page.locator("input, select, textarea").count() == 0
-    assert page.locator(".criteria-card").count() == 7
+    assert page.locator(".criteria-card").count() == 6
     assert page.get_by_role("heading", name="Sedation criteria, at a glance.", exact=True).is_visible()
     review_date = page.get_by_text("next review date February 2027", exact=True)
     assert review_date.is_visible()
@@ -135,6 +134,8 @@ def assert_sedation_reference(page):
     assert abs(review_date.bounding_box()["x"] + review_date.bounding_box()["width"] - page.locator(".reference-heading").bounding_box()["x"] - page.locator(".reference-heading").bounding_box()["width"]) < 2
     for heading in CARD_HEADINGS:
         assert page.get_by_role("heading", name=heading, exact=True).is_visible()
+    assert page.get_by_role("heading", name="Medication holds", exact=True).count() == 0
+    assert page.get_by_text("POM guidance", exact=True).count() == 0
     assert page.get_by_text("One-page clinical reference.", exact=False).count() == 0
     assert page.get_by_text("Boundary:", exact=True).count() == 0
     assert page.get_by_text("Peritoneal-dialysis cases must be booked at Antioch only—not Walnut Creek.", exact=False).is_visible()
@@ -290,6 +291,8 @@ with sync_playwright() as playwright:
     desktop.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).click()
     assert_sedation_reference(desktop)
     assert desktop.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).get_attribute("aria-selected") == "true"
+    desktop.wait_for_timeout(850)
+    desktop.evaluate("window.scrollTo(0, 0)")
     desktop.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-sedation-desktop.png", full_page=True)
 
     desktop.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).click()

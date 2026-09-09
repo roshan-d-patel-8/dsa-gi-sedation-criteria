@@ -13,7 +13,7 @@ A compact, tabbed DSA GI clinical-operations reference. The primary Home tab car
 
 ## Purpose
 
-The site converts dense operational material into scan-friendly references. The Home tab surfaces seven dated departmental milestones from the September 8, 2026 Sheikah Slate and updates days remaining at midnight Pacific. The sedation tab preserves every criterion, preparation instruction, Pleasanton exclusion, remimazolam consideration, and POM medication hold. The coverage tab expands screenshot abbreviations into vault-verified provider names and pairs locally sourced physician portraits with each podlet. The orientation tab preserves the complete text of the supplied 2026 guide in 11 searchable sub-tabs, displaying one color-coded section at a time.
+The site converts dense operational material into scan-friendly references. The Home tab surfaces seven dated departmental milestones from the September 8, 2026 Sheikah Slate and updates days remaining at midnight Pacific. The sedation tab preserves the core criteria, preparation instructions, Pleasanton exclusions, and remimazolam considerations. The coverage tab expands screenshot abbreviations into vault-verified provider names and pairs locally sourced physician portraits with each podlet. The orientation tab preserves the complete text of the supplied 2026 guide in 12 searchable sub-tabs, displaying one color-coded section at a time.
 
 It does not clear patients, replace clinician judgment, or independently validate the clinical policy.
 
