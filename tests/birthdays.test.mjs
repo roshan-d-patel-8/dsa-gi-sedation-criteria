@@ -10,7 +10,7 @@ const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const contactsRoot = resolve(repoRoot, "..", "Contacts");
 
 test("September through December GI birthday data is complete and has portraits", () => {
-  assert.equal(birthdayEvents.length, 11);
+  assert.equal(birthdayEvents.length, 12);
   assert.deepEqual([...birthdayEvents].sort((a, b) => a.date.localeCompare(b.date)), birthdayEvents);
   assert.equal(new Set(birthdayEvents.map(({ name }) => name)).size, birthdayEvents.length);
 
@@ -18,6 +18,19 @@ test("September through December GI birthday data is complete and has portraits"
     assert.match(birthday.date, /^2026-(09|10|11|12)-\d{2}$/);
     assert(existsSync(resolve(repoRoot, "public", "portraits", birthday.photo)), `${birthday.name} must have a portrait`);
   }
+});
+
+test("Erina Foster's October 17 birthday is represented", () => {
+  assert.deepEqual(
+    birthdayEvents.find(({ name }) => name === "Erina Foster"),
+    {
+      name: "Erina Foster",
+      date: "2026-10-17",
+      displayDate: "October 17",
+      photo: "erina-foster.webp",
+      sourceNote: "Erina Foster.md",
+    },
+  );
 });
 
 test("GI birthdays match their vault contact cards when the vault is available", { skip: !existsSync(contactsRoot) }, () => {

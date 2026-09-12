@@ -5,6 +5,11 @@ tags:
 
 # Changelog
 
+## 0.29.1 — 2026-09-11
+
+- Added Erina Foster's October 17 birthday to the Home calendar using her existing portrait and the established cupcake hover, focus, and tap interaction.
+- Added source-integrity and browser coverage for the October 17 date, accessible label, portrait load, and October birthday count.
+
 ## 0.29.0 — 2026-09-11
 
 - Added a month-aware Department meeting resources library beside the calendar, with The Four Habits assigned only to September 2026.

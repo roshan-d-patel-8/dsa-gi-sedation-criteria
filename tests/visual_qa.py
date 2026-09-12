@@ -202,7 +202,16 @@ def assert_calendar_navigation(page):
     assert page.locator(".department-resource-card").count() == 0
     assert page.get_by_text("No department meeting resources for this month.", exact=True).is_visible()
     assert page.locator(".calendar-event-marker").count() == 3
-    assert page.locator(".birthday-marker").count() == 2
+    assert page.locator(".birthday-marker").count() == 3
+    erina_birthday = page.get_by_label("Happy Birthday, Erina Foster!", exact=True)
+    assert erina_birthday.is_visible()
+    erina_birthday.focus()
+    page.wait_for_timeout(200)
+    assert erina_birthday.get_by_role("tooltip").get_by_text("Happy Birthday, Erina Foster!", exact=True).is_visible()
+    assert erina_birthday.get_by_role("tooltip").locator("img").evaluate("image => image.complete && image.naturalWidth > 0")
+    erina_day = page.locator('.calendar-day[aria-label^="October 2026 17:"][aria-label*="Erina Foster birthday"]')
+    assert erina_day.count() == 1
+    page.screenshot(path=OUTPUT / "dsa-gi-calendar-erina-birthday-desktop.png", full_page=False)
     assert previous.is_enabled()
     next_month.click()
     assert page.get_by_role("grid", name="November 2026", exact=True).is_visible()
