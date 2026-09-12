@@ -80,6 +80,38 @@ const monthlyAnnouncements = {
 };
 
 const monthlyDepartmentResources = {
+  6: [
+    {
+      id: "erbe-settings-and-upper-emr",
+      title: "ERBE Settings and Upper EMR",
+      description: "Electrosurgical settings and practical upper-GI polypectomy guidance.",
+      assetPath: "department-meeting-resources/2026-07/erbe-settings-and-upper-emr",
+      slideTitles: [
+        "ERBE Settings and Upper EMR Thoughts",
+        "Endoscopic Management of Iatrogenic Rectal Perforation",
+        "Endoluminal Repair of Iatrogenic Colonic Perforation",
+        "Pedal to the Metal",
+        "WCR ERBE — Endo Cut Q and Forced Coag",
+        "DRV ERBE — Colon Polypectomy Settings",
+        "DRV ERBE — Right-Colon Polypectomy Settings",
+        "DRV ERBE — Stomach/PE Polypectomy Settings",
+        "Endo Cut Q",
+        "Forced Coag for Polypectomy",
+        "WCR ERBE — Endo Cut I and Soft Coag",
+        "Soft Coag — Tissue Desiccation",
+        "Soft Coag Snare Tip — Polypectomy Edges",
+        "Soft Coag Snare Tip — Bleeding Vessel",
+        "Endo Cut I",
+        "DRV ERBE — Coagulation Forceps Setting",
+        "DRV ERBE — Snare Tip Setting",
+        "Hot Avulsion Sequence",
+        "Gastric Polyp Removal Guidelines",
+        "Polypectomy Technique by Size",
+        "Gastric Polyps — Practical Approach",
+        "Duodenal Polyps",
+      ],
+    },
+  ],
   8: [
     {
       id: "four-habits",

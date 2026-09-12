@@ -197,6 +197,93 @@ def assert_department_meeting_resource(page, mobile=False):
     assert resource_button.evaluate("element => document.activeElement === element")
 
 
+def assert_july_department_meeting_resource(page, mobile=False):
+    previous = page.get_by_role("button", name="Previous month", exact=True)
+    next_month = page.get_by_role("button", name="Next month", exact=True)
+
+    previous.click()
+    assert page.get_by_role("grid", name="August 2026", exact=True).is_visible()
+    assert page.locator(".department-resource-card").count() == 0
+    assert page.get_by_text("No department meeting resources for this month.", exact=True).is_visible()
+
+    previous.click()
+    assert page.get_by_role("grid", name="July 2026", exact=True).is_visible()
+    resources = page.locator(".department-resources")
+    assert resources.get_by_text("July 2026", exact=True).is_visible()
+    assert resources.locator(".department-resource-card").count() == 1
+    resource_button = resources.get_by_role("button", name="Open ERBE Settings and Upper EMR presentation, 22 slides", exact=True)
+    assert resource_button.is_visible()
+    assert resource_button.get_by_text("ERBE Settings and Upper EMR", exact=True).is_visible()
+    assert resource_button.get_by_text("Electrosurgical settings and practical upper-GI polypectomy guidance.", exact=True).is_visible()
+    cover = resource_button.locator("img")
+    assert cover.evaluate("image => image.decode().then(() => image.naturalWidth === 2560 && image.naturalHeight === 1440)")
+    resource_button.scroll_into_view_if_needed()
+    page.screenshot(path=OUTPUT / ("dsa-gi-erbe-resource-card-mobile.png" if mobile else "dsa-gi-erbe-resource-card-desktop.png"), full_page=False)
+
+    resource_button.click()
+    viewer = page.get_by_role("dialog", name="ERBE Settings and Upper EMR", exact=True)
+    assert viewer.is_visible()
+    assert page.locator("body").get_attribute("class") == "presentation-open"
+    assert viewer.get_by_text("Slide 1 of 22", exact=True).is_visible()
+    slide_title = viewer.get_by_text("ERBE Settings and Upper EMR Thoughts", exact=True)
+    assert slide_title.count() == 1
+    assert slide_title.is_hidden() if mobile else slide_title.is_visible()
+    slide = viewer.locator(".presentation-slide img")
+    assert slide.get_attribute("src").endswith("/department-meeting-resources/2026-07/erbe-settings-and-upper-emr/slide-01.webp")
+    assert slide.evaluate("image => image.decode().then(() => image.naturalWidth === 2560 && image.naturalHeight === 1440)")
+    assert viewer.get_by_role("progressbar", name="Presentation progress", exact=True).get_attribute("aria-valuenow") == "1"
+    assert viewer.get_by_role("button", name="Previous slide", exact=True).is_disabled()
+
+    viewer.get_by_role("button", name="Advance to slide 2", exact=True).click()
+    viewer.get_by_text("Slide 2 of 22", exact=True).wait_for(state="visible")
+    viewer.locator(".presentation-stage").evaluate(
+        """element => {
+          const start = new Event('touchstart', { bubbles: true });
+          Object.defineProperty(start, 'changedTouches', { value: [{ clientX: 320 }] });
+          element.dispatchEvent(start);
+          const end = new Event('touchend', { bubbles: true });
+          Object.defineProperty(end, 'changedTouches', { value: [{ clientX: 120 }] });
+          element.dispatchEvent(end);
+        }"""
+    )
+    viewer.get_by_text("Slide 3 of 22", exact=True).wait_for(state="visible")
+    page.keyboard.press("End")
+    viewer.get_by_text("Slide 22 of 22", exact=True).wait_for(state="visible")
+    assert viewer.get_by_role("button", name="Next slide", exact=True).is_disabled()
+    page.keyboard.press("Home")
+    viewer.get_by_text("Slide 1 of 22", exact=True).wait_for(state="visible")
+
+    if not mobile:
+        viewer.get_by_role("button", name="Enter full screen", exact=True).click()
+        viewer.get_by_role("button", name="Exit full screen", exact=True).wait_for(state="visible")
+        assert viewer.evaluate("element => document.fullscreenElement === element || element.classList.contains('is-fallback-fullscreen')")
+        page.screenshot(path=OUTPUT / "dsa-gi-erbe-viewer-fullscreen-desktop.png", full_page=False)
+        viewer.get_by_role("button", name="Exit full screen", exact=True).click()
+        viewer.get_by_role("button", name="Enter full screen", exact=True).wait_for(state="visible")
+    else:
+        viewer_dimensions = viewer.evaluate("element => ({ width: element.getBoundingClientRect().width, height: element.getBoundingClientRect().height, viewportWidth: innerWidth, viewportHeight: innerHeight })")
+        assert abs(viewer_dimensions["width"] - viewer_dimensions["viewportWidth"]) < 1, viewer_dimensions
+        assert abs(viewer_dimensions["height"] - viewer_dimensions["viewportHeight"]) < 1, viewer_dimensions
+
+    page.screenshot(path=OUTPUT / ("dsa-gi-erbe-viewer-mobile.png" if mobile else "dsa-gi-erbe-viewer-desktop.png"), full_page=False)
+    page.keyboard.press("Escape")
+    assert viewer.count() == 0
+    assert page.locator("body").get_attribute("class") in (None, "")
+    assert resource_button.evaluate("element => document.activeElement === element")
+
+    previous.click()
+    assert page.get_by_role("grid", name="June 2026", exact=True).is_visible()
+    assert page.locator(".department-resource-card").count() == 0
+    next_month.click()
+    assert page.get_by_role("grid", name="July 2026", exact=True).is_visible()
+    next_month.click()
+    assert page.get_by_role("grid", name="August 2026", exact=True).is_visible()
+    assert page.locator(".department-resource-card").count() == 0
+    next_month.click()
+    assert page.get_by_role("grid", name="September 2026", exact=True).is_visible()
+    assert page.get_by_role("button", name="Open The Four Habits presentation, 19 slides", exact=True).is_visible()
+
+
 def assert_calendar_navigation(page):
     previous = page.get_by_role("button", name="Previous month", exact=True)
     next_month = page.get_by_role("button", name="Next month", exact=True)
@@ -487,6 +574,7 @@ with sync_playwright() as playwright:
     assert_global_zoom(desktop)
     assert_home(desktop)
     assert_department_meeting_resource(desktop)
+    assert_july_department_meeting_resource(desktop)
     assert_calendar_navigation(desktop)
     assert desktop.get_by_role("tab", name="Home", exact=True).get_attribute("aria-selected") == "true"
     desktop.evaluate("document.documentElement.style.scrollBehavior = 'auto'; window.scrollTo(0, 0)")
@@ -807,6 +895,7 @@ with sync_playwright() as playwright:
     assert_global_zoom(mobile, mobile=True)
     assert_home(mobile)
     assert_department_meeting_resource(mobile, mobile=True)
+    assert_july_department_meeting_resource(mobile, mobile=True)
     assert_earlier_calendar_mobile(mobile)
     assert mobile.locator(".countdown-strip").evaluate("element => element.scrollWidth > element.clientWidth")
     mobile.screenshot(path=OUTPUT / "dsa-gi-home-countdowns-mobile.png", full_page=False)
@@ -910,4 +999,4 @@ with sync_playwright() as playwright:
     assert not compact_mobile_errors, compact_mobile_errors
     browser.close()
 
-print("Visual QA passed: persistent upper-right zoom controls across all four primary pages, Home countdowns, the January–December 2026 calendar with month-aware announcements, department resources, and GI birthdays, the 19-slide Four Habits viewer with keyboard/fullscreen/focus behavior, Tom farewell cocktail event, all 12 Field Guide sections with nested accordions except the restored open Choosing Wisely layout, highlighted search matches with automatic accordion reveal, complete email and pool copy controls, Choosing Wisely with expandable infographic, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")
+print("Visual QA passed: persistent upper-right zoom controls across all four primary pages, Home countdowns, the January–December 2026 calendar with month-aware announcements, department resources, and GI birthdays, the July 22-slide ERBE and September 19-slide Four Habits viewers with click, keyboard, touch, fullscreen, month-isolation, and focus behavior, Tom farewell cocktail event, all 12 Field Guide sections with nested accordions except the restored open Choosing Wisely layout, highlighted search matches with automatic accordion reveal, complete email and pool copy controls, Choosing Wisely with expandable infographic, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")

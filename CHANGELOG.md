@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.31.0 — 2026-09-11
+
+- Added the 22-slide ERBE Settings and Upper EMR deck exclusively to the July 2026 Department meeting resources section.
+- Preserved the deck's intended Aptos and Google Sans typography and restored static poster frames for four video-bearing slides; the source PowerPoint, temporary PDF, embedded videos, external hyperlinks, and timing behavior are not published.
+- Added desktop and mobile browser coverage for July ownership, June/August isolation, slide navigation, touch swiping, fullscreen, focus return, and 2560×1440 asset fidelity.
+
 ## 0.30.1 — 2026-09-11
 
 - Replaced the mobile birthday hover tooltip with a polished tap-open bottom sheet that keeps the portrait, date, and greeting within the viewport.

@@ -13,7 +13,7 @@ A compact, tabbed DSA GI clinical-operations reference. The primary Home tab car
 
 ## Purpose
 
-The site converts dense operational material into scan-friendly references. The Home tab surfaces seven dated departmental milestones from the September 8, 2026 Sheikah Slate and updates days remaining at midnight Pacific. Its calendar rail also scopes announcements and meeting references to the selected month. September 2026 includes a native 19-slide viewer for The Four Habits with click, keyboard, touch, and fullscreen controls, so the presentation does not require Microsoft PowerPoint. The sedation tab preserves the core criteria, preparation instructions, Pleasanton exclusions, and remimazolam considerations. The coverage tab expands screenshot abbreviations into vault-verified provider names and pairs locally sourced physician portraits with each podlet. The orientation tab preserves the complete text of the supplied 2026 guide in 12 searchable sub-tabs, displaying one color-coded section at a time.
+The site converts dense operational material into scan-friendly references. The Home tab surfaces seven dated departmental milestones from the September 8, 2026 Sheikah Slate and updates days remaining at midnight Pacific. Its calendar rail also scopes announcements and meeting references to the selected month. July 2026 includes a native 22-slide viewer for ERBE Settings and Upper EMR, while September includes the 19-slide Four Habits deck; both support click, keyboard, touch, and fullscreen controls without requiring Microsoft PowerPoint. The sedation tab preserves the core criteria, preparation instructions, Pleasanton exclusions, and remimazolam considerations. The coverage tab expands screenshot abbreviations into vault-verified provider names and pairs locally sourced physician portraits with each podlet. The orientation tab preserves the complete text of the supplied 2026 guide in 12 searchable sub-tabs, displaying one color-coded section at a time.
 
 It does not clear patients, replace clinician judgment, or independently validate the clinical policy.
 
@@ -44,6 +44,8 @@ The complete orientation text—including facility door codes, internal contact 
 The seven Sheikah Slate countdown labels and dates were explicitly requested for this public site on 2026-09-09.
 
 The Four Habits slide deck was confirmed clear for public presentation and explicitly authorized for deployment as September 2026 department meeting resources on 2026-09-11. Its 19 slides are published as fully revealed final frames; PowerPoint animations are intentionally flattened for dependable in-browser viewing.
+
+The ERBE Settings and Upper EMR slide deck was explicitly requested for deployment as July 2026 department meeting resources on 2026-09-11. Its 22 slides are published only as static frames; four embedded videos, eight external hyperlinks, timing behavior, and the original PowerPoint and temporary PDF files are excluded from the public build.
 
 Erina Foster's October 17 birthday was supplied by the user and explicitly requested for public calendar display on 2026-09-11.
 
