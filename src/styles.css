@@ -174,7 +174,7 @@ body::before {
 .calendar-day-empty { border-color: transparent; background: transparent; }
 .calendar-birthday-cluster { position: absolute; z-index: 6; top: 7px; right: 7px; display: flex; gap: 4px; }
 .calendar-birthday-cluster:has(.birthday-marker:hover), .calendar-birthday-cluster:has(.birthday-marker:focus) { z-index: 80; }
-.birthday-marker { position: relative; width: 39px; height: 39px; display: grid; place-items: center; border: 1px solid rgba(198, 95, 130, .3); border-radius: 12px; background: linear-gradient(145deg, #fff8ef, #fdeaf0); box-shadow: 0 5px 12px rgba(120, 62, 82, .1); cursor: help; transition: transform .18s ease, box-shadow .18s ease; }
+.birthday-marker { position: relative; width: 39px; height: 39px; padding: 0; display: grid; place-items: center; border: 1px solid rgba(198, 95, 130, .3); border-radius: 12px; appearance: none; background: linear-gradient(145deg, #fff8ef, #fdeaf0); box-shadow: 0 5px 12px rgba(120, 62, 82, .1); cursor: pointer; transition: transform .18s ease, box-shadow .18s ease; }
 .birthday-marker:hover { z-index: 8; transform: translateY(-2px) rotate(-2deg); box-shadow: 0 8px 18px rgba(120, 62, 82, .17); }
 .birthday-marker:focus-visible { z-index: 8; outline: 3px solid rgba(198, 95, 130, .28); outline-offset: 2px; }
 .birthday-cupcake-icon { width: 31px; height: 31px; overflow: visible; }
@@ -193,6 +193,22 @@ body::before {
 .birthday-tooltip small { color: #f8d9e4; font-size: 9px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
 .birthday-tooltip strong { color: var(--white); font-size: 15px; line-height: 1.25; letter-spacing: -.01em; }
 .birthday-marker:hover .birthday-tooltip, .birthday-marker:focus .birthday-tooltip { visibility: visible; opacity: 1; transform: none; }
+body.birthday-dialog-open { overflow: hidden; }
+.birthday-dialog-backdrop { position: fixed; z-index: 150; inset: 0; padding: 24px; display: grid; place-items: center; background: rgba(15, 31, 50, .58); backdrop-filter: blur(7px); animation: birthday-dialog-backdrop-in .18s ease-out both; }
+.birthday-dialog { position: relative; width: min(430px, calc(100vw - 32px)); min-height: 190px; padding: 28px 28px 28px 26px; display: grid; grid-template-columns: 104px minmax(0, 1fr); align-items: center; gap: 22px; overflow: hidden; border: 1px solid rgba(255, 255, 255, .22); border-radius: 25px; background: radial-gradient(circle at 90% 5%, rgba(255, 226, 151, .22), transparent 31%), linear-gradient(145deg, #6e3651, #9c496b); color: var(--white); box-shadow: 0 30px 80px rgba(35, 15, 28, .38); animation: birthday-dialog-in .22s cubic-bezier(.2, .75, .25, 1) both; }
+.birthday-dialog::after { position: absolute; width: 150px; height: 150px; right: -76px; bottom: -87px; border: 24px solid rgba(255, 255, 255, .06); border-radius: 50%; content: ""; pointer-events: none; }
+.birthday-dialog-close { position: absolute; z-index: 3; width: 38px; height: 38px; top: 13px; right: 13px; padding: 0; display: grid; place-items: center; border: 1px solid rgba(255, 255, 255, .24); border-radius: 50%; background: rgba(255, 255, 255, .12); color: var(--white); font-size: 25px; line-height: 1; cursor: pointer; }
+.birthday-dialog-close:hover { background: rgba(255, 255, 255, .22); }
+.birthday-dialog-close:focus-visible { outline: 3px solid rgba(255, 226, 151, .75); outline-offset: 2px; }
+.birthday-dialog-portrait { position: relative; z-index: 1; width: 104px; height: 104px; }
+.birthday-dialog-portrait > img { width: 100%; height: 100%; object-fit: cover; border: 5px solid rgba(255, 255, 255, .78); border-radius: 50%; background: var(--white); box-shadow: 0 13px 30px rgba(49, 19, 34, .3); }
+.birthday-dialog-portrait .birthday-cupcake-icon { position: absolute; width: 38px; height: 38px; right: -6px; bottom: -2px; padding: 5px; border: 2px solid rgba(255, 255, 255, .82); border-radius: 12px; background: #fff5e7; box-shadow: 0 8px 16px rgba(49, 19, 34, .2); }
+.birthday-dialog-copy { position: relative; z-index: 1; display: grid; gap: 7px; }
+.birthday-dialog-copy small { padding-right: 30px; color: #f8d9e4; font-size: 10px; font-weight: 850; letter-spacing: .08em; line-height: 1.25; text-transform: uppercase; }
+.birthday-dialog-copy strong { color: var(--white); font-size: 27px; line-height: 1.02; letter-spacing: -.035em; }
+.birthday-dialog-copy > span { color: rgba(255, 255, 255, .82); font-size: 13px; font-weight: 650; }
+@keyframes birthday-dialog-backdrop-in { from { opacity: 0; } }
+@keyframes birthday-dialog-in { from { opacity: 0; transform: translateY(12px) scale(.97); } }
 .calendar-social-cluster { position: absolute; z-index: 7; right: 7px; bottom: 7px; }
 .calendar-social-cluster:has(.calendar-social-marker:hover), .calendar-social-cluster:has(.calendar-social-marker:focus) { z-index: 90; }
 .calendar-social-marker { position: relative; width: 41px; height: 41px; display: grid; place-items: center; border: 1px solid rgba(219, 142, 36, .42); border-radius: 13px; background: linear-gradient(145deg, #fff7df, #ffe0a1); box-shadow: 0 6px 14px rgba(109, 62, 15, .14); cursor: help; transition: transform .18s ease, box-shadow .18s ease; }
@@ -816,12 +832,17 @@ body.presentation-open { overflow: hidden; }
   .calendar-birthday-cluster { top: auto; right: 4px; bottom: 4px; }
   .birthday-marker { width: 27px; height: 27px; border-radius: 9px; cursor: pointer; }
   .birthday-cupcake-icon { width: 23px; height: 23px; }
-  .birthday-tooltip { position: fixed; width: auto; top: auto; left: 16px; right: 16px; bottom: 20px; padding: 15px; grid-template-columns: 58px minmax(0, 1fr); transform-origin: bottom center; }
-  .birthday-tooltip::before { display: none; }
-  .birthday-tooltip img { width: 58px; height: 58px; }
-  .birthday-tooltip small { font-size: 10px; }
-  .birthday-tooltip strong { font-size: 16px; }
-  .calendar-grid:has(.birthday-marker:focus) .birthday-marker:not(:focus) { opacity: 0; }
+  .birthday-tooltip { display: none; }
+  .birthday-dialog-backdrop { align-items: end; padding: 12px 12px max(12px, env(safe-area-inset-bottom)); }
+  .birthday-dialog { width: 100%; min-height: 172px; padding: 46px 18px 22px; grid-template-columns: 76px minmax(0, 1fr); gap: 16px; border-radius: 24px; }
+  .birthday-dialog-close { width: 36px; height: 36px; top: 10px; right: 10px; }
+  .birthday-dialog-portrait { width: 76px; height: 76px; }
+  .birthday-dialog-portrait > img { border-width: 4px; }
+  .birthday-dialog-portrait .birthday-cupcake-icon { width: 32px; height: 32px; right: -5px; bottom: -5px; }
+  .birthday-dialog-copy { gap: 6px; }
+  .birthday-dialog-copy small { padding-right: 0; font-size: 9px; }
+  .birthday-dialog-copy strong { font-size: clamp(23px, 7vw, 28px); }
+  .birthday-dialog-copy > span { font-size: 12px; }
   .calendar-social-cluster { right: 4px; bottom: 4px; }
   .calendar-social-marker { width: 29px; height: 29px; border-radius: 9px; cursor: pointer; }
   .cocktail-icon { width: 24px; height: 24px; }

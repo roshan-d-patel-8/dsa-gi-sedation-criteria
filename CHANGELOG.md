@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.30.1 — 2026-09-11
+
+- Replaced the mobile birthday hover tooltip with a polished tap-open bottom sheet that keeps the portrait, date, and greeting within the viewport.
+- Added a dimmed backdrop, explicit close control, outside-tap and Escape dismissal, scroll locking, modal focus isolation, and focus return to the selected cupcake.
+- Preserved the compact desktop hover/focus preview while adding a full birthday card on click, with expanded desktop/mobile interaction and geometry coverage.
+
 ## 0.30.0 — 2026-09-11
 
 - Expanded the Home calendar from September–December to the complete January–December 2026 year while keeping September as the opening month.

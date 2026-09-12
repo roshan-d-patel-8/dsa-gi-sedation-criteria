@@ -412,9 +412,76 @@ const calendarMonths = Array.from({ length: 12 }, (_, index) => index);
 const defaultCalendarPosition = 8;
 const weekdayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
+function BirthdayDialog({ birthday, onClose }) {
+  const closeButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (!birthday) return undefined;
+    const pageSurface = document.querySelector(".page-zoom-surface");
+    document.body.classList.add("birthday-dialog-open");
+    pageSurface?.setAttribute("inert", "");
+    closeButtonRef.current?.focus({ preventScroll: true });
+
+    function closeOnEscape(event) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose();
+      }
+    }
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      window.removeEventListener("keydown", closeOnEscape);
+      document.body.classList.remove("birthday-dialog-open");
+      pageSurface?.removeAttribute("inert");
+    };
+  }, [birthday, onClose]);
+
+  if (!birthday) return null;
+
+  return createPortal(
+    <div
+      className="birthday-dialog-backdrop"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      <section
+        id="birthday-celebration-dialog"
+        className="birthday-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Birthday celebration for ${birthday.name}`}
+      >
+        <button
+          className="birthday-dialog-close"
+          type="button"
+          aria-label="Close birthday card"
+          onClick={onClose}
+          ref={closeButtonRef}
+        >
+          ×
+        </button>
+        <span className="birthday-dialog-portrait">
+          <img src={`${import.meta.env.BASE_URL}portraits/${birthday.photo}`} alt="" />
+          <BirthdayCupcakeIcon />
+        </span>
+        <span className="birthday-dialog-copy">
+          <small>Celebrate a colleague · {birthday.displayDate}</small>
+          <strong>Happy Birthday,<br />{birthday.name}!</strong>
+          <span>Wishing you a wonderful day.</span>
+        </span>
+      </section>
+    </div>,
+    document.body,
+  );
+}
+
 function Calendar2026() {
   const [monthPosition, setMonthPosition] = useState(defaultCalendarPosition);
   const [activeResource, setActiveResource] = useState(null);
+  const [activeBirthday, setActiveBirthday] = useState(null);
+  const birthdayTriggerRef = useRef(null);
   const monthIndex = calendarMonths[monthPosition];
   const monthLabel = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric", timeZone: "UTC" })
     .format(new Date(Date.UTC(2026, monthIndex, 1)));
@@ -428,7 +495,18 @@ function Calendar2026() {
   const departmentResources = monthlyDepartmentResources[monthIndex] || [];
 
   function moveMonth(direction) {
+    setActiveBirthday(null);
     setMonthPosition((position) => Math.min(calendarMonths.length - 1, Math.max(0, position + direction)));
+  }
+
+  function openBirthday(birthday, trigger) {
+    birthdayTriggerRef.current = trigger;
+    setActiveBirthday(birthday);
+  }
+
+  function closeBirthday() {
+    setActiveBirthday(null);
+    requestAnimationFrame(() => birthdayTriggerRef.current?.focus({ preventScroll: true }));
   }
 
   function handleCalendarKeyDown(event) {
@@ -474,11 +552,15 @@ function Calendar2026() {
                   {birthdays.map((birthday, birthdayIndex) => {
                     const tooltipId = `birthday-${date}-${birthdayIndex}`;
                     return (
-                      <span
+                      <button
                         className="birthday-marker"
-                        tabIndex="0"
+                        type="button"
                         aria-label={`Happy Birthday, ${birthday.name}!`}
                         aria-describedby={tooltipId}
+                        aria-haspopup="dialog"
+                        aria-expanded={activeBirthday?.name === birthday.name && activeBirthday?.date === birthday.date}
+                        aria-controls="birthday-celebration-dialog"
+                        onClick={(event) => openBirthday(birthday, event.currentTarget)}
                         key={birthday.name}
                       >
                         <BirthdayCupcakeIcon />
@@ -489,7 +571,7 @@ function Calendar2026() {
                             <strong>Happy Birthday, {birthday.name}!</strong>
                           </span>
                         </span>
-                      </span>
+                      </button>
                     );
                   })}
                 </span>
@@ -607,6 +689,7 @@ function Calendar2026() {
       </aside>
 
       <PresentationViewer resource={activeResource} onClose={() => setActiveResource(null)} />
+      <BirthdayDialog birthday={activeBirthday} onClose={closeBirthday} />
     </section>
   );
 }

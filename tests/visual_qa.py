@@ -186,7 +186,9 @@ def assert_department_meeting_resource(page, mobile=False):
         viewer.get_by_role("button", name="Exit full screen", exact=True).click()
         viewer.get_by_role("button", name="Enter full screen", exact=True).wait_for(state="visible")
     else:
-        assert viewer.evaluate("element => element.getBoundingClientRect().width === innerWidth && element.getBoundingClientRect().height === innerHeight")
+        viewer_dimensions = viewer.evaluate("element => ({ width: element.getBoundingClientRect().width, height: element.getBoundingClientRect().height, viewportWidth: innerWidth, viewportHeight: innerHeight })")
+        assert abs(viewer_dimensions["width"] - viewer_dimensions["viewportWidth"]) < 1, viewer_dimensions
+        assert abs(viewer_dimensions["height"] - viewer_dimensions["viewportHeight"]) < 1, viewer_dimensions
 
     page.screenshot(path=OUTPUT / ("dsa-gi-four-habits-viewer-mobile.png" if mobile else "dsa-gi-four-habits-viewer-desktop.png"), full_page=False)
     page.keyboard.press("Escape")
@@ -280,18 +282,46 @@ def assert_calendar_navigation(page):
     assert page.locator(".department-resource-card").count() == 1
 
 
+def assert_mobile_birthday_dialog(page, name, screenshot_name, dismiss="close"):
+    trigger = page.get_by_label(f"Happy Birthday, {name}!", exact=True)
+    trigger.click()
+    dialog = page.get_by_role("dialog", name=f"Birthday celebration for {name}", exact=True)
+    assert dialog.is_visible()
+    assert dialog.locator(".birthday-dialog-copy strong").inner_text() == f"Happy Birthday,\n{name}!"
+    portrait = dialog.locator(".birthday-dialog-portrait > img")
+    assert portrait.evaluate("image => image.complete && image.naturalWidth > 0")
+    assert page.locator("body").evaluate("body => body.classList.contains('birthday-dialog-open')")
+    assert page.locator(".page-zoom-surface").get_attribute("inert") == ""
+    page.wait_for_timeout(250)
+    dialog_box = dialog.bounding_box()
+    assert dialog_box["x"] >= 10
+    assert dialog_box["x"] + dialog_box["width"] <= page.viewport_size["width"] - 10
+    assert dialog_box["y"] >= 0
+    assert dialog_box["y"] + dialog_box["height"] <= page.viewport_size["height"] - 10, (dialog_box, page.viewport_size)
+    page.screenshot(path=OUTPUT / screenshot_name, full_page=False)
+
+    if dismiss == "escape":
+        page.keyboard.press("Escape")
+    elif dismiss == "backdrop":
+        page.locator(".birthday-dialog-backdrop").click(position={"x": 4, "y": 4})
+    else:
+        dialog.get_by_role("button", name="Close birthday card", exact=True).click()
+
+    dialog.wait_for(state="detached")
+    page.wait_for_timeout(100)
+    assert not page.locator("body").evaluate("body => body.classList.contains('birthday-dialog-open')")
+    assert page.locator(".page-zoom-surface").get_attribute("inert") is None
+    assert trigger.evaluate("element => document.activeElement === element")
+    return trigger
+
+
 def assert_earlier_calendar_mobile(page):
     previous = page.get_by_role("button", name="Previous month", exact=True)
     next_month = page.get_by_role("button", name="Next month", exact=True)
     previous.click()
     assert page.get_by_role("grid", name="August 2026", exact=True).is_visible()
     assert page.locator(".birthday-marker").count() == 3
-    mariel_birthday = page.get_by_label("Happy Birthday, Mariel Bailey!", exact=True)
-    mariel_birthday.focus()
-    page.wait_for_timeout(200)
-    assert mariel_birthday.get_by_role("tooltip").is_visible()
-    assert mariel_birthday.get_by_role("tooltip").locator("img").evaluate("image => image.complete && image.naturalWidth > 0")
-    page.screenshot(path=OUTPUT / "dsa-gi-calendar-august-birthdays-mobile.png", full_page=False)
+    assert_mobile_birthday_dialog(page, "Mariel Bailey", "dsa-gi-calendar-august-birthdays-mobile.png")
     page.locator(".year-calendar").focus()
 
     for _ in range(7):
@@ -475,6 +505,14 @@ with sync_playwright() as playwright:
     assert birthday_tooltip.get_by_text("Happy Birthday, Steve Cheng!", exact=True).is_visible()
     assert birthday_tooltip.locator("img").evaluate("image => image.complete && image.naturalWidth > 0")
     desktop.screenshot(path=OUTPUT / "dsa-gi-calendar-birthday-desktop.png", full_page=False)
+    steve_birthday.click()
+    desktop_birthday_dialog = desktop.get_by_role("dialog", name="Birthday celebration for Steve Cheng", exact=True)
+    assert desktop_birthday_dialog.is_visible()
+    assert desktop.locator(".page-zoom-surface").get_attribute("inert") == ""
+    desktop_birthday_dialog.get_by_role("button", name="Close birthday card", exact=True).click()
+    desktop_birthday_dialog.wait_for(state="detached")
+    desktop.wait_for_timeout(100)
+    assert steve_birthday.evaluate("element => document.activeElement === element")
     desktop.locator(".year-calendar").focus()
     farewell = desktop.get_by_label("Tom's Farewell Happy Hour, Thu · Sep 10, 2026, Barebottle Brewing Co. · Walnut Creek Taproom & Kitchen", exact=True)
     farewell.hover()
@@ -778,13 +816,13 @@ with sync_playwright() as playwright:
     assert mobile_announcements_box["y"] >= mobile_calendar_box["y"] + mobile_calendar_box["height"]
     mobile.locator(".calendar-announcements").scroll_into_view_if_needed()
     mobile.screenshot(path=OUTPUT / "dsa-gi-calendar-announcements-mobile.png", full_page=False)
-    mobile_birthday = mobile.get_by_label("Happy Birthday, Steve Cheng!", exact=True)
-    mobile_birthday.focus()
-    mobile.wait_for_timeout(200)
-    assert mobile_birthday.get_by_role("tooltip").is_visible()
-    assert mobile_birthday.get_by_role("tooltip").get_by_text("Happy Birthday, Steve Cheng!", exact=True).is_visible()
-    assert mobile_birthday.get_by_role("tooltip").locator("img").evaluate("image => image.complete && image.naturalWidth > 0")
-    mobile.screenshot(path=OUTPUT / "dsa-gi-calendar-birthday-mobile.png", full_page=False)
+    mobile_birthday = assert_mobile_birthday_dialog(mobile, "Steve Cheng", "dsa-gi-calendar-birthday-mobile.png", dismiss="escape")
+    mobile_birthday.click()
+    mobile.get_by_role("dialog", name="Birthday celebration for Steve Cheng", exact=True).wait_for(state="visible")
+    mobile.locator(".birthday-dialog-backdrop").click(position={"x": 4, "y": 4})
+    mobile.get_by_role("dialog", name="Birthday celebration for Steve Cheng", exact=True).wait_for(state="detached")
+    mobile.wait_for_timeout(100)
+    assert mobile_birthday.evaluate("element => document.activeElement === element")
     mobile.locator(".year-calendar").focus()
     mobile_farewell = mobile.get_by_label("Tom's Farewell Happy Hour, Thu · Sep 10, 2026, Barebottle Brewing Co. · Walnut Creek Taproom & Kitchen", exact=True)
     mobile_farewell.focus()
@@ -860,8 +898,16 @@ with sync_playwright() as playwright:
     mobile_skills_day.scroll_into_view_if_needed()
     mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-skills-day-mobile.png", full_page=False)
 
+    compact_mobile = browser.new_page(viewport={"width": 320, "height": 568}, device_scale_factor=1)
+    compact_mobile_errors = capture_console_errors(compact_mobile)
+    compact_mobile.goto(BASE_URL)
+    compact_mobile.wait_for_load_state("networkidle")
+    assert_mobile_birthday_dialog(compact_mobile, "Ahilan Arulanandan", "dsa-gi-calendar-birthday-mobile-320.png")
+    assert compact_mobile.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
+
     assert not desktop_errors, desktop_errors
     assert not mobile_errors, mobile_errors
+    assert not compact_mobile_errors, compact_mobile_errors
     browser.close()
 
 print("Visual QA passed: persistent upper-right zoom controls across all four primary pages, Home countdowns, the January–December 2026 calendar with month-aware announcements, department resources, and GI birthdays, the 19-slide Four Habits viewer with keyboard/fullscreen/focus behavior, Tom farewell cocktail event, all 12 Field Guide sections with nested accordions except the restored open Choosing Wisely layout, highlighted search matches with automatic accordion reveal, complete email and pool copy controls, Choosing Wisely with expandable infographic, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")
