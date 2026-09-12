@@ -4,8 +4,9 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 
-OUTPUT = Path("/Users/roshanpatel/.codex/visualizations/2026/09/09/01a085c2-6b70-7660-831a-ff30ef2728c4")
+OUTPUT = Path("/Users/roshanpatel/.codex/visualizations/2026/09/11/01a092d7-669e-7bc0-bddf-6b0d6e699612")
 BASE_URL = "http://127.0.0.1:5173"
+OUTPUT.mkdir(parents=True, exist_ok=True)
 CARD_HEADINGS = [
     "Optiflow",
     "MAC",
@@ -104,10 +105,10 @@ def assert_home(page):
     assert page.locator(".countdown-card time").count() == 7
     assert page.get_by_text("Rest of 2026", exact=True).count() == 0
     assert page.get_by_text("September—December", exact=True).count() == 0
-    assert page.get_by_text("September 2026", exact=True).count() == 1
+    assert page.locator(".calendar-controls").get_by_text("September 2026", exact=True).count() == 1
     assert page.get_by_role("grid", name="September 2026", exact=True).is_visible()
     announcements = page.locator(".calendar-announcements")
-    assert announcements.get_attribute("aria-label") == "Announcements for September 2026"
+    assert announcements.get_attribute("aria-label") == "Announcements and department meeting resources for September 2026"
     assert announcements.get_by_role("heading", name="Announcements", exact=True).is_visible()
     assert announcements.locator(".announcement-card").count() == 2
     assert announcements.get_by_text("Pharmacy Authorization form for Desktop Medicine", exact=True).is_visible()
@@ -134,21 +135,78 @@ def assert_home(page):
     assert page.get_by_role("button", name="Next month", exact=True).is_enabled()
 
 
+def assert_department_meeting_resource(page, mobile=False):
+    resources = page.locator(".department-resources")
+    assert resources.get_by_role("heading", name="Department meeting resources", exact=True).is_visible()
+    assert resources.get_by_text("September 2026", exact=True).is_visible()
+    assert resources.locator(".department-resource-card").count() == 1
+    resource_button = resources.get_by_role("button", name="Open The Four Habits presentation, 19 slides", exact=True)
+    assert resource_button.is_visible()
+    assert resource_button.get_by_text("The Four Habits", exact=True).is_visible()
+    assert resource_button.get_by_text("A user’s guide for difficult conversations.", exact=True).is_visible()
+    cover = resource_button.locator("img")
+    assert cover.evaluate("image => image.decode().then(() => image.naturalWidth === 2560 && image.naturalHeight === 1440)")
+    resource_button.scroll_into_view_if_needed()
+    page.screenshot(path=OUTPUT / ("dsa-gi-department-resource-card-mobile.png" if mobile else "dsa-gi-department-resource-card-desktop.png"), full_page=False)
+
+    resource_button.click()
+    viewer = page.get_by_role("dialog", name="The Four Habits", exact=True)
+    assert viewer.is_visible()
+    assert page.locator("body").get_attribute("class") == "presentation-open"
+    assert viewer.get_by_text("Slide 1 of 19", exact=True).is_visible()
+    slide_title = viewer.get_by_text("The Four Habits — A user’s guide for difficult conversations", exact=True)
+    assert slide_title.count() == 1
+    assert slide_title.is_hidden() if mobile else slide_title.is_visible()
+    slide = viewer.locator(".presentation-slide img")
+    assert slide.get_attribute("src").endswith("/department-meeting-resources/2026-09/the-four-habits/slide-01.webp")
+    assert slide.evaluate("image => image.decode().then(() => image.naturalWidth === 2560 && image.naturalHeight === 1440)")
+    assert viewer.get_by_role("progressbar", name="Presentation progress", exact=True).get_attribute("aria-valuenow") == "1"
+    assert viewer.get_by_role("button", name="Previous slide", exact=True).is_disabled()
+
+    viewer.get_by_role("button", name="Advance to slide 2", exact=True).click()
+    viewer.get_by_text("Slide 2 of 19", exact=True).wait_for(state="visible")
+    page.keyboard.press("ArrowRight")
+    viewer.get_by_text("Slide 3 of 19", exact=True).wait_for(state="visible")
+    page.keyboard.press("End")
+    viewer.get_by_text("Slide 19 of 19", exact=True).wait_for(state="visible")
+    assert viewer.get_by_role("button", name="Next slide", exact=True).is_disabled()
+    page.keyboard.press("Home")
+    viewer.get_by_text("Slide 1 of 19", exact=True).wait_for(state="visible")
+
+    if not mobile:
+        viewer.get_by_role("button", name="Enter full screen", exact=True).click()
+        viewer.get_by_role("button", name="Exit full screen", exact=True).wait_for(state="visible")
+        assert viewer.evaluate("element => document.fullscreenElement === element || element.classList.contains('is-fallback-fullscreen')")
+        page.screenshot(path=OUTPUT / "dsa-gi-four-habits-viewer-fullscreen-desktop.png", full_page=False)
+        viewer.get_by_role("button", name="Exit full screen", exact=True).click()
+        viewer.get_by_role("button", name="Enter full screen", exact=True).wait_for(state="visible")
+    else:
+        assert viewer.evaluate("element => element.getBoundingClientRect().width === innerWidth && element.getBoundingClientRect().height === innerHeight")
+
+    page.screenshot(path=OUTPUT / ("dsa-gi-four-habits-viewer-mobile.png" if mobile else "dsa-gi-four-habits-viewer-desktop.png"), full_page=False)
+    page.keyboard.press("Escape")
+    assert viewer.count() == 0
+    assert page.locator("body").get_attribute("class") in (None, "")
+    assert resource_button.evaluate("element => document.activeElement === element")
+
+
 def assert_calendar_navigation(page):
     previous = page.get_by_role("button", name="Previous month", exact=True)
     next_month = page.get_by_role("button", name="Next month", exact=True)
     next_month.click()
     assert page.get_by_role("grid", name="October 2026", exact=True).is_visible()
-    assert page.get_by_text("October 2026", exact=True).count() == 1
-    assert page.locator(".calendar-announcements").get_attribute("aria-label") == "Announcements for October 2026"
+    assert page.locator(".calendar-controls").get_by_text("October 2026", exact=True).count() == 1
+    assert page.locator(".calendar-announcements").get_attribute("aria-label") == "Announcements and department meeting resources for October 2026"
     assert page.locator(".announcement-card").count() == 0
     assert page.get_by_text("No announcements for this month.", exact=True).is_visible()
+    assert page.locator(".department-resource-card").count() == 0
+    assert page.get_by_text("No department meeting resources for this month.", exact=True).is_visible()
     assert page.locator(".calendar-event-marker").count() == 3
     assert page.locator(".birthday-marker").count() == 2
     assert previous.is_enabled()
     next_month.click()
     assert page.get_by_role("grid", name="November 2026", exact=True).is_visible()
-    assert page.get_by_text("November 2026", exact=True).count() == 1
+    assert page.locator(".calendar-controls").get_by_text("November 2026", exact=True).count() == 1
     assert page.locator(".announcement-card").count() == 0
     assert page.locator(".calendar-event-marker").count() == 2
     assert page.locator(".birthday-marker").count() == 4
@@ -161,7 +219,7 @@ def assert_calendar_navigation(page):
     page.screenshot(path=OUTPUT / "dsa-gi-calendar-roshan-birthday-desktop.png", full_page=False)
     next_month.click()
     assert page.get_by_role("grid", name="December 2026", exact=True).is_visible()
-    assert page.get_by_text("December 2026", exact=True).count() == 1
+    assert page.locator(".calendar-controls").get_by_text("December 2026", exact=True).count() == 1
     assert page.locator(".calendar-event-marker").count() == 0
     assert page.locator(".birthday-marker").count() == 1
     assert next_month.is_disabled()
@@ -170,6 +228,7 @@ def assert_calendar_navigation(page):
     previous.click()
     assert page.get_by_role("grid", name="September 2026", exact=True).is_visible()
     assert page.locator(".announcement-card").count() == 2
+    assert page.locator(".department-resource-card").count() == 1
 
 
 def assert_sedation_reference(page):
@@ -322,6 +381,7 @@ with sync_playwright() as playwright:
     assert_tabs(desktop)
     assert_global_zoom(desktop)
     assert_home(desktop)
+    assert_department_meeting_resource(desktop)
     assert_calendar_navigation(desktop)
     assert desktop.get_by_role("tab", name="Home", exact=True).get_attribute("aria-selected") == "true"
     desktop.evaluate("document.documentElement.style.scrollBehavior = 'auto'; window.scrollTo(0, 0)")
@@ -633,6 +693,7 @@ with sync_playwright() as playwright:
     assert_tabs(mobile)
     assert_global_zoom(mobile, mobile=True)
     assert_home(mobile)
+    assert_department_meeting_resource(mobile, mobile=True)
     assert mobile.locator(".countdown-strip").evaluate("element => element.scrollWidth > element.clientWidth")
     mobile.screenshot(path=OUTPUT / "dsa-gi-home-countdowns-mobile.png", full_page=False)
     mobile.locator(".year-calendar").scroll_into_view_if_needed()
@@ -727,4 +788,4 @@ with sync_playwright() as playwright:
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: persistent upper-right zoom controls across all four primary pages, Home countdowns, September announcements, September–December GI birthdays, Tom farewell cocktail event, all 12 Field Guide sections with nested accordions except the restored open Choosing Wisely layout, highlighted search matches with automatic accordion reveal, complete email and pool copy controls, Choosing Wisely with expandable infographic, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")
+print("Visual QA passed: persistent upper-right zoom controls across all four primary pages, Home countdowns, month-aware announcements and department resources, the 19-slide Four Habits viewer with keyboard/fullscreen/focus behavior, September–December GI birthdays, Tom farewell cocktail event, all 12 Field Guide sections with nested accordions except the restored open Choosing Wisely layout, highlighted search matches with automatic accordion reveal, complete email and pool copy controls, Choosing Wisely with expandable infographic, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")

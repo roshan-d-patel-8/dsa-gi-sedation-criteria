@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.29.0 — 2026-09-11
+
+- Added a month-aware Department meeting resources library beside the calendar, with The Four Habits assigned only to September 2026.
+- Added a native 19-slide viewer with click, keyboard, and touch navigation; progress feedback; an accessible modal; and browser fullscreen with an in-page fallback.
+- Rendered the PowerPoint-native final slide frames at 2560×1440 with embedded Selawik and Source Sans Pro fonts; the original PowerPoint file is not published, and build/browser coverage now checks image fidelity, month isolation, desktop/mobile behavior, focus return, and fullscreen.
+
 ## 0.28.1 — 2026-09-09
 
 - Restored Choosing Wisely to its original fully open campaign layout, removing the eight accordion wrappers introduced in version 0.26.0.

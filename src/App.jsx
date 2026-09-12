@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { POLICY_VERSION, policySections } from "./criteria.js";
 import { coverageSites } from "./podlets.js";
 import { birthdayEvents } from "./birthdays.js";
@@ -78,6 +79,38 @@ const monthlyAnnouncements = {
   ],
 };
 
+const monthlyDepartmentResources = {
+  8: [
+    {
+      id: "four-habits",
+      title: "The Four Habits",
+      description: "A user’s guide for difficult conversations.",
+      assetPath: "department-meeting-resources/2026-09/the-four-habits",
+      slideTitles: [
+        "The Four Habits — A user’s guide for difficult conversations",
+        "Let’s name them",
+        "The Four Habits overview",
+        "Invest in the beginning",
+        "Elicit the patient perspective",
+        "Invest in the end",
+        "Empathy",
+        "Sample empathic statements",
+        "Feelings vocabulary",
+        "Empathy batting practice",
+        "Difficult conversations",
+        "Difficult conversations framework",
+        "Pause and reset",
+        "The difficult-conversation holy trinity",
+        "Align",
+        "Pivot",
+        "Feeling weird is normal",
+        "Thank you",
+        "Thank you",
+      ],
+    },
+  ],
+};
+
 function pacificToday() {
   const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: "America/Los_Angeles",
@@ -137,11 +170,250 @@ function CocktailIcon() {
   );
 }
 
+function PresentationViewer({ resource, onClose }) {
+  const [slideIndex, setSlideIndex] = useState(0);
+  const [nativeFullscreen, setNativeFullscreen] = useState(false);
+  const [fallbackFullscreen, setFallbackFullscreen] = useState(false);
+  const dialogRef = useRef(null);
+  const closeButtonRef = useRef(null);
+  const touchStartX = useRef(null);
+
+  const totalSlides = resource?.slideTitles.length || 0;
+  const slideNumber = String(slideIndex + 1).padStart(2, "0");
+  const slideSrc = resource
+    ? `${import.meta.env.BASE_URL}${resource.assetPath}/slide-${slideNumber}.webp`
+    : "";
+
+  function goToSlide(nextIndex) {
+    setSlideIndex(Math.max(0, Math.min(totalSlides - 1, nextIndex)));
+  }
+
+  async function closeViewer() {
+    if (document.fullscreenElement && document.exitFullscreen) await document.exitFullscreen();
+    if (document.webkitFullscreenElement && document.webkitExitFullscreen) document.webkitExitFullscreen();
+    onClose();
+  }
+
+  async function toggleFullscreen() {
+    if (fallbackFullscreen) {
+      setFallbackFullscreen(false);
+      return;
+    }
+
+    const activeFullscreen = document.fullscreenElement || document.webkitFullscreenElement;
+    if (activeFullscreen) {
+      if (document.exitFullscreen) await document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      return;
+    }
+
+    const requestFullscreen = dialogRef.current?.requestFullscreen || dialogRef.current?.webkitRequestFullscreen;
+    if (!requestFullscreen) {
+      setFallbackFullscreen((active) => !active);
+      return;
+    }
+
+    try {
+      await requestFullscreen.call(dialogRef.current);
+    } catch {
+      setFallbackFullscreen((active) => !active);
+    }
+  }
+
+  function handleKeyDown(event) {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeViewer();
+      return;
+    }
+    if (["ArrowRight", "PageDown", " "].includes(event.key)) {
+      event.preventDefault();
+      goToSlide(slideIndex + 1);
+      return;
+    }
+    if (["ArrowLeft", "PageUp"].includes(event.key)) {
+      event.preventDefault();
+      goToSlide(slideIndex - 1);
+      return;
+    }
+    if (event.key === "Home") {
+      event.preventDefault();
+      goToSlide(0);
+      return;
+    }
+    if (event.key === "End") {
+      event.preventDefault();
+      goToSlide(totalSlides - 1);
+      return;
+    }
+    if (event.key.toLowerCase() === "f") {
+      event.preventDefault();
+      toggleFullscreen();
+      return;
+    }
+    if (event.key !== "Tab" || !dialogRef.current) return;
+
+    const focusable = Array.from(dialogRef.current.querySelectorAll("button:not(:disabled)"));
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable.at(-1);
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
+  useEffect(() => {
+    if (!resource) return undefined;
+    const priorFocus = document.activeElement;
+    setSlideIndex(0);
+    setFallbackFullscreen(false);
+    document.body.classList.add("presentation-open");
+    const focusFrame = window.requestAnimationFrame(() => closeButtonRef.current?.focus());
+    return () => {
+      window.cancelAnimationFrame(focusFrame);
+      document.body.classList.remove("presentation-open");
+      if (priorFocus instanceof HTMLElement) priorFocus.focus();
+    };
+  }, [resource]);
+
+  useEffect(() => {
+    function updateFullscreenState() {
+      setNativeFullscreen(Boolean(document.fullscreenElement || document.webkitFullscreenElement));
+    }
+    document.addEventListener("fullscreenchange", updateFullscreenState);
+    document.addEventListener("webkitfullscreenchange", updateFullscreenState);
+    return () => {
+      document.removeEventListener("fullscreenchange", updateFullscreenState);
+      document.removeEventListener("webkitfullscreenchange", updateFullscreenState);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!resource) return undefined;
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [resource, slideIndex, totalSlides, fallbackFullscreen]);
+
+  useEffect(() => {
+    if (!resource) return;
+    [slideIndex - 1, slideIndex + 1]
+      .filter((index) => index >= 0 && index < totalSlides)
+      .forEach((index) => {
+        const image = new Image();
+        image.src = `${import.meta.env.BASE_URL}${resource.assetPath}/slide-${String(index + 1).padStart(2, "0")}.webp`;
+      });
+  }, [resource, slideIndex, totalSlides]);
+
+  if (!resource) return null;
+
+  const isFullscreen = nativeFullscreen || fallbackFullscreen;
+  const currentTitle = resource.slideTitles[slideIndex];
+
+  return createPortal(
+    <div
+      className="presentation-backdrop"
+      onMouseDown={(event) => event.target === event.currentTarget && closeViewer()}
+    >
+      <section
+        className={`presentation-dialog${fallbackFullscreen ? " is-fallback-fullscreen" : ""}`}
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="presentation-title"
+        aria-describedby="presentation-instructions"
+      >
+        <header className="presentation-header">
+          <div>
+            <small>Department meeting resource</small>
+            <h2 id="presentation-title">{resource.title}</h2>
+          </div>
+          <div className="presentation-header-actions">
+            <button type="button" onClick={toggleFullscreen} aria-label={isFullscreen ? "Exit full screen" : "Enter full screen"}>
+              <span aria-hidden="true">{isFullscreen ? "↙" : "⛶"}</span>
+              <strong>{isFullscreen ? "Exit full screen" : "Full screen"}</strong>
+            </button>
+            <button className="presentation-close" type="button" onClick={closeViewer} ref={closeButtonRef} aria-label={`Close ${resource.title} presentation`}>
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+        </header>
+
+        <div
+          className="presentation-stage"
+          onTouchStart={(event) => { touchStartX.current = event.changedTouches[0].clientX; }}
+          onTouchEnd={(event) => {
+            if (touchStartX.current === null) return;
+            const distance = event.changedTouches[0].clientX - touchStartX.current;
+            if (Math.abs(distance) > 45) goToSlide(slideIndex + (distance < 0 ? 1 : -1));
+            touchStartX.current = null;
+          }}
+        >
+          <button
+            className="presentation-arrow presentation-arrow-previous"
+            type="button"
+            onClick={() => goToSlide(slideIndex - 1)}
+            disabled={slideIndex === 0}
+            aria-label="Previous slide"
+          >
+            <span aria-hidden="true">←</span>
+          </button>
+
+          <figure className="presentation-slide">
+            <button
+              className="presentation-slide-advance"
+              type="button"
+              onClick={() => goToSlide(slideIndex + 1)}
+              disabled={slideIndex === totalSlides - 1}
+              aria-label={slideIndex === totalSlides - 1 ? "Final slide" : `Advance to slide ${slideIndex + 2}`}
+            >
+              <img src={slideSrc} alt={`${currentTitle}. Slide ${slideIndex + 1} of ${totalSlides}.`} draggable="false" />
+            </button>
+            <figcaption aria-live="polite">
+              <span>Slide {slideIndex + 1} of {totalSlides}</span>
+              <strong>{currentTitle}</strong>
+            </figcaption>
+          </figure>
+
+          <button
+            className="presentation-arrow presentation-arrow-next"
+            type="button"
+            onClick={() => goToSlide(slideIndex + 1)}
+            disabled={slideIndex === totalSlides - 1}
+            aria-label="Next slide"
+          >
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <footer className="presentation-footer">
+          <div
+            className="presentation-progress"
+            role="progressbar"
+            aria-label="Presentation progress"
+            aria-valuemin="1"
+            aria-valuemax={totalSlides}
+            aria-valuenow={slideIndex + 1}
+          >
+            <span style={{ width: `${((slideIndex + 1) / totalSlides) * 100}%` }} />
+          </div>
+          <p id="presentation-instructions">Click the slide or use ← → to advance · F for full screen · Esc to close</p>
+        </footer>
+      </section>
+    </div>,
+    document.body,
+  );
+}
+
 const calendarMonths = [8, 9, 10, 11];
 const weekdayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 function Calendar2026() {
   const [monthPosition, setMonthPosition] = useState(0);
+  const [activeResource, setActiveResource] = useState(null);
   const monthIndex = calendarMonths[monthPosition];
   const monthLabel = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric", timeZone: "UTC" })
     .format(new Date(Date.UTC(2026, monthIndex, 1)));
@@ -152,6 +424,7 @@ function Calendar2026() {
   const monthBirthdays = birthdayEvents.filter(({ date }) => Number(date.slice(5, 7)) - 1 === monthIndex);
   const monthSocialEvents = socialEvents.filter(({ date }) => Number(date.slice(5, 7)) - 1 === monthIndex);
   const announcements = monthlyAnnouncements[monthIndex] || [];
+  const departmentResources = monthlyDepartmentResources[monthIndex] || [];
 
   function moveMonth(direction) {
     setMonthPosition((position) => Math.min(calendarMonths.length - 1, Math.max(0, position + direction)));
@@ -168,7 +441,7 @@ function Calendar2026() {
 
   return (
     <section className="year-calendar" aria-labelledby="calendar-title" tabIndex="0" onKeyDown={handleCalendarKeyDown}>
-      <h2 id="calendar-title" className="sr-only">2026 calendar with monthly announcements</h2>
+      <h2 id="calendar-title" className="sr-only">2026 calendar with monthly announcements and department meeting resources</h2>
       <div className="calendar-main">
         <header className="calendar-header">
           <div className="calendar-controls" aria-label="Calendar month controls">
@@ -271,7 +544,7 @@ function Calendar2026() {
         </div>
       </div>
 
-      <aside className="calendar-announcements" aria-label={`Announcements for ${monthLabel}`}>
+      <aside className="calendar-announcements" aria-label={`Announcements and department meeting resources for ${monthLabel}`}>
         <header className="calendar-announcements-header">
           <span>Bulletin</span>
           <h2>Announcements</h2>
@@ -296,7 +569,43 @@ function Calendar2026() {
         ) : (
           <p className="announcements-empty">No announcements for this month.</p>
         )}
+
+        <section className="department-resources" aria-labelledby={`department-resources-${monthIndex}`}>
+          <header className="department-resources-header">
+            <span>Reference library</span>
+            <h3 id={`department-resources-${monthIndex}`}>Department meeting resources</h3>
+            <small>{monthLabel}</small>
+          </header>
+          {departmentResources.length > 0 ? (
+            <div className="department-resource-list">
+              {departmentResources.map((resource) => (
+                <button
+                  className="department-resource-card"
+                  type="button"
+                  onClick={() => setActiveResource(resource)}
+                  aria-label={`Open ${resource.title} presentation, ${resource.slideTitles.length} slides`}
+                  key={resource.id}
+                >
+                  <span className="department-resource-cover">
+                    <img src={`${import.meta.env.BASE_URL}${resource.assetPath}/slide-01.webp`} alt="" />
+                    <i aria-hidden="true">View deck</i>
+                  </span>
+                  <span className="department-resource-copy">
+                    <small>Presentation · {resource.slideTitles.length} slides</small>
+                    <strong>{resource.title}</strong>
+                    <span>{resource.description}</span>
+                  </span>
+                  <b aria-hidden="true">Open →</b>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <p className="department-resources-empty">No department meeting resources for this month.</p>
+          )}
+        </section>
       </aside>
+
+      <PresentationViewer resource={activeResource} onClose={() => setActiveResource(null)} />
     </section>
   );
 }
@@ -1577,7 +1886,7 @@ export default function App() {
           {activeTab === "orientation" && <OrientationMaterials />}
         </div>
 
-        <footer>
+        <footer className="site-footer">
           <div><strong>DSA GI · Trust Your Gut</strong><span>{isSedation ? `Sedation Criteria · Revised ${POLICY_VERSION}` : activeTabLabel}</span></div>
           <p>The DSA Way · Physician-led, team-owned clinical operations.</p>
         </footer>
