@@ -1,4 +1,12 @@
 export const birthdayEvents = [
+  { name: "Liz Clark", date: "2026-04-13", displayDate: "April 13", photo: "liz-clark.webp", sourceNote: "Liz Clark.md" },
+  { name: "Ed Ouyang", date: "2026-05-02", displayDate: "May 2", photo: "ed-ouyang.webp", sourceNote: "Ed Ouyang.md" },
+  { name: "Kirsten Regalia", date: "2026-06-04", displayDate: "June 4", photo: "kirsten-regalia.webp", sourceNote: "Kirsten Regalia.md" },
+  { name: "Patrick McKenzie", date: "2026-06-13", displayDate: "June 13", photo: "patrick-mckenzie.webp", sourceNote: "Patrick McKenzie.md" },
+  { name: "Maureen Morgan", date: "2026-07-30", displayDate: "July 30", photo: "maureen-morgan.webp", sourceNote: "Maureen Morgan.md" },
+  { name: "Suk Seo", date: "2026-08-28", displayDate: "August 28", photo: "suk-seo.webp", sourceNote: "Suk Seo.md" },
+  { name: "Arun Suryaprasad", date: "2026-08-29", displayDate: "August 29", photo: "arun-suryaprasad.webp", sourceNote: "Arun Suryaprasad.md" },
+  { name: "Mariel Bailey", date: "2026-08-31", displayDate: "August 31", photo: "mariel-bailey.webp", sourceNote: "Mariel Bailey.md" },
   { name: "Steve Cheng", date: "2026-09-05", displayDate: "September 5", photo: "steve-cheng.webp", sourceNote: "Steve Cheng.md" },
   { name: "Sammy Tesfay", date: "2026-09-07", displayDate: "September 7", photo: "sammy-tesfay.webp", sourceNote: "Sammy Tesfay.md" },
   { name: "Ahilan Arulanandan", date: "2026-09-08", displayDate: "September 8", photo: "ahilan-arulanandan.webp", sourceNote: "Ahilan Arulanandan.md" },

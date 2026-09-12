@@ -5,7 +5,7 @@ tags:
 
 # DSA GI Resources
 
-A compact, tabbed DSA GI clinical-operations reference. The primary Home tab carries a Pacific-time countdown strip, a navigable September–December 2026 milestone calendar, and month-specific department meeting resources; the remaining tabs contain the August 2026 anesthesia procedure criteria, DSA GI MA–MD pod assignments, and a searchable New Physician Orientation field guide.
+A compact, tabbed DSA GI clinical-operations reference. The primary Home tab carries a Pacific-time countdown strip, a navigable January–December 2026 milestone calendar, and month-specific department meeting resources; the remaining tabs contain the August 2026 anesthesia procedure criteria, DSA GI MA–MD pod assignments, and a searchable New Physician Orientation field guide.
 
 ## Live site
 
@@ -46,6 +46,8 @@ The seven Sheikah Slate countdown labels and dates were explicitly requested for
 The Four Habits slide deck was confirmed clear for public presentation and explicitly authorized for deployment as September 2026 department meeting resources on 2026-09-11. Its 19 slides are published as fully revealed final frames; PowerPoint animations are intentionally flattened for dependable in-browser viewing.
 
 Erina Foster's October 17 birthday was supplied by the user and explicitly requested for public calendar display on 2026-09-11.
+
+The January–August 2026 calendar expansion and its vault-recorded DSA GI physician birthdays were explicitly requested for public display on 2026-09-11.
 
 ## Backlinks
 

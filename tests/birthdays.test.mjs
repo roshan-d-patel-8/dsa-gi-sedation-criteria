@@ -9,15 +9,31 @@ import { birthdayEvents } from "../src/birthdays.js";
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const contactsRoot = resolve(repoRoot, "..", "Contacts");
 
-test("September through December GI birthday data is complete and has portraits", () => {
-  assert.equal(birthdayEvents.length, 12);
+test("2026 GI physician birthday data is complete and has portraits", () => {
+  assert.equal(birthdayEvents.length, 20);
   assert.deepEqual([...birthdayEvents].sort((a, b) => a.date.localeCompare(b.date)), birthdayEvents);
   assert.equal(new Set(birthdayEvents.map(({ name }) => name)).size, birthdayEvents.length);
 
   for (const birthday of birthdayEvents) {
-    assert.match(birthday.date, /^2026-(09|10|11|12)-\d{2}$/);
+    assert.match(birthday.date, /^2026-(0[1-9]|1[0-2])-\d{2}$/);
     assert(existsSync(resolve(repoRoot, "public", "portraits", birthday.photo)), `${birthday.name} must have a portrait`);
   }
+});
+
+test("January through August includes every vault-recorded GI physician birthday", () => {
+  assert.deepEqual(
+    birthdayEvents.filter(({ date }) => date < "2026-09-01").map(({ name, date }) => ({ name, date })),
+    [
+      { name: "Liz Clark", date: "2026-04-13" },
+      { name: "Ed Ouyang", date: "2026-05-02" },
+      { name: "Kirsten Regalia", date: "2026-06-04" },
+      { name: "Patrick McKenzie", date: "2026-06-13" },
+      { name: "Maureen Morgan", date: "2026-07-30" },
+      { name: "Suk Seo", date: "2026-08-28" },
+      { name: "Arun Suryaprasad", date: "2026-08-29" },
+      { name: "Mariel Bailey", date: "2026-08-31" },
+    ],
+  );
 });
 
 test("Erina Foster's October 17 birthday is represented", () => {

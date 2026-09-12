@@ -408,11 +408,12 @@ function PresentationViewer({ resource, onClose }) {
   );
 }
 
-const calendarMonths = [8, 9, 10, 11];
+const calendarMonths = Array.from({ length: 12 }, (_, index) => index);
+const defaultCalendarPosition = 8;
 const weekdayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 function Calendar2026() {
-  const [monthPosition, setMonthPosition] = useState(0);
+  const [monthPosition, setMonthPosition] = useState(defaultCalendarPosition);
   const [activeResource, setActiveResource] = useState(null);
   const monthIndex = calendarMonths[monthPosition];
   const monthLabel = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric", timeZone: "UTC" })

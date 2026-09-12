@@ -136,7 +136,7 @@ def assert_home(page):
     assert float(page.locator(".calendar-day > time").first.evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 13
     assert page.get_by_role("gridcell", name="September 2026 17: Tom Haddad — last on-site day", exact=True).is_visible()
     assert page.get_by_role("gridcell", name="September 2026 18", exact=True).is_visible()
-    assert page.get_by_role("button", name="Previous month", exact=True).is_disabled()
+    assert page.get_by_role("button", name="Previous month", exact=True).is_enabled()
     assert page.get_by_role("button", name="Next month", exact=True).is_enabled()
 
 
@@ -198,6 +198,41 @@ def assert_department_meeting_resource(page, mobile=False):
 def assert_calendar_navigation(page):
     previous = page.get_by_role("button", name="Previous month", exact=True)
     next_month = page.get_by_role("button", name="Next month", exact=True)
+
+    earlier_months = [
+        ("August 2026", 3),
+        ("July 2026", 1),
+        ("June 2026", 2),
+        ("May 2026", 1),
+        ("April 2026", 1),
+        ("March 2026", 0),
+        ("February 2026", 0),
+        ("January 2026", 0),
+    ]
+    for month_label, birthday_count in earlier_months:
+        previous.click()
+        assert page.get_by_role("grid", name=month_label, exact=True).is_visible()
+        assert page.locator(".calendar-controls").get_by_text(month_label, exact=True).count() == 1
+        assert page.locator(".birthday-marker").count() == birthday_count
+
+        if month_label == "April 2026":
+            liz_birthday = page.get_by_label("Happy Birthday, Liz Clark!", exact=True)
+            assert liz_birthday.is_visible()
+            liz_birthday.focus()
+            page.wait_for_timeout(200)
+            assert liz_birthday.get_by_role("tooltip").get_by_text("Happy Birthday, Liz Clark!", exact=True).is_visible()
+            assert liz_birthday.get_by_role("tooltip").locator("img").evaluate("image => image.complete && image.naturalWidth > 0")
+            page.screenshot(path=OUTPUT / "dsa-gi-calendar-april-birthday-desktop.png", full_page=False)
+
+    assert previous.is_disabled()
+    assert next_month.is_enabled()
+    page.screenshot(path=OUTPUT / "dsa-gi-calendar-january-2026-desktop.png", full_page=False)
+
+    for _ in range(8):
+        next_month.click()
+    assert page.get_by_role("grid", name="September 2026", exact=True).is_visible()
+    assert page.locator(".birthday-marker").count() == 4
+
     next_month.click()
     assert page.get_by_role("grid", name="October 2026", exact=True).is_visible()
     assert page.locator(".calendar-controls").get_by_text("October 2026", exact=True).count() == 1
@@ -243,6 +278,32 @@ def assert_calendar_navigation(page):
     assert page.get_by_role("grid", name="September 2026", exact=True).is_visible()
     assert page.locator(".announcement-card").count() == 2
     assert page.locator(".department-resource-card").count() == 1
+
+
+def assert_earlier_calendar_mobile(page):
+    previous = page.get_by_role("button", name="Previous month", exact=True)
+    next_month = page.get_by_role("button", name="Next month", exact=True)
+    previous.click()
+    assert page.get_by_role("grid", name="August 2026", exact=True).is_visible()
+    assert page.locator(".birthday-marker").count() == 3
+    mariel_birthday = page.get_by_label("Happy Birthday, Mariel Bailey!", exact=True)
+    mariel_birthday.focus()
+    page.wait_for_timeout(200)
+    assert mariel_birthday.get_by_role("tooltip").is_visible()
+    assert mariel_birthday.get_by_role("tooltip").locator("img").evaluate("image => image.complete && image.naturalWidth > 0")
+    page.screenshot(path=OUTPUT / "dsa-gi-calendar-august-birthdays-mobile.png", full_page=False)
+    page.locator(".year-calendar").focus()
+
+    for _ in range(7):
+        previous.click()
+    assert page.get_by_role("grid", name="January 2026", exact=True).is_visible()
+    assert page.locator(".birthday-marker").count() == 0
+    assert previous.is_disabled()
+    page.screenshot(path=OUTPUT / "dsa-gi-calendar-january-2026-mobile.png", full_page=False)
+
+    for _ in range(8):
+        next_month.click()
+    assert page.get_by_role("grid", name="September 2026", exact=True).is_visible()
 
 
 def assert_sedation_reference(page):
@@ -708,6 +769,7 @@ with sync_playwright() as playwright:
     assert_global_zoom(mobile, mobile=True)
     assert_home(mobile)
     assert_department_meeting_resource(mobile, mobile=True)
+    assert_earlier_calendar_mobile(mobile)
     assert mobile.locator(".countdown-strip").evaluate("element => element.scrollWidth > element.clientWidth")
     mobile.screenshot(path=OUTPUT / "dsa-gi-home-countdowns-mobile.png", full_page=False)
     mobile.locator(".year-calendar").scroll_into_view_if_needed()
@@ -802,4 +864,4 @@ with sync_playwright() as playwright:
     assert not mobile_errors, mobile_errors
     browser.close()
 
-print("Visual QA passed: persistent upper-right zoom controls across all four primary pages, Home countdowns, month-aware announcements and department resources, the 19-slide Four Habits viewer with keyboard/fullscreen/focus behavior, September–December GI birthdays, Tom farewell cocktail event, all 12 Field Guide sections with nested accordions except the restored open Choosing Wisely layout, highlighted search matches with automatic accordion reveal, complete email and pool copy controls, Choosing Wisely with expandable infographic, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")
+print("Visual QA passed: persistent upper-right zoom controls across all four primary pages, Home countdowns, the January–December 2026 calendar with month-aware announcements, department resources, and GI birthdays, the 19-slide Four Habits viewer with keyboard/fullscreen/focus behavior, Tom farewell cocktail event, all 12 Field Guide sections with nested accordions except the restored open Choosing Wisely layout, highlighted search matches with automatic accordion reveal, complete email and pool copy controls, Choosing Wisely with expandable infographic, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")

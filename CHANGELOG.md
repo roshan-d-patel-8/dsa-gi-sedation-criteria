@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.30.0 — 2026-09-11
+
+- Expanded the Home calendar from September–December to the complete January–December 2026 year while keeping September as the opening month.
+- Added eight vault-verified January–August DSA GI physician birthdays with their existing portraits; January–March correctly remain birthday-free because no physician birthdays are recorded for those months.
+- Added browser coverage for backward navigation through every earlier month, the January boundary, monthly birthday counts, and an early-year portrait tooltip.
+
 ## 0.29.2 — 2026-09-11
 
 - Enlarged and optically tightened the numbered primary-tab labels so their typography better fills the available tab space while preserving the existing folder-tab design.
