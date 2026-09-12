@@ -5,6 +5,11 @@ tags:
 
 # Changelog
 
+## 0.29.2 — 2026-09-11
+
+- Enlarged and optically tightened the numbered primary-tab labels so their typography better fills the available tab space while preserving the existing folder-tab design.
+- Added desktop and mobile browser checks for the Podlets tab's minimum label size and overflow-free rendering.
+
 ## 0.29.1 — 2026-09-11
 
 - Added Erina Foster's October 17 birthday to the Home calendar using her existing portrait and the established cupcake hover, focus, and tap interaction.

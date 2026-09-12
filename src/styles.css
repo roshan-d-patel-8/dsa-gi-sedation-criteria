@@ -94,8 +94,8 @@ body::before {
 .home-tab-icon { width: 22px; height: 22px; fill: currentColor; filter: drop-shadow(0 3px 5px rgba(27, 117, 187, .2)); }
 .folder-tab:nth-child(3) { min-width: 332px; box-shadow: inset 0 3px 0 rgba(242, 160, 184, .7); }
 .folder-tab:nth-child(4) { min-width: 356px; box-shadow: inset 0 3px 0 rgba(217, 164, 65, .72); }
-.folder-tab > span { color: #91a2b3; font-size: 9px; font-weight: 900; letter-spacing: .14em; }
-.folder-tab > strong { overflow: hidden; text-overflow: ellipsis; font-size: 13px; letter-spacing: -.01em; }
+.folder-tab > span { color: #91a2b3; font-size: 11px; font-weight: 900; letter-spacing: .14em; line-height: 1; }
+.folder-tab > strong { overflow: hidden; text-overflow: ellipsis; font-size: clamp(15px, 1.05vw, 16px); font-weight: 800; line-height: 1.08; letter-spacing: -.02em; }
 .folder-tab:hover { color: var(--navy); background: #f5f7f9; }
 .folder-tab.active {
   position: relative;
@@ -795,7 +795,8 @@ body.presentation-open { overflow: hidden; }
   .folder-tab-home { min-width: 54px; width: 54px; padding-inline: 13px; }
   .folder-tab:nth-child(3) { min-width: 294px; }
   .folder-tab:nth-child(4) { min-width: 320px; }
-  .folder-tab > strong { font-size: 11px; }
+  .folder-tab > span { font-size: 10px; }
+  .folder-tab > strong { font-size: 12px; }
   .home-page, .reference-page, .coverage-page, .orientation-page { padding: 18px 12px 28px; }
   .countdown-heading { align-items: start; flex-direction: column; gap: 8px; }
   .countdown-heading h1 { font-size: 42px; }
