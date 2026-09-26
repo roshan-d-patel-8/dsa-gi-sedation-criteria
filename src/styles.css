@@ -262,7 +262,7 @@ body.birthday-dialog-open { overflow: hidden; }
 .department-resources-header > span { color: #f3b847; font-size: 8px; font-weight: 950; letter-spacing: .15em; text-transform: uppercase; }
 .department-resources-header h3 { margin: 0; color: var(--white); font-size: 18px; line-height: 1.08; letter-spacing: -.025em; }
 .department-resources-header small { color: rgba(255, 255, 255, .58); font-size: 9px; font-weight: 800; }
-.department-resource-list { padding: 0 14px 15px; }
+.department-resource-list { padding: 0 14px 15px; display: grid; gap: 12px; }
 .department-resource-card { width: 100%; padding: 0; display: grid; overflow: hidden; border: 1px solid rgba(158, 200, 226, .3); border-radius: 13px; background: #f9fbfc; box-shadow: 0 11px 24px rgba(2, 15, 27, .28); color: var(--navy); cursor: pointer; text-align: left; transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
 .department-resource-card:hover { border-color: #66cfe0; box-shadow: 0 15px 30px rgba(2, 15, 27, .36); transform: translateY(-2px); }
 .department-resource-card:focus-visible { outline: 3px solid #f3b847; outline-offset: 3px; }

@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.32.0 — 2026-09-26
+
+- Added the 15-slide Immunotherapy-Induced Hepatitis deck to September 2026 Department meeting resources with its September 21 Topic Based Discussion date.
+- Published faithful 2560×1440 static frames while excluding the forwarded email, source PowerPoint, temporary PDF, speaker notes, and notes-only external hyperlink.
+- Expanded desktop and mobile browser coverage for both September resource cards, the new viewer, navigation, fullscreen, focus return, image fidelity, and month isolation.
+
 ## 0.31.0 — 2026-09-11
 
 - Added the 22-slide ERBE Settings and Upper EMR deck exclusively to the July 2026 Department meeting resources section.

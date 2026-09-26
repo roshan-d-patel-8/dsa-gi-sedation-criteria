@@ -1,10 +1,11 @@
+import os
 import re
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
 
-OUTPUT = Path("/Users/roshanpatel/.codex/visualizations/2026/09/11/01a092d7-669e-7bc0-bddf-6b0d6e699612")
+OUTPUT = Path(os.environ.get("VISUAL_QA_OUTPUT", "/private/tmp/dsa-gi-visual-qa"))
 BASE_URL = "http://127.0.0.1:5173"
 OUTPUT.mkdir(parents=True, exist_ok=True)
 CARD_HEADINGS = [
@@ -144,7 +145,7 @@ def assert_department_meeting_resource(page, mobile=False):
     resources = page.locator(".department-resources")
     assert resources.get_by_role("heading", name="Department meeting resources", exact=True).is_visible()
     assert resources.get_by_text("September 2026", exact=True).is_visible()
-    assert resources.locator(".department-resource-card").count() == 1
+    assert resources.locator(".department-resource-card").count() == 2
     resource_button = resources.get_by_role("button", name="Open The Four Habits presentation, 19 slides", exact=True)
     assert resource_button.is_visible()
     assert resource_button.get_by_text("The Four Habits", exact=True).is_visible()
@@ -195,6 +196,43 @@ def assert_department_meeting_resource(page, mobile=False):
     assert viewer.count() == 0
     assert page.locator("body").get_attribute("class") in (None, "")
     assert resource_button.evaluate("element => document.activeElement === element")
+
+    hepatitis_button = resources.get_by_role(
+        "button",
+        name="Open Immunotherapy-Induced Hepatitis presentation, 15 slides",
+        exact=True,
+    )
+    assert hepatitis_button.is_visible()
+    assert hepatitis_button.get_by_text("Immunotherapy-Induced Hepatitis", exact=True).is_visible()
+    assert hepatitis_button.get_by_text("Topic Based Discussion · September 21, 2026.", exact=True).is_visible()
+    assert hepatitis_button.locator("img").evaluate(
+        "image => image.decode().then(() => image.naturalWidth === 2560 && image.naturalHeight === 1440)"
+    )
+
+    hepatitis_button.click()
+    viewer = page.get_by_role("dialog", name="Immunotherapy-Induced Hepatitis", exact=True)
+    assert viewer.is_visible()
+    assert viewer.get_by_text("Slide 1 of 15", exact=True).is_visible()
+    assert viewer.get_by_text("Immunotherapy Induced Hepatitis", exact=True).count() == 1
+    slide = viewer.locator(".presentation-slide img")
+    assert slide.get_attribute("src").endswith(
+        "/department-meeting-resources/2026-09/immunotherapy-induced-hepatitis/slide-01.webp"
+    )
+    assert slide.evaluate(
+        "image => image.decode().then(() => image.naturalWidth === 2560 && image.naturalHeight === 1440)"
+    )
+    page.keyboard.press("ArrowRight")
+    viewer.get_by_text("Slide 2 of 15", exact=True).wait_for(state="visible")
+    page.keyboard.press("End")
+    viewer.get_by_text("Slide 15 of 15", exact=True).wait_for(state="visible")
+    assert viewer.get_by_role("button", name="Next slide", exact=True).is_disabled()
+    page.screenshot(
+        path=OUTPUT / ("dsa-gi-hepatitis-viewer-mobile.png" if mobile else "dsa-gi-hepatitis-viewer-desktop.png"),
+        full_page=False,
+    )
+    page.keyboard.press("Escape")
+    assert viewer.count() == 0
+    assert hepatitis_button.evaluate("element => document.activeElement === element")
 
 
 def assert_july_department_meeting_resource(page, mobile=False):
@@ -366,7 +404,7 @@ def assert_calendar_navigation(page):
     previous.click()
     assert page.get_by_role("grid", name="September 2026", exact=True).is_visible()
     assert page.locator(".announcement-card").count() == 2
-    assert page.locator(".department-resource-card").count() == 1
+    assert page.locator(".department-resource-card").count() == 2
 
 
 def assert_mobile_birthday_dialog(page, name, screenshot_name, dismiss="close"):
