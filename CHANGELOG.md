@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.32.1 — 2026-09-26
+
+- Removed the completed Tom Haddad last-on-site countdown card and its calendar marker.
+- Removed the “Countdowns!” heading so the Home tab opens directly on the remaining milestone cards.
+- Updated desktop and mobile browser checks for the six-card strip and removed milestone.
+
 ## 0.32.0 — 2026-09-26
 
 - Added the 15-slide Immunotherapy-Induced Hepatitis deck to September 2026 Department meeting resources with its September 21 Topic Based Discussion date.

@@ -37,7 +37,6 @@ function highlightSearchText(text, query) {
 }
 
 const countdowns = [
-  { label: "Tom Haddad — last on-site day", date: "2026-09-17", displayDate: "Thu · Sep 17, 2026" },
   { label: "Aysha Aslam — first day", date: "2026-09-28", displayDate: "Mon · Sep 28, 2026" },
   { label: "Dublin — closure / last booking day", date: "2026-10-02", displayDate: "Fri · Oct 2, 2026", tone: "gold" },
   { label: "NorCal in-person TPIP — Oakland", date: "2026-10-17", displayDate: "Sat · Oct 17, 2026" },
@@ -752,11 +751,7 @@ function Calendar2026() {
 function HomePage() {
   return (
     <main className="home-page" id="home-panel" role="tabpanel" aria-labelledby="home-tab">
-      <section className="countdown-section" aria-labelledby="countdown-title">
-        <div className="countdown-heading">
-          <h1 id="countdown-title">Countdowns!</h1>
-          <p>Days remaining update automatically at midnight Pacific.</p>
-        </div>
+      <section className="countdown-section" aria-label="Upcoming milestones">
         <div className="countdown-strip">
           {countdowns.map((item, index) => {
             const days = daysUntil(item.date);

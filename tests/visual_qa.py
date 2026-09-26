@@ -100,15 +100,15 @@ def assert_global_zoom(page, mobile=False):
 
 
 def assert_home(page):
-    assert page.get_by_role("heading", name="Countdowns!", exact=True).is_visible()
+    assert page.get_by_role("heading", name="Countdowns!", exact=True).count() == 0
     assert page.get_by_text("The next markers on the map.", exact=True).count() == 0
     assert page.locator(".home-tab-icon").is_visible()
-    assert page.locator(".countdown-card").count() == 7
+    assert page.locator(".countdown-card").count() == 6
     assert page.get_by_text("Sheikah Slate", exact=False).count() == 0
-    assert page.locator(".countdown-strip").get_by_text("Tom Haddad — last on-site day", exact=True).is_visible()
-    assert page.locator(".countdown-strip").get_by_text("Thu · Sep 17, 2026", exact=True).is_visible()
+    assert page.locator(".countdown-strip").get_by_text("Tom Haddad — last on-site day", exact=True).count() == 0
+    assert page.locator(".countdown-strip").get_by_text("Thu · Sep 17, 2026", exact=True).count() == 0
     assert page.locator(".countdown-strip").get_by_text("E2K — GI go-live", exact=True).is_visible()
-    assert page.locator(".countdown-card time").count() == 7
+    assert page.locator(".countdown-card time").count() == 6
     assert page.get_by_text("Rest of 2026", exact=True).count() == 0
     assert page.get_by_text("September—December", exact=True).count() == 0
     assert page.locator(".calendar-controls").get_by_text("September 2026", exact=True).count() == 1
@@ -135,7 +135,7 @@ def assert_home(page):
     assert float(page.locator(".calendar-controls strong").evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 24
     assert float(page.locator(".calendar-weekday").first.evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 10
     assert float(page.locator(".calendar-day > time").first.evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 13
-    assert page.get_by_role("gridcell", name="September 2026 17: Tom Haddad — last on-site day", exact=True).is_visible()
+    assert page.get_by_role("gridcell", name="September 2026 17: Tom Haddad — last on-site day", exact=True).count() == 0
     assert page.get_by_role("gridcell", name="September 2026 18", exact=True).is_visible()
     assert page.get_by_role("button", name="Previous month", exact=True).is_enabled()
     assert page.get_by_role("button", name="Next month", exact=True).is_enabled()

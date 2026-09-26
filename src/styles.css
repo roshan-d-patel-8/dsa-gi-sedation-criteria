@@ -138,10 +138,7 @@ body::before {
 /* Home command deck */
 .home-page { width: min(1580px, 100%); margin: 0 auto; padding: clamp(30px, 3.5vw, 50px) clamp(16px, 3.5vw, 52px) clamp(46px, 6vw, 90px); }
 .countdown-section { position: relative; }
-.countdown-heading { margin-bottom: 20px; display: flex; align-items: end; justify-content: space-between; gap: 24px; }
-.countdown-heading h1 { margin: 0; color: var(--navy); font-size: clamp(36px, 4vw, 58px); line-height: .95; letter-spacing: -.045em; }
-.countdown-heading p { margin: 0; color: var(--muted); font-size: 10px; font-weight: 700; }
-.countdown-strip { display: grid; grid-template-columns: repeat(7, minmax(158px, 1fr)); gap: 10px; }
+.countdown-strip { display: grid; grid-template-columns: repeat(6, minmax(158px, 1fr)); gap: 10px; }
 .countdown-card { --card-accent: var(--way); position: relative; min-width: 0; min-height: 228px; padding: 17px 15px 16px; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-top: 5px solid var(--card-accent); border-radius: 13px; background: rgba(255, 255, 255, .93); box-shadow: var(--shadow); animation: card-in .48s both; animation-delay: var(--delay); }
 .countdown-card::after { position: absolute; width: 82px; height: 82px; top: -38px; right: -36px; border-radius: 50%; background: color-mix(in srgb, var(--card-accent) 11%, transparent); content: ""; }
 .countdown-card.tone-gold { --card-accent: var(--gold); }
@@ -814,9 +811,6 @@ body.presentation-open { overflow: hidden; }
   .folder-tab > span { font-size: 10px; }
   .folder-tab > strong { font-size: 12px; }
   .home-page, .reference-page, .coverage-page, .orientation-page { padding: 18px 12px 28px; }
-  .countdown-heading { align-items: start; flex-direction: column; gap: 8px; }
-  .countdown-heading h1 { font-size: 42px; }
-  .countdown-heading p { line-height: 1.35; }
   .countdown-strip { margin-right: -12px; padding-right: 12px; }
   .countdown-card { min-width: 184px; min-height: 216px; }
   .year-calendar { margin-top: 30px; border-radius: 14px; }
