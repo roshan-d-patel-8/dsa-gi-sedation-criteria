@@ -389,7 +389,19 @@ def assert_calendar_navigation(page):
         "image => image.decode().then(() => image.naturalWidth == 1672 && image.naturalHeight == 941)"
     )
     page.screenshot(path=OUTPUT / "dsa-gi-calendar-october-happy-hour-desktop.png", full_page=False)
-    page.locator(".year-calendar").focus()
+    happy_hour.click()
+    happy_hour_dialog = page.get_by_role("dialog", name="GI Monthly Happy Hour details", exact=True)
+    assert happy_hour_dialog.is_visible()
+    assert page.locator("body").evaluate("body => body.classList.contains('social-event-dialog-open')")
+    assert page.locator(".page-zoom-surface").get_attribute("inert") == ""
+    assert happy_hour_dialog.get_by_role("img", name="GI Monthly Happy Hour event infographic", exact=True).evaluate(
+        "image => image.decode().then(() => image.naturalWidth == 1672 && image.naturalHeight == 941)"
+    )
+    page.screenshot(path=OUTPUT / "dsa-gi-calendar-october-happy-hour-dialog-desktop.png", full_page=False)
+    happy_hour_dialog.get_by_role("button", name="Close event details", exact=True).click()
+    happy_hour_dialog.wait_for(state="detached")
+    page.wait_for_timeout(100)
+    assert happy_hour.evaluate("element => document.activeElement === element")
     erina_birthday = page.get_by_label("Happy Birthday, Erina Foster!", exact=True)
     assert erina_birthday.is_visible()
     erina_birthday.focus()
@@ -434,7 +446,7 @@ def assert_mobile_birthday_dialog(page, name, screenshot_name, dismiss="close"):
     assert dialog.is_visible()
     assert dialog.locator(".birthday-dialog-copy strong").inner_text() == f"Happy Birthday,\n{name}!"
     portrait = dialog.locator(".birthday-dialog-portrait > img")
-    assert portrait.evaluate("image => image.complete && image.naturalWidth > 0")
+    assert portrait.evaluate("image => image.decode().then(() => image.naturalWidth > 0)")
     assert page.locator("body").evaluate("body => body.classList.contains('birthday-dialog-open')")
     assert page.locator(".page-zoom-surface").get_attribute("inert") == ""
     page.wait_for_timeout(250)
@@ -485,20 +497,31 @@ def assert_earlier_calendar_mobile(page):
         "GI Monthly Happy Hour, Thu · Oct 22, 2026 · 5:30–6:00 PM arrival, Bare Bottle Brewery · Across the street from WCR Kaiser",
         exact=True,
     )
-    happy_hour.focus()
-    page.wait_for_timeout(200)
-    happy_hour_tooltip = happy_hour.get_by_role("tooltip")
-    assert happy_hour_tooltip.is_visible()
-    assert happy_hour_tooltip.locator("img").evaluate(
+    happy_hour.click()
+    happy_hour_dialog = page.get_by_role("dialog", name="GI Monthly Happy Hour details", exact=True)
+    assert happy_hour_dialog.is_visible()
+    assert page.locator("body").evaluate("body => body.classList.contains('social-event-dialog-open')")
+    assert page.locator(".page-zoom-surface").get_attribute("inert") == ""
+    assert happy_hour_dialog.get_by_text("Connect with colleagues", exact=True).is_visible()
+    assert happy_hour_dialog.get_by_text("GI Monthly Happy Hour", exact=True).is_visible()
+    assert happy_hour_dialog.get_by_text("Thu · Oct 22, 2026 · 5:30–6:00 PM arrival", exact=True).is_visible()
+    assert happy_hour_dialog.get_by_text("Bare Bottle Brewery · Across the street from WCR Kaiser", exact=True).is_visible()
+    assert happy_hour_dialog.get_by_role("img", name="GI Monthly Happy Hour event infographic", exact=True).evaluate(
         "image => image.decode().then(() => image.naturalWidth == 1672 && image.naturalHeight == 941)"
     )
-    tooltip_box = happy_hour_tooltip.bounding_box()
-    assert tooltip_box["x"] >= 10
-    assert tooltip_box["x"] + tooltip_box["width"] <= page.viewport_size["width"] - 10
-    assert tooltip_box["y"] >= 0
-    assert tooltip_box["y"] + tooltip_box["height"] <= page.viewport_size["height"] - 10
+    page.wait_for_timeout(250)
+    dialog_box = happy_hour_dialog.bounding_box()
+    assert dialog_box["x"] >= 10
+    assert dialog_box["x"] + dialog_box["width"] <= page.viewport_size["width"] - 10
+    assert dialog_box["y"] >= 0
+    assert dialog_box["y"] + dialog_box["height"] <= page.viewport_size["height"] - 10
     page.screenshot(path=OUTPUT / "dsa-gi-calendar-october-happy-hour-mobile.png", full_page=False)
-    page.locator(".year-calendar").focus()
+    happy_hour_dialog.get_by_role("button", name="Close event details", exact=True).click()
+    happy_hour_dialog.wait_for(state="detached")
+    page.wait_for_timeout(100)
+    assert not page.locator("body").evaluate("body => body.classList.contains('social-event-dialog-open')")
+    assert page.locator(".page-zoom-surface").get_attribute("inert") is None
+    assert happy_hour.evaluate("element => document.activeElement === element")
     previous.click()
     assert page.get_by_role("grid", name="September 2026", exact=True).is_visible()
 
@@ -683,6 +706,7 @@ with sync_playwright() as playwright:
     assert steve_birthday.evaluate("element => document.activeElement === element")
     desktop.locator(".year-calendar").focus()
     farewell = desktop.get_by_label("Tom's Farewell Happy Hour, Thu · Sep 10, 2026, Barebottle Brewing Co. · Walnut Creek Taproom & Kitchen", exact=True)
+    farewell.evaluate("element => element.scrollIntoView({ block: 'center' })")
     farewell.hover()
     desktop.wait_for_timeout(200)
     farewell_tooltip = farewell.get_by_role("tooltip")
@@ -994,12 +1018,17 @@ with sync_playwright() as playwright:
     assert mobile_birthday.evaluate("element => document.activeElement === element")
     mobile.locator(".year-calendar").focus()
     mobile_farewell = mobile.get_by_label("Tom's Farewell Happy Hour, Thu · Sep 10, 2026, Barebottle Brewing Co. · Walnut Creek Taproom & Kitchen", exact=True)
-    mobile_farewell.focus()
-    mobile.wait_for_timeout(200)
-    assert mobile_farewell.get_by_role("tooltip").is_visible()
-    assert mobile_farewell.get_by_role("tooltip").locator("img").evaluate("image => image.complete && image.naturalWidth == 1672")
+    mobile_farewell.click()
+    farewell_dialog = mobile.get_by_role("dialog", name="Tom's Farewell Happy Hour details", exact=True)
+    assert farewell_dialog.is_visible()
+    assert farewell_dialog.get_by_role("img", name="Tom's Farewell Happy Hour event infographic", exact=True).evaluate(
+        "image => image.decode().then(() => image.naturalWidth == 1672 && image.naturalHeight == 941)"
+    )
     mobile.screenshot(path=OUTPUT / "dsa-gi-calendar-tom-farewell-mobile.png", full_page=False)
-    mobile.locator(".year-calendar").focus()
+    mobile.keyboard.press("Escape")
+    farewell_dialog.wait_for(state="detached")
+    mobile.wait_for_timeout(100)
+    assert mobile_farewell.evaluate("element => document.activeElement === element")
     mobile_event = mobile.locator(".calendar-event-marker").first
     mobile_event.focus()
     mobile.wait_for_timeout(200)

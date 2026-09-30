@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.32.3 — 2026-09-30
+
+- Replaced the mobile calendar event's focus-only infographic preview with an explicit tap-open event dialog so iPhone and other touch browsers can reliably display the artwork.
+- Added modal focus isolation, Escape/backdrop/close-button dismissal, focus return, viewport-safe mobile layout, and retained the desktop hover preview.
+- Replaced the previous programmatic-focus mobile check with a real pointer click and assertions for the visible dialog, full infographic dimensions, event copy, viewport fit, dismissal, and focus return.
+
 ## 0.32.2 — 2026-09-30
 
 - Added the October 22 DSA GI Monthly Happy Hour to the Home calendar with its 5:30–6:00 PM arrival window and Bare Bottle Brewery location.

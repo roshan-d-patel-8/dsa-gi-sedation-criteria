@@ -540,11 +540,80 @@ function BirthdayDialog({ birthday, onClose }) {
   );
 }
 
+function SocialEventDialog({ event, onClose }) {
+  const closeButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (!event) return undefined;
+    const pageSurface = document.querySelector(".page-zoom-surface");
+    document.body.classList.add("social-event-dialog-open");
+    pageSurface?.setAttribute("inert", "");
+    closeButtonRef.current?.focus({ preventScroll: true });
+
+    function closeOnEscape(keyEvent) {
+      if (keyEvent.key === "Escape") {
+        keyEvent.preventDefault();
+        onClose();
+      }
+    }
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      window.removeEventListener("keydown", closeOnEscape);
+      document.body.classList.remove("social-event-dialog-open");
+      pageSurface?.removeAttribute("inert");
+    };
+  }, [event, onClose]);
+
+  if (!event) return null;
+
+  return createPortal(
+    <div
+      className="social-event-dialog-backdrop"
+      onPointerDown={(pointerEvent) => {
+        if (pointerEvent.target === pointerEvent.currentTarget) onClose();
+      }}
+    >
+      <section
+        id="social-event-dialog"
+        className="social-event-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${event.label} details`}
+      >
+        <button
+          className="social-event-dialog-close"
+          type="button"
+          aria-label="Close event details"
+          onClick={onClose}
+          ref={closeButtonRef}
+        >
+          ×
+        </button>
+        <img
+          className="social-event-dialog-art"
+          src={`${import.meta.env.BASE_URL}${event.image}`}
+          alt={`${event.label} event infographic`}
+        />
+        <span className="social-event-dialog-copy">
+          <small>{event.eyebrow}</small>
+          <strong>{event.label}</strong>
+          <time dateTime={event.date}>{event.displayDate}</time>
+          <em>{event.venue}</em>
+        </span>
+      </section>
+    </div>,
+    document.body,
+  );
+}
+
 function Calendar2026() {
   const [monthPosition, setMonthPosition] = useState(defaultCalendarPosition);
   const [activeResource, setActiveResource] = useState(null);
   const [activeBirthday, setActiveBirthday] = useState(null);
+  const [activeSocialEvent, setActiveSocialEvent] = useState(null);
   const birthdayTriggerRef = useRef(null);
+  const socialEventTriggerRef = useRef(null);
   const monthIndex = calendarMonths[monthPosition];
   const monthLabel = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric", timeZone: "UTC" })
     .format(new Date(Date.UTC(2026, monthIndex, 1)));
@@ -559,6 +628,7 @@ function Calendar2026() {
 
   function moveMonth(direction) {
     setActiveBirthday(null);
+    setActiveSocialEvent(null);
     setMonthPosition((position) => Math.min(calendarMonths.length - 1, Math.max(0, position + direction)));
   }
 
@@ -570,6 +640,16 @@ function Calendar2026() {
   function closeBirthday() {
     setActiveBirthday(null);
     requestAnimationFrame(() => birthdayTriggerRef.current?.focus({ preventScroll: true }));
+  }
+
+  function openSocialEvent(event, trigger) {
+    socialEventTriggerRef.current = trigger;
+    setActiveSocialEvent(event);
+  }
+
+  function closeSocialEvent() {
+    setActiveSocialEvent(null);
+    requestAnimationFrame(() => socialEventTriggerRef.current?.focus({ preventScroll: true }));
   }
 
   function handleCalendarKeyDown(event) {
@@ -644,11 +724,15 @@ function Calendar2026() {
                   {socials.map((event, eventIndex) => {
                     const tooltipId = `social-event-${date}-${eventIndex}`;
                     return (
-                      <span
+                      <button
                         className="calendar-social-marker"
-                        tabIndex="0"
+                        type="button"
                         aria-label={`${event.label}, ${event.displayDate}, ${event.venue}`}
                         aria-describedby={tooltipId}
+                        aria-haspopup="dialog"
+                        aria-expanded={activeSocialEvent?.label === event.label && activeSocialEvent?.date === event.date}
+                        aria-controls="social-event-dialog"
+                        onClick={(clickEvent) => openSocialEvent(event, clickEvent.currentTarget)}
                         key={event.label}
                       >
                         <CocktailIcon />
@@ -661,7 +745,7 @@ function Calendar2026() {
                             <em>{event.venue}</em>
                           </span>
                         </span>
-                      </span>
+                      </button>
                     );
                   })}
                 </span>
@@ -753,6 +837,7 @@ function Calendar2026() {
 
       <PresentationViewer resource={activeResource} onClose={() => setActiveResource(null)} />
       <BirthdayDialog birthday={activeBirthday} onClose={closeBirthday} />
+      <SocialEventDialog event={activeSocialEvent} onClose={closeSocialEvent} />
     </section>
   );
 }
