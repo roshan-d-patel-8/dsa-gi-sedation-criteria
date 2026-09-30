@@ -52,6 +52,15 @@ const socialEvents = [
     displayDate: "Thu · Sep 10, 2026",
     venue: "Barebottle Brewing Co. · Walnut Creek Taproom & Kitchen",
     image: "toms-farewell-happy-hour-2026-09-10.png",
+    eyebrow: "Raise a glass for Tom",
+  },
+  {
+    label: "GI Monthly Happy Hour",
+    date: "2026-10-22",
+    displayDate: "Thu · Oct 22, 2026 · 5:30–6:00 PM arrival",
+    venue: "Bare Bottle Brewery · Across the street from WCR Kaiser",
+    image: "gi-monthly-happy-hour-2026-10-22.png",
+    eyebrow: "Connect with colleagues",
   },
 ];
 
@@ -646,7 +655,7 @@ function Calendar2026() {
                         <span className="calendar-social-tooltip" id={tooltipId} role="tooltip">
                           <img src={`${import.meta.env.BASE_URL}${event.image}`} alt="" loading="lazy" />
                           <span>
-                            <small>Raise a glass for Tom</small>
+                            <small>{event.eyebrow}</small>
                             <strong>{event.label}</strong>
                             <time dateTime={event.date}>{event.displayDate}</time>
                             <em>{event.venue}</em>

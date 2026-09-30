@@ -262,7 +262,7 @@ def assert_july_department_meeting_resource(page, mobile=False):
     viewer = page.get_by_role("dialog", name="ERBE Settings and Upper EMR", exact=True)
     assert viewer.is_visible()
     assert page.locator("body").get_attribute("class") == "presentation-open"
-    assert viewer.get_by_text("Slide 1 of 22", exact=True).is_visible()
+    viewer.get_by_text("Slide 1 of 22", exact=True).wait_for(state="visible")
     slide_title = viewer.get_by_text("ERBE Settings and Upper EMR Thoughts", exact=True)
     assert slide_title.count() == 1
     assert slide_title.is_hidden() if mobile else slide_title.is_visible()
@@ -370,6 +370,26 @@ def assert_calendar_navigation(page):
     assert page.get_by_text("No department meeting resources for this month.", exact=True).is_visible()
     assert page.locator(".calendar-event-marker").count() == 3
     assert page.locator(".birthday-marker").count() == 3
+    assert page.locator(".calendar-social-marker").count() == 1
+    happy_hour = page.get_by_label(
+        "GI Monthly Happy Hour, Thu · Oct 22, 2026 · 5:30–6:00 PM arrival, Bare Bottle Brewery · Across the street from WCR Kaiser",
+        exact=True,
+    )
+    assert happy_hour.is_visible()
+    assert page.get_by_role("gridcell", name="October 2026 22: GI Monthly Happy Hour", exact=True).is_visible()
+    happy_hour.focus()
+    page.wait_for_timeout(200)
+    happy_hour_tooltip = happy_hour.get_by_role("tooltip")
+    assert happy_hour_tooltip.is_visible()
+    assert happy_hour_tooltip.get_by_text("Connect with colleagues", exact=True).is_visible()
+    assert happy_hour_tooltip.get_by_text("GI Monthly Happy Hour", exact=True).is_visible()
+    assert happy_hour_tooltip.get_by_text("Thu · Oct 22, 2026 · 5:30–6:00 PM arrival", exact=True).is_visible()
+    assert happy_hour_tooltip.get_by_text("Bare Bottle Brewery · Across the street from WCR Kaiser", exact=True).is_visible()
+    assert happy_hour_tooltip.locator("img").evaluate(
+        "image => image.decode().then(() => image.naturalWidth == 1672 && image.naturalHeight == 941)"
+    )
+    page.screenshot(path=OUTPUT / "dsa-gi-calendar-october-happy-hour-desktop.png", full_page=False)
+    page.locator(".year-calendar").focus()
     erina_birthday = page.get_by_label("Happy Birthday, Erina Foster!", exact=True)
     assert erina_birthday.is_visible()
     erina_birthday.focus()
@@ -458,6 +478,28 @@ def assert_earlier_calendar_mobile(page):
 
     for _ in range(8):
         next_month.click()
+    assert page.get_by_role("grid", name="September 2026", exact=True).is_visible()
+    next_month.click()
+    assert page.get_by_role("grid", name="October 2026", exact=True).is_visible()
+    happy_hour = page.get_by_label(
+        "GI Monthly Happy Hour, Thu · Oct 22, 2026 · 5:30–6:00 PM arrival, Bare Bottle Brewery · Across the street from WCR Kaiser",
+        exact=True,
+    )
+    happy_hour.focus()
+    page.wait_for_timeout(200)
+    happy_hour_tooltip = happy_hour.get_by_role("tooltip")
+    assert happy_hour_tooltip.is_visible()
+    assert happy_hour_tooltip.locator("img").evaluate(
+        "image => image.decode().then(() => image.naturalWidth == 1672 && image.naturalHeight == 941)"
+    )
+    tooltip_box = happy_hour_tooltip.bounding_box()
+    assert tooltip_box["x"] >= 10
+    assert tooltip_box["x"] + tooltip_box["width"] <= page.viewport_size["width"] - 10
+    assert tooltip_box["y"] >= 0
+    assert tooltip_box["y"] + tooltip_box["height"] <= page.viewport_size["height"] - 10
+    page.screenshot(path=OUTPUT / "dsa-gi-calendar-october-happy-hour-mobile.png", full_page=False)
+    page.locator(".year-calendar").focus()
+    previous.click()
     assert page.get_by_role("grid", name="September 2026", exact=True).is_visible()
 
 

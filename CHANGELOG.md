@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.32.2 — 2026-09-30
+
+- Added the October 22 DSA GI Monthly Happy Hour to the Home calendar with its 5:30–6:00 PM arrival window and Bare Bottle Brewery location.
+- Added a new 1672×941 event infographic and reused the established accessible cocktail-marker tooltip on desktop and mobile.
+- Added browser coverage for the event date, exact accessible details, infographic dimensions, tooltip content, and viewport fit.
+
 ## 0.32.1 — 2026-09-26
 
 - Removed the completed Tom Haddad last-on-site countdown card and its calendar marker.
