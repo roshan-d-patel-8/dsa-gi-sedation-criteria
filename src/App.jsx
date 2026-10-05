@@ -45,7 +45,23 @@ const countdowns = [
   { label: "E2K — GI go-live", date: "2026-11-18", displayDate: "Wed · Nov 18, 2026 · confirmed", tone: "way" },
 ];
 
-const socialEvents = [
+const calendarArtEvents = [
+  {
+    label: "Omar Al-Shuwaykh — first clinical day",
+    date: "2026-08-31",
+    displayDate: "Mon · Aug 31, 2026",
+    image: "omar-first-clinical-day-2026-08-31.jpg",
+    eyebrow: "Welcome to DSA Gastroenterology",
+    marker: "star",
+  },
+  {
+    label: "Aysha Aslam — first clinical day",
+    date: "2026-10-05",
+    displayDate: "Mon · Oct 5, 2026",
+    image: "aysha-first-clinical-day-2026-10-05.jpg",
+    eyebrow: "Welcome to DSA Gastroenterology",
+    marker: "star",
+  },
   {
     label: "Tom's Farewell Happy Hour",
     date: "2026-09-10",
@@ -218,6 +234,14 @@ function BirthdayCupcakeIcon() {
       <circle className="birthday-sprinkle sprinkle-one" cx="17.2" cy="23.3" r="1.2" />
       <circle className="birthday-sprinkle sprinkle-two" cx="23" cy="19.7" r="1.2" />
       <circle className="birthday-sprinkle sprinkle-three" cx="28.2" cy="24" r="1.2" />
+    </svg>
+  );
+}
+
+function ClinicalDayStarIcon() {
+  return (
+    <svg className="clinical-day-star-icon" viewBox="0 0 44 44" aria-hidden="true">
+      <path d="m22 4 5.4 11 12.1 1.8-8.8 8.6 2.1 12.1L22 31.8l-10.8 5.7 2.1-12.1-8.8-8.6L16.6 15 22 4Z" />
     </svg>
   );
 }
@@ -591,7 +615,7 @@ function SocialEventDialog({ event, onClose }) {
           ×
         </button>
         <img
-          className="social-event-dialog-art"
+          className={`social-event-dialog-art${event.marker === "star" ? " clinical-day-art" : ""}`}
           src={`${import.meta.env.BASE_URL}${event.image}`}
           alt={`${event.label} event infographic`}
         />
@@ -599,7 +623,7 @@ function SocialEventDialog({ event, onClose }) {
           <small>{event.eyebrow}</small>
           <strong>{event.label}</strong>
           <time dateTime={event.date}>{event.displayDate}</time>
-          <em>{event.venue}</em>
+          {event.venue && <em>{event.venue}</em>}
         </span>
       </section>
     </div>,
@@ -622,7 +646,7 @@ function Calendar2026() {
   const cellCount = Math.ceil((leadingDays + daysInMonth) / 7) * 7;
   const monthEvents = countdowns.filter(({ date }) => Number(date.slice(5, 7)) - 1 === monthIndex);
   const monthBirthdays = birthdayEvents.filter(({ date }) => Number(date.slice(5, 7)) - 1 === monthIndex);
-  const monthSocialEvents = socialEvents.filter(({ date }) => Number(date.slice(5, 7)) - 1 === monthIndex);
+  const monthSocialEvents = calendarArtEvents.filter(({ date }) => Number(date.slice(5, 7)) - 1 === monthIndex);
   const announcements = monthlyAnnouncements[monthIndex] || [];
   const departmentResources = monthlyDepartmentResources[monthIndex] || [];
 
@@ -725,9 +749,9 @@ function Calendar2026() {
                     const tooltipId = `social-event-${date}-${eventIndex}`;
                     return (
                       <button
-                        className="calendar-social-marker"
+                        className={`calendar-art-marker ${event.marker === "star" ? "calendar-clinical-marker" : "calendar-social-marker"}`}
                         type="button"
-                        aria-label={`${event.label}, ${event.displayDate}, ${event.venue}`}
+                        aria-label={[event.label, event.displayDate, event.venue].filter(Boolean).join(", ")}
                         aria-describedby={tooltipId}
                         aria-haspopup="dialog"
                         aria-expanded={activeSocialEvent?.label === event.label && activeSocialEvent?.date === event.date}
@@ -735,14 +759,14 @@ function Calendar2026() {
                         onClick={(clickEvent) => openSocialEvent(event, clickEvent.currentTarget)}
                         key={event.label}
                       >
-                        <CocktailIcon />
+                        {event.marker === "star" ? <ClinicalDayStarIcon /> : <CocktailIcon />}
                         <span className="calendar-social-tooltip" id={tooltipId} role="tooltip">
-                          <img src={`${import.meta.env.BASE_URL}${event.image}`} alt="" loading="lazy" />
+                          <img className={event.marker === "star" ? "clinical-day-art" : undefined} src={`${import.meta.env.BASE_URL}${event.image}`} alt="" loading="lazy" />
                           <span>
                             <small>{event.eyebrow}</small>
                             <strong>{event.label}</strong>
                             <time dateTime={event.date}>{event.displayDate}</time>
-                            <em>{event.venue}</em>
+                            {event.venue && <em>{event.venue}</em>}
                           </span>
                         </span>
                       </button>

@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.32.5 — 2026-10-04
+
+- Added gold star calendar markers for Omar Al-Shuwaykh's first clinical day on August 31, 2026, and Aysha Aslam's first clinical day on October 5, 2026.
+- Display the supplied welcome artwork in desktop hover/focus previews and tap-open event dialogs, preserving the full image aspect ratio.
+- Reused event dismissal, focus return, and mobile layout; retained Aysha's September 28 onboarding milestone.
+- Added browser regression coverage for both dates, star icons, welcome image dimensions, and dialog dismissal.
+
 ## 0.32.4 — 2026-10-04
 
 - Automatically hide countdown cards with zero or negative days remaining while preserving their calendar entries.

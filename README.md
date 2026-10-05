@@ -37,6 +37,8 @@ The application is static and has no clinical inputs, backend, database, analyti
 
 ## Publication
 
+The user supplied Omar and Aysha’s welcome artwork and explicitly requested their first clinical days on the public calendar on 2026-10-04: August 31, 2026, and October 5, 2026, respectively. Gold star markers open their welcome cards.
+
 The source repository and GitHub Pages website are public by explicit authorization on 2026-08-16. The DSA GI MA-MD Podlets roster, workday details, assignments, and physician portraits were separately authorized for public deployment on 2026-08-17.
 
 The complete orientation text—including facility door codes, internal contact details, inbox names, schedules, and operational workflows—was explicitly authorized for public deployment on 2026-08-26. The two HealthConnect screenshots remain excluded because they display patient names.

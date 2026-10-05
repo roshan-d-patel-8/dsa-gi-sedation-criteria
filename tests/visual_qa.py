@@ -479,6 +479,40 @@ def assert_mobile_birthday_dialog(page, name, screenshot_name, dismiss="close"):
     return trigger
 
 
+def assert_first_clinical_days(page):
+    previous = page.get_by_role("button", name="Previous month", exact=True)
+    next_month = page.get_by_role("button", name="Next month", exact=True)
+    previous.click()
+    for label, day, month, image_name, direction in [
+        ("Omar Al-Shuwaykh", 31, "August", "omar-first-clinical-day-2026-08-31.jpg", 1),
+        ("Aysha Aslam", 5, "October", "aysha-first-clinical-day-2026-10-05.jpg", -1),
+    ]:
+        cell = page.get_by_role("gridcell", name=re.compile(rf"^{month} 2026 {day}: {re.escape(label)} — first clinical day"))
+        trigger = cell.locator(".calendar-clinical-marker")
+        assert trigger.locator(".clinical-day-star-icon").count() == 1
+        if month == "August":
+            star_box = trigger.bounding_box()
+            birthday_box = cell.locator(".birthday-marker").bounding_box()
+            assert birthday_box["y"] + birthday_box["height"] <= star_box["y"]
+        trigger.click()
+        dialog = page.get_by_role("dialog", name=f"{label} — first clinical day details", exact=True)
+        assert dialog.is_visible()
+        art = dialog.locator(".clinical-day-art")
+        assert art.get_attribute("src").endswith(image_name)
+        assert art.evaluate("image => image.decode().then(() => image.naturalWidth === 2752 && image.naturalHeight === 1536)")
+        assert dialog.locator("time").get_attribute("datetime") == ("2026-08-31" if month == "August" else "2026-10-05")
+        page.screenshot(path=OUTPUT / f"clinical-day-{month.lower()}-{page.viewport_size['width']}.png")
+        dialog.get_by_role("button", name="Close event details", exact=True).click()
+        dialog.wait_for(state="detached")
+        assert trigger.evaluate("element => document.activeElement === element")
+        if direction == 1:
+            next_month.click()
+            next_month.click()
+        else:
+            previous.click()
+    assert page.get_by_role("grid", name="September 2026", exact=True).is_visible()
+
+
 def assert_earlier_calendar_mobile(page):
     previous = page.get_by_role("button", name="Previous month", exact=True)
     next_month = page.get_by_role("button", name="Next month", exact=True)
@@ -683,6 +717,7 @@ with sync_playwright() as playwright:
     assert_tabs(desktop)
     assert_global_zoom(desktop)
     assert_home(desktop)
+    assert_first_clinical_days(desktop)
     assert_department_meeting_resource(desktop)
     assert_july_department_meeting_resource(desktop)
     assert_calendar_navigation(desktop)
@@ -1005,6 +1040,7 @@ with sync_playwright() as playwright:
     assert_tabs(mobile)
     assert_global_zoom(mobile, mobile=True)
     assert_home(mobile)
+    assert_first_clinical_days(mobile)
     assert_department_meeting_resource(mobile, mobile=True)
     assert_july_department_meeting_resource(mobile, mobile=True)
     assert_earlier_calendar_mobile(mobile)
