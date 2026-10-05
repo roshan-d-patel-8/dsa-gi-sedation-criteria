@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.32.4 — 2026-10-04
+
+- Automatically hide countdown cards with zero or negative days remaining while preserving their calendar entries.
+- Reflow the desktop strip to fill the available width with the remaining cards and refresh the Pacific date each minute and when the window regains focus.
+- Update countdown browser assertions to check the upcoming dates and positive values instead of a fixed six-card count.
+
 ## 0.32.3 — 2026-09-30
 
 - Replaced the mobile calendar event's focus-only infographic preview with an explicit tap-open event dialog so iPhone and other touch browsers can reliably display the artwork.

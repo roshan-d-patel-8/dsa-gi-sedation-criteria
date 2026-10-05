@@ -1,5 +1,7 @@
 import os
 import re
+from datetime import date, datetime
+from zoneinfo import ZoneInfo
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
@@ -103,12 +105,17 @@ def assert_home(page):
     assert page.get_by_role("heading", name="Countdowns!", exact=True).count() == 0
     assert page.get_by_text("The next markers on the map.", exact=True).count() == 0
     assert page.locator(".home-tab-icon").is_visible()
-    assert page.locator(".countdown-card").count() == 6
+    today = datetime.now(ZoneInfo("America/Los_Angeles")).date()
+    milestone_dates = ["2026-09-28", "2026-10-02", "2026-10-17", "2026-10-19", "2026-11-02", "2026-11-18"]
+    upcoming_dates = [value for value in milestone_dates if date.fromisoformat(value) > today]
+    assert page.locator(".countdown-card").count() == len(upcoming_dates)
+    assert page.locator(".countdown-card time").evaluate_all("elements => elements.map(element => element.dateTime)") == upcoming_dates
+    assert page.locator(".countdown-number strong").evaluate_all("elements => elements.every(element => Number(element.textContent) > 0)")
     assert page.get_by_text("Sheikah Slate", exact=False).count() == 0
     assert page.locator(".countdown-strip").get_by_text("Tom Haddad — last on-site day", exact=True).count() == 0
     assert page.locator(".countdown-strip").get_by_text("Thu · Sep 17, 2026", exact=True).count() == 0
-    assert page.locator(".countdown-strip").get_by_text("E2K — GI go-live", exact=True).is_visible()
-    assert page.locator(".countdown-card time").count() == 6
+    if "2026-11-18" in upcoming_dates:
+        assert page.locator(".countdown-strip").get_by_text("E2K — GI go-live", exact=True).is_visible()
     assert page.get_by_text("Rest of 2026", exact=True).count() == 0
     assert page.get_by_text("September—December", exact=True).count() == 0
     assert page.locator(".calendar-controls").get_by_text("September 2026", exact=True).count() == 1

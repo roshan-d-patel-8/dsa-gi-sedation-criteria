@@ -138,7 +138,7 @@ body::before {
 /* Home command deck */
 .home-page { width: min(1580px, 100%); margin: 0 auto; padding: clamp(30px, 3.5vw, 50px) clamp(16px, 3.5vw, 52px) clamp(46px, 6vw, 90px); }
 .countdown-section { position: relative; }
-.countdown-strip { display: grid; grid-template-columns: repeat(6, minmax(158px, 1fr)); gap: 10px; }
+.countdown-strip { display: grid; grid-template-columns: repeat(var(--countdown-count), minmax(158px, 1fr)); gap: 10px; }
 .countdown-card { --card-accent: var(--way); position: relative; min-width: 0; min-height: 228px; padding: 17px 15px 16px; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-top: 5px solid var(--card-accent); border-radius: 13px; background: rgba(255, 255, 255, .93); box-shadow: var(--shadow); animation: card-in .48s both; animation-delay: var(--delay); }
 .countdown-card::after { position: absolute; width: 82px; height: 82px; top: -38px; right: -36px; border-radius: 50%; background: color-mix(in srgb, var(--card-accent) 11%, transparent); content: ""; }
 .countdown-card.tone-gold { --card-accent: var(--gold); }

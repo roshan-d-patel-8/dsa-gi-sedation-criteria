@@ -185,9 +185,9 @@ function pacificToday() {
   return Date.UTC(Number(values.year), Number(values.month) - 1, Number(values.day));
 }
 
-function daysUntil(date) {
+function daysUntil(date, today = pacificToday()) {
   const [year, month, day] = date.split("-").map(Number);
-  return Math.ceil((Date.UTC(year, month - 1, day) - pacificToday()) / 86_400_000);
+  return Math.ceil((Date.UTC(year, month - 1, day) - today) / 86_400_000);
 }
 
 function HomeIcon() {
@@ -843,17 +843,33 @@ function Calendar2026() {
 }
 
 function HomePage() {
+  const [today, setToday] = useState(pacificToday);
+
+  useEffect(() => {
+    const refreshToday = () => setToday(pacificToday());
+    const timer = window.setInterval(refreshToday, 60_000);
+    window.addEventListener("focus", refreshToday);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("focus", refreshToday);
+    };
+  }, []);
+
+  const upcomingCountdowns = countdowns
+    .map((item) => ({ ...item, days: daysUntil(item.date, today) }))
+    .filter(({ days }) => days > 0);
+
   return (
     <main className="home-page" id="home-panel" role="tabpanel" aria-labelledby="home-tab">
-      <section className="countdown-section" aria-label="Upcoming milestones">
-        <div className="countdown-strip">
-          {countdowns.map((item, index) => {
-            const days = daysUntil(item.date);
+      {upcomingCountdowns.length > 0 && <section className="countdown-section" aria-label="Upcoming milestones">
+        <div className="countdown-strip" style={{ "--countdown-count": upcomingCountdowns.length }}>
+          {upcomingCountdowns.map((item, index) => {
+            const { days } = item;
             return (
               <article className={`countdown-card tone-${item.tone || "blue"}`} style={{ "--delay": `${index * 55}ms` }} key={item.label}>
                 <span className="countdown-sequence">{String(index + 1).padStart(2, "0")}</span>
                 <div className="countdown-number">
-                  <strong>{Math.max(days, 0)}</strong>
+                  <strong>{days}</strong>
                   <span>{days === 1 ? "day" : "days"}</span>
                 </div>
                 <h3>{item.label}</h3>
@@ -862,7 +878,7 @@ function HomePage() {
             );
           })}
         </div>
-      </section>
+      </section>}
       <Calendar2026 />
     </main>
   );
