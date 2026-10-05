@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.32.6 — 2026-10-04
+
+- Open the 2026 calendar to the current month in America/Los_Angeles on each visit.
+- Render calendar hover and keyboard-focus previews outside the zoomed page, clamp them within the viewport, and reposition them on scrolling, resizing, and image loading.
+- Apply the placement fix to welcome, social-event, birthday, and milestone cards while retaining tap-open dialogs.
+- Update browser coverage for the current-month default and viewport bounds of clinical-day previews.
+
 ## 0.32.5 — 2026-10-04
 
 - Added gold star calendar markers for Omar Al-Shuwaykh's first clinical day on August 31, 2026, and Aysha Aslam's first clinical day on October 5, 2026.

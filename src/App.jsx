@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { POLICY_VERSION, policySections } from "./criteria.js";
 import { coverageSites } from "./podlets.js";
@@ -496,8 +496,95 @@ function PresentationViewer({ resource, onClose }) {
 }
 
 const calendarMonths = Array.from({ length: 12 }, (_, index) => index);
-const defaultCalendarPosition = 8;
+function currentCalendarPosition() {
+  return new Date(pacificToday()).getUTCMonth();
+}
 const weekdayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+function CalendarPreview({ id, className, children, placement = "below" }) {
+  const anchorRef = useRef(null);
+  const previewRef = useRef(null);
+  const [visible, setVisible] = useState(false);
+  const [position, setPosition] = useState(null);
+
+  useLayoutEffect(() => {
+    const marker = anchorRef.current?.parentElement;
+    if (!marker) return undefined;
+    const show = (event) => {
+      if (event.type === "pointerenter" && event.pointerType !== "mouse") return;
+      setVisible(true);
+    };
+    const hide = () => {
+      setVisible(false);
+      setPosition(null);
+    };
+    marker.addEventListener("pointerenter", show);
+    marker.addEventListener("pointerleave", hide);
+    marker.addEventListener("focus", show);
+    marker.addEventListener("blur", hide);
+    if (marker.getAttribute("aria-haspopup") === "dialog") marker.addEventListener("click", hide);
+    return () => {
+      marker.removeEventListener("pointerenter", show);
+      marker.removeEventListener("pointerleave", hide);
+      marker.removeEventListener("focus", show);
+      marker.removeEventListener("blur", hide);
+      marker.removeEventListener("click", hide);
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!visible) return undefined;
+    const marker = anchorRef.current?.parentElement;
+    const preview = previewRef.current;
+    if (!marker || !preview) return undefined;
+    const updatePosition = () => {
+      const anchor = marker.getBoundingClientRect();
+      const card = preview.getBoundingClientRect();
+      const margin = 12;
+      const gap = 10;
+      const viewportWidth = document.documentElement.clientWidth;
+      const viewportHeight = window.innerHeight;
+      const above = anchor.top - card.height - gap;
+      const below = anchor.bottom + gap;
+      let top = placement === "above" ? above : below;
+      if (placement === "above" && above < margin) top = below;
+      if (placement === "below" && below + card.height > viewportHeight - margin) top = above;
+      const next = {
+        left: Math.max(margin, Math.min(anchor.right - card.width, viewportWidth - card.width - margin)),
+        top: Math.max(margin, Math.min(top, viewportHeight - card.height - margin)),
+      };
+      setPosition((previous) => previous?.left === next.left && previous?.top === next.top ? previous : next);
+    };
+    updatePosition();
+    const observer = new ResizeObserver(updatePosition);
+    observer.observe(preview);
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+    };
+  }, [visible, placement]);
+
+  return (
+    <>
+      <span ref={anchorRef} hidden />
+      {createPortal(
+        <span
+          ref={previewRef}
+          className={`${className} calendar-floating-preview`}
+          id={id}
+          role="tooltip"
+          style={{ left: position?.left ?? 12, top: position?.top ?? 12, visibility: visible && position ? "visible" : "hidden", opacity: visible && position ? 1 : 0 }}
+        >
+          {children}
+        </span>,
+        document.body,
+      )}
+    </>
+  );
+}
 
 function BirthdayDialog({ birthday, onClose }) {
   const closeButtonRef = useRef(null);
@@ -632,7 +719,7 @@ function SocialEventDialog({ event, onClose }) {
 }
 
 function Calendar2026() {
-  const [monthPosition, setMonthPosition] = useState(defaultCalendarPosition);
+  const [monthPosition, setMonthPosition] = useState(currentCalendarPosition);
   const [activeResource, setActiveResource] = useState(null);
   const [activeBirthday, setActiveBirthday] = useState(null);
   const [activeSocialEvent, setActiveSocialEvent] = useState(null);
@@ -731,13 +818,13 @@ function Calendar2026() {
                         key={birthday.name}
                       >
                         <BirthdayCupcakeIcon />
-                        <span className="birthday-tooltip" id={tooltipId} role="tooltip">
+                        <CalendarPreview className="birthday-tooltip" id={tooltipId} placement="below">
                           <img src={`${import.meta.env.BASE_URL}portraits/${birthday.photo}`} alt="" loading="lazy" />
                           <span>
                             <small>Celebrate a colleague</small>
                             <strong>Happy Birthday, {birthday.name}!</strong>
                           </span>
-                        </span>
+                        </CalendarPreview>
                       </button>
                     );
                   })}
@@ -760,7 +847,7 @@ function Calendar2026() {
                         key={event.label}
                       >
                         {event.marker === "star" ? <ClinicalDayStarIcon /> : <CocktailIcon />}
-                        <span className="calendar-social-tooltip" id={tooltipId} role="tooltip">
+                        <CalendarPreview className="calendar-social-tooltip" id={tooltipId} placement="above">
                           <img className={event.marker === "star" ? "clinical-day-art" : undefined} src={`${import.meta.env.BASE_URL}${event.image}`} alt="" loading="lazy" />
                           <span>
                             <small>{event.eyebrow}</small>
@@ -768,7 +855,7 @@ function Calendar2026() {
                             <time dateTime={event.date}>{event.displayDate}</time>
                             {event.venue && <em>{event.venue}</em>}
                           </span>
-                        </span>
+                        </CalendarPreview>
                       </button>
                     );
                   })}
@@ -785,10 +872,10 @@ function Calendar2026() {
                     key={event.label}
                   >
                     <span className="calendar-event-label">{event.label}</span>
-                    <span className="calendar-event-tooltip" id={tooltipId} role="tooltip">
+                    <CalendarPreview className="calendar-event-tooltip" id={tooltipId} placement="below">
                       <strong>{event.label}</strong>
                       <small>{event.displayDate.replace(" · confirmed", "")}</small>
-                    </span>
+                    </CalendarPreview>
                   </span>
                 );
               })}

@@ -990,3 +990,7 @@ body.presentation-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+
+/* Calendar previews use viewport coordinates outside the zoomed page surface. */
+.calendar-floating-preview { position: fixed; z-index: 150; right: auto; bottom: auto; max-width: calc(100vw - 24px); max-height: calc(100dvh - 24px); overflow: auto; pointer-events: none; transform: none; transition: opacity .12s ease; }
+.calendar-floating-preview::before, .calendar-floating-preview::after { display: none; }

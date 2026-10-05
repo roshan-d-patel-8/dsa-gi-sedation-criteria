@@ -101,6 +101,20 @@ def assert_global_zoom(page, mobile=False):
     page.keyboard.press("Escape")
 
 
+def calendar_preview_for(page, marker):
+    return page.locator(f"#{marker.get_attribute('aria-describedby')}")
+
+
+def assert_preview_in_viewport(page, marker):
+    preview = calendar_preview_for(page, marker)
+    assert preview.is_visible()
+    box = preview.bounding_box()
+    assert box["x"] >= 11
+    assert box["y"] >= 11
+    assert box["x"] + box["width"] <= page.viewport_size["width"] - 11
+    assert box["y"] + box["height"] <= page.viewport_size["height"] - 11
+
+
 def assert_home(page):
     assert page.get_by_role("heading", name="Countdowns!", exact=True).count() == 0
     assert page.get_by_text("The next markers on the map.", exact=True).count() == 0
@@ -118,6 +132,13 @@ def assert_home(page):
         assert page.locator(".countdown-strip").get_by_text("E2K — GI go-live", exact=True).is_visible()
     assert page.get_by_text("Rest of 2026", exact=True).count() == 0
     assert page.get_by_text("September—December", exact=True).count() == 0
+    current_month = datetime.now(ZoneInfo("America/Los_Angeles")).month
+    opening_month = date(2026, current_month, 1).strftime("%B %Y")
+    assert page.get_by_role("grid", name=opening_month, exact=True).is_visible()
+    # Select September explicitly for the existing source-content and resource checks.
+    navigation = "Previous month" if current_month > 9 else "Next month"
+    for _ in range(abs(current_month - 9)):
+        page.get_by_role("button", name=navigation, exact=True).click()
     assert page.locator(".calendar-controls").get_by_text("September 2026", exact=True).count() == 1
     assert page.get_by_role("grid", name="September 2026", exact=True).is_visible()
     announcements = page.locator(".calendar-announcements")
@@ -354,8 +375,8 @@ def assert_calendar_navigation(page):
             assert liz_birthday.is_visible()
             liz_birthday.focus()
             page.wait_for_timeout(200)
-            assert liz_birthday.get_by_role("tooltip").get_by_text("Happy Birthday, Liz Clark!", exact=True).is_visible()
-            assert liz_birthday.get_by_role("tooltip").locator("img").evaluate("image => image.complete && image.naturalWidth > 0")
+            assert calendar_preview_for(page, liz_birthday).get_by_text("Happy Birthday, Liz Clark!", exact=True).is_visible()
+            assert calendar_preview_for(page, liz_birthday).locator("img").evaluate("image => image.complete && image.naturalWidth > 0")
             page.screenshot(path=OUTPUT / "dsa-gi-calendar-april-birthday-desktop.png", full_page=False)
 
     assert previous.is_disabled()
@@ -386,7 +407,7 @@ def assert_calendar_navigation(page):
     assert page.get_by_role("gridcell", name="October 2026 22: GI Monthly Happy Hour", exact=True).is_visible()
     happy_hour.focus()
     page.wait_for_timeout(200)
-    happy_hour_tooltip = happy_hour.get_by_role("tooltip")
+    happy_hour_tooltip = calendar_preview_for(page, happy_hour)
     assert happy_hour_tooltip.is_visible()
     assert happy_hour_tooltip.get_by_text("Connect with colleagues", exact=True).is_visible()
     assert happy_hour_tooltip.get_by_text("GI Monthly Happy Hour", exact=True).is_visible()
@@ -413,8 +434,8 @@ def assert_calendar_navigation(page):
     assert erina_birthday.is_visible()
     erina_birthday.focus()
     page.wait_for_timeout(200)
-    assert erina_birthday.get_by_role("tooltip").get_by_text("Happy Birthday, Erina Foster!", exact=True).is_visible()
-    assert erina_birthday.get_by_role("tooltip").locator("img").evaluate("image => image.complete && image.naturalWidth > 0")
+    assert calendar_preview_for(page, erina_birthday).get_by_text("Happy Birthday, Erina Foster!", exact=True).is_visible()
+    assert calendar_preview_for(page, erina_birthday).locator("img").evaluate("image => image.complete && image.naturalWidth > 0")
     erina_day = page.locator('.calendar-day[aria-label^="October 2026 17:"][aria-label*="Erina Foster birthday"]')
     assert erina_day.count() == 1
     page.screenshot(path=OUTPUT / "dsa-gi-calendar-erina-birthday-desktop.png", full_page=False)
@@ -429,8 +450,8 @@ def assert_calendar_navigation(page):
     assert roshan_birthday.is_visible()
     roshan_birthday.focus()
     page.wait_for_timeout(200)
-    assert roshan_birthday.get_by_role("tooltip").get_by_text("Happy Birthday, Roshan Patel!", exact=True).is_visible()
-    assert roshan_birthday.get_by_role("tooltip").locator("img").evaluate("image => image.complete && image.naturalWidth > 0")
+    assert calendar_preview_for(page, roshan_birthday).get_by_text("Happy Birthday, Roshan Patel!", exact=True).is_visible()
+    assert calendar_preview_for(page, roshan_birthday).locator("img").evaluate("image => image.complete && image.naturalWidth > 0")
     page.screenshot(path=OUTPUT / "dsa-gi-calendar-roshan-birthday-desktop.png", full_page=False)
     next_month.click()
     assert page.get_by_role("grid", name="December 2026", exact=True).is_visible()
@@ -490,6 +511,10 @@ def assert_first_clinical_days(page):
         cell = page.get_by_role("gridcell", name=re.compile(rf"^{month} 2026 {day}: {re.escape(label)} — first clinical day"))
         trigger = cell.locator(".calendar-clinical-marker")
         assert trigger.locator(".clinical-day-star-icon").count() == 1
+        if page.viewport_size["width"] > 680:
+            trigger.scroll_into_view_if_needed()
+            trigger.hover()
+            assert_preview_in_viewport(page, trigger)
         if month == "August":
             star_box = trigger.bounding_box()
             birthday_box = cell.locator(".birthday-marker").bounding_box()
@@ -733,7 +758,7 @@ with sync_playwright() as playwright:
     steve_birthday = desktop.get_by_label("Happy Birthday, Steve Cheng!", exact=True)
     steve_birthday.hover()
     desktop.wait_for_timeout(200)
-    birthday_tooltip = steve_birthday.get_by_role("tooltip")
+    birthday_tooltip = calendar_preview_for(desktop, steve_birthday)
     assert birthday_tooltip.is_visible()
     assert birthday_tooltip.get_by_text("Happy Birthday, Steve Cheng!", exact=True).is_visible()
     assert birthday_tooltip.locator("img").evaluate("image => image.complete && image.naturalWidth > 0")
@@ -751,13 +776,10 @@ with sync_playwright() as playwright:
     farewell.evaluate("element => element.scrollIntoView({ block: 'center' })")
     farewell.hover()
     desktop.wait_for_timeout(200)
-    farewell_tooltip = farewell.get_by_role("tooltip")
+    farewell_tooltip = calendar_preview_for(desktop, farewell)
     assert farewell_tooltip.is_visible()
     assert desktop.locator(".calendar-main").evaluate("element => getComputedStyle(element).overflow") == "visible"
-    farewell_tooltip_box = farewell_tooltip.bounding_box()
-    calendar_main_box = desktop.locator(".calendar-main").bounding_box()
-    assert farewell_tooltip_box["y"] < calendar_main_box["y"]
-    assert farewell_tooltip_box["y"] >= 0
+    assert_preview_in_viewport(desktop, farewell)
     assert farewell_tooltip.get_by_text("Tom's Farewell Happy Hour", exact=True).is_visible()
     assert farewell_tooltip.get_by_text("Barebottle Brewing Co. · Walnut Creek Taproom & Kitchen", exact=True).is_visible()
     assert farewell_tooltip.locator("img").evaluate("image => image.decode().then(() => image.naturalWidth == 1672 && image.naturalHeight == 941)")
@@ -767,8 +789,8 @@ with sync_playwright() as playwright:
     assert float(tom_event.evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 12
     tom_event.focus()
     desktop.wait_for_timeout(200)
-    assert tom_event.get_by_role("tooltip").is_visible()
-    assert float(tom_event.get_by_role("tooltip").locator("strong").evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 13
+    assert calendar_preview_for(desktop, tom_event).is_visible()
+    assert float(calendar_preview_for(desktop, tom_event).locator("strong").evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 13
     desktop.screenshot(path=OUTPUT / "dsa-gi-calendar-desktop.png", full_page=False)
     desktop.locator(".year-calendar").focus()
 
@@ -1075,8 +1097,8 @@ with sync_playwright() as playwright:
     mobile_event = mobile.locator(".calendar-event-marker").first
     mobile_event.focus()
     mobile.wait_for_timeout(200)
-    assert mobile_event.get_by_role("tooltip").is_visible()
-    assert float(mobile_event.get_by_role("tooltip").locator("strong").evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 15
+    assert calendar_preview_for(mobile, mobile_event).is_visible()
+    assert float(calendar_preview_for(mobile, mobile_event).locator("strong").evaluate("element => getComputedStyle(element).fontSize.replace('px', '')")) >= 15
     mobile.screenshot(path=OUTPUT / "dsa-gi-calendar-mobile.png", full_page=False)
     mobile.locator(".year-calendar").focus()
     mobile.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).click()
@@ -1143,6 +1165,9 @@ with sync_playwright() as playwright:
     compact_mobile_errors = capture_console_errors(compact_mobile)
     compact_mobile.goto(BASE_URL)
     compact_mobile.wait_for_load_state("networkidle")
+    current_month = datetime.now(ZoneInfo("America/Los_Angeles")).month
+    for _ in range(abs(current_month - 9)):
+        compact_mobile.get_by_role("button", name="Previous month" if current_month > 9 else "Next month", exact=True).click()
     assert_mobile_birthday_dialog(compact_mobile, "Ahilan Arulanandan", "dsa-gi-calendar-birthday-mobile-320.png")
     assert compact_mobile.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
 
