@@ -5,6 +5,10 @@ tags:
 
 # Changelog
 
+## 0.32.8 — 2026-10-06
+
+- Corrected the TPMG POS and JAMM Survey countdown to use the direct survey URL from the original sender email instead of the Outlook mobile-signature link from the forwarded message.
+
 ## 0.32.7 — 2026-10-06
 
 - Added an October 16, 2026 countdown and calendar marker for the 2026 TPMG POS and JAMM Survey.

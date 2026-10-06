@@ -43,7 +43,7 @@ const countdowns = [
     label: "2026 TPMG POS and JAMM Survey",
     date: "2026-10-16",
     displayDate: "Fri · Oct 16, 2026",
-    href: "https://aka.ms/o0ukef",
+    href: "https://tpmghr.kp.org/physician-opinion-survey",
     cta: "Take the survey",
     tone: "way",
   },

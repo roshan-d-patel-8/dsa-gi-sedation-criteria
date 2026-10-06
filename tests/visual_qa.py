@@ -128,7 +128,7 @@ def assert_home(page):
     if "2026-10-16" in upcoming_dates:
         survey = page.get_by_role("link", name=re.compile("2026 TPMG POS and JAMM Survey"))
         assert survey.is_visible()
-        assert survey.get_attribute("href") == "https://aka.ms/o0ukef"
+        assert survey.get_attribute("href") == "https://tpmghr.kp.org/physician-opinion-survey"
         assert survey.get_attribute("target") == "_blank"
         assert survey.locator(".countdown-cta").inner_text().lower().startswith("take the survey")
     assert page.get_by_text("Sheikah Slate", exact=False).count() == 0

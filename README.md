@@ -45,7 +45,7 @@ The complete orientation text—including facility door codes, internal contact 
 
 The remaining six Sheikah Slate countdown labels and dates were explicitly requested for this public site on 2026-09-09. Tom Haddad's completed last-on-site milestone was removed on request on 2026-09-26.
 
-The 2026 TPMG POS and JAMM Survey countdown and its October 16, 2026 deadline were supplied through the private Dispatch assignment and explicitly requested for public display on 2026-10-06. The public countdown links to the user-supplied survey URL; the forwarded email files and their internal instructions are excluded from the site.
+The 2026 TPMG POS and JAMM Survey countdown and its October 16, 2026 deadline were supplied through the private Dispatch assignment and explicitly requested for public display on 2026-10-06. The public countdown links to the survey URL in the original sender email; the forwarded email files and their internal instructions are excluded from the site.
 
 The Four Habits slide deck was confirmed clear for public presentation and explicitly authorized for deployment as September 2026 department meeting resources on 2026-09-11. Its 19 slides are published as fully revealed final frames; PowerPoint animations are intentionally flattened for dependable in-browser viewing.
 
