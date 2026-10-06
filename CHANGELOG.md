@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.32.7 — 2026-10-06
+
+- Added an October 16, 2026 countdown and calendar marker for the 2026 TPMG POS and JAMM Survey.
+- Linked the countdown card to the user-supplied survey URL with a clear external-action cue and keyboard-visible focus state.
+- Expanded browser coverage for deadline ordering, automatic expiry, link destination, and external-tab behavior.
+
 ## 0.32.6 — 2026-10-04
 
 - Open the 2026 calendar to the current month in America/Los_Angeles on each visit.

@@ -39,6 +39,14 @@ function highlightSearchText(text, query) {
 const countdowns = [
   { label: "Aysha Aslam — first day", date: "2026-09-28", displayDate: "Mon · Sep 28, 2026" },
   { label: "Dublin — closure / last booking day", date: "2026-10-02", displayDate: "Fri · Oct 2, 2026", tone: "gold" },
+  {
+    label: "2026 TPMG POS and JAMM Survey",
+    date: "2026-10-16",
+    displayDate: "Fri · Oct 16, 2026",
+    href: "https://aka.ms/o0ukef",
+    cta: "Take the survey",
+    tone: "way",
+  },
   { label: "NorCal in-person TPIP — Oakland", date: "2026-10-17", displayDate: "Sat · Oct 17, 2026" },
   { label: "Pleasanton soft launch — Room 1", date: "2026-10-19", displayDate: "Mon · Oct 19, 2026", tone: "gold" },
   { label: "Pleasanton — Room 2 opens", date: "2026-11-02", displayDate: "Mon · Nov 2, 2026", tone: "gold" },
@@ -976,8 +984,14 @@ function HomePage() {
         <div className="countdown-strip" style={{ "--countdown-count": upcomingCountdowns.length }}>
           {upcomingCountdowns.map((item, index) => {
             const { days } = item;
+            const CountdownTag = item.href ? "a" : "article";
             return (
-              <article className={`countdown-card tone-${item.tone || "blue"}`} style={{ "--delay": `${index * 55}ms` }} key={item.label}>
+              <CountdownTag
+                className={`countdown-card tone-${item.tone || "blue"}${item.href ? " is-linked" : ""}`}
+                style={{ "--delay": `${index * 55}ms` }}
+                {...(item.href ? { href: item.href, target: "_blank", rel: "noreferrer" } : {})}
+                key={item.label}
+              >
                 <span className="countdown-sequence">{String(index + 1).padStart(2, "0")}</span>
                 <div className="countdown-number">
                   <strong>{days}</strong>
@@ -985,7 +999,8 @@ function HomePage() {
                 </div>
                 <h3>{item.label}</h3>
                 <time dateTime={item.date}>{item.displayDate}</time>
-              </article>
+                {item.cta && <b className="countdown-cta">{item.cta}<span aria-hidden="true">↗</span></b>}
+              </CountdownTag>
             );
           })}
         </div>
