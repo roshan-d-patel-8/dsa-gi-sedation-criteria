@@ -1855,12 +1855,33 @@ function InBasketCoverage() {
   const [open, setOpen] = useState(false);
   const [pinned, setPinned] = useState(false);
   const triggerRef = useRef(null);
+  const restoringFocusRef = useRef(false);
+  const dismissedRef = useRef(false);
 
   const close = (returnFocus = false) => {
+    // Removing a pinned backdrop can expose the still-hovered trigger again.
+    dismissedRef.current = true;
     setPinned(false);
     setOpen(false);
-    if (returnFocus) requestAnimationFrame(() => triggerRef.current?.focus());
+    if (returnFocus) requestAnimationFrame(() => {
+      // Dismissal returns focus without treating it as a new preview request.
+      restoringFocusRef.current = true;
+      triggerRef.current?.focus({ preventScroll: true });
+      restoringFocusRef.current = false;
+    });
   };
+
+  useEffect(() => {
+    const rearmHover = (event) => {
+      if (event.pointerType !== "mouse" || !dismissedRef.current) return;
+      const bounds = triggerRef.current?.getBoundingClientRect();
+      if (bounds && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) {
+        dismissedRef.current = false;
+      }
+    };
+    document.addEventListener("pointermove", rearmHover);
+    return () => document.removeEventListener("pointermove", rearmHover);
+  }, []);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -1882,9 +1903,14 @@ function InBasketCoverage() {
   return (
     <div
       className="inbasket-control"
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => { if (!pinned) setOpen(false); }}
-      onFocusCapture={() => setOpen(true)}
+      onPointerEnter={(event) => {
+        if (event.pointerType === "mouse" && !dismissedRef.current) setOpen(true);
+      }}
+      onPointerLeave={(event) => {
+        if (event.pointerType !== "mouse") return;
+        if (!pinned) setOpen(false);
+      }}
+      onFocusCapture={() => { if (!restoringFocusRef.current) setOpen(true); }}
       onBlurCapture={handleBlur}
     >
       <button

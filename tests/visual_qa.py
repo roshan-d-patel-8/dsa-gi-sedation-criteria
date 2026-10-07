@@ -652,7 +652,7 @@ def assert_inbasket_coverage(page, mobile=False):
     trigger = page.get_by_role("button", name="In Basket Podlet Coverage", exact=True)
     assert trigger.is_visible()
     if mobile:
-        trigger.click()
+        trigger.tap()
     else:
         trigger.hover()
     panel = page.get_by_role("dialog", name="In Basket Podlet Coverage", exact=True)
@@ -682,6 +682,59 @@ def assert_inbasket_coverage(page, mobile=False):
     assert panel_box["y"] >= 0
     assert panel_box["y"] + panel_box["height"] <= page.viewport_size["height"] + 2
     return trigger, panel
+
+
+def assert_inbasket_dismissal(page, trigger, panel, mobile=False):
+    def assert_closed():
+        # Wait past the animation frame that restores focus: a momentary detach
+        # alone misses the original close-then-reopen bug.
+        page.wait_for_timeout(350)
+        assert panel.count() == 0
+        assert page.locator(".inbasket-backdrop").count() == 0
+        assert trigger.get_attribute("aria-expanded") == "false"
+        assert trigger.evaluate("element => document.activeElement === element")
+
+    def open_pinned():
+        if mobile:
+            trigger.tap()
+        else:
+            trigger.click()
+        panel.wait_for(state="visible")
+        assert panel.get_attribute("aria-modal") == "true"
+        page.wait_for_timeout(250)
+
+    # Close the initial desktop hover preview / mobile tap-open sheet.
+    panel.get_by_role("button", name="Close in-basket podlet coverage", exact=True).click()
+    assert_closed()
+
+    # Hover and keyboard focus remain usable after dismissal.
+    if not mobile:
+        page.get_by_role("heading", name="DSA GI MA-MD Podlets", exact=True).hover()
+        trigger.hover()
+        panel.wait_for(state="visible")
+        panel.get_by_role("button", name="Close in-basket podlet coverage", exact=True).click()
+        assert_closed()
+        page.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).focus()
+        trigger.focus()
+        panel.wait_for(state="visible")
+        page.keyboard.press("Escape")
+        assert_closed()
+
+    open_pinned()
+    panel.get_by_role("button", name="Close in-basket podlet coverage", exact=True).click()
+    assert_closed()
+    open_pinned()
+    page.keyboard.press("Escape")
+    assert_closed()
+    open_pinned()
+    page.locator(".inbasket-backdrop").click(position={"x": 5, "y": 5})
+    assert_closed()
+    trigger.press("Enter")
+    panel.wait_for(state="visible")
+    assert panel.get_attribute("aria-modal") == "true"
+    page.wait_for_timeout(250)
+    panel.get_by_role("button", name="Close in-basket podlet coverage", exact=True).click()
+    assert_closed()
 
 
 def assert_orientation_reference(page):
@@ -859,11 +912,7 @@ with sync_playwright() as playwright:
     assert desktop.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).get_attribute("aria-selected") == "true"
     inbasket_trigger, inbasket_panel = assert_inbasket_coverage(desktop)
     desktop.screenshot(path=OUTPUT / "dsa-gi-inbasket-coverage-desktop.png", full_page=False)
-    inbasket_trigger.click()
-    assert inbasket_panel.get_attribute("aria-modal") == "true"
-    desktop.keyboard.press("Escape")
-    inbasket_panel.wait_for(state="detached")
-    assert inbasket_trigger.evaluate("element => document.activeElement === element")
+    assert_inbasket_dismissal(desktop, inbasket_trigger, inbasket_panel)
     george = desktop.locator(".site-drv .pod-card").nth(0).locator(".ma-chip", has_text="George")
     george.hover()
     assert george.get_by_role("tooltip").is_visible()
@@ -1114,7 +1163,7 @@ with sync_playwright() as playwright:
     assert desktop.get_by_text("DSAGIGRADNOTE", exact=True).is_visible()
     desktop.get_by_role("button", name="Clear search").click()
 
-    mobile = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
+    mobile = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1, has_touch=True)
     mobile_errors = capture_console_errors(mobile)
     mobile.goto(BASE_URL)
     mobile.wait_for_load_state("networkidle")
@@ -1168,10 +1217,7 @@ with sync_playwright() as playwright:
     assert_coverage_reference(mobile)
     mobile_inbasket_trigger, mobile_inbasket_panel = assert_inbasket_coverage(mobile, mobile=True)
     mobile.screenshot(path=OUTPUT / "dsa-gi-inbasket-coverage-mobile.png", full_page=False)
-    mobile_inbasket_panel.get_by_role("button", name="Close in-basket podlet coverage", exact=True).click()
-    mobile_inbasket_panel.wait_for(state="detached")
-    mobile.wait_for_timeout(100)
-    assert mobile_inbasket_trigger.evaluate("element => document.activeElement === element")
+    assert_inbasket_dismissal(mobile, mobile_inbasket_trigger, mobile_inbasket_panel, mobile=True)
     assert mobile.locator(".pod-card").nth(0).get_by_text("Pod 01", exact=True).is_visible()
     mobile.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-podlets-mobile.png", full_page=True)
 

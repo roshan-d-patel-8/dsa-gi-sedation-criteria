@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.33.1 — 2026-10-07
+
+- Fix the In Basket Podlet Coverage window reopening when X, Escape, or the backdrop returns focus to its trigger.
+- Preserve hover, keyboard focus, tap/click reopening, existing visuals, and the source coverage snapshot.
+- Add desktop and touch regression checks that wait past focus restoration and verify dismissal remains closed.
+
 ## 0.33.0 — 2026-10-06
 
 - Added an accessible In Basket Podlet Coverage reference with the five supplied clinician groups, physician portraits, and desktop hover/keyboard plus mobile tap behavior.
