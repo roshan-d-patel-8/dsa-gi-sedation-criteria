@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.34.1 — 2026-10-07
+
+- Remove transferred Tom Haddad from active In Basket coverage and the main MA–MD Podlets roster.
+- Retain Aysha Aslam as the standalone provider in her existing Podlets row.
+- Preserve nine unnumbered In Basket groups with 24 clinicians (21 physicians, three PAs) and verify desktop/touch membership, portraits, and dismissal.
+
 ## 0.34.0 — 2026-10-07
 
 - Add the Medication holds (DOAC/Diabetes meds) pill button below the sedation review date.

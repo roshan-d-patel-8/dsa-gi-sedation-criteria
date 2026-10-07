@@ -79,11 +79,7 @@ export const coverageSites = [
         providers: [
           { name: "Liz Clark", photo: "liz-clark.webp" },
           { name: "Anish Patel", photo: "anish-patel.webp" },
-          {
-            name: "Tom Haddad",
-            photo: "tom-haddad.webp",
-            transition: { name: "Aysha Aslam", photo: "aysha-aslam.jpg", tag: "New" },
-          },
+          { name: "Aysha Aslam", photo: "aysha-aslam.jpg", tag: "New" },
           { name: "Jay Garuda", photo: "jay-garuda.webp" },
         ],
         schedule: [
@@ -161,7 +157,6 @@ export const inBasketCoverageGroups = [
     id: "roshan-patel",
     members: [
       { name: "Roshan Patel", photo: "roshan-patel.webp" },
-      { name: "Tom Haddad", photo: "tom-haddad.webp" },
       { name: "Steve Cheng", photo: "steve-cheng.webp" },
       { name: "Jagrati Mathur", photo: "jag-mathur.webp" },
     ],

@@ -39,7 +39,6 @@ PROVIDERS = [
     "T.R. Levin",
     "Liz Clark",
     "Anish Patel",
-    "Tom Haddad",
     "Aysha Aslam",
     "Jay Garuda",
     "Ying Wang",
@@ -632,12 +631,14 @@ def assert_coverage_reference(page):
     assert page.locator(".ma-chip").count() == 11
     assert page.locator(".ma-assignment > small").count() == 0
     assert page.get_by_text("Pod 04", exact=True).count() == 0
-    assert page.locator(".site-stack .provider-avatar img").count() == 25
+    assert page.locator(".site-stack .provider-avatar img").count() == 24
     assert page.locator(".site-stack .provider-initials").count() == 1
-    aysha = page.locator(".provider-transition", has_text="Aysha Aslam")
-    aysha_portrait = aysha.locator(".avatar-compact img")
+    aysha = page.locator(".provider-row", has_text="Aysha Aslam")
+    aysha_portrait = aysha.locator(".provider-avatar img")
     assert aysha_portrait.get_attribute("src").endswith("/portraits/aysha-aslam.jpg")
     assert aysha_portrait.evaluate("image => image.decode().then(() => image.naturalWidth > 0 && image.naturalHeight > 0)")
+    assert page.locator(".provider-panel").get_by_text("Tom Haddad", exact=True).count() == 0
+    assert not aysha.locator(".transition-target").count()
     for provider in PROVIDERS:
         assert page.locator(".provider-panel").get_by_text(provider, exact=True).first.is_visible()
     assert page.get_by_text("Anarosa Mejia", exact=False).is_visible()
@@ -666,12 +667,13 @@ def assert_inbasket_coverage(page, mobile=False):
         ["Courtney Gonzales", "Maureen Morgan", "Kirsten Regalia"],
         ["Patrick McKenzie", "Ahilan Arulanandan", "Mariel Bailey"],
         ["Sammy Tesfay", "Simon Chan"],
-        ["Roshan Patel", "Tom Haddad", "Steve Cheng", "Jagrati Mathur"],
+        ["Roshan Patel", "Steve Cheng", "Jagrati Mathur"],
         ["Kay Ozeki", "Ying Wang", "Anish Patel"],
         ["Sabrina Han", "Robbie Molden", "Megan Palsa"],
     ]
     groups = panel.locator(".inbasket-group")
     assert groups.count() == 9
+    assert panel.get_by_text("Tom Haddad", exact=True).count() == 0
     actual_groups = groups.evaluate_all(
         "groups => groups.map(group => Array.from(group.querySelectorAll('.inbasket-person strong')).map(name => name.textContent))"
     )
@@ -679,8 +681,8 @@ def assert_inbasket_coverage(page, mobile=False):
     assert groups.locator("header").count() == 1
     assert groups.locator("header").text_content() == "Physician assistants"
     assert not re.search(r"Group\s+\d+", panel.inner_text())
-    assert panel.locator(".inbasket-person").count() == 25
-    assert panel.locator(".provider-avatar img").count() == 22
+    assert panel.locator(".inbasket-person").count() == 24
+    assert panel.locator(".provider-avatar img").count() == 21
     assert panel.locator(".provider-initials").count() == 3
     assert panel.locator(".inbasket-empty").count() == 0
     first_box, second_box = groups.nth(0).bounding_box(), groups.nth(1).bounding_box()

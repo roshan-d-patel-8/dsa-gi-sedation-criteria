@@ -37,6 +37,8 @@ The application is static and has no clinical inputs, backend, database, analyti
 
 ## Publication
 
+On 2026-10-07 Roshan requested removal of transferred Tom Haddad from current coverage. The In Basket reference now contains 24 clinicians across nine groups; the main Podlets roster retains Aysha Aslam as the standalone provider in the existing row. Historical source material and events are retained.
+
 On 2026-10-07 Roshan requested the Medication holds (DOAC/Diabetes meds) reference on the existing public sedation page. Its grouped intervals and skipped-dose counts are transcribed from the two supplied DSA GI dropdown screenshots; cropped follow-up sentences are excluded. The screenshots themselves are not published. This is a source-provided reference, not an independently revised clinical policy.
 
 On 2026-10-07 Roshan clarified that each original In Basket coverage column is its own group. The public reference now displays nine independent groups without numbering, preserving all names, portraits, and per-column order. This clarification supersedes the original five-block grouping interpretation.
