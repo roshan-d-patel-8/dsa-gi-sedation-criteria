@@ -82,7 +82,7 @@ export const coverageSites = [
           {
             name: "Tom Haddad",
             photo: "tom-haddad.webp",
-            transition: { name: "Aysha Aslam", initials: "AA", tag: "New" },
+            transition: { name: "Aysha Aslam", photo: "aysha-aslam.jpg", tag: "New" },
           },
           { name: "Jay Garuda", photo: "jay-garuda.webp" },
         ],
@@ -107,6 +107,51 @@ export const coverageSites = [
     ],
     support: [
       { label: "Additional PAs", people: ["Robbie Molden", "Megan Palsa"], note: "Shared across MAs" },
+    ],
+  },
+];
+
+export const inBasketCoverageGroups = [
+  {
+    id: "01",
+    rows: [
+      [{ name: "Suk Seo", photo: "suk-seo.webp" }, null],
+      [{ name: "Liz Clark", photo: "liz-clark.webp" }, { name: "Dan Chung", photo: "dan-chung.webp" }],
+      [{ name: "Arun Suryaprasad", photo: "arun-suryaprasad.webp" }, { name: "Erina Foster", photo: "erina-foster.webp" }],
+    ],
+  },
+  {
+    id: "02",
+    rows: [
+      [{ name: "Ed Ouyang", photo: "ed-ouyang.webp" }, { name: "Courtney Gonzales", photo: "courtney-gonzales.webp" }],
+      [{ name: "Sanjay Garuda", photo: "jay-garuda.webp" }, { name: "Maureen Morgan", photo: "maureen-morgan.webp" }],
+      [null, { name: "Kirsten Regalia", photo: "kirsten-regalia.webp" }],
+    ],
+  },
+  {
+    id: "03",
+    rows: [
+      [{ name: "Patrick McKenzie", photo: "patrick-mckenzie.webp" }, null],
+      [{ name: "Ahilan Arulanandan", photo: "ahilan-arulanandan.webp" }, { name: "Sammy Tesfay", photo: "sammy-tesfay.webp" }],
+      [{ name: "Mariel Bailey", photo: "mariel-bailey.webp" }, { name: "Simon Chan", photo: "simon-chan.webp" }],
+    ],
+  },
+  {
+    id: "04",
+    rows: [
+      [{ name: "Roshan Patel", photo: "roshan-patel.webp" }, null],
+      [{ name: "Tom Haddad", photo: "tom-haddad.webp" }, { name: "Kay Ozeki", photo: "kay-ozeki.webp" }],
+      [{ name: "Steve Cheng", photo: "steve-cheng.webp" }, { name: "Ying Wang", photo: "ying-wang.webp" }],
+      [{ name: "Jagrati Mathur", photo: "jag-mathur.webp" }, { name: "Anish Patel", photo: "anish-patel.webp" }],
+    ],
+  },
+  {
+    id: "05",
+    role: "Physician assistants",
+    rows: [
+      [{ name: "Sabrina Han", initials: "SH", role: "PA" }, null],
+      [{ name: "Robbie Molden", initials: "RM", role: "PA" }, null],
+      [{ name: "Megan Palsa", initials: "MP", role: "PA" }, null],
     ],
   },
 ];

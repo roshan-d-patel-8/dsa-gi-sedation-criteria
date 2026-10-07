@@ -631,8 +631,12 @@ def assert_coverage_reference(page):
     assert page.locator(".ma-chip").count() == 11
     assert page.locator(".ma-assignment > small").count() == 0
     assert page.get_by_text("Pod 04", exact=True).count() == 0
-    assert page.locator(".provider-avatar img").count() == 24
-    assert page.locator(".provider-initials").count() == 2
+    assert page.locator(".site-stack .provider-avatar img").count() == 25
+    assert page.locator(".site-stack .provider-initials").count() == 1
+    aysha = page.locator(".provider-transition", has_text="Aysha Aslam")
+    aysha_portrait = aysha.locator(".avatar-compact img")
+    assert aysha_portrait.get_attribute("src").endswith("/portraits/aysha-aslam.jpg")
+    assert aysha_portrait.evaluate("image => image.decode().then(() => image.naturalWidth > 0 && image.naturalHeight > 0)")
     for provider in PROVIDERS:
         assert page.locator(".provider-panel").get_by_text(provider, exact=True).first.is_visible()
     assert page.get_by_text("Anarosa Mejia", exact=False).is_visible()
@@ -642,6 +646,42 @@ def assert_coverage_reference(page):
     assert wcr_pod_three.locator(".ma-roster").get_by_text("Martha", exact=True).is_visible()
     assert page.get_by_text("Natalie", exact=True).count() == 0
     assert page.evaluate("Array.from(document.images).every((image) => image.complete && image.naturalWidth > 0)")
+
+
+def assert_inbasket_coverage(page, mobile=False):
+    trigger = page.get_by_role("button", name="In Basket Podlet Coverage", exact=True)
+    assert trigger.is_visible()
+    if mobile:
+        trigger.click()
+    else:
+        trigger.hover()
+    panel = page.get_by_role("dialog", name="In Basket Podlet Coverage", exact=True)
+    assert panel.is_visible()
+    page.wait_for_timeout(250)
+    expected_groups = [
+        [["Suk Seo", None], ["Liz Clark", "Dan Chung"], ["Arun Suryaprasad", "Erina Foster"]],
+        [["Ed Ouyang", "Courtney Gonzales"], ["Sanjay Garuda", "Maureen Morgan"], [None, "Kirsten Regalia"]],
+        [["Patrick McKenzie", None], ["Ahilan Arulanandan", "Sammy Tesfay"], ["Mariel Bailey", "Simon Chan"]],
+        [["Roshan Patel", None], ["Tom Haddad", "Kay Ozeki"], ["Steve Cheng", "Ying Wang"], ["Jagrati Mathur", "Anish Patel"]],
+        [["Sabrina Han", None], ["Robbie Molden", None], ["Megan Palsa", None]],
+    ]
+    groups = panel.locator(".inbasket-group")
+    assert groups.count() == 5
+    actual_groups = groups.evaluate_all(
+        "groups => groups.map(group => Array.from(group.querySelectorAll('.inbasket-row')).map(row => Array.from(row.children).map(cell => cell.querySelector('strong')?.textContent ?? null)))"
+    )
+    assert actual_groups == expected_groups
+    assert panel.locator(".inbasket-person").count() == 25
+    assert panel.locator(".provider-avatar img").count() == 22
+    assert panel.locator(".provider-initials").count() == 3
+    assert panel.locator(".inbasket-empty").count() == 7
+    assert panel.locator("img").evaluate_all("images => Promise.all(images.map(image => image.decode())).then(() => images.every(image => image.naturalWidth > 0))")
+    panel_box = panel.bounding_box()
+    assert panel_box["x"] >= 0
+    assert panel_box["x"] + panel_box["width"] <= page.viewport_size["width"] + 2
+    assert panel_box["y"] >= 0
+    assert panel_box["y"] + panel_box["height"] <= page.viewport_size["height"] + 2
+    return trigger, panel
 
 
 def assert_orientation_reference(page):
@@ -817,6 +857,13 @@ with sync_playwright() as playwright:
     desktop.wait_for_timeout(700)
     assert_coverage_reference(desktop)
     assert desktop.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).get_attribute("aria-selected") == "true"
+    inbasket_trigger, inbasket_panel = assert_inbasket_coverage(desktop)
+    desktop.screenshot(path=OUTPUT / "dsa-gi-inbasket-coverage-desktop.png", full_page=False)
+    inbasket_trigger.click()
+    assert inbasket_panel.get_attribute("aria-modal") == "true"
+    desktop.keyboard.press("Escape")
+    inbasket_panel.wait_for(state="detached")
+    assert inbasket_trigger.evaluate("element => document.activeElement === element")
     george = desktop.locator(".site-drv .pod-card").nth(0).locator(".ma-chip", has_text="George")
     george.hover()
     assert george.get_by_role("tooltip").is_visible()
@@ -1119,6 +1166,12 @@ with sync_playwright() as playwright:
     mobile.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).click()
     mobile.wait_for_timeout(700)
     assert_coverage_reference(mobile)
+    mobile_inbasket_trigger, mobile_inbasket_panel = assert_inbasket_coverage(mobile, mobile=True)
+    mobile.screenshot(path=OUTPUT / "dsa-gi-inbasket-coverage-mobile.png", full_page=False)
+    mobile_inbasket_panel.get_by_role("button", name="Close in-basket podlet coverage", exact=True).click()
+    mobile_inbasket_panel.wait_for(state="detached")
+    mobile.wait_for_timeout(100)
+    assert mobile_inbasket_trigger.evaluate("element => document.activeElement === element")
     assert mobile.locator(".pod-card").nth(0).get_by_text("Pod 01", exact=True).is_visible()
     mobile.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-podlets-mobile.png", full_page=True)
 

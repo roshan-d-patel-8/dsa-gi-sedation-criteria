@@ -5,6 +5,11 @@ tags:
 
 # Changelog
 
+## 0.33.0 — 2026-10-06
+
+- Added an accessible In Basket Podlet Coverage reference with the five supplied clinician groups, physician portraits, and desktop hover/keyboard plus mobile tap behavior.
+- Added Aysha Aslam's sourced portrait to the existing Tom Haddad → Aysha transition row.
+
 ## 0.32.8 — 2026-10-06
 
 - Corrected the TPMG POS and JAMM Survey countdown to use the direct survey URL from the original sender email instead of the Outlook mobile-signature link from the forwarded message.

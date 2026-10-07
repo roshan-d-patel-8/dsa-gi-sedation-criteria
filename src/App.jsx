@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { POLICY_VERSION, policySections } from "./criteria.js";
-import { coverageSites } from "./podlets.js";
+import { coverageSites, inBasketCoverageGroups } from "./podlets.js";
 import { birthdayEvents } from "./birthdays.js";
 import orientationSource from "./orientation-source.html?raw";
 
@@ -1837,6 +1837,115 @@ function SitePodlets({ site }) {
   );
 }
 
+function InBasketPerson({ person }) {
+  if (!person) return <span className="inbasket-empty" aria-hidden="true" />;
+
+  return (
+    <span className="inbasket-person">
+      <Avatar provider={person} />
+      <span>
+        <strong>{person.name}</strong>
+        {person.role && <small>{person.role}</small>}
+      </span>
+    </span>
+  );
+}
+
+function InBasketCoverage() {
+  const [open, setOpen] = useState(false);
+  const [pinned, setPinned] = useState(false);
+  const triggerRef = useRef(null);
+
+  const close = (returnFocus = false) => {
+    setPinned(false);
+    setOpen(false);
+    if (returnFocus) requestAnimationFrame(() => triggerRef.current?.focus());
+  };
+
+  useEffect(() => {
+    if (!open) return undefined;
+
+    const handleEscape = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        close(true);
+      }
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [open]);
+
+  const handleBlur = (event) => {
+    if (!pinned && !event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+  };
+
+  return (
+    <div
+      className="inbasket-control"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => { if (!pinned) setOpen(false); }}
+      onFocusCapture={() => setOpen(true)}
+      onBlurCapture={handleBlur}
+    >
+      <button
+        className="inbasket-trigger"
+        type="button"
+        ref={triggerRef}
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        aria-controls="inbasket-coverage-panel"
+        onClick={() => {
+          if (pinned) close(false);
+          else {
+            setPinned(true);
+            setOpen(true);
+          }
+        }}
+      >
+        <span>In Basket</span>
+        <strong>Podlet Coverage</strong>
+        <i aria-hidden="true">↗</i>
+      </button>
+
+      {open && (
+        <>
+          {pinned && <button className="inbasket-backdrop" type="button" tabIndex={-1} aria-label="Close in-basket podlet coverage" onClick={() => close(true)} />}
+          <section
+            className={`inbasket-panel${pinned ? " is-pinned" : ""}`}
+            id="inbasket-coverage-panel"
+            role="dialog"
+            aria-modal={pinned ? "true" : undefined}
+            aria-labelledby="inbasket-coverage-title"
+          >
+            <header className="inbasket-panel-header">
+              <div>
+                <p>DSA GI operational reference</p>
+                <h2 id="inbasket-coverage-title">In Basket Podlet Coverage</h2>
+                <small>Source-provided coverage snapshot</small>
+              </div>
+              <button type="button" className="inbasket-close" aria-label="Close in-basket podlet coverage" onClick={() => close(true)}>×</button>
+            </header>
+            <div className="inbasket-groups">
+              {inBasketCoverageGroups.map((group) => (
+                <section className="inbasket-group" aria-label={`Coverage group ${group.id}`} key={group.id}>
+                  <header><span>Group</span><strong>{group.id}</strong>{group.role && <small>{group.role}</small>}</header>
+                  <div className="inbasket-rows">
+                    {group.rows.map((row, rowIndex) => (
+                      <div className="inbasket-row" key={`${group.id}-${rowIndex}`}>
+                        {row.map((person, columnIndex) => <InBasketPerson person={person} key={`${group.id}-${rowIndex}-${columnIndex}`} />)}
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </div>
+          </section>
+        </>
+      )}
+    </div>
+  );
+}
+
 function CoveragePodlets() {
   return (
     <main className="coverage-page" id="coverage-panel" role="tabpanel" aria-labelledby="coverage-tab">
@@ -1845,10 +1954,13 @@ function CoveragePodlets() {
           <p className="eyebrow">DSA GI clinical operations · MA–MD alignment · 2026 assignments</p>
           <h1>DSA GI<br />MA-MD Podlets</h1>
         </div>
-        <div className="coverage-key" aria-label="Coverage key">
-          <span><i className="key-ma" />MA ownership</span>
-          <span><i className="key-md" />Physician panel</span>
-          <span><i className="key-new" />New / transition</span>
+        <div className="coverage-actions">
+          <InBasketCoverage />
+          <div className="coverage-key" aria-label="Coverage key">
+            <span><i className="key-ma" />MA ownership</span>
+            <span><i className="key-md" />Physician panel</span>
+            <span><i className="key-new" />New / transition</span>
+          </div>
         </div>
       </header>
 
