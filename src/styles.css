@@ -447,18 +447,14 @@ body.presentation-open { overflow: hidden; }
 .inbasket-close:focus-visible { outline: 3px solid rgba(242, 160, 184, .8); outline-offset: 2px; }
 .inbasket-groups { padding: 14px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; }
 .inbasket-group { overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: rgba(255, 255, 255, .94); }
-.inbasket-group:nth-child(5) { grid-column: 1 / -1; }
+.inbasket-group-pa { grid-column: 1 / -1; }
 .inbasket-group > header { min-height: 34px; padding: 7px 10px; display: flex; align-items: center; gap: 7px; border-bottom: 1px solid var(--line); background: rgba(169, 198, 222, .2); }
-.inbasket-group > header span { color: var(--muted); font-size: 7px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
-.inbasket-group > header strong { color: var(--navy); font-size: 11px; }
-.inbasket-group > header small { margin-left: auto; color: #9a3557; font-size: 7px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
-.inbasket-rows { padding: 7px; display: grid; gap: 5px; }
-.inbasket-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
+.inbasket-group > header small { color: #9a3557; font-size: 7px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+.inbasket-members { padding: 7px; display: grid; gap: 5px; }
 .inbasket-person { min-width: 0; min-height: 48px; padding: 4px 6px; display: grid; grid-template-columns: 38px minmax(0, 1fr); align-items: center; gap: 8px; border: 1px solid rgba(27, 58, 95, .07); border-radius: 10px; background: rgba(244, 246, 248, .7); }
 .inbasket-person > span:last-child { min-width: 0; display: grid; }
 .inbasket-person strong { overflow: hidden; color: var(--navy); font-size: 10px; line-height: 1.15; text-overflow: ellipsis; white-space: nowrap; }
 .inbasket-person small { margin-top: 2px; color: #9a3557; font-size: 7px; font-weight: 850; text-transform: uppercase; }
-.inbasket-empty { min-height: 48px; }
 
 /* New physician orientation tab */
 .orientation-page { width: min(1480px, 100%); margin: 0 auto; padding: clamp(14px, 1.6vw, 24px) clamp(16px, 3.5vw, 52px) clamp(34px, 4vw, 60px); }
@@ -948,7 +944,7 @@ body.presentation-open { overflow: hidden; }
   .inbasket-panel-header { min-height: 76px; padding: 13px 14px; }
   .inbasket-panel-header h2 { font-size: 23px; }
   .inbasket-groups { padding: 10px; grid-template-columns: 1fr; gap: 8px; }
-  .inbasket-group:nth-child(5) { grid-column: auto; }
+  .inbasket-group-pa { grid-column: auto; }
   .inbasket-person { grid-template-columns: 34px minmax(0, 1fr); min-height: 44px; }
   .inbasket-person .provider-avatar { width: 34px; height: 34px; }
   .orientation-tools { top: 110px; padding: 9px; }

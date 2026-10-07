@@ -37,6 +37,8 @@ The application is static and has no clinical inputs, backend, database, analyti
 
 ## Publication
 
+On 2026-10-07 Roshan clarified that each original In Basket coverage column is its own group. The public reference now displays nine independent groups without numbering, preserving all names, portraits, and per-column order. This clarification supersedes the original five-block grouping interpretation.
+
 The Podlet Coverage dismissal correction was requested on 2026-10-07 for the existing public control. It changes only focus restoration and dismissal behavior; no new operational content or source assets are published.
 
 The user supplied Omar and Aysha’s welcome artwork and explicitly requested their first clinical days on the public calendar on 2026-10-04: August 31, 2026, and October 5, 2026, respectively. Gold star markers open their welcome cards.

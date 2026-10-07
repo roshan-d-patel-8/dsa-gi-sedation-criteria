@@ -113,45 +113,74 @@ export const coverageSites = [
 
 export const inBasketCoverageGroups = [
   {
-    id: "01",
-    rows: [
-      [{ name: "Suk Seo", photo: "suk-seo.webp" }, null],
-      [{ name: "Liz Clark", photo: "liz-clark.webp" }, { name: "Dan Chung", photo: "dan-chung.webp" }],
-      [{ name: "Arun Suryaprasad", photo: "arun-suryaprasad.webp" }, { name: "Erina Foster", photo: "erina-foster.webp" }],
+    id: "suk-seo",
+    members: [
+      { name: "Suk Seo", photo: "suk-seo.webp" },
+      { name: "Liz Clark", photo: "liz-clark.webp" },
+      { name: "Arun Suryaprasad", photo: "arun-suryaprasad.webp" },
     ],
   },
   {
-    id: "02",
-    rows: [
-      [{ name: "Ed Ouyang", photo: "ed-ouyang.webp" }, { name: "Courtney Gonzales", photo: "courtney-gonzales.webp" }],
-      [{ name: "Sanjay Garuda", photo: "jay-garuda.webp" }, { name: "Maureen Morgan", photo: "maureen-morgan.webp" }],
-      [null, { name: "Kirsten Regalia", photo: "kirsten-regalia.webp" }],
+    id: "dan-chung",
+    members: [
+      { name: "Dan Chung", photo: "dan-chung.webp" },
+      { name: "Erina Foster", photo: "erina-foster.webp" },
     ],
   },
   {
-    id: "03",
-    rows: [
-      [{ name: "Patrick McKenzie", photo: "patrick-mckenzie.webp" }, null],
-      [{ name: "Ahilan Arulanandan", photo: "ahilan-arulanandan.webp" }, { name: "Sammy Tesfay", photo: "sammy-tesfay.webp" }],
-      [{ name: "Mariel Bailey", photo: "mariel-bailey.webp" }, { name: "Simon Chan", photo: "simon-chan.webp" }],
+    id: "ed-ouyang",
+    members: [
+      { name: "Ed Ouyang", photo: "ed-ouyang.webp" },
+      { name: "Sanjay Garuda", photo: "jay-garuda.webp" },
     ],
   },
   {
-    id: "04",
-    rows: [
-      [{ name: "Roshan Patel", photo: "roshan-patel.webp" }, null],
-      [{ name: "Tom Haddad", photo: "tom-haddad.webp" }, { name: "Kay Ozeki", photo: "kay-ozeki.webp" }],
-      [{ name: "Steve Cheng", photo: "steve-cheng.webp" }, { name: "Ying Wang", photo: "ying-wang.webp" }],
-      [{ name: "Jagrati Mathur", photo: "jag-mathur.webp" }, { name: "Anish Patel", photo: "anish-patel.webp" }],
+    id: "courtney-gonzales",
+    members: [
+      { name: "Courtney Gonzales", photo: "courtney-gonzales.webp" },
+      { name: "Maureen Morgan", photo: "maureen-morgan.webp" },
+      { name: "Kirsten Regalia", photo: "kirsten-regalia.webp" },
     ],
   },
   {
-    id: "05",
+    id: "patrick-mckenzie",
+    members: [
+      { name: "Patrick McKenzie", photo: "patrick-mckenzie.webp" },
+      { name: "Ahilan Arulanandan", photo: "ahilan-arulanandan.webp" },
+      { name: "Mariel Bailey", photo: "mariel-bailey.webp" },
+    ],
+  },
+  {
+    id: "sammy-tesfay",
+    members: [
+      { name: "Sammy Tesfay", photo: "sammy-tesfay.webp" },
+      { name: "Simon Chan", photo: "simon-chan.webp" },
+    ],
+  },
+  {
+    id: "roshan-patel",
+    members: [
+      { name: "Roshan Patel", photo: "roshan-patel.webp" },
+      { name: "Tom Haddad", photo: "tom-haddad.webp" },
+      { name: "Steve Cheng", photo: "steve-cheng.webp" },
+      { name: "Jagrati Mathur", photo: "jag-mathur.webp" },
+    ],
+  },
+  {
+    id: "kay-ozeki",
+    members: [
+      { name: "Kay Ozeki", photo: "kay-ozeki.webp" },
+      { name: "Ying Wang", photo: "ying-wang.webp" },
+      { name: "Anish Patel", photo: "anish-patel.webp" },
+    ],
+  },
+  {
+    id: "sabrina-han",
     role: "Physician assistants",
-    rows: [
-      [{ name: "Sabrina Han", initials: "SH", role: "PA" }, null],
-      [{ name: "Robbie Molden", initials: "RM", role: "PA" }, null],
-      [{ name: "Megan Palsa", initials: "MP", role: "PA" }, null],
+    members: [
+      { name: "Sabrina Han", initials: "SH", role: "PA" },
+      { name: "Robbie Molden", initials: "RM", role: "PA" },
+      { name: "Megan Palsa", initials: "MP", role: "PA" },
     ],
   },
 ];

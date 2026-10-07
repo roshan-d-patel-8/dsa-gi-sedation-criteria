@@ -1838,8 +1838,6 @@ function SitePodlets({ site }) {
 }
 
 function InBasketPerson({ person }) {
-  if (!person) return <span className="inbasket-empty" aria-hidden="true" />;
-
   return (
     <span className="inbasket-person">
       <Avatar provider={person} />
@@ -1953,14 +1951,10 @@ function InBasketCoverage() {
             </header>
             <div className="inbasket-groups">
               {inBasketCoverageGroups.map((group) => (
-                <section className="inbasket-group" aria-label={`Coverage group ${group.id}`} key={group.id}>
-                  <header><span>Group</span><strong>{group.id}</strong>{group.role && <small>{group.role}</small>}</header>
-                  <div className="inbasket-rows">
-                    {group.rows.map((row, rowIndex) => (
-                      <div className="inbasket-row" key={`${group.id}-${rowIndex}`}>
-                        {row.map((person, columnIndex) => <InBasketPerson person={person} key={`${group.id}-${rowIndex}-${columnIndex}`} />)}
-                      </div>
-                    ))}
+                <section className={`inbasket-group${group.role ? " inbasket-group-pa" : ""}`} aria-label={`Coverage group: ${group.members.map((person) => person.name).join(", ")}`} key={group.id}>
+                  {group.role && <header><small>{group.role}</small></header>}
+                  <div className="inbasket-members">
+                    {group.members.map((person) => <InBasketPerson person={person} key={person.name} />)}
                   </div>
                 </section>
               ))}

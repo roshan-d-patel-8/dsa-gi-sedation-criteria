@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.33.2 — 2026-10-07
+
+- Correct In Basket Podlet Coverage so each original column is an independent, unnumbered group: eight physician groups and one PA group.
+- Preserve all 25 clinicians, per-column order, portraits, and dismissal behavior; omit empty placeholders.
+- Verify exact group membership and separate card boundaries on desktop and touch layouts.
+
 ## 0.33.1 — 2026-10-07
 
 - Fix the In Basket Podlet Coverage window reopening when X, Escape, or the backdrop returns focus to its trigger.

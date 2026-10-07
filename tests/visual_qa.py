@@ -659,22 +659,35 @@ def assert_inbasket_coverage(page, mobile=False):
     assert panel.is_visible()
     page.wait_for_timeout(250)
     expected_groups = [
-        [["Suk Seo", None], ["Liz Clark", "Dan Chung"], ["Arun Suryaprasad", "Erina Foster"]],
-        [["Ed Ouyang", "Courtney Gonzales"], ["Sanjay Garuda", "Maureen Morgan"], [None, "Kirsten Regalia"]],
-        [["Patrick McKenzie", None], ["Ahilan Arulanandan", "Sammy Tesfay"], ["Mariel Bailey", "Simon Chan"]],
-        [["Roshan Patel", None], ["Tom Haddad", "Kay Ozeki"], ["Steve Cheng", "Ying Wang"], ["Jagrati Mathur", "Anish Patel"]],
-        [["Sabrina Han", None], ["Robbie Molden", None], ["Megan Palsa", None]],
+        ["Suk Seo", "Liz Clark", "Arun Suryaprasad"],
+        ["Dan Chung", "Erina Foster"],
+        ["Ed Ouyang", "Sanjay Garuda"],
+        ["Courtney Gonzales", "Maureen Morgan", "Kirsten Regalia"],
+        ["Patrick McKenzie", "Ahilan Arulanandan", "Mariel Bailey"],
+        ["Sammy Tesfay", "Simon Chan"],
+        ["Roshan Patel", "Tom Haddad", "Steve Cheng", "Jagrati Mathur"],
+        ["Kay Ozeki", "Ying Wang", "Anish Patel"],
+        ["Sabrina Han", "Robbie Molden", "Megan Palsa"],
     ]
     groups = panel.locator(".inbasket-group")
-    assert groups.count() == 5
+    assert groups.count() == 9
     actual_groups = groups.evaluate_all(
-        "groups => groups.map(group => Array.from(group.querySelectorAll('.inbasket-row')).map(row => Array.from(row.children).map(cell => cell.querySelector('strong')?.textContent ?? null)))"
+        "groups => groups.map(group => Array.from(group.querySelectorAll('.inbasket-person strong')).map(name => name.textContent))"
     )
     assert actual_groups == expected_groups
+    assert groups.locator("header").count() == 1
+    assert groups.locator("header").text_content() == "Physician assistants"
+    assert not re.search(r"Group\s+\d+", panel.inner_text())
     assert panel.locator(".inbasket-person").count() == 25
     assert panel.locator(".provider-avatar img").count() == 22
     assert panel.locator(".provider-initials").count() == 3
-    assert panel.locator(".inbasket-empty").count() == 7
+    assert panel.locator(".inbasket-empty").count() == 0
+    first_box, second_box = groups.nth(0).bounding_box(), groups.nth(1).bounding_box()
+    if mobile:
+        assert second_box["y"] >= first_box["y"] + first_box["height"]
+    else:
+        assert second_box["x"] >= first_box["x"] + first_box["width"]
+    assert groups.evaluate_all("groups => groups.every(group => getComputedStyle(group).borderStyle === 'solid' && parseFloat(getComputedStyle(group).borderWidth) > 0)")
     assert panel.locator("img").evaluate_all("images => Promise.all(images.map(image => image.decode())).then(() => images.every(image => image.naturalWidth > 0))")
     panel_box = panel.bounding_box()
     assert panel_box["x"] >= 0
