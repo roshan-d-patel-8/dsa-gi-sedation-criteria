@@ -5,6 +5,7 @@ from zoneinfo import ZoneInfo
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
+from medication_qa import assert_medication_holds
 
 
 OUTPUT = Path(os.environ.get("VISUAL_QA_OUTPUT", "/private/tmp/dsa-gi-visual-qa"))
@@ -914,6 +915,7 @@ with sync_playwright() as playwright:
 
     desktop.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).click()
     assert_sedation_reference(desktop)
+    assert_medication_holds(desktop, OUTPUT)
     assert desktop.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).get_attribute("aria-selected") == "true"
     desktop.wait_for_timeout(850)
     desktop.evaluate("window.scrollTo(0, 0)")
@@ -1224,6 +1226,7 @@ with sync_playwright() as playwright:
     mobile.locator(".year-calendar").focus()
     mobile.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).click()
     assert_sedation_reference(mobile)
+    assert_medication_holds(mobile, OUTPUT, mobile=True)
     mobile.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-sedation-mobile.png", full_page=False)
     mobile.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).click()
     mobile.wait_for_timeout(700)

@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { POLICY_VERSION, policySections } from "./criteria.js";
 import { coverageSites, inBasketCoverageGroups } from "./podlets.js";
 import { birthdayEvents } from "./birthdays.js";
+import { medicationHoldSections } from "./medication-holds.js";
 import orientationSource from "./orientation-source.html?raw";
 
 const columnLayout = [
@@ -1700,6 +1701,111 @@ function cardFor(id) {
   return <CriteriaCard section={section} index={index} key={id} />;
 }
 
+function MedicationHolds() {
+  const [open, setOpen] = useState(false);
+  const [pinned, setPinned] = useState(false);
+  const triggerRef = useRef(null);
+  const closeRef = useRef(null);
+  const dismissedRef = useRef(false);
+  const restoringFocusRef = useRef(false);
+
+  const close = () => {
+    dismissedRef.current = true;
+    // Restore focus while the trigger is interactive, before removing the sheet.
+    if (pinned) document.querySelector(".page-zoom-surface")?.removeAttribute("inert");
+    restoringFocusRef.current = true;
+    triggerRef.current?.focus({ preventScroll: true });
+    restoringFocusRef.current = false;
+    setOpen(false);
+    setPinned(false);
+  };
+
+  useEffect(() => {
+    const rearmHover = (event) => {
+      if (event.pointerType !== "mouse" || !dismissedRef.current) return;
+      const bounds = triggerRef.current?.getBoundingClientRect();
+      if (bounds && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) dismissedRef.current = false;
+    };
+    document.addEventListener("pointermove", rearmHover);
+    return () => document.removeEventListener("pointermove", rearmHover);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!open) return undefined;
+    const handleKey = (event) => {
+      if (event.key === "Escape") { event.preventDefault(); close(); }
+      if (pinned && event.key === "Tab") {
+        event.preventDefault();
+        closeRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", handleKey);
+    const surface = document.querySelector(".page-zoom-surface");
+    const previousOverflow = document.body.style.overflow;
+    if (pinned) {
+      surface?.setAttribute("inert", "");
+      document.body.style.overflow = "hidden";
+      closeRef.current?.focus({ preventScroll: true });
+    }
+    return () => {
+      document.removeEventListener("keydown", handleKey);
+      if (pinned) {
+        surface?.removeAttribute("inert");
+        document.body.style.overflow = previousOverflow;
+      }
+    };
+  }, [open, pinned]);
+
+  return (
+    <div className="medication-control"
+      onPointerEnter={(event) => { if (event.pointerType === "mouse" && !dismissedRef.current) setOpen(true); }}
+      onPointerLeave={(event) => { if (event.pointerType === "mouse" && !pinned) setOpen(false); }}
+      onFocusCapture={() => {
+        // Touch focus precedes click: opening a sheet here would cover the tap.
+        if (!restoringFocusRef.current && window.matchMedia("(hover: hover)").matches) setOpen(true);
+      }}
+      onBlurCapture={(event) => { if (!pinned && !event.currentTarget.contains(event.relatedTarget)) setOpen(false); }}
+    >
+      <button className="medication-trigger" type="button" ref={triggerRef}
+        aria-haspopup="dialog" aria-expanded={open} aria-controls="medication-holds-panel"
+        onClick={() => { setOpen(true); setPinned(true); }}
+      >
+        <svg className="medication-pill-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <g transform="rotate(-45 12 12)"><rect x="3" y="7" width="18" height="10" rx="5" /><path d="M12 7v10" /></g>
+        </svg>
+        <span><strong>Medication holds</strong><small>(DOAC/Diabetes meds)</small></span>
+        <i aria-hidden="true">↗</i>
+      </button>
+      {open && createPortal(
+        <>
+          {pinned && <button className="inbasket-backdrop medication-backdrop" type="button" tabIndex={-1} aria-label="Dismiss medication holds" onClick={close} />}
+          <section className="inbasket-panel medication-panel" id="medication-holds-panel" role="dialog"
+            aria-modal={pinned ? "true" : undefined} aria-labelledby="medication-holds-title"
+          >
+            <header className="inbasket-panel-header">
+              <div><p>DSA GI procedure preparation</p><h2 id="medication-holds-title">Medication holds</h2><small>Hold intervals before your procedure</small></div>
+              <button className="inbasket-close" type="button" ref={closeRef} aria-label="Close medication holds" onClick={close}>×</button>
+            </header>
+            <div className="medication-sections">
+              {medicationHoldSections.map((section) => (
+                <section className={`medication-section medication-${section.id}`} aria-labelledby={`medication-${section.id}-title`} key={section.id}>
+                  <header><h3 id={`medication-${section.id}-title`}>{section.title}</h3><p>{section.subtitle}</p></header>
+                  {section.groups.map((group) => (
+                    <section className="medication-hold-group" key={group.timing}>
+                      <h4>{group.timing}</h4>
+                      <ul>{group.entries.map((entry) => <li key={entry.medications}><span>{entry.medications}</span>{entry.detail && <strong>{entry.detail}</strong>}</li>)}</ul>
+                    </section>
+                  ))}
+                </section>
+              ))}
+            </div>
+          </section>
+        </>, document.body,
+      )}
+    </div>
+  );
+}
+
 function CriteriaMatrix() {
   return (
     <main className="reference-page" id="sedation-panel" role="tabpanel" aria-labelledby="sedation-tab">
@@ -1708,7 +1814,10 @@ function CriteriaMatrix() {
           <p className="eyebrow">DSA GI procedural sedation · Revised {POLICY_VERSION}</p>
           <p className="reference-review-date">next review date February 2027</p>
         </div>
-        <h1>Sedation criteria, at a glance.</h1>
+        <div className="reference-title-row">
+          <h1>Sedation criteria, at a glance.</h1>
+          <MedicationHolds />
+        </div>
       </header>
 
       <div className="criteria-columns">

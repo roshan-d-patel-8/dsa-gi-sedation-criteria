@@ -332,6 +332,29 @@ body.presentation-open { overflow: hidden; }
 /* Procedure sedation tab */
 .reference-page { width: min(1480px, 100%); margin: 0 auto; padding: clamp(22px, 3vw, 40px) clamp(16px, 3.5vw, 52px) clamp(28px, 4vw, 54px); }
 .reference-heading { margin-bottom: 20px; }
+.reference-title-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 6px; }
+.reference-title-row h1 { margin-top: 0; }
+.medication-control { flex: 0 0 auto; }
+.medication-trigger { min-height: 54px; padding: 10px 14px; display: flex; align-items: center; gap: 11px; border: 1px solid rgba(27, 58, 95, .15); border-radius: 28px; background: linear-gradient(135deg, var(--navy), #285985); box-shadow: 0 8px 20px rgba(27, 58, 95, .16); color: white; cursor: pointer; text-align: left; }
+.medication-trigger:hover { box-shadow: 0 11px 24px rgba(27, 58, 95, .22); }
+.medication-trigger:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+.medication-trigger span { display: grid; gap: 3px; }
+.medication-trigger strong { font-size: 13px; line-height: 1.1; }
+.medication-trigger small { font-size: 10px; color: #dbe9f6; line-height: 1.1; }
+.medication-trigger i { font-style: normal; font-size: 17px; }
+.medication-pill-icon { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.7; flex: 0 0 auto; }
+.inbasket-panel.medication-panel { top: 184px; max-height: calc(100dvh - 208px); }
+.medication-sections { padding: 18px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.medication-section { min-width: 0; }
+.medication-section > header { margin-bottom: 12px; }
+.medication-section h3 { margin: 0; color: var(--navy); font-size: 20px; line-height: 1.15; }
+.medication-section > header p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+.medication-hold-group { margin-top: 10px; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: white; }
+.medication-hold-group h4 { margin: 0; padding: 9px 12px; background: #e8f1f8; color: var(--navy); font-size: 15px; line-height: 1.2; }
+.medication-diabetes-meds .medication-hold-group h4 { background: #f7edd9; }
+.medication-hold-group ul { margin: 0; padding: 12px; list-style: none; display: grid; gap: 10px; }
+.medication-hold-group li { display: grid; gap: 5px; font-size: 14px; line-height: 1.55; }
+.medication-hold-group li strong { color: var(--way); font-size: 12px; }
 .reference-meta-row { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; }
 .reference-meta-row .eyebrow { margin-bottom: 0; }
 .reference-review-date { margin: 0; color: #000; font-size: 13px; font-weight: 800; line-height: 1.2; text-align: right; white-space: nowrap; }
@@ -932,6 +955,10 @@ body.presentation-open { overflow: hidden; }
   .presentation-footer { padding: 0 10px 9px; gap: 5px; }
   .presentation-footer p { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .reference-heading { margin-bottom: 14px; }
+  .reference-title-row { flex-wrap: wrap; gap: 14px; }
+  .medication-control { margin-left: auto; }
+  .inbasket-panel.medication-panel { top: auto; max-height: 86dvh; }
+  .medication-sections { padding: 14px; grid-template-columns: 1fr; gap: 20px; }
   .reference-review-date { font-size: 11px; }
   .reference-heading h1, .coverage-heading h1 { font-size: 36px; }
   .criteria-columns, .pod-grid { grid-template-columns: 1fr; gap: 10px; }

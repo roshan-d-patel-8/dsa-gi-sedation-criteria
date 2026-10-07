@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.34.0 — 2026-10-07
+
+- Add the Medication holds (DOAC/Diabetes meds) pill button below the sedation review date.
+- Group all screenshot-provided blood-thinner and diabetes medications by hold interval, retaining the supplied skipped-dose counts.
+- Add hover/focus preview and click/tap modal with scrollable mobile layout, Escape/backdrop/close dismissal, focus return, and keyboard isolation.
+- Verify exact source copy, desktop/mobile layout, 140% page zoom, and existing site regressions.
+
 ## 0.33.2 — 2026-10-07
 
 - Correct In Basket Podlet Coverage so each original column is an independent, unnumbered group: eight physician groups and one PA group.
