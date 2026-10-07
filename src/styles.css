@@ -468,15 +468,19 @@ body.presentation-open { overflow: hidden; }
 .inbasket-panel-header small { display: block; margin-top: 5px; color: rgba(255, 255, 255, .64); font-size: 8px; font-weight: 700; }
 .inbasket-close { width: 40px; height: 40px; flex: 0 0 auto; border: 1px solid rgba(255, 255, 255, .25); border-radius: 50%; background: rgba(255, 255, 255, .1); color: var(--white); font-size: 25px; line-height: 1; cursor: pointer; }
 .inbasket-close:focus-visible { outline: 3px solid rgba(242, 160, 184, .8); outline-offset: 2px; }
-.inbasket-groups { padding: 14px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; }
-.inbasket-group { overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: rgba(255, 255, 255, .94); }
-.inbasket-group-pa { grid-column: 1 / -1; }
-.inbasket-group > header { min-height: 34px; padding: 7px 10px; display: flex; align-items: center; gap: 7px; border-bottom: 1px solid var(--line); background: rgba(169, 198, 222, .2); }
+.inbasket-coverage-panel .inbasket-panel-header { min-height: 62px; padding: 8px 12px; gap: 10px; }
+.inbasket-coverage-panel .inbasket-panel-header h2 { font-size: 24px; }
+.inbasket-coverage-panel .inbasket-panel-header small { margin-top: 3px; }
+.inbasket-coverage-panel .inbasket-close { width: 44px; height: 44px; }
+.inbasket-groups { padding: 8px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; gap: 6px; }
+.inbasket-group { overflow: hidden; border: 1px solid var(--line); border-radius: 10px; background: rgba(255, 255, 255, .94); }
+.inbasket-group > header { min-height: 22px; padding: 4px 7px; display: flex; align-items: center; gap: 7px; border-bottom: 1px solid var(--line); background: rgba(169, 198, 222, .2); }
 .inbasket-group > header small { color: #9a3557; font-size: 7px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
-.inbasket-members { padding: 7px; display: grid; gap: 5px; }
-.inbasket-person { min-width: 0; min-height: 48px; padding: 4px 6px; display: grid; grid-template-columns: 38px minmax(0, 1fr); align-items: center; gap: 8px; border: 1px solid rgba(27, 58, 95, .07); border-radius: 10px; background: rgba(244, 246, 248, .7); }
+.inbasket-members { padding: 4px; display: grid; gap: 3px; }
+.inbasket-person { min-width: 0; min-height: 34px; padding: 2px 4px; display: grid; grid-template-columns: 28px minmax(0, 1fr); align-items: center; gap: 6px; border: 1px solid rgba(27, 58, 95, .07); border-radius: 7px; background: rgba(244, 246, 248, .7); }
+.inbasket-person .provider-avatar { width: 28px; height: 28px; }
 .inbasket-person > span:last-child { min-width: 0; display: grid; }
-.inbasket-person strong { overflow: hidden; color: var(--navy); font-size: 10px; line-height: 1.15; text-overflow: ellipsis; white-space: nowrap; }
+.inbasket-person strong { color: var(--navy); font-size: 11px; line-height: 1.2; }
 .inbasket-person small { margin-top: 2px; color: #9a3557; font-size: 7px; font-weight: 850; text-transform: uppercase; }
 
 /* New physician orientation tab */
@@ -970,10 +974,16 @@ body.presentation-open { overflow: hidden; }
   .inbasket-panel { top: auto; right: 0; bottom: 0; width: 100vw; max-height: min(86dvh, 760px); border-right: 0; border-bottom: 0; border-left: 0; border-radius: 22px 22px 0 0; }
   .inbasket-panel-header { min-height: 76px; padding: 13px 14px; }
   .inbasket-panel-header h2 { font-size: 23px; }
-  .inbasket-groups { padding: 10px; grid-template-columns: 1fr; gap: 8px; }
-  .inbasket-group-pa { grid-column: auto; }
-  .inbasket-person { grid-template-columns: 34px minmax(0, 1fr); min-height: 44px; }
-  .inbasket-person .provider-avatar { width: 34px; height: 34px; }
+  .inbasket-panel.inbasket-coverage-panel { max-height: calc(100dvh - 12px); }
+  .inbasket-coverage-panel .inbasket-panel-header { padding: 7px 10px; }
+  .inbasket-coverage-panel .inbasket-panel-header h2 { font-size: clamp(18px, 5vw, 23px); }
+  .inbasket-groups { padding: 6px; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+  .inbasket-group-pa { grid-column: 1 / -1; }
+  .inbasket-group-pa .inbasket-members { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .inbasket-group-pa .inbasket-person small { display: none; }
+  .inbasket-person { grid-template-columns: 22px minmax(0, 1fr); min-height: 28px; padding-inline: 2px; gap: 4px; }
+  .inbasket-person .provider-avatar { width: 22px; height: 22px; }
+  .inbasket-person strong { font-size: 10px; }
   .orientation-tools { top: 110px; padding: 9px; }
   .orientation-subtabs { display: flex; gap: 7px; overflow-x: auto; padding: 2px 1px 7px; scroll-snap-type: x proximity; }
   .orientation-subtab { min-width: 190px; min-height: 78px; scroll-snap-align: start; }

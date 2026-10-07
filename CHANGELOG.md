@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.34.2 — 2026-10-07
+
+- Compact the In Basket coverage header, portraits, rows, card padding, and gaps to show the full reference without scrolling at tested desktop and phone sizes.
+- Use three independent group columns on desktop and two on phones, with a compact shared PA card; preserve all nine groups, 24 clinicians, member order, and full names.
+- Keep the medication reference styling isolated and verify close, touch, focus return, and reopening.
+
 ## 0.34.1 — 2026-10-07
 
 - Remove transferred Tom Haddad from active In Basket coverage and the main MA–MD Podlets roster.

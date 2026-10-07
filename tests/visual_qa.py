@@ -9,7 +9,7 @@ from medication_qa import assert_medication_holds
 
 
 OUTPUT = Path(os.environ.get("VISUAL_QA_OUTPUT", "/private/tmp/dsa-gi-visual-qa"))
-BASE_URL = "http://127.0.0.1:5173"
+BASE_URL = os.environ.get("VISUAL_QA_URL", "http://127.0.0.1:5173")
 OUTPUT.mkdir(parents=True, exist_ok=True)
 CARD_HEADINGS = [
     "Optiflow",
@@ -686,10 +686,8 @@ def assert_inbasket_coverage(page, mobile=False):
     assert panel.locator(".provider-initials").count() == 3
     assert panel.locator(".inbasket-empty").count() == 0
     first_box, second_box = groups.nth(0).bounding_box(), groups.nth(1).bounding_box()
-    if mobile:
-        assert second_box["y"] >= first_box["y"] + first_box["height"]
-    else:
-        assert second_box["x"] >= first_box["x"] + first_box["width"]
+    assert second_box["x"] >= first_box["x"] + first_box["width"]
+    assert panel.locator(".inbasket-groups").evaluate("element => getComputedStyle(element).gridTemplateColumns.split(' ').length") == (2 if mobile else 3)
     assert groups.evaluate_all("groups => groups.every(group => getComputedStyle(group).borderStyle === 'solid' && parseFloat(getComputedStyle(group).borderWidth) > 0)")
     assert panel.locator("img").evaluate_all("images => Promise.all(images.map(image => image.decode())).then(() => images.every(image => image.naturalWidth > 0))")
     panel_box = panel.bounding_box()
@@ -697,6 +695,10 @@ def assert_inbasket_coverage(page, mobile=False):
     assert panel_box["x"] + panel_box["width"] <= page.viewport_size["width"] + 2
     assert panel_box["y"] >= 0
     assert panel_box["y"] + panel_box["height"] <= page.viewport_size["height"] + 2
+    assert panel.evaluate("element => element.scrollHeight <= element.clientHeight + 1"), "Coverage requires scrolling"
+    assert panel.locator(".inbasket-person strong").evaluate_all("names => names.every(name => { const box = name.getBoundingClientRect(); const panel = name.closest('.inbasket-panel').getBoundingClientRect(); return name.scrollWidth <= name.clientWidth + 1 && box.top >= panel.top && box.bottom <= panel.bottom && box.left >= panel.left && box.right <= panel.right; })"), "A full clinician name is clipped"
+    close_box = panel.get_by_role("button", name="Close in-basket podlet coverage", exact=True).bounding_box()
+    assert close_box["width"] >= 44 and close_box["height"] >= 44
     return trigger, panel
 
 
@@ -1290,7 +1292,7 @@ with sync_playwright() as playwright:
     mobile_skills_day.scroll_into_view_if_needed()
     mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-skills-day-mobile.png", full_page=False)
 
-    compact_mobile = browser.new_page(viewport={"width": 320, "height": 568}, device_scale_factor=1)
+    compact_mobile = browser.new_page(viewport={"width": 320, "height": 568}, device_scale_factor=1, has_touch=True)
     compact_mobile_errors = capture_console_errors(compact_mobile)
     compact_mobile.goto(BASE_URL)
     compact_mobile.wait_for_load_state("networkidle")
@@ -1298,6 +1300,10 @@ with sync_playwright() as playwright:
     for _ in range(abs(current_month - 9)):
         compact_mobile.get_by_role("button", name="Previous month" if current_month > 9 else "Next month", exact=True).click()
     assert_mobile_birthday_dialog(compact_mobile, "Ahilan Arulanandan", "dsa-gi-calendar-birthday-mobile-320.png")
+    compact_mobile.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).click()
+    compact_trigger, compact_panel = assert_inbasket_coverage(compact_mobile, mobile=True)
+    compact_mobile.screenshot(path=OUTPUT / "dsa-gi-inbasket-mobile-320.png", full_page=False)
+    assert_inbasket_dismissal(compact_mobile, compact_trigger, compact_panel, mobile=True)
     assert compact_mobile.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
 
     assert not desktop_errors, desktop_errors

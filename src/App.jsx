@@ -2044,7 +2044,7 @@ function InBasketCoverage() {
         <>
           {pinned && <button className="inbasket-backdrop" type="button" tabIndex={-1} aria-label="Close in-basket podlet coverage" onClick={() => close(true)} />}
           <section
-            className={`inbasket-panel${pinned ? " is-pinned" : ""}`}
+            className={`inbasket-panel inbasket-coverage-panel${pinned ? " is-pinned" : ""}`}
             id="inbasket-coverage-panel"
             role="dialog"
             aria-modal={pinned ? "true" : undefined}
