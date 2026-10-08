@@ -6,6 +6,7 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 from medication_qa import assert_medication_holds
+from orientation_qa import assert_section_foldout_toggle, assert_all_section_foldout_toggles
 
 
 OUTPUT = Path(os.environ.get("VISUAL_QA_OUTPUT", "/private/tmp/dsa-gi-visual-qa"))
@@ -834,6 +835,7 @@ def assert_all_orientation_sections_are_clean(page):
         accordions = page.locator(".orientation-content details.orientation-site-group")
         assert accordions.count() == expected_accordion_counts[index]
         assert accordions.evaluate_all("elements => elements.every((element) => !element.open)")
+        assert_section_foldout_toggle(page)
         if accordions.count():
             accordions.first.locator("summary").press("Enter")
             assert accordions.first.get_attribute("open") == ""
@@ -1291,6 +1293,8 @@ with sync_playwright() as playwright:
     assert mobile_skills_day.get_by_role("link", name="26:37 Swimmer's Position for Colonoscopy", exact=False).is_visible()
     mobile_skills_day.scroll_into_view_if_needed()
     mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-skills-day-mobile.png", full_page=False)
+
+    assert_all_section_foldout_toggles(mobile)
 
     compact_mobile = browser.new_page(viewport={"width": 320, "height": 568}, device_scale_factor=1, has_touch=True)
     compact_mobile_errors = capture_console_errors(compact_mobile)

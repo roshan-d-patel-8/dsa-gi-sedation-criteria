@@ -618,7 +618,7 @@ body.presentation-open { overflow: hidden; }
   min-height: 92px;
   padding: 18px 22px;
   display: grid;
-  grid-template-columns: 50px minmax(0, 1fr) max-content;
+  grid-template-columns: 50px minmax(0, 1fr) repeat(2, max-content);
   align-items: center;
   gap: 15px;
   overflow: hidden;
@@ -630,6 +630,11 @@ body.presentation-open { overflow: hidden; }
 .orientation-card-header strong { color: var(--section-ink); font-size: 25px; line-height: 1.05; letter-spacing: -.025em; }
 .orientation-card-header small { margin-top: 5px; color: var(--muted); font-size: 11px; font-weight: 750; }
 .orientation-card-header b { position: relative; z-index: 1; padding: 6px 9px; border-radius: 7px; background: var(--section-accent); color: var(--white); font-size: 8px; letter-spacing: .09em; text-transform: uppercase; }
+.orientation-expand-all { position: relative; z-index: 2; min-height: 44px; padding: 10px 13px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid color-mix(in srgb, var(--section-accent) 45%, var(--line)); border-radius: 9px; background: rgba(255, 255, 255, .9); color: var(--section-ink); font: inherit; font-size: 12px; font-weight: 800; white-space: nowrap; cursor: pointer; }
+.orientation-expand-all svg { width: 21px; height: 21px; flex: none; }
+.orientation-expand-all:hover:not(:disabled) { background: var(--section-tint); border-color: var(--section-accent); }
+.orientation-expand-all:focus-visible { outline: 3px solid var(--section-accent); outline-offset: 3px; }
+.orientation-expand-all:disabled { opacity: .55; cursor: default; }
 .cw-infographic-launch { position: relative; z-index: 2; width: clamp(150px, 13vw, 194px); padding: 0; overflow: hidden; aspect-ratio: 5504 / 3072; border: 2px solid color-mix(in srgb, var(--section-accent) 72%, white); border-radius: 10px; background: #173a4d; box-shadow: 0 7px 18px color-mix(in srgb, var(--section-accent) 18%, transparent); cursor: zoom-in; transition: transform .18s ease, box-shadow .18s ease; }
 .cw-infographic-launch:hover { transform: translateY(-2px); box-shadow: 0 10px 24px color-mix(in srgb, var(--section-accent) 25%, transparent); }
 .cw-infographic-launch:focus-visible { outline: 3px solid color-mix(in srgb, var(--section-accent) 38%, transparent); outline-offset: 3px; }
@@ -992,6 +997,8 @@ body.presentation-open { overflow: hidden; }
   .orientation-results small { display: none; }
   .orientation-card-header { min-height: 78px; padding: 14px; grid-template-columns: 42px minmax(0, 1fr); gap: 11px; }
   .orientation-card-header.has-infographic { grid-template-columns: 42px minmax(0, 1fr) 106px; }
+  .orientation-expand-all { grid-column: 2 / -1; justify-self: start; }
+  .orientation-card-header.has-infographic .cw-infographic-launch { grid-column: 3; grid-row: 1; }
   .orientation-card-header b { display: none; }
   .orientation-card-header strong { font-size: 21px; }
   .orientation-card-header small { font-size: 10px; }

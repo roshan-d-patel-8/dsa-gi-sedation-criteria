@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.35.0 — 2026-10-07
+
+- Add a folding-map Expand all / Collapse all button to each orientation section header, opening or closing every nested foldout in the active section.
+- Synchronize its label with individual foldout changes, section navigation, and search reveals; disable it for the already fully visible Choosing Wisely section.
+- Verify all 12 sections on desktop and touch, keyboard activation, mixed states, responsive layout, search, and existing site regressions.
+
 ## 0.34.2 — 2026-10-07
 
 - Compact the In Basket coverage header, portraits, rows, card padding, and gaps to show the full reference without scrolling at tested desktop and phone sizes.

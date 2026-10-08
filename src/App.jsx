@@ -2106,6 +2106,7 @@ function OrientationMaterials() {
   const [activeSectionId, setActiveSectionId] = useState(sections[0]?.id);
   const [showChoosingWiselyInfographic, setShowChoosingWiselyInfographic] = useState(false);
   const [visibleMatchCount, setVisibleMatchCount] = useState(0);
+  const [foldoutState, setFoldoutState] = useState({ count: 0, allOpen: false });
   const orientationContentRef = useRef(null);
   const normalizedQuery = query.trim().toLowerCase();
   const visibleSections = normalizedQuery
@@ -2185,6 +2186,25 @@ function OrientationMaterials() {
     }
     setVisibleMatchCount(nextMatchCount);
   }, [activeSection, normalizedQuery]);
+
+  useEffect(() => {
+    const content = orientationContentRef.current;
+    function syncFoldouts() {
+      const foldouts = Array.from(content?.querySelectorAll("details") || []);
+      setFoldoutState({ count: foldouts.length, allOpen: foldouts.length > 0 && foldouts.every((foldout) => foldout.open) });
+    }
+    syncFoldouts();
+    // Native toggle events do not bubble; capture includes every nested foldout.
+    content?.addEventListener("toggle", syncFoldouts, true);
+    return () => content?.removeEventListener("toggle", syncFoldouts, true);
+  }, [activeSection, normalizedQuery]);
+
+  function toggleAllFoldouts() {
+    const foldouts = Array.from(orientationContentRef.current?.querySelectorAll("details") || []);
+    const open = !foldouts.every((foldout) => foldout.open);
+    foldouts.forEach((foldout) => { foldout.open = open; });
+    setFoldoutState({ count: foldouts.length, allOpen: foldouts.length > 0 && open });
+  }
 
   function handleSectionKeyDown(event, currentIndex) {
     if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
@@ -2304,6 +2324,21 @@ function OrientationMaterials() {
             <header className={`orientation-card-header${isChoosingWisely ? " has-infographic" : ""}`}>
               <span className="orientation-number">{String(sections.indexOf(activeSection) + 1).padStart(2, "0")}</span>
               <span><strong>{highlightSearchText(activeSection.sourceLabel, normalizedQuery)}</strong><small>{highlightSearchText(activeSection.descriptor, normalizedQuery)}</small></span>
+              <button
+                className="orientation-expand-all"
+                type="button"
+                onClick={toggleAllFoldouts}
+                disabled={foldoutState.count === 0}
+                aria-expanded={foldoutState.allOpen}
+                aria-controls={`${activeSection.id}-content`}
+                title={foldoutState.count === 0 ? "This section is already fully visible" : `${foldoutState.allOpen ? "Collapse" : "Expand"} all subsections in ${activeSection.short}`}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2Z" />
+                  <path d="M9 3v16M15 5v16" />
+                </svg>
+                <span>{foldoutState.allOpen ? "Collapse all" : "Expand all"}</span>
+              </button>
               {activeSection.sensitive && <b>Internal details</b>}
               {isChoosingWisely && (
                 <button
@@ -2320,6 +2355,7 @@ function OrientationMaterials() {
             </header>
             <div
               className="orientation-content"
+              id={`${activeSection.id}-content`}
               ref={orientationContentRef}
               onClick={handleOrientationContentClick}
               dangerouslySetInnerHTML={activeSectionMarkup}
