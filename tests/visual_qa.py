@@ -7,6 +7,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 from medication_qa import assert_medication_holds
 from orientation_qa import assert_section_foldout_toggle, assert_all_section_foldout_toggles, assert_outside_kp_referrals
+from changelog_qa import assert_change_log
 
 
 OUTPUT = Path(os.environ.get("VISUAL_QA_OUTPUT", "/private/tmp/dsa-gi-visual-qa"))
@@ -864,6 +865,7 @@ with sync_playwright() as playwright:
     desktop_errors = capture_console_errors(desktop)
     desktop.goto(BASE_URL)
     desktop.wait_for_load_state("networkidle")
+    assert_change_log(desktop, BASE_URL, OUTPUT / "dsa-gi-change-log-desktop.png")
     assert_tabs(desktop)
     assert_global_zoom(desktop)
     assert_home(desktop)
@@ -1191,6 +1193,7 @@ with sync_playwright() as playwright:
     mobile_errors = capture_console_errors(mobile)
     mobile.goto(BASE_URL)
     mobile.wait_for_load_state("networkidle")
+    assert_change_log(mobile, BASE_URL, OUTPUT / "dsa-gi-change-log-mobile.png")
     assert_tabs(mobile)
     assert_global_zoom(mobile, mobile=True)
     assert_home(mobile)
@@ -1306,6 +1309,7 @@ with sync_playwright() as playwright:
     compact_mobile_errors = capture_console_errors(compact_mobile)
     compact_mobile.goto(BASE_URL)
     compact_mobile.wait_for_load_state("networkidle")
+    assert_change_log(compact_mobile, BASE_URL)
     current_month = datetime.now(ZoneInfo("America/Los_Angeles")).month
     for _ in range(abs(current_month - 9)):
         compact_mobile.get_by_role("button", name="Previous month" if current_month > 9 else "Next month", exact=True).click()
@@ -1321,4 +1325,4 @@ with sync_playwright() as playwright:
     assert not compact_mobile_errors, compact_mobile_errors
     browser.close()
 
-print("Visual QA passed: persistent upper-right zoom controls across all four primary pages, Home countdowns, the January–December 2026 calendar with month-aware announcements, department resources, and GI birthdays, the July 22-slide ERBE and September 19-slide Four Habits viewers with click, keyboard, touch, fullscreen, month-isolation, and focus behavior, Tom farewell cocktail event, all 12 Field Guide sections with nested accordions except the restored open Choosing Wisely layout, highlighted search matches with automatic accordion reveal, complete email and pool copy controls, Choosing Wisely with expandable infographic, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")
+print("Visual QA passed: persistent upper-right zoom controls across all four primary pages, Home countdowns, the January–December 2026 calendar with month-aware announcements, department resources and GI birthdays, the maintained newest-first Change Log and browser navigation, the July 22-slide ERBE and September 19-slide Four Habits viewers with click, keyboard, touch, fullscreen, month-isolation, and focus behavior, Tom farewell cocktail event, all 12 Field Guide sections with nested accordions except the restored open Choosing Wisely layout, highlighted search matches with automatic accordion reveal, complete email and pool copy controls, Choosing Wisely with expandable infographic, Skills Day video with nine timestamp chapter links, podlet tooltips, portraits, and mobile layout.")

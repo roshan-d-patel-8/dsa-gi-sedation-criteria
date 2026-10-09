@@ -5,6 +5,7 @@ import { coverageSites, inBasketCoverageGroups } from "./podlets.js";
 import { birthdayEvents } from "./birthdays.js";
 import { medicationHoldSections } from "./medication-holds.js";
 import orientationSource from "./orientation-source.html?raw";
+import changelogSource from "../CHANGELOG.md?raw";
 
 const columnLayout = [
   ["optiflow", "or"],
@@ -21,6 +22,33 @@ const tabs = [
 
 const zoomLevels = [90, 100, 110, 125, 140];
 const zoomStorageKey = "dsa-gi-page-zoom";
+
+function parseChangeLog(source) {
+  const entries = [];
+  let current = null;
+
+  source.split(/\r?\n/).forEach((line) => {
+    const heading = line.match(/^##\s+([^\s]+)\s+—\s+(\d{4}-\d{2}-\d{2})$/);
+    if (heading) {
+      current = { version: heading[1], date: heading[2], changes: [] };
+      entries.push(current);
+      return;
+    }
+    const bullet = line.match(/^-\s+(.+)/);
+    if (current && bullet) current.changes.push(bullet[1]);
+  });
+
+  return entries.filter((entry) => entry.changes.length);
+}
+
+const changeLogEntries = parseChangeLog(changelogSource);
+
+function changeKind(changes) {
+  const lead = changes[0]?.toLowerCase() || "";
+  if (/^(remove|removed|retire|retired)\b/.test(lead)) return "Removed";
+  if (/^(correct|corrected|fix|fixed|replace|replaced)\b/.test(lead)) return "Corrected";
+  return "Added";
+}
 
 function escapeSearchPattern(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -962,7 +990,7 @@ function Calendar2026() {
   );
 }
 
-function HomePage() {
+function HomePage({ onOpenChangeLog }) {
   const [today, setToday] = useState(pacificToday);
 
   useEffect(() => {
@@ -1007,6 +1035,61 @@ function HomePage() {
         </div>
       </section>}
       <Calendar2026 />
+      <nav className="change-log-portal" aria-label="Site updates">
+        <a
+          href="?view=change-log"
+          onClick={(event) => {
+            if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            event.preventDefault();
+            onOpenChangeLog();
+          }}
+        >
+          <span aria-hidden="true">↗</span>
+          <span><strong>Change Log</strong><small>See what information was added, corrected, or removed.</small></span>
+          <b aria-hidden="true">View updates →</b>
+        </a>
+      </nav>
+    </main>
+  );
+}
+
+function ChangeLogPage({ onClose }) {
+  return (
+    <main className="change-log-page" aria-labelledby="change-log-title">
+      <header className="change-log-hero">
+        <a
+          href="./"
+          onClick={(event) => {
+            if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            event.preventDefault();
+            onClose();
+          }}
+        >
+          <span aria-hidden="true">←</span> Back to Home
+        </a>
+        <span>DSA GI Resources · Site updates</span>
+        <h1 id="change-log-title">Change Log</h1>
+        <p>What information was added, corrected, or removed—newest first.</p>
+      </header>
+
+      <section className="change-log-timeline" aria-label="Chronological site changes">
+        {changeLogEntries.map((entry) => {
+          const kind = changeKind(entry.changes);
+          return (
+            <article className="change-log-entry" key={entry.version}>
+              <header>
+                <time dateTime={entry.date}>{new Date(`${entry.date}T12:00:00`).toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                })}</time>
+                <div><span className={`change-kind change-kind-${kind.toLowerCase()}`}>{kind}</span><small>Release {entry.version}</small></div>
+              </header>
+              <ul>{entry.changes.map((change) => <li key={change}>{change}</li>)}</ul>
+            </article>
+          );
+        })}
+      </section>
     </main>
   );
 }
@@ -2605,6 +2688,7 @@ function ZoomControl({ zoom, onZoomChange }) {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("home");
+  const [showChangeLog, setShowChangeLog] = useState(() => new URLSearchParams(window.location.search).get("view") === "change-log");
   const [zoom, setZoom] = useState(() => {
     const storedZoom = Number(window.localStorage.getItem(zoomStorageKey));
     return zoomLevels.includes(storedZoom) ? storedZoom : 100;
@@ -2616,6 +2700,31 @@ export default function App() {
     window.localStorage.setItem(zoomStorageKey, String(zoom));
   }, [zoom]);
 
+  useEffect(() => {
+    const syncView = () => {
+      const open = new URLSearchParams(window.location.search).get("view") === "change-log";
+      setShowChangeLog(open);
+      if (open) setActiveTab("home");
+    };
+    window.addEventListener("popstate", syncView);
+    return () => window.removeEventListener("popstate", syncView);
+  }, []);
+
+  const navigateChangeLog = (open) => {
+    const url = new URL(window.location.href);
+    if (open) url.searchParams.set("view", "change-log");
+    else url.searchParams.delete("view");
+    window.history.pushState({}, "", `${url.pathname}${url.search}${url.hash}`);
+    setShowChangeLog(open);
+    setActiveTab("home");
+    window.scrollTo({ top: 0, behavior: "instant" });
+  };
+
+  const selectTab = (tabId) => {
+    if (showChangeLog) navigateChangeLog(false);
+    setActiveTab(tabId);
+  };
+
   return (
     <div className={`app-shell active-${activeTab}`}>
       <header className="site-header">
@@ -2623,7 +2732,7 @@ export default function App() {
           <img className="brand-mark" src={`${import.meta.env.BASE_URL}dsa-gi-logo.png`} alt="DSA GI logo" />
           <span><strong>DSA GI</strong><small>Resources</small></span>
         </div>
-        <FolderTabs activeTab={activeTab} onChange={setActiveTab} />
+        <FolderTabs activeTab={activeTab} onChange={selectTab} />
         <ZoomControl zoom={zoom} onZoomChange={setZoom} />
       </header>
 
@@ -2633,14 +2742,18 @@ export default function App() {
         style={{ "--page-zoom": zoom / 100, "--page-zoom-width": `${10000 / zoom}%` }}
       >
         <div className="folder-sheet">
-          {activeTab === "home" && <HomePage />}
-          {activeTab === "sedation" && <CriteriaMatrix />}
-          {activeTab === "coverage" && <CoveragePodlets />}
-          {activeTab === "orientation" && <OrientationMaterials />}
+          {showChangeLog ? <ChangeLogPage onClose={() => navigateChangeLog(false)} /> : (
+            <>
+              {activeTab === "home" && <HomePage onOpenChangeLog={() => navigateChangeLog(true)} />}
+              {activeTab === "sedation" && <CriteriaMatrix />}
+              {activeTab === "coverage" && <CoveragePodlets />}
+              {activeTab === "orientation" && <OrientationMaterials />}
+            </>
+          )}
         </div>
 
         <footer className="site-footer">
-          <div><strong>DSA GI · Trust Your Gut</strong><span>{isSedation ? `Sedation Criteria · Revised ${POLICY_VERSION}` : activeTabLabel}</span></div>
+          <div><strong>DSA GI · Trust Your Gut</strong><span>{showChangeLog ? "Change Log" : isSedation ? `Sedation Criteria · Revised ${POLICY_VERSION}` : activeTabLabel}</span></div>
           <p>The DSA Way · Physician-led, team-owned clinical operations.</p>
         </footer>
       </div>

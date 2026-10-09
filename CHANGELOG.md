@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.37.0 — 2026-10-09
+
+- Add a Home-only Change Log link immediately below the 2026 calendar and before the global footer.
+- Open a dedicated, newest-first release history generated from this maintained changelog, with dated cards and Added, Corrected, or Removed labels.
+- Preserve browser back/forward navigation, primary-tab navigation, page zoom, accessible links, and responsive desktop/touch layouts.
+- Verify the complete release history, newest entry, return navigation, direct-link loading, viewport fit, and existing site regressions.
+
 ## 0.36.0 — 2026-10-09
 
 - Add an Outside KP Referrals foldout beside Regional Services & Referrals and DSA GI Subspecialists in the Services field-guide section.
