@@ -1114,7 +1114,7 @@ const orientationSectionMeta = [
   { short: "Communication", descriptor: "Approved channels", tone: "aqua" },
   { short: "People", descriptor: "Management staff and PAs", sensitive: true, tone: "pink" },
   { short: "Contacts", descriptor: "Phone and voicemail directory", sensitive: true, tone: "coral" },
-  { short: "Services", descriptor: "Regional capabilities and referrals", tone: "teal" },
+  { short: "Referrals", key: "Services", descriptor: "Regional capabilities and referrals", tone: "teal" },
   { short: "Clinic", descriptor: "Visits, referrals and follow-up", tone: "blue" },
   { short: "Procedures", descriptor: "Appointment types and documentation", tone: "gold" },
   { short: "Choosing Wisely", descriptor: "CRC surveillance graduation", tone: "sage" },
@@ -1825,14 +1825,15 @@ function parseOrientationSource(source) {
     const container = doc.createElement("div");
     contentNodes.forEach((node) => container.append(node.cloneNode(true)));
     const meta = orientationSectionMeta[index];
+    const sectionKey = meta.key || meta.short;
     container.querySelectorAll("p").forEach((paragraph) => emphasizeLeadingLabel(paragraph, doc));
     normalizeListItemLines(container, doc);
-    groupDirectoryBySite(container, doc, meta.short);
-    groupCommunicationContent(container, doc, meta.short);
-    addPoolParty(container, doc, meta.short);
-    groupProcedures(container, doc, meta.short);
-    groupSchedules(container, doc, meta.short);
-    groupStandardSections(container, doc, meta.short);
+    groupDirectoryBySite(container, doc, sectionKey);
+    groupCommunicationContent(container, doc, sectionKey);
+    addPoolParty(container, doc, sectionKey);
+    groupProcedures(container, doc, sectionKey);
+    groupSchedules(container, doc, sectionKey);
+    groupStandardSections(container, doc, sectionKey);
     Array.from(container.children).forEach((node) => {
       if (node.matches("ol, ul")) node.classList.add("orientation-list-grid");
       if (node.matches("blockquote")) node.classList.add("orientation-callout");
@@ -1845,7 +1846,7 @@ function parseOrientationSource(source) {
 
     return {
       ...meta,
-      id: sectionId(meta.short),
+      id: sectionId(sectionKey),
       sourceLabel: orientationSectionNames[index].replace(/:$/, ""),
       html: container.innerHTML,
       text: container.textContent.toLowerCase(),
@@ -2305,6 +2306,10 @@ function OrientationMaterials() {
   const activeSectionMarkup = useMemo(() => ({ __html: activeSection?.html || "" }), [activeSection?.html]);
   const isChoosingWisely = activeSection?.short === "Choosing Wisely";
   const choosingWiselyInfographic = `${import.meta.env.BASE_URL}choosing-wisely-graduation-jan-jul-2026.jpg`;
+
+  useEffect(() => {
+    document.getElementById(`${activeSectionId}-tab`)?.scrollIntoView({ block: "nearest", inline: "center" });
+  }, [activeSectionId]);
 
   useEffect(() => {
     const content = orientationContentRef.current;

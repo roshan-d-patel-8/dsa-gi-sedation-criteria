@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.37.1 — 2026-10-09
+
+- Correct the Field Guide section 5 navigation label from Services to Referrals so it matches the regional, subspecialist, and outside-referral content.
+- Preserve the source heading, existing foldout titles and content, stable section identity, accessibility relationships, search, and keyboard navigation.
+- Verify the exact label, referral content, desktop/mobile behavior, build, and existing site regressions.
+
 ## 0.37.0 — 2026-10-09
 
 - Add a Home-only Change Log link immediately below the 2026 calendar and before the global footer.
