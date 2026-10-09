@@ -760,6 +760,29 @@ body.presentation-open { overflow: hidden; }
 .orientation-topic-body > .orientation-subheading { margin: 4px 0 0; padding: 9px 12px; border-radius: 8px; background: var(--section-accent); color: white; }
 .orientation-topic-body > .orientation-subheading strong { color: white; }
 .orientation-topic-body > .orientation-callout { margin: 0; padding: 13px 15px; border: 1px solid color-mix(in srgb, var(--section-accent) 28%, var(--line)); border-left: 5px solid var(--section-accent); border-radius: 10px; background: var(--section-tint); }
+.topic-services-outside { --site-color: #287a6e; }
+.topic-services-outside > summary > span { background: linear-gradient(145deg, #429d8e, #205e56); }
+.outside-referrals-body { gap: 13px; background: radial-gradient(circle at 94% 6%, rgba(40, 122, 110, .13), transparent 28%), linear-gradient(145deg, #f1faf7, rgba(255, 255, 255, .98)); }
+.outside-referrals-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.outside-referral-card { overflow: hidden; border: 1px solid rgba(40, 122, 110, .23); border-radius: 12px; background: rgba(255, 255, 255, .92); box-shadow: 0 6px 16px rgba(30, 89, 81, .07); }
+.outside-referral-card > header { min-height: 82px; padding: 13px 14px; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; border-bottom: 1px solid rgba(40, 122, 110, .16); background: linear-gradient(125deg, rgba(40, 122, 110, .09), rgba(255, 255, 255, .96)); }
+.outside-referral-eyebrow { margin: 0 0 4px; color: #287a6e; font-size: 8px; font-weight: 950; letter-spacing: .09em; line-height: 1.25; text-transform: uppercase; }
+.outside-referral-card h4 { margin: 0; color: #173f3a; font-size: 15px; line-height: 1.2; }
+.outside-referral-primary-phone { min-width: 126px; min-height: 50px; padding: 8px 10px; display: grid; align-content: center; border: 1px solid rgba(40, 122, 110, .25); border-radius: 9px; background: white; color: #205e56; text-align: right; text-decoration: none; }
+.outside-referral-primary-phone:hover { border-color: #287a6e; background: rgba(40, 122, 110, .05); }
+.outside-referral-primary-phone:focus-visible { outline: 3px solid rgba(40, 122, 110, .28); outline-offset: 2px; }
+.outside-referral-primary-phone small { color: #617c78; font-size: 7px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
+.outside-referral-primary-phone strong { margin-top: 2px; color: #205e56; font-family: "SFMono-Regular", Consolas, monospace; font-size: 12px; }
+.outside-referral-contact-list { margin: 0 !important; padding: 0 !important; list-style: none; }
+.outside-referral-contact-list > li { margin: 0; padding: 11px 14px; display: grid; grid-template-columns: minmax(140px, .9fr) minmax(0, 1.1fr); align-items: start; gap: 10px; border-bottom: 1px solid rgba(40, 122, 110, .12); }
+.outside-referral-contact-list > li:last-child { border-bottom: 0; }
+.outside-referral-contact-list > li > div:first-child { display: grid; gap: 2px; }
+.outside-referral-contact-list > li strong { color: #173f3a; font-size: 11px; line-height: 1.3; }
+.outside-referral-contact-list > li small { color: #6c7c79; font-size: 8px; font-weight: 740; line-height: 1.35; }
+.outside-referral-routes { display: grid; justify-items: start; gap: 3px; }
+.outside-referral-routes :is(span, a) { color: #496964; font-size: 10px; font-weight: 760; line-height: 1.35; }
+.outside-referral-routes a { color: #287a6e; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+.outside-referral-source { padding: 9px 12px; border-left: 4px solid #287a6e; border-radius: 0 8px 8px 0; background: rgba(40, 122, 110, .08); color: #496964; font-size: 9px; font-weight: 850; letter-spacing: .04em; }
 .communication-accordion-body { padding: clamp(13px, 2vw, 20px); background: linear-gradient(145deg, #f6fafc, rgba(255, 255, 255, .98)); }
 .communication-privacy-note { margin: 0 0 10px !important; padding: 10px 12px !important; border-left: 4px solid #1b75bb; border-radius: 0 8px 8px 0; background: rgba(27, 117, 187, .07) !important; color: #425d76; font-size: 11px; }
 .communication-privacy-note code { color: #15537e; font-size: 11px; font-weight: 950; }
@@ -1015,6 +1038,10 @@ body.presentation-open { overflow: hidden; }
   .pool-party-body { padding: 10px; }
   .communication-accordion-body { padding: 10px; }
   .orientation-topic-body { padding: 10px; }
+  .outside-referrals-grid { grid-template-columns: 1fr; }
+  .outside-referral-card > header { min-height: 0; grid-template-columns: 1fr; }
+  .outside-referral-primary-phone { width: 100%; min-height: 48px; text-align: left; }
+  .outside-referral-contact-list > li { grid-template-columns: 1fr; gap: 5px; }
   .email-directory-body table { min-width: 0; border: 0; background: transparent; }
   .email-directory-body thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
   .email-directory-body tbody { display: grid; gap: 8px; }

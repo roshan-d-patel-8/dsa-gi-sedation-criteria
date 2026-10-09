@@ -5,7 +5,7 @@ tags:
 
 # DSA GI Resources
 
-A compact, tabbed DSA GI clinical-operations reference. The primary Home tab carries a Pacific-time countdown strip, a navigable January–December 2026 milestone calendar, and month-specific department meeting resources. The calendar opens to the current Pacific-time month. The remaining tabs contain the August 2026 anesthesia procedure criteria, DSA GI MA–MD pod assignments, and a searchable New Physician Orientation field guide.
+A compact, tabbed DSA GI clinical-operations reference. The primary Home tab carries a Pacific-time countdown strip, a navigable January–December 2026 milestone calendar, and month-specific department meeting resources. The calendar opens to the current Pacific-time month. The remaining tabs contain the August 2026 anesthesia procedure criteria, DSA GI MA–MD pod assignments, and a searchable New Physician Orientation field guide. Its Services section includes regional routes, DSA GI subspecialists, and a source-labeled Outside KP Referrals reference for transplant coordination.
 
 ## Live site
 
@@ -33,9 +33,11 @@ npm run build
 
 ## Privacy
 
-The application is static and has no clinical inputs, backend, database, analytics, cookies, or persistent storage. Physician portraits and presentation slides are optimized local assets; the site does not fetch external profile data. The original PowerPoint file is not included in the public build. The orientation source contains internal operational details, including facility door codes, phone numbers, inbox names, schedules, and named staff. Its two HealthConnect screenshots were not imported because they show patient names.
+The application is static and has no clinical inputs, backend, database, analytics, cookies, or persistent storage. Physician portraits and presentation slides are optimized local assets; the site does not fetch external profile data. The original PowerPoint file is not included in the public build. The orientation source contains internal operational details, including facility door codes, phone numbers, inbox names, schedules, named staff, and source-labeled referral contacts. Its two HealthConnect screenshots were not imported because they show patient names. Forwarded-email and Todoist attachment source files are excluded from the public build.
 
 ## Publication
+
+On 2026-10-09 Roshan supplied an October 2026 Suk Seo reference through the private Dispatch project and requested an Outside KP Referrals section on the existing public Services field guide. The release publishes only the task-authorized transplant-coordinator routing, Mayo Clinic Arizona coverage hours, and UCSF clinic contacts. The attached forwarded-email HTML and its confidentiality footer remain excluded; an ambiguous duplicate transfer sentence is omitted in favor of the task's explicit primary-contact wording.
 
 On 2026-10-07 Roshan requested a per-section folding-map Expand all / Collapse all control on the existing public orientation guide. This release adds the control and preserves all existing orientation copy and source exclusions.
 

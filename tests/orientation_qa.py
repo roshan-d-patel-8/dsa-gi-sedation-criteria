@@ -51,6 +51,30 @@ def assert_all_section_foldout_toggles(page):
         assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
 
 
+def assert_outside_kp_referrals(page):
+    services_tab = page.locator(".orientation-subtab").filter(has_text="Services")
+    services_tab.click()
+    content = page.locator(".orientation-content")
+    foldouts = content.locator("details.orientation-topic-group")
+    assert foldouts.count() == 3
+    outside = content.locator("details.topic-services-outside")
+    expect(outside.locator("summary")).to_contain_text("Outside KP Referrals")
+    outside.locator("summary").click()
+    expect(outside).to_have_attribute("open", "")
+    expect(outside.get_by_text("KP Transplant Coordinators", exact=True)).to_be_visible()
+    expect(outside.get_by_role("link", name="Coordinator line: 510-625-2923", exact=True)).to_have_attribute("href", "tel:5106252923")
+    expect(outside.get_by_text("Kristina Beloso, RN", exact=True)).to_be_visible()
+    expect(outside.get_by_text("NCAL · A, B, C, G, I", exact=True)).to_be_visible()
+    expect(outside.get_by_text("Linda Le, RN", exact=True)).to_be_visible()
+    expect(outside.get_by_text("Part-time · all Mayo Clinic Arizona referrals", exact=True)).to_be_visible()
+    expect(outside.get_by_text("UCSF Hepatology & Liver Transplant Clinic", exact=True)).to_be_visible()
+    expect(outside.get_by_role("link", name="Primary · try first: 415-353-1888", exact=True)).to_have_attribute("href", "tel:4153531888")
+    expect(outside.get_by_text("415-353-2318 · option 5", exact=True)).to_be_visible()
+    expect(outside.get_by_text("Source: Suk Seo · October 2026", exact=True)).to_be_visible()
+    assert content.get_by_text("Transfer 4153531888 to call on all hepatologist", exact=True).count() == 0
+    assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
+
+
 if __name__ == "__main__":
     import os
     from pathlib import Path
@@ -73,6 +97,7 @@ if __name__ == "__main__":
                 if expected:
                     assert page.locator(selector).evaluate_all("items => items.map(item => item.src || item.href)") == [url.split("?")[0] + expected]
             page.get_by_role("tab", name="New Physician Orientation Materials", exact=False).click()
+            assert_outside_kp_referrals(page)
             assert_all_section_foldout_toggles(page)
             page.locator(".orientation-subtab").first.click()
             button = page.locator(".orientation-expand-all")

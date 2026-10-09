@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.36.0 — 2026-10-09
+
+- Add an Outside KP Referrals foldout beside Regional Services & Referrals and DSA GI Subspecialists in the Services field-guide section.
+- Publish the source-supplied KP transplant coordinator alphabet routing, Mayo Clinic Arizona coverage hours, and UCSF Hepatology & Liver Transplant Clinic contacts with tap-to-call primary and secondary numbers.
+- Preserve the original HTML attachment outside the public build, label the October 2026 Suk Seo provenance, and omit its ambiguous duplicate transfer instruction in favor of the task's explicit primary-contact wording.
+- Verify exact copy, phone links, accordion behavior, desktop/mobile layout, search/fold controls, and existing site regressions.
+
 ## 0.35.0 — 2026-10-07
 
 - Add a folding-map Expand all / Collapse all button to each orientation section header, opening or closing every nested foldout in the active section.

@@ -1075,6 +1075,37 @@ const communicationEmailDetails = {
   },
 };
 
+const outsideReferralGroups = [
+  {
+    id: "kp-transplant",
+    eyebrow: "KP Transplant Coordinators",
+    title: "Alphabet-based referral routing",
+    phone: { label: "510-625-2923", value: "5106252923", qualifier: "Coordinator line" },
+    contacts: [
+      { name: "Kristina Beloso, RN", routes: ["NCAL · A, B, C, G, I", "KPNW · A–L"] },
+      { name: "Melissa Kwan, RN", routes: ["NCAL · D, E, F, H, J, L, Q", "KPWA · J–Z"] },
+      { name: "Rezelda Reyes, RN", routes: ["NCAL · K, M, N, O, P, W, U, X", "KPNW · M–Z"] },
+      { name: "Mac Castro-Castillo, RN", routes: ["NCAL · R, S, T, V, Y, Z", "KPWA · A–I"] },
+      {
+        name: "Linda Le, RN",
+        note: "Part-time · all Mayo Clinic Arizona referrals",
+        routes: ["Tue / Thu · 8:00–4:30", "Wed · 8:00–12:00"],
+      },
+    ],
+  },
+  {
+    id: "ucsf-hepatology",
+    eyebrow: "UCSF Hepatology & Liver Transplant Clinic",
+    title: "Clinic contacts",
+    phone: { label: "415-353-1888", value: "4153531888", qualifier: "Primary · try first" },
+    contacts: [
+      { name: "Secondary", routes: ["415-353-2318 · option 5", "415-353-7773"], phones: ["4153532318", "4153537773"] },
+      { name: "New patient coordinator", note: "Helen", routes: ["415-353-8003"], phones: ["4153538003"] },
+      { name: "Fax", routes: ["415-353-8003"] },
+    ],
+  },
+];
+
 const skillsDayVideo = {
   title: "DSA GI Skills Day 2025",
   embedUrl: "https://www.youtube-nocookie.com/embed/WYdP1js9NPk?rel=0",
@@ -1383,6 +1414,80 @@ function createTopicFoldout(doc, { code, title, description, className = "", nod
   return foldout;
 }
 
+function createOutsideReferralFoldout(doc) {
+  const grid = doc.createElement("div");
+  grid.className = "outside-referrals-grid";
+
+  outsideReferralGroups.forEach((group) => {
+    const card = doc.createElement("section");
+    card.className = `outside-referral-card outside-referral-${group.id}`;
+    card.setAttribute("aria-labelledby", `outside-referral-${group.id}-title`);
+
+    const header = doc.createElement("header");
+    const heading = doc.createElement("div");
+    const eyebrow = doc.createElement("p");
+    eyebrow.className = "outside-referral-eyebrow";
+    eyebrow.textContent = group.eyebrow;
+    const title = doc.createElement("h4");
+    title.id = `outside-referral-${group.id}-title`;
+    title.textContent = group.title;
+    heading.append(eyebrow, title);
+
+    const phone = doc.createElement("a");
+    phone.className = "outside-referral-primary-phone";
+    phone.href = `tel:${group.phone.value}`;
+    phone.setAttribute("aria-label", `${group.phone.qualifier}: ${group.phone.label}`);
+    const phoneQualifier = doc.createElement("small");
+    phoneQualifier.textContent = group.phone.qualifier;
+    const phoneNumber = doc.createElement("strong");
+    phoneNumber.textContent = group.phone.label;
+    phone.append(phoneQualifier, phoneNumber);
+    header.append(heading, phone);
+    card.append(header);
+
+    const contacts = doc.createElement("ul");
+    contacts.className = "outside-referral-contact-list";
+    group.contacts.forEach((contact) => {
+      const item = doc.createElement("li");
+      item.className = "outside-referral-contact";
+      const identity = doc.createElement("div");
+      const name = doc.createElement("strong");
+      name.textContent = contact.name;
+      identity.append(name);
+      if (contact.note) {
+        const note = doc.createElement("small");
+        note.textContent = contact.note;
+        identity.append(note);
+      }
+      const routes = doc.createElement("div");
+      routes.className = "outside-referral-routes";
+      contact.routes.forEach((route, index) => {
+        const value = doc.createElement(contact.phones?.[index] ? "a" : "span");
+        value.textContent = route;
+        if (contact.phones?.[index]) value.href = `tel:${contact.phones[index]}`;
+        routes.append(value);
+      });
+      item.append(identity, routes);
+      contacts.append(item);
+    });
+    card.append(contacts);
+    grid.append(card);
+  });
+
+  const source = doc.createElement("footer");
+  source.className = "outside-referral-source";
+  source.textContent = "Source: Suk Seo · October 2026";
+
+  return createTopicFoldout(doc, {
+    code: "OUT",
+    title: "Outside KP Referrals",
+    description: "Transplant coordinator routing and external hepatology contacts",
+    className: "topic-services-outside",
+    bodyClass: "outside-referrals-body",
+    nodes: [grid, source],
+  });
+}
+
 function listWithItems(doc, sourceList, items) {
   const list = doc.createElement(sourceList.tagName.toLowerCase());
   Array.from(sourceList.attributes).forEach((attribute) => list.setAttribute(attribute.name, attribute.value));
@@ -1450,6 +1555,7 @@ function groupStandardSections(container, doc, sectionShort) {
         className: "topic-services-specialists",
         nodes: nodes.slice(specialists + 1),
       }),
+      createOutsideReferralFoldout(doc),
     );
     return;
   }

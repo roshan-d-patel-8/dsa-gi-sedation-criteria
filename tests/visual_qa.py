@@ -6,7 +6,7 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 from medication_qa import assert_medication_holds
-from orientation_qa import assert_section_foldout_toggle, assert_all_section_foldout_toggles
+from orientation_qa import assert_section_foldout_toggle, assert_all_section_foldout_toggles, assert_outside_kp_referrals
 
 
 OUTPUT = Path(os.environ.get("VISUAL_QA_OUTPUT", "/private/tmp/dsa-gi-visual-qa"))
@@ -829,7 +829,7 @@ def assert_choosing_wisely(page):
 
 
 def assert_all_orientation_sections_are_clean(page):
-    expected_accordion_counts = [3, 3, 3, 5, 2, 3, 4, 0, 1, 1, 1, 5]
+    expected_accordion_counts = [3, 3, 3, 5, 3, 3, 4, 0, 1, 1, 1, 5]
     for index in range(page.locator(".orientation-subtab").count()):
         page.locator(".orientation-subtab").nth(index).click()
         accordions = page.locator(".orientation-content details.orientation-site-group")
@@ -842,7 +842,7 @@ def assert_all_orientation_sections_are_clean(page):
         else:
             assert page.locator(".choosing-wisely-guide").is_visible()
         assert page.locator(".orientation-content li > p").count() == 0
-        assert page.locator(".orientation-content li:not(.skills-day-chapter)").evaluate_all(
+        assert page.locator(".orientation-content li:not(.skills-day-chapter):not(.outside-referral-contact)").evaluate_all(
             "elements => elements.every((element) => element.firstElementChild?.classList.contains('orientation-list-line'))"
         )
         assert page.locator(".orientation-content li > .orientation-list-line").evaluate_all(
@@ -954,6 +954,9 @@ with sync_playwright() as playwright:
     desktop.get_by_role("tab", name="New Physician Orientation Materials", exact=False).click()
     desktop.wait_for_timeout(300)
     assert_orientation_reference(desktop)
+    assert_outside_kp_referrals(desktop)
+    desktop.locator(".topic-services-outside").scroll_into_view_if_needed()
+    desktop.screenshot(path=OUTPUT / "dsa-gi-outside-kp-referrals-desktop.png", full_page=False)
     assert_choosing_wisely(desktop)
     desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-choosing-wisely-thumbnail.png", full_page=False)
     desktop.get_by_role("button", name="Expand Choosing Wisely graduation infographic", exact=True).click()
@@ -1246,6 +1249,9 @@ with sync_playwright() as playwright:
     mobile.get_by_role("tab", name="New Physician Orientation Materials", exact=False).click()
     mobile.wait_for_timeout(300)
     assert_orientation_reference(mobile)
+    assert_outside_kp_referrals(mobile)
+    mobile.locator(".topic-services-outside").scroll_into_view_if_needed()
+    mobile.screenshot(path=OUTPUT / "dsa-gi-outside-kp-referrals-mobile.png", full_page=False)
     assert mobile.locator(".orientation-tools").is_visible()
     assert mobile.locator(".orientation-subtabs").evaluate("element => element.scrollWidth > element.clientWidth")
     mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-mobile.png", full_page=False)
