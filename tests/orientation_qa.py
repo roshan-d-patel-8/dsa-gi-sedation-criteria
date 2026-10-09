@@ -52,7 +52,7 @@ def assert_all_section_foldout_toggles(page):
 
 
 def assert_outside_kp_referrals(page):
-    referrals_tab = page.locator(".orientation-subtab").filter(has_text="Referrals")
+    referrals_tab = page.locator("#orientation-services-tab")
     expect(referrals_tab.locator("strong")).to_have_text("Referrals")
     assert page.locator(".orientation-subtab strong").filter(has_text="Services").count() == 0
     referrals_tab.click()
