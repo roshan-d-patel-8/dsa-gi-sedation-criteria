@@ -34,13 +34,15 @@ def assert_density(page, width, touch):
     assert page.locator(".countdown-strip").evaluate("e => e.scrollWidth <= e.clientWidth")
     calendar = page.locator(".calendar-main").bounding_box()
     sidebar = page.locator(".calendar-sidebar").bounding_box()
+    countdown = page.locator(".countdown-section").bounding_box()
     if width > 980:
         assert sidebar["x"] >= calendar["x"] + calendar["width"]
-        assert abs(sidebar["y"] - calendar["y"]) <= 1
+        assert abs(countdown["y"] - calendar["y"]) <= 1
         assert calendar["y"] < (140 if width > 1120 else 220), calendar
     else:
+        assert countdown["y"] + countdown["height"] <= calendar["y"]
         assert sidebar["y"] >= calendar["y"] + calendar["height"]
-    countdown = page.locator(".countdown-section").bounding_box()
+        assert page.locator(".countdown-section").evaluate('e => Boolean(e.compareDocumentPosition(document.querySelector(".calendar-main")) & Node.DOCUMENT_POSITION_FOLLOWING)')
     bulletin = page.locator(".calendar-announcements").bounding_box()
     assert countdown["y"] + countdown["height"] <= bulletin["y"]
     colors = cards.evaluate_all("es => es.map(e => getComputedStyle(e).backgroundColor)")

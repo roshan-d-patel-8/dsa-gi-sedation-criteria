@@ -939,6 +939,7 @@ function Calendar2026({ upcomingCountdowns }) {
   return (
     <section className="year-calendar" aria-labelledby="calendar-title" tabIndex="0" onKeyDown={handleCalendarKeyDown}>
       <h2 id="calendar-title" className="sr-only">2026 calendar with monthly announcements and department meeting resources</h2>
+      <CountdownTiles items={upcomingCountdowns} />
       <div className="calendar-main">
         <header className="calendar-header">
           <div className="calendar-controls" aria-label="Calendar month controls">
@@ -1050,7 +1051,6 @@ function Calendar2026({ upcomingCountdowns }) {
       </div>
 
       <div className="calendar-sidebar">
-        <CountdownTiles items={upcomingCountdowns} />
         <aside className="calendar-announcements" aria-label={`Announcements and department meeting resources for ${monthLabel}`}>
           <header className="calendar-announcements-header">
             <span>Bulletin</span>

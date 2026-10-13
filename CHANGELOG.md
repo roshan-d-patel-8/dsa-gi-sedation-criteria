@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.38.1 — 2026-10-12
+
+- Correct the narrow-screen page order so countdown tiles appear above the calendar, followed by announcements and meeting resources.
+- Align document and keyboard order with the mobile layout while preserving the desktop calendar and right rail arrangement.
+- Verify mobile ordering, desktop placement, tile details, keyboard/touch access, zoom, expiry, and existing site regressions.
+
 ## 0.38.0 — 2026-10-12
 
 - Replace the Home icon with a calendar icon and Calendar navigation label.

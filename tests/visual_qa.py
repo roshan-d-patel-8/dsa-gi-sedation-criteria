@@ -1208,6 +1208,8 @@ with sync_playwright() as playwright:
     mobile.screenshot(path=OUTPUT / "dsa-gi-home-countdowns-mobile.png", full_page=False)
     mobile.locator(".year-calendar").scroll_into_view_if_needed()
     mobile_calendar_box = mobile.locator(".calendar-main").bounding_box()
+    mobile_countdown_box = mobile.locator(".countdown-section").bounding_box()
+    assert mobile_countdown_box["y"] + mobile_countdown_box["height"] <= mobile_calendar_box["y"]
     mobile_announcements_box = mobile.locator(".calendar-announcements").bounding_box()
     assert mobile_announcements_box["y"] >= mobile_calendar_box["y"] + mobile_calendar_box["height"]
     mobile.locator(".calendar-announcements").scroll_into_view_if_needed()
