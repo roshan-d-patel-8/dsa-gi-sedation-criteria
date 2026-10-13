@@ -5,6 +5,14 @@ tags:
 
 # Changelog
 
+## 0.38.0 — 2026-10-12
+
+- Replace the Home icon with a calendar icon and Calendar navigation label.
+- Move countdowns beside the calendar, above announcements, as compact color-coded square tiles with pixel digits and short labels.
+- Reveal full milestone titles, dates, and days remaining on hover/focus or in a tap-open detail card; retain the survey destination in that card.
+- Tighten calendar spacing, wrap tiles on phones, and preserve Pacific-date refresh, completed-event calendar history, monthly resources, page zoom, and clinical content.
+- Verify desktop/mobile layout, hover, keyboard/touch details, dismissal/focus return, survey link, zoom, expiry, and existing site regressions.
+
 ## 0.37.1 — 2026-10-09
 
 - Correct the Field Guide section 5 navigation label from Services to Referrals so it matches the regional, subspecialist, and outside-referral content.

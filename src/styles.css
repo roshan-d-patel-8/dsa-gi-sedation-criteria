@@ -91,7 +91,7 @@ body::before {
   transition: color .18s ease, background .18s ease, transform .18s ease, box-shadow .18s ease;
 }
 .folder-tab-home { min-width: 64px; width: 64px; max-width: 64px; justify-content: center; padding-inline: 15px; color: var(--way); box-shadow: inset 0 3px 0 rgba(27, 117, 187, .65); }
-.home-tab-icon { width: 22px; height: 22px; fill: currentColor; filter: drop-shadow(0 3px 5px rgba(27, 117, 187, .2)); }
+.calendar-tab-icon { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 3px 5px rgba(27, 117, 187, .2)); }
 .folder-tab:nth-child(3) { min-width: 332px; box-shadow: inset 0 3px 0 rgba(242, 160, 184, .7); }
 .folder-tab:nth-child(4) { min-width: 356px; box-shadow: inset 0 3px 0 rgba(217, 164, 65, .72); }
 .folder-tab > span { color: #91a2b3; font-size: 11px; font-weight: 900; letter-spacing: .14em; line-height: 1; }
@@ -135,27 +135,40 @@ body::before {
 
 .folder-sheet { min-height: calc(100vh - 160px); border-top: 1px solid rgba(27, 58, 95, .04); }
 
-/* Home command deck */
-.home-page { width: min(1580px, 100%); margin: 0 auto; padding: clamp(30px, 3.5vw, 50px) clamp(16px, 3.5vw, 52px) clamp(46px, 6vw, 90px); }
-.countdown-section { position: relative; }
-.countdown-strip { display: grid; grid-template-columns: repeat(var(--countdown-count), minmax(158px, 1fr)); gap: 10px; }
-.countdown-card { --card-accent: var(--way); position: relative; min-width: 0; min-height: 228px; padding: 17px 15px 16px; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-top: 5px solid var(--card-accent); border-radius: 13px; background: rgba(255, 255, 255, .93); box-shadow: var(--shadow); animation: card-in .48s both; animation-delay: var(--delay); }
-.countdown-card.is-linked { color: inherit; text-decoration: none; transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
-.countdown-card.is-linked:hover { border-color: color-mix(in srgb, var(--card-accent) 48%, var(--line)); box-shadow: 0 17px 34px rgba(18, 43, 70, .16); transform: translateY(-2px); }
-.countdown-card.is-linked:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
-.countdown-card::after { position: absolute; width: 82px; height: 82px; top: -38px; right: -36px; border-radius: 50%; background: color-mix(in srgb, var(--card-accent) 11%, transparent); content: ""; }
-.countdown-card.tone-gold { --card-accent: var(--gold); }
-.countdown-card.tone-way { --card-accent: var(--navy); background: linear-gradient(155deg, #fff, rgba(27, 117, 187, .09)); }
-.countdown-sequence { position: relative; z-index: 1; color: color-mix(in srgb, var(--card-accent) 55%, white); font-size: 9px; font-weight: 950; letter-spacing: .12em; }
-.countdown-number { margin: 16px 0 13px; display: flex; align-items: baseline; gap: 6px; color: var(--card-accent); }
-.countdown-number strong { font-size: clamp(42px, 4.2vw, 62px); line-height: .8; letter-spacing: -.06em; }
-.countdown-number span { font-size: 8px; font-weight: 950; letter-spacing: .1em; text-transform: uppercase; }
-.countdown-card h3 { margin: auto 0 10px; color: var(--navy); font-size: 13px; line-height: 1.22; letter-spacing: -.01em; }
-.countdown-card time { min-height: 25px; padding-top: 9px; border-top: 1px solid color-mix(in srgb, var(--card-accent) 18%, var(--line)); color: var(--muted); font-size: 8.5px; font-weight: 750; line-height: 1.25; }
-.countdown-cta { margin-top: 9px; display: flex; align-items: center; justify-content: space-between; color: color-mix(in srgb, var(--card-accent) 78%, var(--navy)); font-size: 9px; font-weight: 950; letter-spacing: .08em; text-transform: uppercase; }
-.countdown-cta span { font-size: 15px; line-height: .7; transition: transform .18s ease; }
-.countdown-card.is-linked:hover .countdown-cta span { transform: translate(2px, -2px); }
-.year-calendar { margin-top: clamp(28px, 4vw, 50px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(250px, 292px); align-items: start; gap: 14px; }
+/* Calendar command deck */
+.home-page { width: min(1580px, 100%); margin: 0 auto; padding: clamp(18px, 2vw, 28px) clamp(16px, 3vw, 44px) clamp(30px, 4vw, 60px); }
+.calendar-sidebar { min-width: 0; display: grid; gap: 14px; }
+.countdown-section { min-width: 0; }
+.countdown-header { padding: 0 2px 9px; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.countdown-header h2 { margin: 0; color: var(--navy); font-size: 14px; font-weight: 900; }
+.countdown-header small { color: var(--muted); font-size: 9px; font-weight: 800; }
+.countdown-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.countdown-card, .countdown-tooltip, .countdown-dialog { --tile-bg: #1b75bb; --tile-ink: #fff; }
+.countdown-card.tone-gold, .countdown-tooltip.tone-gold, .countdown-dialog.tone-gold { --tile-bg: #f1c76a; --tile-ink: #4d350f; }
+.countdown-card.tone-way, .countdown-tooltip.tone-way, .countdown-dialog.tone-way { --tile-bg: #1b3a5f; --tile-ink: #fff; }
+.countdown-card { position: relative; min-width: 0; width: 100%; aspect-ratio: 1; padding: 8px 5px 7px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; border: 1px solid rgba(27, 58, 95, .16); border-radius: 9px; background: var(--tile-bg); color: var(--tile-ink); box-shadow: 0 3px 0 color-mix(in srgb, var(--tile-bg) 75%, #142337); cursor: pointer; transition: transform .16s ease, box-shadow .16s ease; }
+.countdown-card:hover { transform: translateY(-2px); box-shadow: 0 5px 0 color-mix(in srgb, var(--tile-bg) 75%, #142337), 0 8px 16px rgba(27, 58, 95, .12); }
+.countdown-card:focus-visible { outline: 3px solid var(--way); outline-offset: 4px; }
+.countdown-card:active { transform: translateY(2px); box-shadow: none; }
+.countdown-number { display: grid; justify-items: center; gap: 4px; }
+.pixel-number { display: block; height: 27px; width: auto; max-width: 60px; fill: currentColor; }
+.countdown-number > span { font-size: 7px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; opacity: .8; }
+.countdown-short-label { max-width: 100%; font-size: 10px; font-weight: 900; line-height: 1.15; text-align: center; }
+.countdown-tooltip { width: 280px; padding: 16px; display: grid; gap: 7px; border: 1px solid rgba(27, 58, 95, .18); border-top: 5px solid var(--tile-bg); border-radius: 12px; background: white; color: var(--navy); box-shadow: 0 14px 34px rgba(20, 55, 88, .22); text-align: left; }
+.countdown-tooltip small { font-size: 9px; font-weight: 900; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.countdown-tooltip strong { font-size: 15px; line-height: 1.3; }
+.countdown-tooltip time { font-size: 12px; font-weight: 750; }
+.countdown-tooltip em { font-size: 10px; font-style: normal; color: var(--way); }
+.countdown-dialog { position: relative; width: min(420px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); padding: 26px; overflow: auto; border-top: 6px solid var(--tile-bg); border-radius: 16px; background: white; color: var(--navy); box-shadow: 0 20px 60px rgba(7, 28, 49, .3); }
+.countdown-dialog > small { display: block; padding-right: 40px; color: var(--muted); font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; }
+.countdown-dialog-number { margin-top: 24px; display: flex; align-items: center; gap: 14px; color: color-mix(in srgb, var(--tile-bg) 70%, var(--navy)); }
+.countdown-dialog-number .pixel-number { height: 42px; max-width: 108px; }
+.countdown-dialog-number > span { font-size: 12px; font-weight: 800; }
+.countdown-dialog h2 { margin: 20px 0 10px; font-size: 22px; line-height: 1.2; }
+.countdown-dialog > time { font-size: 14px; }
+.countdown-cta { min-height: 44px; margin-top: 22px; padding: 12px 14px; display: flex; justify-content: space-between; gap: 12px; border-radius: 8px; background: var(--navy); color: white; font-size: 12px; font-weight: 900; text-decoration: none; }
+.countdown-cta:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+.year-calendar { margin-top: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(250px, 292px); align-items: start; gap: 16px; }
 .year-calendar:focus-visible { outline: 3px solid rgba(27, 117, 187, .3); outline-offset: 4px; }
 .calendar-main { position: relative; z-index: 1; min-width: 0; overflow: visible; border: 1px solid var(--line); border-radius: 18px; background: rgba(255, 255, 255, .9); box-shadow: var(--shadow); }
 .calendar-main:has(.calendar-art-marker:hover), .calendar-main:has(.calendar-art-marker:focus) { z-index: 10; }
@@ -168,7 +181,8 @@ body::before {
 .calendar-controls button:disabled { color: #b6c2ce; border-color: var(--line); background: #f2f4f6; cursor: not-allowed; }
 .calendar-grid { padding: 18px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; border-radius: 0 0 18px 18px; }
 .calendar-weekday { padding: 5px 4px 9px; color: var(--muted); font-size: 12px; font-weight: 950; letter-spacing: .1em; text-align: center; text-transform: uppercase; }
-.calendar-day { position: relative; min-height: 108px; padding: 10px; border: 1px solid rgba(217, 226, 234, .8); border-radius: 11px; background: rgba(244, 246, 248, .62); }
+.calendar-day { position: relative; min-height: 90px; padding: 10px; border: 1px solid rgba(217, 226, 234, .8); border-radius: 11px; background: rgba(244, 246, 248, .62); }
+.calendar-day.has-social-event.has-birthday { min-height: 100px; }
 .calendar-day > time { width: 31px; height: 31px; display: grid; place-items: center; border-radius: 9px; color: var(--navy); font-size: 14px; font-weight: 900; }
 .calendar-day.has-event { border-color: rgba(27, 117, 187, .28); background: linear-gradient(145deg, rgba(27, 117, 187, .08), rgba(255, 255, 255, .94)); }
 .calendar-day.has-event > time { background: var(--way); color: var(--white); }
@@ -256,10 +270,10 @@ body.birthday-dialog-open, body.social-event-dialog-open { overflow: hidden; }
 .calendar-event-tooltip small { color: var(--pillar); font-size: 12px; font-weight: 800; line-height: 1.3; }
 .calendar-event-marker:hover .calendar-event-tooltip, .calendar-event-marker:focus .calendar-event-tooltip { visibility: visible; opacity: 1; transform: none; }
 .calendar-announcements { min-width: 0; overflow: hidden; border: 1px solid rgba(27, 58, 95, .28); border-radius: 18px; background: linear-gradient(160deg, #173f66, #0d2c4a); color: var(--white); box-shadow: 0 14px 32px rgba(20, 55, 88, .18); }
-.calendar-announcements-header { position: relative; min-height: 112px; padding: 22px 20px 17px; overflow: hidden; border-bottom: 1px solid rgba(255, 255, 255, .14); }
+.calendar-announcements-header { position: relative; min-height: 82px; padding: 14px 16px; overflow: hidden; border-bottom: 1px solid rgba(255, 255, 255, .14); }
 .calendar-announcements-header::after { position: absolute; width: 112px; height: 112px; top: -52px; right: -38px; border: 18px solid rgba(169, 198, 222, .1); border-radius: 50%; content: ""; }
 .calendar-announcements-header > span { color: #9ec8e2; font-size: 9px; font-weight: 950; letter-spacing: .15em; text-transform: uppercase; }
-.calendar-announcements-header h2 { margin: 7px 0 8px; color: var(--white); font-size: 27px; line-height: 1; letter-spacing: -.035em; }
+.calendar-announcements-header h2 { margin: 5px 0 6px; color: var(--white); font-size: 23px; line-height: 1; letter-spacing: -.035em; }
 .calendar-announcements-header small { color: rgba(255, 255, 255, .62); font-size: 10px; font-weight: 800; }
 .announcement-list { padding: 14px; display: grid; align-content: start; gap: 11px; }
 .announcement-card { --announcement-accent: var(--pillar); padding: 13px; display: grid; grid-template-columns: 50px minmax(0, 1fr); align-items: start; gap: 11px; border: 1px solid rgba(255, 255, 255, .15); border-left: 5px solid var(--announcement-accent); border-radius: 12px; background: rgba(255, 255, 255, .97); box-shadow: 0 9px 20px rgba(3, 20, 36, .18); }
@@ -907,17 +921,18 @@ body.presentation-open { overflow: hidden; }
   .folder-tab-home { min-width: 60px; width: 60px; }
   .folder-tab:nth-child(3) { min-width: 310px; }
   .folder-tab:nth-child(4) { min-width: 338px; }
-  .countdown-strip { display: flex; overflow-x: auto; padding: 2px 1px 14px; scroll-snap-type: x proximity; }
-  .countdown-card { min-width: 190px; scroll-snap-align: start; }
-  .year-calendar { grid-template-columns: 1fr; }
+  .year-calendar { grid-template-columns: minmax(0, 1fr) 250px; }
   .calendar-announcements-header { min-height: auto; padding: 17px 18px; }
-  .announcement-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .announcement-list { grid-template-columns: 1fr; }
   .coverage-heading { align-items: start; }
   .orientation-tools { top: 130px; grid-template-columns: 1fr; }
   .orientation-subtabs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
 @media (max-width: 980px) {
+  .year-calendar { grid-template-columns: 1fr; }
+  .countdown-strip { grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); }
+  .countdown-card { max-width: 110px; }
   .criteria-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .criteria-column { display: contents; }
   .criteria-card { order: var(--order); }
@@ -943,9 +958,9 @@ body.presentation-open { overflow: hidden; }
   .folder-tab > span { font-size: 10px; }
   .folder-tab > strong { font-size: 12px; }
   .home-page, .reference-page, .coverage-page, .orientation-page { padding: 18px 12px 28px; }
-  .countdown-strip { margin-right: -12px; padding-right: 12px; }
-  .countdown-card { min-width: 184px; min-height: 216px; }
-  .year-calendar { margin-top: 30px; border-radius: 14px; }
+  .countdown-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .countdown-card { max-width: none; }
+  .year-calendar { margin-top: 0; border-radius: 14px; }
   .calendar-main, .calendar-announcements { border-radius: 14px; }
   .calendar-header { min-height: 68px; padding: 12px; border-radius: 14px 14px 0 0; }
   .calendar-controls { width: 100%; grid-template-columns: 42px minmax(0, 1fr) 42px; gap: 8px; }
@@ -1124,6 +1139,10 @@ body.presentation-open { overflow: hidden; }
   .change-log-entry::before { left: -22px; }
   .change-log-entry > header { align-items: flex-start; flex-direction: column; gap: 7px; }
   .change-log-entry ul { padding: 13px 15px 14px 30px; }
+}
+
+@media (max-width: 360px) {
+  .countdown-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 @media print {

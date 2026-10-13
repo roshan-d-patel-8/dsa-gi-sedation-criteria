@@ -47,10 +47,10 @@ def assert_change_log(page, base_url, screenshot_path=None):
     entries = expected_entries()
     cards = page.locator(".change-log-entry")
     assert cards.count() == len(entries)
-    assert cards.first.get_by_text("Release 0.37.1", exact=True).is_visible()
-    assert cards.first.get_by_text("Corrected", exact=True).is_visible()
-    assert cards.first.get_by_text("October 9, 2026", exact=True).is_visible()
-    assert cards.first.get_by_text("Correct the Field Guide section 5 navigation label from Services to Referrals so it matches the regional, subspecialist, and outside-referral content.", exact=True).is_visible()
+    assert cards.first.get_by_text(f"Release {entries[0][0]}", exact=True).is_visible()
+    expect(cards.first.locator(".change-kind")).to_have_text("Corrected")
+    assert cards.first.locator("time").get_attribute("datetime") == entries[0][1]
+    assert cards.get_by_text("Correct the Field Guide section 5 navigation label from Services to Referrals so it matches the regional, subspecialist, and outside-referral content.", exact=True).is_visible()
     dates = cards.locator("time").evaluate_all("items => items.map(item => item.dateTime)")
     assert dates == sorted(dates, reverse=True)
     assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
@@ -63,8 +63,8 @@ def assert_change_log(page, base_url, screenshot_path=None):
     assert "view=change-log" not in page.url
     page.go_forward()
     expect(page.get_by_role("heading", name="Change Log", exact=True)).to_be_visible()
-    expect(page.get_by_role("tab", name="Home", exact=False)).to_have_attribute("aria-selected", "true")
-    page.get_by_role("link", name="Back to Home", exact=False).click()
+    expect(page.get_by_role("tab", name="Calendar", exact=False)).to_have_attribute("aria-selected", "true")
+    page.get_by_role("link", name="Back to Calendar", exact=False).click()
     expect(page.locator(".year-calendar")).to_be_visible()
     assert "view=change-log" not in page.url
 
@@ -72,7 +72,7 @@ def assert_change_log(page, base_url, screenshot_path=None):
     page.wait_for_load_state("networkidle")
     expect(page.get_by_role("heading", name="Change Log", exact=True)).to_be_visible()
     assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
-    page.get_by_role("link", name="Back to Home", exact=False).click()
+    page.get_by_role("link", name="Back to Calendar", exact=False).click()
     expect(page.locator(".year-calendar")).to_be_visible()
 
 

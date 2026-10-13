@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { POLICY_VERSION, policySections } from "./criteria.js";
 import { coverageSites, inBasketCoverageGroups } from "./podlets.js";
@@ -14,7 +14,7 @@ const columnLayout = [
 ];
 
 const tabs = [
-  { id: "home", label: "Home", icon: true },
+  { id: "home", label: "Calendar", icon: true },
   { id: "sedation", index: "01", label: "Procedure Sedation Criteria" },
   { id: "coverage", index: "02", label: "DSA GI MA-MD Podlets" },
   { id: "orientation", index: "03", label: "New Physician Orientation Materials" },
@@ -243,10 +243,11 @@ function daysUntil(date, today = pacificToday()) {
   return Math.ceil((Date.UTC(year, month - 1, day) - today) / 86_400_000);
 }
 
-function HomeIcon() {
+function CalendarIcon() {
   return (
-    <svg className="home-tab-icon" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M3.75 10.5 12 3.75l8.25 6.75v8.25a1.5 1.5 0 0 1-1.5 1.5h-4.5v-6h-4.5v6h-4.5a1.5 1.5 0 0 1-1.5-1.5V10.5Z" />
+    <svg className="calendar-tab-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="3.5" y="5" width="17" height="16" rx="2" />
+      <path d="M7.5 3v4M16.5 3v4M3.5 10h17M8 14h1M12 14h1M16 14h1M8 17h1M12 17h1" />
     </svg>
   );
 }
@@ -755,7 +756,133 @@ function SocialEventDialog({ event, onClose }) {
   );
 }
 
-function Calendar2026() {
+const pixelDigits = [
+  ["11111", "10001", "10001", "10001", "10001", "10001", "11111"],
+  ["00100", "01100", "00100", "00100", "00100", "00100", "01110"],
+  ["11111", "00001", "00001", "11111", "10000", "10000", "11111"],
+  ["11111", "00001", "00001", "01111", "00001", "00001", "11111"],
+  ["10001", "10001", "10001", "11111", "00001", "00001", "00001"],
+  ["11111", "10000", "10000", "11111", "00001", "00001", "11111"],
+  ["11111", "10000", "10000", "11111", "10001", "10001", "11111"],
+  ["11111", "00001", "00001", "00010", "00100", "00100", "00100"],
+  ["11111", "10001", "10001", "11111", "10001", "10001", "11111"],
+  ["11111", "10001", "10001", "11111", "00001", "00001", "11111"],
+];
+
+function PixelNumber({ value }) {
+  const digits = String(value).split("");
+  return (
+    <svg className="pixel-number" viewBox={`0 0 ${digits.length * 6 - 1} 7`} aria-hidden="true" shapeRendering="crispEdges">
+      {digits.flatMap((digit, index) => pixelDigits[Number(digit)].flatMap((row, y) =>
+        row.split("").flatMap((pixel, x) => pixel === "1" ? <rect key={`${index}-${x}-${y}`} x={index * 6 + x} y={y} width=".85" height=".85" /> : [])
+      ))}
+    </svg>
+  );
+}
+
+function CountdownDialog({ item, onClose }) {
+  const dialogRef = useRef(null);
+  const closeRef = useRef(null);
+  const isOpen = Boolean(item);
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const surface = document.querySelector(".page-zoom-surface");
+    surface?.setAttribute("inert", "");
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    closeRef.current?.focus({ preventScroll: true });
+    const handleKey = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose();
+      }
+      if (event.key === "Tab") {
+        const targets = dialogRef.current.querySelectorAll("button, a[href]");
+        const first = targets[0];
+        const last = targets[targets.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault(); last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault(); first.focus();
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => {
+      surface?.removeAttribute("inert");
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, [isOpen, onClose]);
+  if (!item) return null;
+  return createPortal(
+    <div className="social-event-dialog-backdrop" onPointerDown={(event) => {
+      if (event.target === event.currentTarget) onClose();
+    }}>
+      <section ref={dialogRef} className={`countdown-dialog tone-${item.tone || "blue"}`} role="dialog" aria-modal="true" aria-labelledby="countdown-dialog-title">
+        <button ref={closeRef} className="social-event-dialog-close" type="button" aria-label="Close milestone details" onClick={onClose}>×</button>
+        <small>Upcoming milestone</small>
+        <div className="countdown-dialog-number"><strong className="sr-only">{item.days}</strong><PixelNumber value={item.days} /><span>{item.days === 1 ? "day" : "days"} remaining</span></div>
+        <h2 id="countdown-dialog-title">{item.label}</h2>
+        <time dateTime={item.date}>{item.displayDate}</time>
+        {item.href && <a className="countdown-cta" href={item.href} target="_blank" rel="noreferrer">{item.cta}<span aria-hidden="true">↗</span></a>}
+      </section>
+    </div>, document.body,
+  );
+}
+
+function CountdownTiles({ items }) {
+  const [activeItem, setActiveItem] = useState(null);
+  const triggerRef = useRef(null);
+  const shortLabels = {
+    "2026-09-28": "Aslam", "2026-10-02": "Dublin", "2026-10-16": "Survey",
+    "2026-10-17": "TPIP", "2026-10-19": "PL · Rm 1", "2026-11-02": "PL · Rm 2", "2026-11-18": "E2K",
+  };
+  const closeDetails = useCallback(() => {
+    setActiveItem(null);
+    requestAnimationFrame(() => {
+      const target = triggerRef.current?.isConnected ? triggerRef.current : document.querySelector(".countdown-card, #home-tab");
+      target?.focus({ preventScroll: true });
+    });
+  }, []);
+  // Resolve the open item against the refreshed Pacific date as well as the tiles.
+  const currentItem = items.find((item) => item.date === activeItem);
+  useEffect(() => {
+    if (activeItem && !currentItem) closeDetails();
+  }, [activeItem, currentItem, closeDetails]);
+  if (!items.length) return null;
+  return (
+    <section className="countdown-section" aria-label="Upcoming milestones">
+      <header className="countdown-header"><h2>Countdowns</h2><small>Days to go</small></header>
+      <div className="countdown-strip">
+        {items.map((item) => {
+          const tooltipId = `countdown-details-${item.date}`;
+          return (
+            <button className={`countdown-card tone-${item.tone || "blue"}`} type="button" key={item.date}
+              aria-label={`${item.label}, ${item.days} ${item.days === 1 ? "day" : "days"} remaining, ${item.displayDate}`}
+              aria-describedby={tooltipId} aria-haspopup="dialog" onClick={(event) => {
+                triggerRef.current = event.currentTarget;
+                setActiveItem(item.date);
+              }}>
+              <span className="countdown-number"><strong className="sr-only">{item.days}</strong><PixelNumber value={item.days} /><span>{item.days === 1 ? "day" : "days"}</span></span>
+              <span className="countdown-short-label">{shortLabels[item.date] || item.label}</span>
+              <time className="sr-only" dateTime={item.date}>{item.displayDate}</time>
+              <CalendarPreview id={tooltipId} className={`countdown-tooltip tone-${item.tone || "blue"}`}>
+                <small>{item.days} {item.days === 1 ? "day" : "days"} remaining</small>
+                <strong>{item.label}</strong>
+                <time dateTime={item.date}>{item.displayDate}</time>
+                {item.cta && <em>{item.cta} ↗ · Open details</em>}
+              </CalendarPreview>
+            </button>
+          );
+        })}
+      </div>
+      <CountdownDialog item={currentItem} onClose={closeDetails} />
+    </section>
+  );
+}
+
+function Calendar2026({ upcomingCountdowns }) {
   const [monthPosition, setMonthPosition] = useState(currentCalendarPosition);
   const [activeResource, setActiveResource] = useState(null);
   const [activeBirthday, setActiveBirthday] = useState(null);
@@ -922,66 +1049,69 @@ function Calendar2026() {
         </div>
       </div>
 
-      <aside className="calendar-announcements" aria-label={`Announcements and department meeting resources for ${monthLabel}`}>
-        <header className="calendar-announcements-header">
-          <span>Bulletin</span>
-          <h2>Announcements</h2>
-          <small>{announcements.length ? `${announcements.length} items` : "All clear"}</small>
-        </header>
-        {announcements.length > 0 ? (
-          <div className="announcement-list">
-            {announcements.map((announcement) => (
-              <article className={`announcement-card tone-${announcement.tone}`} key={announcement.label}>
-                <time className="announcement-date" dateTime={announcement.date}>
-                  <span>{announcement.month}</span>
-                  <strong>{announcement.day}</strong>
-                </time>
-                <div>
-                  <small>{announcement.kind}</small>
-                  <h3>{announcement.label}</h3>
-                  <time dateTime={announcement.date}>{announcement.displayDate}</time>
-                </div>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <p className="announcements-empty">No announcements for this month.</p>
-        )}
-
-        <section className="department-resources" aria-labelledby={`department-resources-${monthIndex}`}>
-          <header className="department-resources-header">
-            <span>Reference library</span>
-            <h3 id={`department-resources-${monthIndex}`}>Department meeting resources</h3>
-            <small>{monthLabel}</small>
+      <div className="calendar-sidebar">
+        <CountdownTiles items={upcomingCountdowns} />
+        <aside className="calendar-announcements" aria-label={`Announcements and department meeting resources for ${monthLabel}`}>
+          <header className="calendar-announcements-header">
+            <span>Bulletin</span>
+            <h2>Announcements</h2>
+            <small>{announcements.length ? `${announcements.length} items` : "All clear"}</small>
           </header>
-          {departmentResources.length > 0 ? (
-            <div className="department-resource-list">
-              {departmentResources.map((resource) => (
-                <button
-                  className="department-resource-card"
-                  type="button"
-                  onClick={() => setActiveResource(resource)}
-                  aria-label={`Open ${resource.title} presentation, ${resource.slideTitles.length} slides`}
-                  key={resource.id}
-                >
-                  <span className="department-resource-cover">
-                    <img src={`${import.meta.env.BASE_URL}${resource.assetPath}/slide-01.webp`} alt="" />
-                    <i aria-hidden="true">View deck</i>
-                  </span>
-                  <span className="department-resource-copy">
-                    <small>Presentation · {resource.slideTitles.length} slides</small>
-                    <strong>{resource.title}</strong>
-                    <span>{resource.description}</span>
-                  </span>
-                  <b aria-hidden="true">Open →</b>
-                </button>
+          {announcements.length > 0 ? (
+            <div className="announcement-list">
+              {announcements.map((announcement) => (
+                <article className={`announcement-card tone-${announcement.tone}`} key={announcement.label}>
+                  <time className="announcement-date" dateTime={announcement.date}>
+                    <span>{announcement.month}</span>
+                    <strong>{announcement.day}</strong>
+                  </time>
+                  <div>
+                    <small>{announcement.kind}</small>
+                    <h3>{announcement.label}</h3>
+                    <time dateTime={announcement.date}>{announcement.displayDate}</time>
+                  </div>
+                </article>
               ))}
             </div>
           ) : (
-            <p className="department-resources-empty">No department meeting resources for this month.</p>
+            <p className="announcements-empty">No announcements for this month.</p>
           )}
-        </section>
-      </aside>
+
+          <section className="department-resources" aria-labelledby={`department-resources-${monthIndex}`}>
+            <header className="department-resources-header">
+              <span>Reference library</span>
+              <h3 id={`department-resources-${monthIndex}`}>Department meeting resources</h3>
+              <small>{monthLabel}</small>
+            </header>
+            {departmentResources.length > 0 ? (
+              <div className="department-resource-list">
+                {departmentResources.map((resource) => (
+                  <button
+                    className="department-resource-card"
+                    type="button"
+                    onClick={() => setActiveResource(resource)}
+                    aria-label={`Open ${resource.title} presentation, ${resource.slideTitles.length} slides`}
+                    key={resource.id}
+                  >
+                    <span className="department-resource-cover">
+                      <img src={`${import.meta.env.BASE_URL}${resource.assetPath}/slide-01.webp`} alt="" />
+                      <i aria-hidden="true">View deck</i>
+                    </span>
+                    <span className="department-resource-copy">
+                      <small>Presentation · {resource.slideTitles.length} slides</small>
+                      <strong>{resource.title}</strong>
+                      <span>{resource.description}</span>
+                    </span>
+                    <b aria-hidden="true">Open →</b>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <p className="department-resources-empty">No department meeting resources for this month.</p>
+            )}
+          </section>
+        </aside>
+      </div>
 
       <PresentationViewer resource={activeResource} onClose={() => setActiveResource(null)} />
       <BirthdayDialog birthday={activeBirthday} onClose={closeBirthday} />
@@ -1009,32 +1139,7 @@ function HomePage({ onOpenChangeLog }) {
 
   return (
     <main className="home-page" id="home-panel" role="tabpanel" aria-labelledby="home-tab">
-      {upcomingCountdowns.length > 0 && <section className="countdown-section" aria-label="Upcoming milestones">
-        <div className="countdown-strip" style={{ "--countdown-count": upcomingCountdowns.length }}>
-          {upcomingCountdowns.map((item, index) => {
-            const { days } = item;
-            const CountdownTag = item.href ? "a" : "article";
-            return (
-              <CountdownTag
-                className={`countdown-card tone-${item.tone || "blue"}${item.href ? " is-linked" : ""}`}
-                style={{ "--delay": `${index * 55}ms` }}
-                {...(item.href ? { href: item.href, target: "_blank", rel: "noreferrer" } : {})}
-                key={item.label}
-              >
-                <span className="countdown-sequence">{String(index + 1).padStart(2, "0")}</span>
-                <div className="countdown-number">
-                  <strong>{days}</strong>
-                  <span>{days === 1 ? "day" : "days"}</span>
-                </div>
-                <h3>{item.label}</h3>
-                <time dateTime={item.date}>{item.displayDate}</time>
-                {item.cta && <b className="countdown-cta">{item.cta}<span aria-hidden="true">↗</span></b>}
-              </CountdownTag>
-            );
-          })}
-        </div>
-      </section>}
-      <Calendar2026 />
+      <Calendar2026 upcomingCountdowns={upcomingCountdowns} />
       <nav className="change-log-portal" aria-label="Site updates">
         <a
           href="?view=change-log"
@@ -1065,7 +1170,7 @@ function ChangeLogPage({ onClose }) {
             onClose();
           }}
         >
-          <span aria-hidden="true">←</span> Back to Home
+          <span aria-hidden="true">←</span> Back to Calendar
         </a>
         <span>DSA GI Resources · Site updates</span>
         <h1 id="change-log-title">Change Log</h1>
@@ -2632,7 +2737,7 @@ function FolderTabs({ activeTab, onChange }) {
           onKeyDown={(event) => handleKeyDown(event, index)}
           key={tab.id}
         >
-          {tab.icon ? <HomeIcon /> : <span>{tab.index}</span>}
+          {tab.icon ? <CalendarIcon /> : <span>{tab.index}</span>}
           <strong className={tab.icon ? "sr-only" : undefined}>{tab.label}</strong>
         </button>
       ))}

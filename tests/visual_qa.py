@@ -58,7 +58,7 @@ def capture_console_errors(page):
 
 def assert_tabs(page):
     assert page.get_by_role("tab").count() == 4
-    assert page.get_by_role("tab", name="Home", exact=True).is_visible()
+    assert page.get_by_role("tab", name="Calendar", exact=True).is_visible()
     assert page.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).is_visible()
     podlets_tab = page.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False)
     assert podlets_tab.is_visible()
@@ -88,7 +88,7 @@ def assert_global_zoom(page, mobile=False):
     page.keyboard.press("Escape")
     assert zoom_panel.count() == 0
 
-    for tab_name in ["Home", "Procedure Sedation Criteria", "DSA GI MA-MD Podlets", "New Physician Orientation Materials"]:
+    for tab_name in ["Calendar", "Procedure Sedation Criteria", "DSA GI MA-MD Podlets", "New Physician Orientation Materials"]:
         page.get_by_role("tab", name=tab_name, exact=False).click()
         assert page.get_by_role("button", name="Zoom page, currently 110%", exact=True).is_visible()
         assert page.locator(".page-zoom-surface").get_attribute("data-zoom") == "110"
@@ -120,7 +120,7 @@ def assert_preview_in_viewport(page, marker):
 def assert_home(page):
     assert page.get_by_role("heading", name="Countdowns!", exact=True).count() == 0
     assert page.get_by_text("The next markers on the map.", exact=True).count() == 0
-    assert page.locator(".home-tab-icon").is_visible()
+    assert page.locator(".calendar-tab-icon").is_visible()
     today = datetime.now(ZoneInfo("America/Los_Angeles")).date()
     milestone_dates = ["2026-09-28", "2026-10-02", "2026-10-16", "2026-10-17", "2026-10-19", "2026-11-02", "2026-11-18"]
     upcoming_dates = [value for value in milestone_dates if date.fromisoformat(value) > today]
@@ -128,16 +128,19 @@ def assert_home(page):
     assert page.locator(".countdown-card time").evaluate_all("elements => elements.map(element => element.dateTime)") == upcoming_dates
     assert page.locator(".countdown-number strong").evaluate_all("elements => elements.every(element => Number(element.textContent) > 0)")
     if "2026-10-16" in upcoming_dates:
-        survey = page.get_by_role("link", name=re.compile("2026 TPMG POS and JAMM Survey"))
+        survey = page.get_by_role("button", name=re.compile("2026 TPMG POS and JAMM Survey"))
         assert survey.is_visible()
-        assert survey.get_attribute("href") == "https://tpmghr.kp.org/physician-opinion-survey"
-        assert survey.get_attribute("target") == "_blank"
-        assert survey.locator(".countdown-cta").inner_text().lower().startswith("take the survey")
+        survey.click()
+        dialog = page.get_by_role("dialog", name="2026 TPMG POS and JAMM Survey", exact=True)
+        link = dialog.get_by_role("link", name="Take the survey", exact=False)
+        assert link.get_attribute("href") == "https://tpmghr.kp.org/physician-opinion-survey"
+        assert link.get_attribute("target") == "_blank"
+        page.get_by_role("button", name="Close milestone details", exact=True).click()
     assert page.get_by_text("Sheikah Slate", exact=False).count() == 0
     assert page.locator(".countdown-strip").get_by_text("Tom Haddad — last on-site day", exact=True).count() == 0
     assert page.locator(".countdown-strip").get_by_text("Thu · Sep 17, 2026", exact=True).count() == 0
     if "2026-11-18" in upcoming_dates:
-        assert page.locator(".countdown-strip").get_by_text("E2K — GI go-live", exact=True).is_visible()
+        assert page.locator(".countdown-strip").get_by_role("button", name=re.compile("E2K — GI go-live")).is_visible()
     assert page.get_by_text("Rest of 2026", exact=True).count() == 0
     assert page.get_by_text("September—December", exact=True).count() == 0
     current_month = datetime.now(ZoneInfo("America/Los_Angeles")).month
@@ -873,7 +876,7 @@ with sync_playwright() as playwright:
     assert_department_meeting_resource(desktop)
     assert_july_department_meeting_resource(desktop)
     assert_calendar_navigation(desktop)
-    assert desktop.get_by_role("tab", name="Home", exact=True).get_attribute("aria-selected") == "true"
+    assert desktop.get_by_role("tab", name="Calendar", exact=True).get_attribute("aria-selected") == "true"
     desktop.evaluate("document.documentElement.style.scrollBehavior = 'auto'; window.scrollTo(0, 0)")
     desktop.wait_for_timeout(100)
     desktop.screenshot(path=OUTPUT / "dsa-gi-home-countdowns-desktop.png", full_page=False)
@@ -1201,7 +1204,7 @@ with sync_playwright() as playwright:
     assert_department_meeting_resource(mobile, mobile=True)
     assert_july_department_meeting_resource(mobile, mobile=True)
     assert_earlier_calendar_mobile(mobile)
-    assert mobile.locator(".countdown-strip").evaluate("element => element.scrollWidth > element.clientWidth")
+    assert mobile.locator(".countdown-strip").evaluate("element => element.scrollWidth <= element.clientWidth")
     mobile.screenshot(path=OUTPUT / "dsa-gi-home-countdowns-mobile.png", full_page=False)
     mobile.locator(".year-calendar").scroll_into_view_if_needed()
     mobile_calendar_box = mobile.locator(".calendar-main").bounding_box()
