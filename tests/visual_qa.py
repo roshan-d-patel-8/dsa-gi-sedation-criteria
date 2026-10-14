@@ -6,6 +6,7 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 from medication_qa import assert_medication_holds
+from sedation_qa import assert_sedation_clarifications
 from orientation_qa import assert_section_foldout_toggle, assert_all_section_foldout_toggles, assert_outside_kp_referrals
 from changelog_qa import assert_change_log
 
@@ -926,6 +927,7 @@ with sync_playwright() as playwright:
 
     desktop.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).click()
     assert_sedation_reference(desktop)
+    assert_sedation_clarifications(desktop)
     assert_medication_holds(desktop, OUTPUT)
     assert desktop.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).get_attribute("aria-selected") == "true"
     desktop.wait_for_timeout(850)
@@ -1243,6 +1245,7 @@ with sync_playwright() as playwright:
     mobile.locator(".year-calendar").focus()
     mobile.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).click()
     assert_sedation_reference(mobile)
+    assert_sedation_clarifications(mobile, touch=True)
     assert_medication_holds(mobile, OUTPUT, mobile=True)
     mobile.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-sedation-mobile.png", full_page=False)
     mobile.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).click()

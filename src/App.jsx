@@ -1959,12 +1959,82 @@ function parseOrientationSource(source) {
   });
 }
 
+function CriteriaExplanation({ explanation }) {
+  const [open, setOpen] = useState(false);
+  const [position, setPosition] = useState(null);
+  const triggerRef = useRef(null);
+  const tooltipRef = useRef(null);
+  const hideTimer = useRef(null);
+  const cancelHide = () => window.clearTimeout(hideTimer.current);
+  const show = () => { cancelHide(); setOpen(true); };
+  const hideSoon = () => { cancelHide(); hideTimer.current = window.setTimeout(() => setOpen(false), 180); };
+
+  useEffect(() => () => window.clearTimeout(hideTimer.current), []);
+  useEffect(() => {
+    if (!open) return undefined;
+    const dismiss = (event) => {
+      if (event.type === "keydown" && event.key !== "Escape") return;
+      if (event.type === "pointerdown" && (triggerRef.current?.contains(event.target) || tooltipRef.current?.contains(event.target))) return;
+      setOpen(false);
+    };
+    document.addEventListener("keydown", dismiss);
+    document.addEventListener("pointerdown", dismiss);
+    return () => {
+      document.removeEventListener("keydown", dismiss);
+      document.removeEventListener("pointerdown", dismiss);
+    };
+  }, [open]);
+
+  useLayoutEffect(() => {
+    if (!open) { setPosition(null); return undefined; }
+    const update = () => {
+      const anchor = triggerRef.current.getBoundingClientRect();
+      const card = tooltipRef.current.getBoundingClientRect();
+      const margin = 12;
+      const below = anchor.bottom + 8;
+      setPosition({
+        left: Math.max(margin, Math.min(anchor.right - card.width, document.documentElement.clientWidth - card.width - margin)),
+        top: Math.max(margin, Math.min(below + card.height <= window.innerHeight - margin ? below : anchor.top - card.height - 8, window.innerHeight - card.height - margin)),
+      });
+    };
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(tooltipRef.current);
+    window.addEventListener("resize", update);
+    window.addEventListener("scroll", update, true);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update, true);
+    };
+  }, [open]);
+
+  return <>
+    <button type="button" className="criteria-help" ref={triggerRef}
+      aria-label={explanation.label} aria-describedby={open ? explanation.id : undefined}
+      aria-expanded={open} aria-controls={explanation.id}
+      onPointerEnter={(event) => { if (event.pointerType === "mouse") show(); }}
+      onPointerLeave={(event) => { if (event.pointerType === "mouse") hideSoon(); }}
+      onFocus={() => { if (window.matchMedia("(hover: hover)").matches) show(); }}
+      onBlur={() => setOpen(false)}
+      onClick={(event) => { cancelHide(); setOpen(event.detail === 0 || window.matchMedia("(hover: hover)").matches ? true : !open); }}
+    ><span aria-hidden="true">?</span></button>
+    {open && createPortal(<span role="tooltip" id={explanation.id} ref={tooltipRef}
+      className="criteria-explanation" style={{ ...position, visibility: position ? "visible" : "hidden" }}
+      onPointerEnter={cancelHide} onPointerLeave={hideSoon}
+    >{explanation.text}</span>, document.body)}
+  </>;
+}
+
 function CriteriaItem({ item }) {
   if (typeof item === "string") return <li>{item}</li>;
   return (
     <li>
       {item.text}
-      <div className="criteria-contrast">
+      {item.emphasis && <> <strong className="criteria-emphasis">{item.emphasis}</strong> <CriteriaExplanation explanation={item.explanation} /></>}
+      {item.booking && <span className="criteria-booking">{item.booking}</span>}
+      {item.after && <> {item.after}</>}
+      {item.contrast && <div className="criteria-contrast">
         {item.contrast.map((lane) => (
           <section className={`criteria-lane criteria-lane-${lane.tone}`} key={lane.label}>
             <p>{lane.label}</p>
@@ -1972,7 +2042,7 @@ function CriteriaItem({ item }) {
             <ul>{lane.details.map((detail) => <li key={detail}>{detail}</li>)}</ul>
           </section>
         ))}
-      </div>
+      </div>}
     </li>
   );
 }

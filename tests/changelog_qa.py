@@ -48,7 +48,8 @@ def assert_change_log(page, base_url, screenshot_path=None):
     cards = page.locator(".change-log-entry")
     assert cards.count() == len(entries)
     assert cards.first.get_by_text(f"Release {entries[0][0]}", exact=True).is_visible()
-    expect(cards.first.locator(".change-kind")).to_have_text("Corrected")
+    expect(cards.filter(has=page.get_by_text("Release 0.38.1", exact=True)).locator(".change-kind")).to_have_text("Corrected")
+    expect(cards.filter(has=page.get_by_text("Release 0.38.2", exact=True)).locator(".change-kind")).to_have_text("Added")
     assert cards.first.locator("time").get_attribute("datetime") == entries[0][1]
     assert cards.get_by_text("Correct the Field Guide section 5 navigation label from Services to Referrals so it matches the regional, subspecialist, and outside-referral content.", exact=True).is_visible()
     dates = cards.locator("time").evaluate_all("items => items.map(item => item.dateTime)")

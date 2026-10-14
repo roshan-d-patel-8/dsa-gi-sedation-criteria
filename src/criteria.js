@@ -77,7 +77,17 @@ export const policySections = [
       "Heavy alcohol or drug use.",
       "Excessive pain/anxiety or prior intolerance to moderate sedation.",
       "History of sexual or physical trauma.",
-      "ESRD on hemodialysis or peritoneal dialysis: arrive two hours early. Peritoneal-dialysis cases must be booked at Antioch only—not Walnut Creek. All hemodialysis and peritoneal-dialysis patients require a STAT potassium order.",
+      {
+        text: "ESRD on hemodialysis or peritoneal dialysis: arrive two hours early.",
+        emphasis: "Peritoneal-dialysis cases must be booked at Antioch only—not Walnut Creek.",
+        explanation: {
+          id: "peritoneal-dialysis-location",
+          label: "Why peritoneal dialysis requires Antioch",
+          text: "Walnut Creek has only 3 admit bays. Its limited space makes it difficult to administer pre-procedure antibiotics that take over 60 minutes. Antioch has greater capacity to accommodate this preparation, which is why peritoneal-dialysis cases must be booked there.",
+        },
+        booking: 'In booking comments, state “Patient is on peritoneal dialysis” to alert schedulers that the case is restricted to Antioch.',
+        after: "All hemodialysis and peritoneal-dialysis patients require a STAT potassium order.",
+      },
     ],
   },
   {
@@ -104,7 +114,7 @@ export const policySections = [
       "Severe gastroparesis.",
       "Intellectual disability or dementia when pre-procedure IV cannot be tolerated.",
       "Severe pulmonary hypertension.",
-      "Physical limitation such as quadriplegia or being bedbound when multiple people are needed for transfer.",
+      "Physical limitation such as quadriplegia or being bedbound when multiple people are needed for transfer. For patients with quadriplegia, the risk of dysautonomia is an additional reason for OR scheduling.",
       "All OR procedures require POM clinic beforehand.",
     ],
   },

@@ -132,6 +132,7 @@ export function evaluateCriteria(state) {
   if (state.dialysis === "pd") {
     elevate("mac", "ESRD on peritoneal dialysis");
     addUnique(advisories, "Book at Antioch only, not Walnut Creek; arrive 2 hours early for antibiotics; a STAT potassium order is required");
+    addUnique(advisories, 'In booking comments, state “Patient is on peritoneal dialysis” to alert schedulers that the case is restricted to Antioch');
   }
   if (state.dialysis !== "none" && state.site === "pleasanton") addUnique(pleasantonExclusions, "Dialysis or renal failure");
   if (state.dialysis !== "none" && state.chf !== "none") addUnique(reviewFlags, "Combined CHF and ESRD may warrant OR; individualized anesthesia input is advised");

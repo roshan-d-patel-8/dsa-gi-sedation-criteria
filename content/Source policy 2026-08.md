@@ -84,6 +84,15 @@ All OR procedures should have POM clinic beforehand.
 
 Consider MAC for significant pain during colonoscopy with moderate sedation because remimazolam has no analgesic properties, and for heavy cannabis use.
 
+## Clarifications supplied by Roshan — 2026-10-14
+
+These dated clarifications supplement the August source above:
+
+- For patients with quadriplegia, the risk of dysautonomia is an additional reason for OR scheduling, alongside the need for multiple staff for transfer.
+- Emphasize the existing Antioch-only requirement for peritoneal dialysis. Walnut Creek has only 3 admit bays, making it difficult to administer pre-procedure antibiotics that take over 60 minutes. Antioch has greater capacity to accommodate this preparation.
+- In booking comments, state “Patient is on peritoneal dialysis” to alert schedulers that the case is restricted to Antioch.
+- Preserve the existing two-hour arrival and STAT potassium instructions. These clarifications do not change antibiotic regimens or other clinical routing thresholds.
+
 ## Backlinks
 
 - [[2026-06-16 DSA GI Sedation Driver Workflow]]

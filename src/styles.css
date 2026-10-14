@@ -399,6 +399,13 @@ body.presentation-open { overflow: hidden; }
 .criteria-card h2 { margin: 8px 0 12px; color: var(--navy); font-size: clamp(22px, 2vw, 27px); font-weight: 750; line-height: 1.08; letter-spacing: -.02em; }
 .criteria-card > ul { margin: 0; padding: 0 0 0 17px; color: var(--muted); font-size: 12.5px; line-height: 1.4; }
 .criteria-card > ul > li { margin: 5px 0; }
+.criteria-emphasis { color: var(--navy); font-weight: 850; }
+.criteria-booking { display: block; margin: 5px 0; }
+.criteria-help { display: inline-grid; place-items: center; width: 28px; height: 28px; padding: 4px; border: 0; border-radius: 50%; background: transparent; vertical-align: middle; cursor: help; }
+.criteria-help > span { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: #1769aa; color: white; font-size: 13px; font-weight: 850; line-height: 1; }
+.criteria-help:focus-visible { outline: 2px solid var(--navy); outline-offset: 1px; }
+.criteria-explanation { position: fixed; z-index: 160; width: min(340px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow: auto; padding: 14px 16px; border: 1px solid #91b9db; border-radius: 12px; background: #eef7ff; color: var(--navy); box-shadow: 0 12px 30px rgba(20, 55, 88, .22); font-size: 14px; line-height: 1.5; }
+@media (pointer: coarse) { .criteria-help { width: 44px; height: 44px; } }
 .criteria-contrast { display: grid; gap: 6px; margin: 8px 0 3px; }
 .criteria-lane { padding: 8px 9px; border: 1px solid; border-radius: 9px; }
 .criteria-lane-moderate { border-color: rgba(76, 124, 174, .35); background: rgba(169, 198, 222, .2); }

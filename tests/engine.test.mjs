@@ -62,6 +62,8 @@ test("dialysis produces MAC and correct preparation instructions", () => {
   assert.equal(hd.level, "mac");
   assert.ok(hd.advisories.some((item) => item.includes("STAT potassium order")));
   assert.equal(pd.level, "mac");
+  assert.ok(pd.advisories.some((item) => item.includes("booking comments") && item.includes("Patient is on peritoneal dialysis")));
+  assert.ok(!hd.advisories.some((item) => item.includes("booking comments")));
   assert.ok(pd.advisories.some((item) => item.includes("antibiotics")));
   assert.ok(pd.advisories.some((item) => item.includes("Antioch only") && item.includes("not Walnut Creek")));
   assert.ok(pd.advisories.some((item) => item.includes("STAT potassium order")));

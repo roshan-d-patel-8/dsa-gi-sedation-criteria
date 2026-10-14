@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.38.2 — 2026-10-14
+
+- Add dysautonomia risk to the quadriplegia operating-room rationale.
+- Bold the Antioch-only peritoneal-dialysis requirement and explain the admit-bay/antibiotic preparation constraint through a blue question-mark control.
+- Ask clinicians to state “Patient is on peritoneal dialysis” in booking comments so schedulers recognize the Antioch restriction.
+- Verify hover, keyboard, touch, dismissal, viewport fit, and existing site/clinical regressions.
+
 ## 0.38.1 — 2026-10-12
 
 - Correct the narrow-screen page order so countdown tiles appear above the calendar, followed by announcements and meeting resources.
