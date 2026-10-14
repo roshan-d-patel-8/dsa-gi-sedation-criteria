@@ -10,6 +10,7 @@ from sedation_qa import assert_sedation_clarifications
 from path_workflow_qa import assert_path_workflow
 from orientation_qa import assert_section_foldout_toggle, assert_all_section_foldout_toggles, assert_outside_kp_referrals
 from changelog_qa import assert_change_log
+from meeting_notes_qa import assert_meeting_notes
 
 
 OUTPUT = Path(os.environ.get("VISUAL_QA_OUTPUT", "/private/tmp/dsa-gi-visual-qa"))
@@ -409,9 +410,9 @@ def assert_calendar_navigation(page):
     assert page.locator(".calendar-controls").get_by_text("October 2026", exact=True).count() == 1
     assert page.locator(".calendar-announcements").get_attribute("aria-label") == "Announcements and department meeting resources for October 2026"
     assert page.locator(".announcement-card").count() == 0
-    assert page.get_by_text("No announcements for this month.", exact=True).is_visible()
+    assert page.get_by_text("Meeting notes available", exact=True).is_visible()
     assert page.locator(".department-resource-card").count() == 0
-    assert page.get_by_text("No department meeting resources for this month.", exact=True).is_visible()
+    assert page.get_by_role("button", name="Read October 14 Department Meeting Notes", exact=True).is_visible()
     assert page.locator(".calendar-event-marker").count() == 4
     survey_deadline = page.get_by_role(
         "gridcell", name="October 2026 16: 2026 TPMG POS and JAMM Survey", exact=True
@@ -1345,6 +1346,9 @@ with sync_playwright() as playwright:
     assert_inbasket_dismissal(compact_mobile, compact_trigger, compact_panel, mobile=True)
     assert compact_mobile.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
 
+    assert_meeting_notes(desktop, BASE_URL, OUTPUT / "oct14-meeting-desktop.png")
+    assert_meeting_notes(mobile, BASE_URL, OUTPUT / "oct14-meeting-mobile.png", touch=True)
+    assert_meeting_notes(compact_mobile, BASE_URL, touch=True)
     assert not desktop_errors, desktop_errors
     assert not mobile_errors, mobile_errors
     assert not compact_mobile_errors, compact_mobile_errors

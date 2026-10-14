@@ -1286,3 +1286,35 @@ body.presentation-open { overflow: hidden; }
   .workflow-image-scroll { max-height: calc(100dvh - 170px); }
   .workflow-image-scroll img { max-height: calc(100dvh - 200px); }
 }
+
+/* Department meeting notes */
+.meeting-notes-card { width: calc(100% - 28px); margin: 0 14px 15px; padding: 14px 12px; display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 11px; border: 1px solid #9ec8e2; border-radius: 12px; background: #f5f9fc; color: var(--navy); text-align: left; cursor: pointer; }
+.meeting-notes-card:hover { background: #e7f2f9; }
+.meeting-notes-card:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+.meeting-notes-card-date { padding-top: 3px; font-size: 9px; font-weight: 850; text-align: center; color: var(--blue); }
+.meeting-notes-card-date strong { display: block; font-size: 27px; line-height: 1.1; }
+.meeting-notes-card > span:last-child { min-width: 0; display: grid; gap: 7px; }
+.meeting-notes-card small { font-size: 9px; color: #60758b; }
+.meeting-notes-card > span > strong { font-size: 16px; line-height: 1.2; }
+.meeting-notes-card > span > span { font-size: 11px; line-height: 1.4; }
+.meeting-notes-card b { font-size: 11px; color: var(--blue); }
+.meeting-notes-dialog { width: min(880px, calc(100vw - 24px)); max-width: none; max-height: calc(100dvh - 24px); padding: 0; overflow: auto; border: 1px solid #afc4d8; border-radius: 18px; background: #f6f9fc; color: var(--ink); box-shadow: 0 25px 80px #071c2666; }
+.meeting-notes-dialog::backdrop { background: #071c26bb; backdrop-filter: blur(6px); }
+.meeting-notes-dialog > header { position: sticky; top: 0; z-index: 2; padding: 20px 24px; display: flex; gap: 16px; align-items: center; justify-content: space-between; background: var(--navy); color: white; }
+.meeting-notes-dialog time { font-size: 11px; color: #b8d6ec; }
+.meeting-notes-dialog h2 { margin: 7px 0 0; font-size: clamp(21px, 4vw, 30px); line-height: 1.15; }
+.meeting-notes-dialog > header button { width: 44px; height: 44px; flex: 0 0 auto; border: 1px solid #ffffff66; border-radius: 50%; background: #ffffff15; color: white; font-size: 27px; cursor: pointer; }
+.meeting-notes-body { padding: 8px 24px 24px; font-size: 15px; line-height: 1.65; overflow-wrap: anywhere; }
+.meeting-notes-body > section { padding: 15px 0; border-bottom: 1px solid #d3e0eb; }
+.meeting-notes-body h3 { margin: 0 0 12px; color: var(--navy); font-size: 21px; }
+.meeting-notes-body ul { padding-left: 23px; margin: 0; }
+.meeting-notes-body li + li { margin-top: 14px; }
+.meeting-notes-body p { margin: 0; }
+.meeting-notes-body a { color: #1467a8; font-weight: 750; text-decoration: underline; }
+.meeting-sticky-note { margin-top: 10px; border: 1px solid #ddc56f; border-radius: 8px; background: #fff7d7; color: #493a16; }
+.meeting-sticky-note > summary { min-height: 44px; padding: 6px 10px; display: flex; align-items: center; gap: 9px; cursor: pointer; font-size: 12px; font-weight: 850; list-style: none; }
+.meeting-sticky-note > summary::-webkit-details-marker { display: none; }
+.meeting-sticky-note > summary span { width: 24px; height: 24px; display: grid; place-items: center; background: #ffe28a; font-size: 11px; clip-path: polygon(0 0, 75% 0, 100% 25%, 100% 100%, 0 100%); }
+.meeting-sticky-note > div { padding: 4px 14px 14px; font-size: 13px; line-height: 1.6; }
+.meeting-sticky-note :focus-visible { outline: 3px solid #bd963a; outline-offset: 2px; }
+@media (max-width: 680px) { .meeting-notes-dialog { width: calc(100vw - 12px); max-height: calc(100dvh - 12px); border-radius: 12px; } .meeting-notes-dialog > header { padding: 15px 12px; gap: 10px; } .meeting-notes-body { padding: 5px 14px 18px; font-size: 14px; } }

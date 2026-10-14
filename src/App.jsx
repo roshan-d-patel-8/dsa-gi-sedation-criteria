@@ -8,6 +8,8 @@ import { dtmMedicationGroups } from "./dtm.js";
 import orientationSource from "./orientation-source.html?raw";
 import pathWorkflowSource from "./path-workflow.html?raw";
 import changeLogEntries from "../content/practice-updates.json";
+import octoberMeetingNotes from "../content/meeting-notes-2026-10-14.json";
+import { MeetingNotesCard, MeetingNotesDialog } from "./MeetingNotes.jsx";
 
 const columnLayout = [
   ["optiflow", "or"],
@@ -876,6 +878,8 @@ function Calendar2026({ upcomingCountdowns }) {
   const monthSocialEvents = calendarArtEvents.filter(({ date }) => Number(date.slice(5, 7)) - 1 === monthIndex);
   const announcements = monthlyAnnouncements[monthIndex] || [];
   const departmentResources = monthlyDepartmentResources[monthIndex] || [];
+  const meetingNotes = monthIndex === 9 ? [octoberMeetingNotes] : [];
+  const [activeMeetingNotes, setActiveMeetingNotes] = useState(null);
 
   function moveMonth(direction) {
     setActiveBirthday(null);
@@ -1031,7 +1035,7 @@ function Calendar2026({ upcomingCountdowns }) {
           <header className="calendar-announcements-header">
             <span>Bulletin</span>
             <h2>Announcements</h2>
-            <small>{announcements.length ? `${announcements.length} items` : "All clear"}</small>
+            <small>{announcements.length ? `${announcements.length} items` : meetingNotes.length ? "Meeting notes available" : "All clear"}</small>
           </header>
           {announcements.length > 0 ? (
             <div className="announcement-list">
@@ -1049,7 +1053,7 @@ function Calendar2026({ upcomingCountdowns }) {
                 </article>
               ))}
             </div>
-          ) : (
+          ) : meetingNotes.length ? null : (
             <p className="announcements-empty">No announcements for this month.</p>
           )}
 
@@ -1059,6 +1063,7 @@ function Calendar2026({ upcomingCountdowns }) {
               <h3 id={`department-resources-${monthIndex}`}>Department meeting resources</h3>
               <small>{monthLabel}</small>
             </header>
+            {meetingNotes.map((notes) => <MeetingNotesCard notes={notes} onOpen={() => setActiveMeetingNotes(notes)} key={notes.id} />)}
             {departmentResources.length > 0 ? (
               <div className="department-resource-list">
                 {departmentResources.map((resource) => (
@@ -1082,13 +1087,14 @@ function Calendar2026({ upcomingCountdowns }) {
                   </button>
                 ))}
               </div>
-            ) : (
+            ) : meetingNotes.length ? null : (
               <p className="department-resources-empty">No department meeting resources for this month.</p>
             )}
           </section>
         </aside>
       </div>
 
+      <MeetingNotesDialog notes={activeMeetingNotes} onClose={() => setActiveMeetingNotes(null)} />
       <PresentationViewer resource={activeResource} onClose={() => setActiveResource(null)} />
       <BirthdayDialog birthday={activeBirthday} onClose={closeBirthday} />
       <SocialEventDialog event={activeSocialEvent} onClose={closeSocialEvent} />

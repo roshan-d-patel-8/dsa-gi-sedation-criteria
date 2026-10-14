@@ -37,6 +37,8 @@ The application is static and has no clinical inputs, backend, database, analyti
 
 ## Publication
 
+On 2026-10-14 Roshan supplied the October 14 Department Meeting Notes for publication in that month’s announcements/meeting section. All supplied paragraphs and both exact links are included, with structured sections and expandable sticky notes for the optional TPIP alternatives and OR consent context. Notes remain scoped to October 2026. Parking is labeled separately from the meeting venue; optional sessions and the two-of-six-hour makeup retain their supplied qualifications.
+
 On 2026-10-14 Roshan requested the primary navigation label “03 Field Guide”. The tab uses the shorter label with its existing number and content-sized width; the document heading and content are preserved. This navigation-only correction is excluded from the clinician practice history.
 
 On 2026-10-14 Roshan requested a new In Basket Podlet Coverage pair: Omar Al-Shuwaykh and Aysha Aslam. Their existing portraits are reused. The reference now contains ten groups and 26 clinicians (23 physicians and three PAs); all earlier groups and main MA-MD assignments remain unchanged. This supersedes the October 7 count below.

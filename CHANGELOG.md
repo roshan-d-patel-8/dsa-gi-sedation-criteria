@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.42.0 — 2026-10-14
+
+- Add the complete October 14 Department Meeting Notes to the October Calendar announcements/department meeting area.
+- Retain all supplied TPIP, administrative, initiative and OR-reminder copy and exact Forms/education links.
+- Add hover/keyboard/tap sticky notes for optional alternative TPIPs and the OR consent context, with a readable native notes dialog.
+- Verify source copy, October ownership, links, notes, dismissal/focus, and desktop/phone layouts.
+
 ## 0.41.1 — 2026-10-14
 
 - Rename the primary orientation navigation tab to “03 Field Guide”, retaining its stable identity and content-sized width.

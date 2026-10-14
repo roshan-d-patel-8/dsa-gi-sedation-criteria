@@ -1,5 +1,16 @@
 [
   {
+    "id": "2026-10-14-meeting-notes",
+    "date": "2026-10-14",
+    "title": "October department meeting notes",
+    "sourceReleases": [
+      "0.42.0"
+    ],
+    "changes": [
+      "Added October 14 meeting notes covering TPIP attendance and alternatives, education and voting deadlines, Desktop Medicine and Pleasanton updates, and inpatient OR consent and anesthesia-call reminders."
+    ]
+  },
+  {
     "id": "2026-10-14-omar-aysha-inbasket",
     "date": "2026-10-14",
     "title": "In Basket coverage: Omar and Aysha",

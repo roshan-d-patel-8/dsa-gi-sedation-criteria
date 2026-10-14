@@ -1,0 +1,99 @@
+{
+  "id": "department-meeting-2026-10-14",
+  "date": "2026-10-14",
+  "title": "October 14 Department Meeting Notes",
+  "sections": [
+    {
+      "title": "TPIP",
+      "items": [
+        {
+          "segments": [
+            "Please see Gene's email for our upcoming Northern California TPIP on Saturday, October 17, at Oakland Medical Center, SMOB conference rooms. Parking at 3701 Broadway. It's a 6-hour session, in person only. There is a makeup session that will constitute only 2 hours of the 6 hours on November 5. Please fill out the following form if you are not able to make this Saturday's TPIP, as we are trying to bring together a possible work group (",
+            {
+              "label": "Microsoft Forms",
+              "href": "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=xHuKPzfjpUeg_A1RLA4F8Zj47EYlwklOq4uH6MhZSndUODlDNDdGTEtSR0JGQ1BNT0U0TlZXWTVHRS4u"
+            },
+            "). There are limited options that I can share for alternative TPIPs as well."
+          ],
+          "note": {
+            "label": "Alternative TPIP options",
+            "items": [
+              {
+                "label": "OBGYN",
+                "text": "Wed 10/21, 5:30–9:30 pm, Dublin Cancer Center. Topics are the OBGYN/Occ Med ergonomics presentation, approach to low back pain in pregnant patients, and Q&A and next steps."
+              },
+              {
+                "label": "ED/UC (with GSAA and East Bay)",
+                "text": "Tue 11/3, 10 am–2 pm, in person at the Pleasanton IT Center. The topic is sharing best practices across DSA, East Bay, and GSAA."
+              },
+              {
+                "label": "OBGYN",
+                "text": "Tue 11/3, 5:30–9:30 pm, Walnut Creek, Oaks Conference Rooms. Same topics as the 10/21 session."
+              }
+            ]
+          }
+        },
+        {
+          "segments": [
+            "Keep in mind 6 hour online on-demand regional TPIP is live to complete by December 1 during uncompensated time for financial incentive (please note financial incentive is also contingent on updating MDO - My Doctor Online - so if you're received an e-mail from Sachin Kapoor please complete!). ",
+            {
+              "label": "Online on-demand regional TPIP",
+              "href": "https://tpmgphysicianed.org/user/login?destination=node/141371"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Administrative",
+      "items": [
+        {
+          "segments": [
+            "Shareholder and participant election votes are due November 1. Please cast your vote to support Kay for shareholder and Mariel for participant!"
+          ]
+        },
+        {
+          "segments": [
+            "The Physician Opinion Survey and JAMM surveys are due this Friday. Please see the link in the countdown above. This is an important way of giving feedback not only to me and the department for areas to improve upon, but also to TPMG as a whole. Appreciate you taking the time!"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Initiatives",
+      "items": [
+        {
+          "segments": [
+            "Desktop medicine (Courtney): Podlet updates, DRV MA pilot review and feedback, Desktop Medicine Phase I rollout 10/14."
+          ]
+        },
+        {
+          "segments": [
+            "Pleasanton updates (Dan): in person orientation Thursday, 10/15."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Reminders",
+      "items": [
+        {
+          "segments": [
+            "Anesthesia sedation criteria"
+          ]
+        },
+        {
+          "segments": [
+            "A reminder to place consents for inpatient OR cases in a timely fashion, and to call anesthesia after seeing and evaluating the patient."
+          ],
+          "note": {
+            "label": "OR consent context",
+            "paragraphs": [
+              "I've been receiving some feedback from OR leadership in Antioch, in particular, about consents not being placed in a timely fashion. Just a reminder that when you place the case request, please add consent. One of the barriers that I have shared with our OR leadership is that when cases get bumped to the next day, particularly ERCPs, the consent has to be redone. This amount of rework adds to our clerical burden and is not sustainable given the increase in volume of our cases, but let's do what we can to meet our OR teams halfway."
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
