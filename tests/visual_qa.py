@@ -64,7 +64,7 @@ def assert_tabs(page):
     assert page.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).is_visible()
     podlets_tab = page.get_by_role("tab", name="Podlets", exact=False)
     assert podlets_tab.is_visible()
-    assert page.get_by_role("tab", name="New Physician Orientation Materials", exact=False).is_visible()
+    assert page.get_by_role("tab", name="Field Guide", exact=False).is_visible()
     assert page.get_by_role("tab", name="Desktop Medicine", exact=False).is_visible()
     label = podlets_tab.locator("strong")
     expected_font_size = 12 if page.viewport_size["width"] <= 680 else 15
@@ -93,7 +93,7 @@ def assert_global_zoom(page, mobile=False):
     page.keyboard.press("Escape")
     assert zoom_panel.count() == 0
 
-    for tab_name in ["Calendar", "Procedure Sedation Criteria", "Podlets", "New Physician Orientation Materials", "Desktop Medicine"]:
+    for tab_name in ["Calendar", "Procedure Sedation Criteria", "Podlets", "Field Guide", "Desktop Medicine"]:
         page.get_by_role("tab", name=tab_name, exact=False).click()
         assert page.get_by_role("button", name="Zoom page, currently 110%", exact=True).is_visible()
         assert page.locator(".page-zoom-surface").get_attribute("data-zoom") == "110"
@@ -972,7 +972,7 @@ with sync_playwright() as playwright:
     desktop.get_by_role("heading", name="DSA GI MA-MD Podlets", exact=True).focus()
     desktop.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-podlets-desktop.png", full_page=True)
 
-    desktop.get_by_role("tab", name="New Physician Orientation Materials", exact=False).click()
+    desktop.get_by_role("tab", name="Field Guide", exact=False).click()
     desktop.wait_for_timeout(300)
     assert_orientation_reference(desktop)
     assert_outside_kp_referrals(desktop)
@@ -987,7 +987,7 @@ with sync_playwright() as playwright:
     desktop.locator(".cw-smartphrase-panel").scroll_into_view_if_needed()
     desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-choosing-wisely.png", full_page=False)
     assert_all_orientation_sections_are_clean(desktop)
-    assert desktop.get_by_role("tab", name="New Physician Orientation Materials", exact=False).get_attribute("aria-selected") == "true"
+    assert desktop.get_by_role("tab", name="Field Guide", exact=False).get_attribute("aria-selected") == "true"
     desktop.wait_for_timeout(350)
     desktop.screenshot(path=OUTPUT / "dsa-gi-orientation-desktop.png", full_page=False)
 
@@ -1093,7 +1093,7 @@ with sync_playwright() as playwright:
     assert desktop.locator(".orientation-site-group").count() == 5
     assert desktop.locator("details.orientation-site-group[open]").count() == 0
     directory_access = desktop.locator(".topic-contact-directory")
-    directory_access.locator("summary").press("Enter")
+    directory_access.locator("summary").click()
     directory_access.get_by_role("link", name="KPATHS Facility Information directory", exact=True).wait_for(state="visible")
     assert desktop.get_by_role("heading", name="Dublin", exact=True).is_visible()
     contacts_departmentwide = desktop.locator(".site-group-departmentwide")
@@ -1273,7 +1273,7 @@ with sync_playwright() as playwright:
     assert mobile.locator(".pod-card").nth(0).get_by_text("Pod 01", exact=True).is_visible()
     mobile.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-podlets-mobile.png", full_page=True)
 
-    mobile.get_by_role("tab", name="New Physician Orientation Materials", exact=False).click()
+    mobile.get_by_role("tab", name="Field Guide", exact=False).click()
     mobile.wait_for_timeout(300)
     assert_orientation_reference(mobile)
     assert_outside_kp_referrals(mobile)

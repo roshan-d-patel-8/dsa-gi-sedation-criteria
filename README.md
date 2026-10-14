@@ -37,6 +37,8 @@ The application is static and has no clinical inputs, backend, database, analyti
 
 ## Publication
 
+On 2026-10-14 Roshan requested the primary navigation label “03 Field Guide”. The tab uses the shorter label with its existing number and content-sized width; the document heading and content are preserved. This navigation-only correction is excluded from the clinician practice history.
+
 On 2026-10-14 Roshan requested a new In Basket Podlet Coverage pair: Omar Al-Shuwaykh and Aysha Aslam. Their existing portraits are reused. The reference now contains ten groups and 26 clinicians (23 physicians and three PAs); all earlier groups and main MA-MD assignments remain unchanged. This supersedes the October 7 count below.
 
 On 2026-10-14 Roshan requested that primary navigation words not be cut off. Tabs now retain their full labels, use content-based sizing, and wrap long text when needed within the viewport. The compact “02 Podlets” label is preserved. This formatting correction is excluded from the clinician practice history.

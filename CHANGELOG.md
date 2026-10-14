@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.41.1 — 2026-10-14
+
+- Rename the primary orientation navigation tab to “03 Field Guide”, retaining its stable identity and content-sized width.
+- Preserve source headings and all Field Guide material; update existing browser selectors.
+- Exclude this navigation-only change from the clinician practice history.
+
 ## 0.41.0 — 2026-10-14
 
 - Add Omar Al-Shuwaykh and Aysha Aslam as a standalone two-physician In Basket coverage group, using their existing portraits.

@@ -19,7 +19,7 @@ const tabs = [
   { id: "home", label: "Calendar", icon: true },
   { id: "sedation", index: "01", label: "Procedure Sedation Criteria" },
   { id: "coverage", index: "02", label: "Podlets" },
-  { id: "orientation", index: "03", label: "New Physician Orientation Materials" },
+  { id: "orientation", index: "03", label: "Field Guide" },
   { id: "dtm", index: "04", label: "Desktop Medicine" },
 ];
 

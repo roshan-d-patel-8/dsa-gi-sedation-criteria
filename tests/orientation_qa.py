@@ -98,7 +98,7 @@ if __name__ == "__main__":
                 expected = os.environ.get(variable)
                 if expected:
                     assert page.locator(selector).evaluate_all("items => items.map(item => item.src || item.href)") == [url.split("?")[0] + expected]
-            page.get_by_role("tab", name="New Physician Orientation Materials", exact=False).click()
+            page.get_by_role("tab", name="Field Guide", exact=False).click()
             assert_outside_kp_referrals(page)
             assert_all_section_foldout_toggles(page)
             page.locator(".orientation-subtab").first.click()

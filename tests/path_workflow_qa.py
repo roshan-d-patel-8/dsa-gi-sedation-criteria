@@ -11,7 +11,7 @@ norm = lambda text: re.sub(r'\s+', ' ', text).strip()
 
 
 def assert_path_workflow(page, touch=False):
-    page.get_by_role('tab', name='New Physician Orientation Materials', exact=False).click()
+    page.get_by_role('tab', name='Field Guide', exact=False).click()
     search = page.get_by_role('searchbox', name='Search the field guide')
     search.fill('MACOLONDSA')
     workflow = page.locator('#gi-path-workflow')
