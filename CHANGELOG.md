@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.40.1 — 2026-10-14
+
+- Separate the public clinician-facing practice history from the technical release log.
+- Curate substantive clinical guidance, workflow/coverage changes, and practice references; omit interface, formatting, QA, and release details.
+- Document the editorial rule for future updates and verify content, chronology, navigation, and desktop/mobile layouts.
+
 ## 0.40.0 — 2026-10-14
 
 - Add a Desktop Medicine primary tab with an October 14 Phase I go-live bulletin, workflow responsibilities, and explicit out-of-scope boundaries.

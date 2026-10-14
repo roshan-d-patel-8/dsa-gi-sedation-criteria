@@ -1,4 +1,5 @@
 """Focused local/live checks for the public Change Log view."""
+import json
 import os
 import re
 from pathlib import Path
@@ -21,8 +22,7 @@ def url_with_view(url, open_view):
 
 
 def expected_entries():
-    source = (ROOT / "CHANGELOG.md").read_text()
-    return re.findall(r"^##\s+([^\s]+)\s+—\s+(\d{4}-\d{2}-\d{2})$", source, flags=re.MULTILINE)
+    return json.loads((ROOT / "content/practice-updates.json").read_text())
 
 
 def assert_change_log(page, base_url, screenshot_path=None):
@@ -35,23 +35,25 @@ def assert_change_log(page, base_url, screenshot_path=None):
     link.scroll_into_view_if_needed()
     expect(link).to_be_visible()
     expect(link).to_contain_text("Change Log")
-    expect(link).to_contain_text("See what information was added, corrected, or removed.")
+    expect(link).to_contain_text("Practice updates and clinical references.")
     assert link.bounding_box()["height"] >= 44
     assert page.locator(".site-footer").bounding_box()["y"] >= portal.bounding_box()["y"] + portal.bounding_box()["height"]
 
     link.click()
     expect(page).to_have_url(re.compile(r"[?&]view=change-log(?:&|$)"))
     expect(page.get_by_role("heading", name="Change Log", exact=True)).to_be_visible()
-    expect(page.get_by_text("What information was added, corrected, or removed—newest first.", exact=True)).to_be_visible()
+    expect(page.get_by_text("Clinical guidance, workflow changes, and new practice references—newest first. Dates indicate when this reference was updated.", exact=True)).to_be_visible()
 
     entries = expected_entries()
     cards = page.locator(".change-log-entry")
     assert cards.count() == len(entries)
-    assert cards.first.get_by_text(f"Release {entries[0][0]}", exact=True).is_visible()
-    expect(cards.filter(has=page.get_by_text("Release 0.38.1", exact=True)).locator(".change-kind")).to_have_text("Corrected")
-    expect(cards.filter(has=page.get_by_text("Release 0.38.2", exact=True)).locator(".change-kind")).to_have_text("Added")
-    assert cards.first.locator("time").get_attribute("datetime") == entries[0][1]
-    assert cards.get_by_text("Correct the Field Guide section 5 navigation label from Services to Referrals so it matches the regional, subspecialist, and outside-referral content.", exact=True).is_visible()
+    for card, entry in zip(cards.all(), entries):
+        expect(card.get_by_role("heading", name=entry["title"], exact=True)).to_be_visible()
+        assert card.locator("time").get_attribute("datetime") == entry["date"]
+        assert card.locator("li").all_text_contents() == entry["changes"]
+    text = page.locator(".change-log-page").inner_text()
+    assert "dysautonomia" in text and "STAT potassium" in text and "PROMPT" in text
+    assert not re.search(r"Release \d|hover|viewport|formatting|regression|keyboard|screenshot|pixel|deployment", text, re.I)
     dates = cards.locator("time").evaluate_all("items => items.map(item => item.dateTime)")
     assert dates == sorted(dates, reverse=True)
     assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")

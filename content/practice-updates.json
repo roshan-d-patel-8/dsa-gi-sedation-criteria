@@ -1,0 +1,213 @@
+[
+  {
+    "id": "2026-10-14-dtm",
+    "date": "2026-10-14",
+    "title": "Desktop Medicine: Phase I pharmacy refill support",
+    "sourceReleases": [
+      "0.40.0"
+    ],
+    "changes": [
+      "Phase I pharmacy refill support went live October 14. Pharmacy may renew eligible GI prescriptions with no refills remaining within the medication-specific limits of the working agreement.",
+      "The Desktop Medicine reference covers monitoring requirements, refill limits, exclusions, and when Pharmacy routes a case back to the prescribing provider. Providers remain responsible for reviewing results and deciding whether therapy continues."
+    ]
+  },
+  {
+    "id": "2026-10-14-1",
+    "date": "2026-10-14",
+    "title": "Pathology result workflow",
+    "sourceReleases": [
+      "0.39.0"
+    ],
+    "changes": [
+      "Added the MD-MA QuickAction protocol for colonoscopy, EGD, and combined EGD/colonoscopy (TURN) pathology results under Orientation → MA-MD → Messages & Result Notes.",
+      "The reference covers MD QuickAction setup and routing to the MA inbox, MA result letters and dotphrases, and the MD’s responsibility to update PROMPT with the surveillance interval."
+    ]
+  },
+  {
+    "id": "2026-10-14-2",
+    "date": "2026-10-14",
+    "title": "OR scheduling and peritoneal dialysis",
+    "sourceReleases": [
+      "0.38.2"
+    ],
+    "changes": [
+      "Clarified that dysautonomia risk is an additional reason for OR scheduling in patients with quadriplegia.",
+      "Clarified the rationale for booking peritoneal-dialysis cases at Antioch: Walnut Creek has only three admit bays, limiting its ability to accommodate pre-procedure antibiotics that take over 60 minutes.",
+      "In booking comments, state “Patient is on peritoneal dialysis” so schedulers recognize that the case is restricted to Antioch."
+    ]
+  },
+  {
+    "id": "2026-10-09-3",
+    "date": "2026-10-09",
+    "title": "Outside KP referrals",
+    "sourceReleases": [
+      "0.36.0"
+    ],
+    "changes": [
+      "Added KP transplant coordinator alphabet routing, Mayo Clinic Arizona coverage hours, and UCSF Hepatology & Liver Transplant Clinic contacts under Orientation → Referrals → Outside KP Referrals."
+    ]
+  },
+  {
+    "id": "2026-10-07-4",
+    "date": "2026-10-07",
+    "title": "In Basket coverage and MA-MD assignments",
+    "sourceReleases": [
+      "0.33.2",
+      "0.34.1"
+    ],
+    "changes": [
+      "Corrected the In Basket coverage reference to show each original column as an independent group: eight physician groups and one PA group.",
+      "Removed transferred Tom Haddad from active In Basket coverage and the MA-MD Podlets roster. Aysha Aslam remains the standalone provider in her existing Podlets row."
+    ]
+  },
+  {
+    "id": "2026-10-07-5",
+    "date": "2026-10-07",
+    "title": "Medication hold reference",
+    "sourceReleases": [
+      "0.34.0"
+    ],
+    "changes": [
+      "Added the supplied blood-thinner and diabetes medication hold instructions, including hold intervals and skipped-dose counts, to Procedure Sedation Criteria → Medication holds (DOAC/Diabetes meds)."
+    ]
+  },
+  {
+    "id": "2026-09-26-6",
+    "date": "2026-09-26",
+    "title": "Immunotherapy-induced hepatitis",
+    "sourceReleases": [
+      "0.32.0"
+    ],
+    "changes": [
+      "Added the Immunotherapy-Induced Hepatitis presentation from the September 21 Topic Based Discussion to September Department meeting resources."
+    ]
+  },
+  {
+    "id": "2026-09-11-7",
+    "date": "2026-09-11",
+    "title": "Procedure and communication education",
+    "sourceReleases": [
+      "0.29.0",
+      "0.31.0"
+    ],
+    "changes": [
+      "Added ERBE Settings and Upper EMR to July Department meeting resources.",
+      "Added The Four Habits communication presentation to September Department meeting resources."
+    ]
+  },
+  {
+    "id": "2026-09-09-8",
+    "date": "2026-09-09",
+    "title": "Choosing Wisely: colonoscopy graduation",
+    "sourceReleases": [
+      "0.16.0"
+    ],
+    "changes": [
+      "Added the GI Choosing Wisely consensus reference with age-based recommendations, risk/benefit discussion, patient messaging, procedure-note language, and PROMPT outreach guidance.",
+      "The reference includes DSAGIGRADNOTE, DSAGIGRADLETTER, DSAGIGRADMA, and DSAGIGRADDC."
+    ]
+  },
+  {
+    "id": "2026-09-09-9",
+    "date": "2026-09-09",
+    "title": "HealthConnect pools and clinician contacts",
+    "sourceReleases": [
+      "0.24.0",
+      "0.25.0"
+    ],
+    "changes": [
+      "Added a reference for nine HealthConnect pool addresses and their uses under Orientation → Communication → Pool Party. The three infusion RN destinations are labeled reference-only.",
+      "Consolidated clinician email contacts, including the centralized physician schedule and time-off request mailbox, under Orientation → Communication → Email Directory."
+    ]
+  },
+  {
+    "id": "2026-09-09-10",
+    "date": "2026-09-09",
+    "title": "Walnut Creek MA assignment",
+    "sourceReleases": [
+      "0.18.2"
+    ],
+    "changes": [
+      "Updated Walnut Creek Pod 03: Martha replaces Natalie in the MA roster."
+    ]
+  },
+  {
+    "id": "2026-09-09-11",
+    "date": "2026-09-09",
+    "title": "Skills Day procedure reference",
+    "sourceReleases": [
+      "0.18.0"
+    ],
+    "changes": [
+      "Added the DSA GI Skills Day 2025 recording as a procedure education reference, available under Orientation → Procedures → Skills Day."
+    ]
+  },
+  {
+    "id": "2026-08-29-12",
+    "date": "2026-08-29",
+    "title": "Facility directory access",
+    "sourceReleases": [
+      "0.12.1",
+      "0.12.3"
+    ],
+    "changes": [
+      "Added the KPATHS Facility Information directory under Orientation → Contacts. Access requires a KP device on site or GlobalProtect offsite."
+    ]
+  },
+  {
+    "id": "2026-08-27-13",
+    "date": "2026-08-27",
+    "title": "Dialysis booking and potassium orders",
+    "sourceReleases": [
+      "0.10.4"
+    ],
+    "changes": [
+      "Clarified that peritoneal-dialysis cases must be booked at Antioch only, not Walnut Creek.",
+      "All hemodialysis and peritoneal-dialysis patients require a STAT potassium order."
+    ]
+  },
+  {
+    "id": "2026-08-26-14",
+    "date": "2026-08-26",
+    "title": "New physician orientation reference",
+    "sourceReleases": [
+      "0.9.0"
+    ],
+    "changes": [
+      "Added the supplied orientation reference covering scheduling, communication, contacts, referrals, clinic, procedures, orders, OR workflow, ergonomics, and MA-MD partnership."
+    ]
+  },
+  {
+    "id": "2026-08-17-15",
+    "date": "2026-08-17",
+    "title": "MA-MD Podlets reference",
+    "sourceReleases": [
+      "0.7.0"
+    ],
+    "changes": [
+      "Added the 2026 Deer Valley and Walnut Creek MA-MD pod assignments, including clinician membership, MA responsibilities, workday patterns, and coverage arrangements."
+    ]
+  },
+  {
+    "id": "2026-08-17-opioid-criteria",
+    "date": "2026-08-17",
+    "title": "High-dose and long-acting narcotic criteria",
+    "sourceReleases": [
+      "0.3.1"
+    ],
+    "changes": [
+      "Restored the complete high-dose and long-acting narcotic MAC criteria in the sedation reference."
+    ]
+  },
+  {
+    "id": "2026-08-16-16",
+    "date": "2026-08-16",
+    "title": "Sedation criteria reference",
+    "sourceReleases": [
+      "0.1.0"
+    ],
+    "changes": [
+      "Added the procedure sedation criteria reference, including procedure and BMI thresholds, cardiopulmonary and medication considerations, dialysis, OR/POM routing, and Pleasanton eligibility."
+    ]
+  }
+]

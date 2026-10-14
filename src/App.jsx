@@ -7,7 +7,7 @@ import { medicationHoldSections } from "./medication-holds.js";
 import { dtmMedicationGroups } from "./dtm.js";
 import orientationSource from "./orientation-source.html?raw";
 import pathWorkflowSource from "./path-workflow.html?raw";
-import changelogSource from "../CHANGELOG.md?raw";
+import changeLogEntries from "../content/practice-updates.json";
 
 const columnLayout = [
   ["optiflow", "or"],
@@ -25,33 +25,6 @@ const tabs = [
 
 const zoomLevels = [90, 100, 110, 125, 140];
 const zoomStorageKey = "dsa-gi-page-zoom";
-
-function parseChangeLog(source) {
-  const entries = [];
-  let current = null;
-
-  source.split(/\r?\n/).forEach((line) => {
-    const heading = line.match(/^##\s+([^\s]+)\s+—\s+(\d{4}-\d{2}-\d{2})$/);
-    if (heading) {
-      current = { version: heading[1], date: heading[2], changes: [] };
-      entries.push(current);
-      return;
-    }
-    const bullet = line.match(/^-\s+(.+)/);
-    if (current && bullet) current.changes.push(bullet[1]);
-  });
-
-  return entries.filter((entry) => entry.changes.length);
-}
-
-const changeLogEntries = parseChangeLog(changelogSource);
-
-function changeKind(changes) {
-  const lead = changes[0]?.toLowerCase() || "";
-  if (/^(remove|removed|retire|retired)\b/.test(lead)) return "Removed";
-  if (/^(correct|corrected|fix|fixed|replace|replaced)\b/.test(lead)) return "Corrected";
-  return "Added";
-}
 
 function escapeSearchPattern(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -1153,7 +1126,7 @@ function HomePage({ onOpenChangeLog }) {
           }}
         >
           <span aria-hidden="true">↗</span>
-          <span><strong>Change Log</strong><small>See what information was added, corrected, or removed.</small></span>
+          <span><strong>Change Log</strong><small>Practice updates and clinical references.</small></span>
           <b aria-hidden="true">View updates →</b>
         </a>
       </nav>
@@ -1175,28 +1148,25 @@ function ChangeLogPage({ onClose }) {
         >
           <span aria-hidden="true">←</span> Back to Calendar
         </a>
-        <span>DSA GI Resources · Site updates</span>
+        <span>DSA GI Resources · Practice updates</span>
         <h1 id="change-log-title">Change Log</h1>
-        <p>What information was added, corrected, or removed—newest first.</p>
+        <p>Clinical guidance, workflow changes, and new practice references—newest first. Dates indicate when this reference was updated.</p>
       </header>
 
-      <section className="change-log-timeline" aria-label="Chronological site changes">
-        {changeLogEntries.map((entry) => {
-          const kind = changeKind(entry.changes);
-          return (
-            <article className="change-log-entry" key={entry.version}>
+      <section className="change-log-timeline" aria-label="Chronological practice updates">
+        {changeLogEntries.map((entry) => (
+            <article className="change-log-entry" key={entry.id}>
               <header>
                 <time dateTime={entry.date}>{new Date(`${entry.date}T12:00:00`).toLocaleDateString("en-US", {
                   month: "long",
                   day: "numeric",
                   year: "numeric",
                 })}</time>
-                <div><span className={`change-kind change-kind-${kind.toLowerCase()}`}>{kind}</span><small>Release {entry.version}</small></div>
+                <h2>{entry.title}</h2>
               </header>
               <ul>{entry.changes.map((change) => <li key={change}>{change}</li>)}</ul>
             </article>
-          );
-        })}
+        ))}
       </section>
     </main>
   );

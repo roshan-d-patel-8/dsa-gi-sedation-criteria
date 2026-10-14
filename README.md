@@ -5,7 +5,7 @@ tags:
 
 # DSA GI Resources
 
-A compact, tabbed DSA GI clinical-operations reference. The primary Calendar tab carries compact Pacific-time countdown tiles, a navigable January–December 2026 milestone calendar, month-specific department meeting resources, and a Change Log link to the chronological release history. The calendar opens to the current Pacific-time month. The remaining tabs contain the August 2026 anesthesia procedure criteria, DSA GI MA–MD pod assignments, a searchable New Physician Orientation field guide, and the Phase I Desktop Medicine pharmacy refill agreement. Its Referrals section includes regional routes, DSA GI subspecialists, and a source-labeled Outside KP Referrals reference for transplant coordination.
+A compact, tabbed DSA GI clinical-operations reference. The primary Calendar tab carries compact Pacific-time countdown tiles, a navigable January–December 2026 milestone calendar, month-specific department meeting resources, and a Change Log link to the chronological practice updates. The calendar opens to the current Pacific-time month. The remaining tabs contain the August 2026 anesthesia procedure criteria, DSA GI MA–MD pod assignments, a searchable New Physician Orientation field guide, and the Phase I Desktop Medicine pharmacy refill agreement. Its Referrals section includes regional routes, DSA GI subspecialists, and a source-labeled Outside KP Referrals reference for transplant coordination.
 
 ## Live site
 
@@ -49,7 +49,7 @@ On 2026-10-12 Roshan clarified that mobile countdowns should appear above the ca
 
 On 2026-10-12 Roshan requested the Calendar navigation icon and a denser calendar page with square, color-coded countdown tiles above the announcements rail. This public interface update preserves all milestone dates, event copy, resource assets, and clinical data; the supplied layout sketch remains outside the public build.
 
-On 2026-10-09 Roshan requested a bottom-of-Home Change Log link and chronological subpage so users can quickly see what changed. The public page is generated from `CHANGELOG.md`, making the repository’s maintained release history the single source for future entries.
+On 2026-10-09 Roshan requested a bottom-of-Home Change Log link and chronological subpage so users can quickly see what changed. The public page is curated in `content/practice-updates.json` for a clinician audience. Include only substantive clinical guidance, workflow or coverage changes, and newly available practice references. Explain what clinicians need to know or do; label added references without implying a new policy, adoption, or effective date. Dates are reference-update dates. Omit formatting, interface behavior, engineering details, QA, deployment notes, and release numbers. A technical-only release must not add a public entry. Keep technical history in `CHANGELOG.md`; `sourceReleases` provides internal provenance for each curated entry. This audience convention was clarified by Roshan on 2026-10-14.
 
 On 2026-10-09 Roshan supplied an October 2026 Suk Seo reference through the private Dispatch project and requested an Outside KP Referrals section on the existing public Services field guide. The release publishes only the task-authorized transplant-coordinator routing, Mayo Clinic Arizona coverage hours, and UCSF clinic contacts. The attached forwarded-email HTML and its confidentiality footer remain excluded; an ambiguous duplicate transfer sentence is omitted in favor of the task's explicit primary-contact wording.
 
