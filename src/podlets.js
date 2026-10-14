@@ -170,6 +170,13 @@ export const inBasketCoverageGroups = [
     ],
   },
   {
+    id: "omar-aysha",
+    members: [
+      { name: "Omar Al-Shuwaykh", photo: "omar-al-shuwaykh.webp" },
+      { name: "Aysha Aslam", photo: "aysha-aslam.jpg" },
+    ],
+  },
+  {
     id: "sabrina-han",
     role: "Physician assistants",
     members: [

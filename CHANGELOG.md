@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.41.0 — 2026-10-14
+
+- Add Omar Al-Shuwaykh and Aysha Aslam as a standalone two-physician In Basket coverage group, using their existing portraits.
+- Preserve all prior coverage groups and main MA-MD assignments; the reference now contains ten groups and 26 clinicians (23 physicians and three PAs).
+- Update the clinician practice history and verify group membership, portrait loading, interaction, and responsive layout.
+
 ## 0.40.3 — 2026-10-14
 
 - Show complete primary-tab labels by preventing flex compression and allowing long labels to wrap within the viewport.

@@ -679,10 +679,11 @@ def assert_inbasket_coverage(page, mobile=False):
         ["Sammy Tesfay", "Simon Chan"],
         ["Roshan Patel", "Steve Cheng", "Jagrati Mathur"],
         ["Kay Ozeki", "Ying Wang", "Anish Patel"],
+        ["Omar Al-Shuwaykh", "Aysha Aslam"],
         ["Sabrina Han", "Robbie Molden", "Megan Palsa"],
     ]
     groups = panel.locator(".inbasket-group")
-    assert groups.count() == 9
+    assert groups.count() == 10
     assert panel.get_by_text("Tom Haddad", exact=True).count() == 0
     actual_groups = groups.evaluate_all(
         "groups => groups.map(group => Array.from(group.querySelectorAll('.inbasket-person strong')).map(name => name.textContent))"
@@ -691,9 +692,13 @@ def assert_inbasket_coverage(page, mobile=False):
     assert groups.locator("header").count() == 1
     assert groups.locator("header").text_content() == "Physician assistants"
     assert not re.search(r"Group\s+\d+", panel.inner_text())
-    assert panel.locator(".inbasket-person").count() == 24
-    assert panel.locator(".provider-avatar img").count() == 21
+    assert panel.locator(".inbasket-person").count() == 26
+    assert panel.locator(".provider-avatar img").count() == 23
     assert panel.locator(".provider-initials").count() == 3
+    pair = groups.filter(has=page.get_by_text("Omar Al-Shuwaykh", exact=True))
+    assert pair.locator(".inbasket-person strong").all_text_contents() == ["Omar Al-Shuwaykh", "Aysha Aslam"]
+    for filename in ["omar-al-shuwaykh.webp", "aysha-aslam.jpg"]:
+        assert pair.locator(f'img[src$="/{filename}"]').count() == 1
     assert panel.locator(".inbasket-empty").count() == 0
     first_box, second_box = groups.nth(0).bounding_box(), groups.nth(1).bounding_box()
     assert second_box["x"] >= first_box["x"] + first_box["width"]
@@ -705,8 +710,13 @@ def assert_inbasket_coverage(page, mobile=False):
     assert panel_box["x"] + panel_box["width"] <= page.viewport_size["width"] + 2
     assert panel_box["y"] >= 0
     assert panel_box["y"] + panel_box["height"] <= page.viewport_size["height"] + 2
-    assert panel.evaluate("element => element.scrollHeight <= element.clientHeight + 1"), "Coverage requires scrolling"
-    assert panel.locator(".inbasket-person strong").evaluate_all("names => names.every(name => { const box = name.getBoundingClientRect(); const panel = name.closest('.inbasket-panel').getBoundingClientRect(); return name.scrollWidth <= name.clientWidth + 1 && box.top >= panel.top && box.bottom <= panel.bottom && box.left >= panel.left && box.right <= panel.right; })"), "A full clinician name is clipped"
+    if page.viewport_size["height"] >= 700:
+        assert panel.evaluate("element => element.scrollHeight <= element.clientHeight + 1"), "Coverage requires scrolling on a tall viewport"
+    else:
+        panel.locator(".inbasket-person").last.scroll_into_view_if_needed()
+        last_box = panel.locator(".inbasket-person").last.bounding_box()
+        assert last_box["y"] + last_box["height"] <= panel_box["y"] + panel_box["height"] + 1
+    assert panel.locator(".inbasket-person strong").evaluate_all("names => names.every(name => { const box = name.getBoundingClientRect(); const panel = name.closest('.inbasket-panel').getBoundingClientRect(); return name.scrollWidth <= name.clientWidth + 1 && box.height <= name.closest('.inbasket-person').getBoundingClientRect().height && box.left >= panel.left && box.right <= panel.right; })"), "A full clinician name is clipped"
     close_box = panel.get_by_role("button", name="Close in-basket podlet coverage", exact=True).bounding_box()
     assert close_box["width"] >= 44 and close_box["height"] >= 44
     return trigger, panel

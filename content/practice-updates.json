@@ -1,5 +1,16 @@
 [
   {
+    "id": "2026-10-14-omar-aysha-inbasket",
+    "date": "2026-10-14",
+    "title": "In Basket coverage: Omar and Aysha",
+    "sourceReleases": [
+      "0.41.0"
+    ],
+    "changes": [
+      "Added Omar Al-Shuwaykh and Aysha Aslam as a new two-physician group in In Basket Podlet Coverage."
+    ]
+  },
+  {
     "id": "2026-10-14-dtm",
     "date": "2026-10-14",
     "title": "Desktop Medicine: Phase I pharmacy refill support",
