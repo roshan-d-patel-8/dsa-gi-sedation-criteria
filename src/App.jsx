@@ -5,6 +5,7 @@ import { coverageSites, inBasketCoverageGroups } from "./podlets.js";
 import { birthdayEvents } from "./birthdays.js";
 import { medicationHoldSections } from "./medication-holds.js";
 import orientationSource from "./orientation-source.html?raw";
+import pathWorkflowSource from "./path-workflow.html?raw";
 import changelogSource from "../CHANGELOG.md?raw";
 
 const columnLayout = [
@@ -1721,6 +1722,24 @@ function findNodeIndex(nodes, pattern) {
   return nodes.findIndex((node) => pattern.test(node.textContent.trim()));
 }
 
+function createPathWorkflow(doc) {
+  const template = doc.createElement("template");
+  template.innerHTML = pathWorkflowSource;
+  template.content.querySelectorAll("[data-workflow-src]").forEach((image) => {
+    image.src = `${import.meta.env.BASE_URL}${image.dataset.workflowSrc}`;
+  });
+  const workflow = template.content.firstElementChild;
+  workflow.querySelectorAll("li").forEach((item) => {
+    const line = doc.createElement("span");
+    line.className = "orientation-list-line";
+    while (item.firstChild) line.append(item.firstChild);
+    item.append(line);
+    emphasizeLeadingLabel(line, doc);
+  });
+  workflow.querySelectorAll("p").forEach((paragraph) => emphasizeLeadingLabel(paragraph, doc));
+  return workflow;
+}
+
 function groupStandardSections(container, doc, sectionShort) {
   const nodes = Array.from(container.children);
   if (!nodes.length) return;
@@ -1844,7 +1863,7 @@ function groupStandardSections(container, doc, sectionShort) {
         title: "Messages & Result Notes",
         description: "Patient outreach, pathology and QuikActions",
         className: "topic-ma-results",
-        nodes: nodes.slice(messaging, expectations),
+        nodes: [...nodes.slice(messaging, expectations), createPathWorkflow(doc)],
       }),
       createTopicFoldout(doc, {
         code: "VIRT",
@@ -2463,11 +2482,41 @@ function CoveragePodlets() {
   );
 }
 
+function WorkflowScreenshotDialog({ image, onClose }) {
+  const dialogRef = useRef(null);
+  const [actualSize, setActualSize] = useState(false);
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    dialog.showModal();
+    return () => {
+      dialog.close();
+      document.body.style.overflow = previousOverflow;
+      if (image.trigger?.isConnected) image.trigger.focus({ preventScroll: true });
+    };
+  }, [image]);
+  return createPortal(
+    <dialog className="workflow-image-dialog" ref={dialogRef} aria-labelledby="workflow-image-title"
+      onCancel={(event) => { event.preventDefault(); onClose(); }}
+      onClick={(event) => { if (event.target === event.currentTarget) onClose(); }}>
+      <header><h2 id="workflow-image-title">{image.alt}</h2><div>
+        <button type="button" onClick={() => setActualSize(!actualSize)} aria-pressed={actualSize}>{actualSize ? "Fit image" : "Actual size"}</button>
+        <button type="button" autoFocus aria-label="Close workflow screenshot" onClick={onClose}>Close</button>
+      </div></header>
+      <div className={`workflow-image-scroll${actualSize ? " is-actual-size" : ""}`} tabIndex={0} aria-label="Screenshot; scroll to explore at actual size">
+        <img src={image.src} alt={image.alt} />
+      </div>
+    </dialog>, document.body,
+  );
+}
+
 function OrientationMaterials() {
   const sections = useMemo(() => parseOrientationSource(orientationSource), []);
   const [query, setQuery] = useState("");
   const [activeSectionId, setActiveSectionId] = useState(sections[0]?.id);
   const [showChoosingWiselyInfographic, setShowChoosingWiselyInfographic] = useState(false);
+  const [workflowImage, setWorkflowImage] = useState(null);
   const [visibleMatchCount, setVisibleMatchCount] = useState(0);
   const [foldoutState, setFoldoutState] = useState({ count: 0, allOpen: false });
   const orientationContentRef = useRef(null);
@@ -2608,6 +2657,13 @@ function OrientationMaterials() {
   }
 
   function handleOrientationContentClick(event) {
+    const imageButton = event.target.closest("[data-workflow-image]");
+    if (imageButton) {
+      const image = imageButton.querySelector("img");
+      setWorkflowImage({ src: image.src, alt: image.alt, trigger: imageButton });
+      return;
+    }
+
     const copyButton = event.target.closest("[data-copy-value]");
     if (copyButton) {
       event.preventDefault();
@@ -2739,6 +2795,7 @@ function OrientationMaterials() {
         )}
       </div>
 
+      {workflowImage && <WorkflowScreenshotDialog image={workflowImage} onClose={() => setWorkflowImage(null)} />}
       {showChoosingWiselyInfographic && (
         <div
           className="cw-infographic-backdrop"

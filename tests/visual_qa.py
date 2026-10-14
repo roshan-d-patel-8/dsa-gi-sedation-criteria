@@ -7,6 +7,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 from medication_qa import assert_medication_holds
 from sedation_qa import assert_sedation_clarifications
+from path_workflow_qa import assert_path_workflow
 from orientation_qa import assert_section_foldout_toggle, assert_all_section_foldout_toggles, assert_outside_kp_referrals
 from changelog_qa import assert_change_log
 
@@ -1194,6 +1195,8 @@ with sync_playwright() as playwright:
     assert desktop.get_by_text("DSAGIGRADNOTE", exact=True).is_visible()
     desktop.get_by_role("button", name="Clear search").click()
 
+    assert_path_workflow(desktop)
+
     mobile = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1, has_touch=True)
     mobile_errors = capture_console_errors(mobile)
     mobile.goto(BASE_URL)
@@ -1312,6 +1315,7 @@ with sync_playwright() as playwright:
     mobile.screenshot(path=OUTPUT / "dsa-gi-orientation-skills-day-mobile.png", full_page=False)
 
     assert_all_section_foldout_toggles(mobile)
+    assert_path_workflow(mobile, touch=True)
 
     compact_mobile = browser.new_page(viewport={"width": 320, "height": 568}, device_scale_factor=1, has_touch=True)
     compact_mobile_errors = capture_console_errors(compact_mobile)

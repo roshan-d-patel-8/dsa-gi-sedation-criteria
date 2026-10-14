@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.39.0 — 2026-10-14
+
+- Add the complete “MD-MA QuickAction protocol for procedure path results” under Orientation → MA-MD → Messages & Result Notes.
+- Preserve all 37 nonempty source paragraphs and five original screenshots, with structured colonoscopy, EGD, and TURN instructions, MD/MA roles, numbered steps, and a highlighted PROMPT reminder.
+- Add click/tap screenshot enlargement with actual-size viewing, keyboard access, Escape/close/backdrop dismissal, and focus return.
+- Verify verbatim source content, original screenshot bytes, search and Expand all behavior, responsive layouts, and existing site regressions.
+
 ## 0.38.3 — 2026-10-14
 
 - Move the existing peritoneal-dialysis booking comment and HD/PD STAT potassium reminder into a small HC sticky-note icon beside the blue question mark.

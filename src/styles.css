@@ -1178,3 +1178,46 @@ body.presentation-open { overflow: hidden; }
 /* Calendar previews use viewport coordinates outside the zoomed page surface. */
 .calendar-floating-preview { position: fixed; z-index: 150; right: auto; bottom: auto; max-width: calc(100vw - 24px); max-height: calc(100dvh - 24px); overflow: auto; pointer-events: none; transform: none; transition: opacity .12s ease; }
 .calendar-floating-preview::before, .calendar-floating-preview::after { display: none; }
+
+/* Source-faithful MD–MA pathology workflow. */
+.path-workflow { margin-top: 22px; border: 1px solid #bfcedb; border-radius: 14px; overflow: hidden; background: #f4f8fb; }
+.path-workflow > summary { padding: 18px 20px; cursor: pointer; color: var(--navy); background: #e8f1f7; }
+.path-workflow > summary h4 { display: inline; margin: 0; font-size: 18px; line-height: 1.4; }
+.path-workflow-document { padding: clamp(12px, 2vw, 24px); display: grid; gap: 24px; }
+.path-workflow-section { min-width: 0; padding: clamp(14px, 2vw, 24px); border: 1px solid var(--line); border-top: 4px solid #1b75bb; border-radius: 12px; background: white; }
+.path-workflow h5 { margin: 0 0 20px; font-size: 17px; line-height: 1.35; color: #155783; letter-spacing: .02em; }
+.path-workflow h6 { margin: 14px 0 9px; font-size: 14px; color: var(--navy); }
+.path-workflow p, .path-workflow li { font-size: 14px; line-height: 1.65; color: #354f68; }
+.path-workflow-steps { display: grid; gap: 8px; padding-left: 24px; }
+.path-workflow-steps li { padding-left: 6px; }
+.path-workflow-steps li::marker { color: #1b75bb; font-weight: 850; }
+.path-workflow-options { padding-left: 22px; }
+.path-workflow-ma { margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--line); }
+.path-workflow-figure figcaption { margin-bottom: 10px; color: var(--navy); font-size: 13px; font-weight: 750; line-height: 1.5; }
+.path-workflow-image-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.path-workflow-figure { margin: 16px 0 0; min-width: 0; }
+.path-workflow-figure button { position: relative; display: block; width: 100%; padding: 8px; border: 1px solid #bdcddb; border-radius: 10px; background: #edf3f7; cursor: zoom-in; }
+.path-workflow-figure img { display: block; width: 100%; height: auto; object-fit: contain; }
+.path-workflow-image-pair img { max-height: 480px; }
+.path-workflow-expand { position: absolute; right: 10px; bottom: 10px; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 6px; background: #173a5f; color: white; font-size: 22px; }
+.path-workflow-figure button:focus-visible, .path-workflow > summary:focus-visible { outline: 3px solid #1b75bb; outline-offset: 2px; }
+.path-workflow-advantages { padding: 20px; border-radius: 12px; background: #e8f1f7; }
+.path-workflow-prompt { padding: 12px 16px; border-left: 4px solid #b18422; border-radius: 0 8px 8px 0; background: #fff3ce; font-weight: 800; }
+.workflow-image-dialog { width: min(1400px, calc(100vw - 24px)); max-width: none; max-height: calc(100dvh - 24px); padding: 0; border: 1px solid #8ca7bf; border-radius: 14px; background: #f5f8fb; color: var(--navy); box-shadow: 0 24px 80px #071c3190; overflow: hidden; }
+.workflow-image-dialog::backdrop { background: #071c31d9; backdrop-filter: blur(8px); }
+.workflow-image-dialog header { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 12px 16px; background: #173a5f; color: white; }
+.workflow-image-dialog h2 { margin: 0; font-size: 15px; line-height: 1.4; }
+.workflow-image-dialog header div { display: flex; flex-shrink: 0; gap: 8px; }
+.workflow-image-dialog button { min-height: 44px; padding: 8px 12px; border: 1px solid #a5c6e3; border-radius: 8px; background: white; color: #173a5f; font: inherit; font-size: 12px; font-weight: 750; cursor: pointer; }
+.workflow-image-scroll { max-height: calc(100dvh - 120px); padding: 12px; overflow: auto; }
+.workflow-image-scroll img { display: block; width: auto; max-width: 100%; max-height: calc(100dvh - 150px); margin: auto; object-fit: contain; }
+.workflow-image-scroll.is-actual-size img { max-width: none; max-height: none; margin: 0; }
+@media (max-width: 680px) {
+  .path-workflow-image-pair { grid-template-columns: 1fr; }
+  .path-workflow > summary { padding: 14px; }
+  .path-workflow > summary h4 { font-size: 16px; }
+  .workflow-image-dialog header { flex-wrap: wrap; gap: 8px; }
+  .workflow-image-dialog header div { width: 100%; justify-content: flex-end; }
+  .workflow-image-scroll { max-height: calc(100dvh - 170px); }
+  .workflow-image-scroll img { max-height: calc(100dvh - 200px); }
+}
