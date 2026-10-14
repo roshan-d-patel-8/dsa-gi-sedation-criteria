@@ -18,7 +18,7 @@ const columnLayout = [
 const tabs = [
   { id: "home", label: "Calendar", icon: true },
   { id: "sedation", index: "01", label: "Procedure Sedation Criteria" },
-  { id: "coverage", index: "02", label: "DSA GI MA-MD Podlets" },
+  { id: "coverage", index: "02", label: "Podlets" },
   { id: "orientation", index: "03", label: "New Physician Orientation Materials" },
   { id: "dtm", index: "04", label: "Desktop Medicine" },
 ];

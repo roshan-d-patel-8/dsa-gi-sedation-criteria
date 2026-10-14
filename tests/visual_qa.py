@@ -62,7 +62,7 @@ def assert_tabs(page):
     assert page.get_by_role("tab").count() == 5
     assert page.get_by_role("tab", name="Calendar", exact=True).is_visible()
     assert page.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).is_visible()
-    podlets_tab = page.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False)
+    podlets_tab = page.get_by_role("tab", name="Podlets", exact=False)
     assert podlets_tab.is_visible()
     assert page.get_by_role("tab", name="New Physician Orientation Materials", exact=False).is_visible()
     assert page.get_by_role("tab", name="Desktop Medicine", exact=False).is_visible()
@@ -91,7 +91,7 @@ def assert_global_zoom(page, mobile=False):
     page.keyboard.press("Escape")
     assert zoom_panel.count() == 0
 
-    for tab_name in ["Calendar", "Procedure Sedation Criteria", "DSA GI MA-MD Podlets", "New Physician Orientation Materials", "Desktop Medicine"]:
+    for tab_name in ["Calendar", "Procedure Sedation Criteria", "Podlets", "New Physician Orientation Materials", "Desktop Medicine"]:
         page.get_by_role("tab", name=tab_name, exact=False).click()
         assert page.get_by_role("button", name="Zoom page, currently 110%", exact=True).is_visible()
         assert page.locator(".page-zoom-surface").get_attribute("data-zoom") == "110"
@@ -740,7 +740,7 @@ def assert_inbasket_dismissal(page, trigger, panel, mobile=False):
         panel.wait_for(state="visible")
         panel.get_by_role("button", name="Close in-basket podlet coverage", exact=True).click()
         assert_closed()
-        page.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).focus()
+        page.get_by_role("tab", name="Podlets", exact=False).focus()
         trigger.focus()
         panel.wait_for(state="visible")
         page.keyboard.press("Escape")
@@ -936,10 +936,10 @@ with sync_playwright() as playwright:
     desktop.evaluate("window.scrollTo(0, 0)")
     desktop.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-sedation-desktop.png", full_page=True)
 
-    desktop.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).click()
+    desktop.get_by_role("tab", name="Podlets", exact=False).click()
     desktop.wait_for_timeout(700)
     assert_coverage_reference(desktop)
-    assert desktop.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).get_attribute("aria-selected") == "true"
+    assert desktop.get_by_role("tab", name="Podlets", exact=False).get_attribute("aria-selected") == "true"
     inbasket_trigger, inbasket_panel = assert_inbasket_coverage(desktop)
     desktop.screenshot(path=OUTPUT / "dsa-gi-inbasket-coverage-desktop.png", full_page=False)
     assert_inbasket_dismissal(desktop, inbasket_trigger, inbasket_panel)
@@ -1252,7 +1252,7 @@ with sync_playwright() as playwright:
     assert_sedation_clarifications(mobile, touch=True)
     assert_medication_holds(mobile, OUTPUT, mobile=True)
     mobile.screenshot(path=OUTPUT / "dsa-gi-folder-tabs-sedation-mobile.png", full_page=False)
-    mobile.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).click()
+    mobile.get_by_role("tab", name="Podlets", exact=False).click()
     mobile.wait_for_timeout(700)
     assert_coverage_reference(mobile)
     mobile_inbasket_trigger, mobile_inbasket_panel = assert_inbasket_coverage(mobile, mobile=True)
@@ -1327,7 +1327,7 @@ with sync_playwright() as playwright:
     for _ in range(abs(current_month - 9)):
         compact_mobile.get_by_role("button", name="Previous month" if current_month > 9 else "Next month", exact=True).click()
     assert_mobile_birthday_dialog(compact_mobile, "Ahilan Arulanandan", "dsa-gi-calendar-birthday-mobile-320.png")
-    compact_mobile.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False).click()
+    compact_mobile.get_by_role("tab", name="Podlets", exact=False).click()
     compact_trigger, compact_panel = assert_inbasket_coverage(compact_mobile, mobile=True)
     compact_mobile.screenshot(path=OUTPUT / "dsa-gi-inbasket-mobile-320.png", full_page=False)
     assert_inbasket_dismissal(compact_mobile, compact_trigger, compact_panel, mobile=True)

@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.40.2 — 2026-10-14
+
+- Shorten the primary coverage navigation label to “Podlets” while retaining “02”.
+- Size the tab to its content and tighten its number-to-label gap across screen sizes.
+- Preserve the coverage page heading, assignments, and interactions. No clinician practice-history entry: presentation only.
+
 ## 0.40.1 — 2026-10-14
 
 - Separate the public clinician-facing practice history from the technical release log.

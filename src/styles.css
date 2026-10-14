@@ -92,7 +92,7 @@ body::before {
 }
 .folder-tab-home { min-width: 64px; width: 64px; max-width: 64px; justify-content: center; padding-inline: 15px; color: var(--way); box-shadow: inset 0 3px 0 rgba(27, 117, 187, .65); }
 .calendar-tab-icon { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 3px 5px rgba(27, 117, 187, .2)); }
-.folder-tab:nth-child(3) { min-width: 332px; box-shadow: inset 0 3px 0 rgba(242, 160, 184, .7); }
+.folder-tab:nth-child(3) { min-width: 0; flex: 0 0 auto; gap: 6px; padding-inline: 14px; box-shadow: inset 0 3px 0 rgba(242, 160, 184, .7); }
 .folder-tab:nth-child(4) { min-width: 356px; box-shadow: inset 0 3px 0 rgba(217, 164, 65, .72); }
 .folder-tab:nth-child(5) { min-width: 220px; box-shadow: inset 0 3px 0 rgba(41, 145, 132, .7); }
 .folder-tab > span { color: #91a2b3; font-size: 11px; font-weight: 900; letter-spacing: .14em; line-height: 1; }
@@ -983,7 +983,6 @@ body.presentation-open { overflow: hidden; }
   .brand { margin-bottom: 0; }
   .folder-tab { min-width: 230px; }
   .folder-tab-home { min-width: 60px; width: 60px; }
-  .folder-tab:nth-child(3) { min-width: 310px; }
   .folder-tab:nth-child(4) { min-width: 338px; }
   .folder-tab:nth-child(5) { min-width: 210px; }
   .year-calendar { grid-template-columns: minmax(0, 1fr) 250px; }
@@ -1019,7 +1018,6 @@ body.presentation-open { overflow: hidden; }
   .folder-tabs { margin-inline: -12px; padding-inline: 12px; }
   .folder-tab { min-width: 220px; min-height: 50px; padding: 9px 13px 10px; }
   .folder-tab-home { min-width: 54px; width: 54px; padding-inline: 13px; }
-  .folder-tab:nth-child(3) { min-width: 294px; }
   .folder-tab:nth-child(4) { min-width: 320px; }
   .folder-tab:nth-child(5) { min-width: 190px; }
   .folder-tab > span { font-size: 10px; }
