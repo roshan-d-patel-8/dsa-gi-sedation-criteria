@@ -4,6 +4,7 @@ import { POLICY_VERSION, policySections } from "./criteria.js";
 import { coverageSites, inBasketCoverageGroups } from "./podlets.js";
 import { birthdayEvents } from "./birthdays.js";
 import { medicationHoldSections } from "./medication-holds.js";
+import { dtmMedicationGroups } from "./dtm.js";
 import orientationSource from "./orientation-source.html?raw";
 import pathWorkflowSource from "./path-workflow.html?raw";
 import changelogSource from "../CHANGELOG.md?raw";
@@ -19,6 +20,7 @@ const tabs = [
   { id: "sedation", index: "01", label: "Procedure Sedation Criteria" },
   { id: "coverage", index: "02", label: "DSA GI MA-MD Podlets" },
   { id: "orientation", index: "03", label: "New Physician Orientation Materials" },
+  { id: "dtm", index: "04", label: "Desktop Medicine" },
 ];
 
 const zoomLevels = [90, 100, 110, 125, 140];
@@ -2834,6 +2836,126 @@ function OrientationMaterials() {
   );
 }
 
+function DtmPage() {
+  const medicationCount = dtmMedicationGroups.reduce((count, group) => count + group.rows.length, 0);
+
+  return (
+    <main className="dtm-page" id="dtm-panel" role="tabpanel" aria-labelledby="dtm-tab">
+      <header className="dtm-hero">
+        <div>
+          <p className="dtm-kicker">Desktop Medicine · Phase I</p>
+          <h1>Pharmacy refill support is live.</h1>
+          <p className="dtm-lede">Pharmacy may renew the defined GI medications when no refills remain, using the working agreement below and routing exceptions back to the prescribing provider.</p>
+        </div>
+        <div className="dtm-live-stamp" aria-label="Live October 14, 2026">
+          <span>Live</span>
+          <time dateTime="2026-10-14">Oct 14 · 2026</time>
+        </div>
+      </header>
+
+      <section className="dtm-bulletin" aria-labelledby="dtm-bulletin-title">
+        <div className="dtm-bulletin-mark" aria-hidden="true">DTM</div>
+        <div>
+          <p className="dtm-kicker">Bulletin</p>
+          <h2 id="dtm-bulletin-title">What changes in Phase I</h2>
+          <p>When an eligible prescription has no refills, Pharmacy can review the chart, order required monitoring under the provider's name, remind the patient to complete it, document the refill, and authorize within the agreement's limits.</p>
+        </div>
+      </section>
+
+      <section className="dtm-workflow" aria-label="Desktop Medicine workflow">
+        <article>
+          <span>01</span>
+          <h2>Pharmacy checks</h2>
+          <p>Required labs, surveillance, medication status, and—where specified—a GI visit within the last year.</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h2>Pharmacy renews</h2>
+          <p>Eligible prescriptions receive no more than the medication-specific interval, with a six-month maximum for qualifying biologics and a three-month maximum for small molecules, DMARDs, and other listed medications.</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h2>Pharmacy routes back</h2>
+          <p>Out-of-criteria cases, significantly overdue monitoring, noncompletion, symptoms, tolerance concerns, and discontinued, held, or changed medications return to the provider.</p>
+        </article>
+      </section>
+
+      <section className="dtm-boundaries" aria-labelledby="dtm-boundaries-title">
+        <div>
+          <p className="dtm-kicker">Scope boundary</p>
+          <h2 id="dtm-boundaries-title">Outside Phase I</h2>
+        </div>
+        <ul>
+          <li>Lasix and Aldactone</li>
+          <li>Hepatitis B medications</li>
+          <li>Controlled substances</li>
+          <li>SSRIs, SNRIs, and TCAs</li>
+          <li>Antibiotics, except rifaximin for hepatic encephalopathy</li>
+          <li>Steroids and hemorrhoid medications</li>
+        </ul>
+      </section>
+
+      <section className="dtm-agreement" aria-labelledby="dtm-agreement-title">
+        <header>
+          <div>
+            <p className="dtm-kicker">Working agreement · {medicationCount} entries</p>
+            <h2 id="dtm-agreement-title">Medication matrix</h2>
+          </div>
+          <p>Supplied for the October 14 launch. Feedback will refine the agreement. A blank field means the source did not specify additional guidance.</p>
+        </header>
+
+        <div className="dtm-groups">
+          {dtmMedicationGroups.map((group, groupIndex) => (
+            <details className="dtm-group" open={groupIndex === 0} key={group.title}>
+              <summary>
+                <span>{String(groupIndex + 1).padStart(2, "0")}</span>
+                <strong>{group.title}</strong>
+                <small>{group.rows.length} medications</small>
+              </summary>
+              <div className="dtm-table-wrap">
+                <table>
+                  <caption className="sr-only">{group.title} refill agreement</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Medication</th>
+                      <th scope="col">Class</th>
+                      <th scope="col">Review requirements</th>
+                      <th scope="col">Comments</th>
+                      <th scope="col">Refill limit</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {group.rows.map((medication, medicationIndex) => (
+                      <tr key={`${medication.generic}-${medication.brand || "none"}-${medicationIndex}`}>
+                        <th scope="row">
+                          <strong>{medication.generic}</strong>
+                          {medication.brand && <span>{medication.brand}</span>}
+                        </th>
+                        <td>{[medication.therapeuticClass, medication.pharmacySubclass].filter(Boolean).join(" · ") || <span className="dtm-unspecified">Not specified</span>}</td>
+                        <td>
+                          {medication.requirements || <span className="dtm-unspecified">Not specified</span>}
+                          {medication.labComments && <small>{medication.labComments}</small>}
+                        </td>
+                        <td>{medication.comments || <span className="dtm-unspecified">Not specified</span>}</td>
+                        <td className="dtm-refill">{medication.refills || <span className="dtm-unspecified">Not specified</span>}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <aside className="dtm-provider-note" aria-labelledby="dtm-provider-note-title">
+        <strong id="dtm-provider-note-title">Provider responsibility remains unchanged.</strong>
+        <p>Providers review results and decide whether therapy continues. Patients actively followed by the regional IBD pharmacy team route to that team; the identification process is still being developed with Alex Huey and the regional IBD pharmacy team.</p>
+      </aside>
+    </main>
+  );
+}
+
 function FolderTabs({ activeTab, onChange }) {
   function handleKeyDown(event, currentIndex) {
     if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
@@ -2983,6 +3105,7 @@ export default function App() {
               {activeTab === "sedation" && <CriteriaMatrix />}
               {activeTab === "coverage" && <CoveragePodlets />}
               {activeTab === "orientation" && <OrientationMaterials />}
+              {activeTab === "dtm" && <DtmPage />}
             </>
           )}
         </div>

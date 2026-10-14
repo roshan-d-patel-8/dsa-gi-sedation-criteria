@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.40.0 — 2026-10-14
+
+- Add a Desktop Medicine primary tab with an October 14 Phase I go-live bulletin, workflow responsibilities, and explicit out-of-scope boundaries.
+- Publish the 54 actionable entries from the supplied working pharmacy agreement across IBD, liver, anti-diarrhea/IBS, GERD/nausea, and constipation groups.
+- Preserve unspecified source fields, exclude the unresolved `TCA's?` worksheet marker because TCAs are explicitly outside Phase I, and keep the source files outside the public build.
+- Verify the five-tab navigation, agreement data, desktop and narrow-phone layouts, keyboard access, build, and existing site regressions.
+
 ## 0.39.0 — 2026-10-14
 
 - Add the complete “MD-MA QuickAction protocol for procedure path results” under Orientation → MA-MD → Messages & Result Notes.

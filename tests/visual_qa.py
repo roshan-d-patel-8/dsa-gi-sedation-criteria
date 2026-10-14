@@ -59,12 +59,13 @@ def capture_console_errors(page):
 
 
 def assert_tabs(page):
-    assert page.get_by_role("tab").count() == 4
+    assert page.get_by_role("tab").count() == 5
     assert page.get_by_role("tab", name="Calendar", exact=True).is_visible()
     assert page.get_by_role("tab", name="Procedure Sedation Criteria", exact=False).is_visible()
     podlets_tab = page.get_by_role("tab", name="DSA GI MA-MD Podlets", exact=False)
     assert podlets_tab.is_visible()
     assert page.get_by_role("tab", name="New Physician Orientation Materials", exact=False).is_visible()
+    assert page.get_by_role("tab", name="Desktop Medicine", exact=False).is_visible()
     label = podlets_tab.locator("strong")
     expected_font_size = 12 if page.viewport_size["width"] <= 680 else 15
     assert float(label.evaluate("element => parseFloat(getComputedStyle(element).fontSize)")) >= expected_font_size
@@ -90,7 +91,7 @@ def assert_global_zoom(page, mobile=False):
     page.keyboard.press("Escape")
     assert zoom_panel.count() == 0
 
-    for tab_name in ["Calendar", "Procedure Sedation Criteria", "DSA GI MA-MD Podlets", "New Physician Orientation Materials"]:
+    for tab_name in ["Calendar", "Procedure Sedation Criteria", "DSA GI MA-MD Podlets", "New Physician Orientation Materials", "Desktop Medicine"]:
         page.get_by_role("tab", name=tab_name, exact=False).click()
         assert page.get_by_role("button", name="Zoom page, currently 110%", exact=True).is_visible()
         assert page.locator(".page-zoom-surface").get_attribute("data-zoom") == "110"
