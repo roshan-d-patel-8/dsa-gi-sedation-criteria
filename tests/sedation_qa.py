@@ -10,7 +10,6 @@ def assert_sedation_clarifications(page, touch=False):
     assert rule.inner_text() == 'Peritoneal-dialysis cases must be booked at Antioch only—not Walnut Creek.'
     assert int(rule.evaluate('el => getComputedStyle(el).fontWeight')) >= 700
     assert page.get_by_text('For patients with quadriplegia, the risk of dysautonomia is an additional reason for OR scheduling.', exact=False).is_visible()
-    assert page.locator('.criteria-booking').inner_text() == 'In booking comments, state “Patient is on peritoneal dialysis” to alert schedulers that the case is restricted to Antioch.'
     trigger = page.get_by_role('button', name='Why peritoneal dialysis requires Antioch', exact=True)
     trigger.scroll_into_view_if_needed()
     if touch:
@@ -54,6 +53,55 @@ def assert_sedation_clarifications(page, touch=False):
         assert trigger.evaluate('el => el === document.activeElement')
         page.keyboard.press('Tab')
         assert tooltip.count() == 0
+
+    page.keyboard.press('Escape')
+    note_trigger = page.get_by_role('button', name='HC booking and potassium instructions', exact=True)
+    assert note_trigger.inner_text() == 'HC'
+    note = page.locator('#dialysis-hc-instructions')
+    assert note.count() == 0
+    note_trigger.scroll_into_view_if_needed()
+    question_box = trigger.bounding_box()
+    note_box = note_trigger.bounding_box()
+    assert abs(question_box['y'] - note_box['y']) < 2
+    assert note_box['x'] > question_box['x']
+    if touch:
+        note_trigger.tap()
+    else:
+        note_trigger.hover()
+    note.wait_for(state='visible')
+    expected = 'In booking comments, state “Patient is on peritoneal dialysis” to alert schedulers that the case is restricted to Antioch.\n\nAll hemodialysis and peritoneal-dialysis patients require a STAT potassium order.'
+    assert note.inner_text() == expected
+    box = note.bounding_box()
+    assert box['x'] >= 0 and box['x'] + box['width'] <= page.viewport_size['width'] + 1
+    assert box['y'] >= 0 and box['y'] + box['height'] <= page.viewport_size['height'] + 1
+    assert page.evaluate('document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1')
+    page.screenshot(path=output / f"hc-note-{'mobile' if touch else 'desktop'}-{page.viewport_size['width']}.png", full_page=False)
+    if not touch:
+        note.hover()
+        page.wait_for_timeout(230)
+        assert note.is_visible()
+    page.keyboard.press('Escape')
+    assert note.count() == 0
+    if touch:
+        note_trigger.tap()
+        assert note.is_visible()
+        note_trigger.tap()
+        assert note.count() == 0
+        note_trigger.tap()
+        page.locator('.reference-heading h1').tap()
+        assert note.count() == 0
+    else:
+        page.mouse.move(0, 0)
+        trigger.focus()
+        page.keyboard.press('Tab')
+        assert note_trigger.evaluate('el => el === document.activeElement')
+        assert note.is_visible()
+        assert note_trigger.get_attribute('aria-describedby') == 'dialysis-hc-instructions'
+        page.keyboard.press('Escape')
+        assert note.count() == 0
+        assert note_trigger.evaluate('el => el === document.activeElement')
+        page.keyboard.press('Tab')
+        assert note.count() == 0
 
 
 if __name__ == '__main__':

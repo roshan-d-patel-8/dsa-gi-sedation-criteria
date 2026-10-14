@@ -2010,7 +2010,7 @@ function CriteriaExplanation({ explanation }) {
   }, [open]);
 
   return <>
-    <button type="button" className="criteria-help" ref={triggerRef}
+    <button type="button" className={`criteria-help${explanation.tone === "sticky" ? " criteria-help-sticky" : ""}`} ref={triggerRef}
       aria-label={explanation.label} aria-describedby={open ? explanation.id : undefined}
       aria-expanded={open} aria-controls={explanation.id}
       onPointerEnter={(event) => { if (event.pointerType === "mouse") show(); }}
@@ -2018,9 +2018,9 @@ function CriteriaExplanation({ explanation }) {
       onFocus={() => { if (window.matchMedia("(hover: hover)").matches) show(); }}
       onBlur={() => setOpen(false)}
       onClick={(event) => { cancelHide(); setOpen(event.detail === 0 || window.matchMedia("(hover: hover)").matches ? true : !open); }}
-    ><span aria-hidden="true">?</span></button>
+    ><span aria-hidden="true">{explanation.icon || "?"}</span></button>
     {open && createPortal(<span role="tooltip" id={explanation.id} ref={tooltipRef}
-      className="criteria-explanation" style={{ ...position, visibility: position ? "visible" : "hidden" }}
+      className={`criteria-explanation${explanation.tone === "sticky" ? " criteria-explanation-sticky" : ""}`} style={{ ...position, visibility: position ? "visible" : "hidden" }}
       onPointerEnter={cancelHide} onPointerLeave={hideSoon}
     >{explanation.text}</span>, document.body)}
   </>;
@@ -2031,9 +2031,7 @@ function CriteriaItem({ item }) {
   return (
     <li>
       {item.text}
-      {item.emphasis && <> <strong className="criteria-emphasis">{item.emphasis}</strong> <CriteriaExplanation explanation={item.explanation} /></>}
-      {item.booking && <span className="criteria-booking">{item.booking}</span>}
-      {item.after && <> {item.after}</>}
+      {item.emphasis && <> <strong className="criteria-emphasis">{item.emphasis}</strong> <span className="criteria-help-controls"><CriteriaExplanation explanation={item.explanation} />{item.note && <CriteriaExplanation explanation={item.note} />}</span></>}
       {item.contrast && <div className="criteria-contrast">
         {item.contrast.map((lane) => (
           <section className={`criteria-lane criteria-lane-${lane.tone}`} key={lane.label}>

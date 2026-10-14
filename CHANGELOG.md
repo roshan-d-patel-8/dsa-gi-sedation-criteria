@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.38.3 — 2026-10-14
+
+- Move the existing peritoneal-dialysis booking comment and HD/PD STAT potassium reminder into a small HC sticky-note icon beside the blue question mark.
+- Preserve the exact instructions and expose them on hover, keyboard focus, and tap, with Escape and outside-tap dismissal.
+- Verify both controls and complete copy on desktop and narrow phone screens, plus existing site regressions.
+
 ## 0.38.2 — 2026-10-14
 
 - Add dysautonomia risk to the quadriplegia operating-room rationale.

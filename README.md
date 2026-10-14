@@ -37,6 +37,8 @@ The application is static and has no clinical inputs, backend, database, analyti
 
 ## Publication
 
+On 2026-10-14 Roshan requested an HC sticky-note icon beside the dialysis question mark. This presentation-only follow-up moves the existing booking-comment and STAT potassium sentences into its hover/focus/tap note, preserving the exact clinical instructions.
+
 On 2026-10-14 Roshan invoked Construct to publish scoped sedation-reference clarifications: dysautonomia as an additional quadriplegia OR rationale, bold Antioch-only peritoneal-dialysis routing, a blue question-mark explanation of Walnut Creek’s 3 admit bays and antibiotic administration taking over 60 minutes, and explicit peritoneal-dialysis booking comments for schedulers. The explanation supports hover, keyboard focus, and touch. The dated source addendum preserves the original August policy; no patient information or new source attachments are published.
 
 On 2026-10-12 Roshan clarified that mobile countdowns should appear above the calendar. The narrow-screen order is countdowns, calendar, then announcements/resources; desktop retains the calendar at left and countdowns above announcements at right.

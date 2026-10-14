@@ -400,11 +400,14 @@ body.presentation-open { overflow: hidden; }
 .criteria-card > ul { margin: 0; padding: 0 0 0 17px; color: var(--muted); font-size: 12.5px; line-height: 1.4; }
 .criteria-card > ul > li { margin: 5px 0; }
 .criteria-emphasis { color: var(--navy); font-weight: 850; }
-.criteria-booking { display: block; margin: 5px 0; }
+.criteria-help-controls { display: inline-flex; align-items: center; gap: 2px; vertical-align: middle; white-space: nowrap; }
 .criteria-help { display: inline-grid; place-items: center; width: 28px; height: 28px; padding: 4px; border: 0; border-radius: 50%; background: transparent; vertical-align: middle; cursor: help; }
 .criteria-help > span { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: #1769aa; color: white; font-size: 13px; font-weight: 850; line-height: 1; }
 .criteria-help:focus-visible { outline: 2px solid var(--navy); outline-offset: 1px; }
 .criteria-explanation { position: fixed; z-index: 160; width: min(340px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow: auto; padding: 14px 16px; border: 1px solid #91b9db; border-radius: 12px; background: #eef7ff; color: var(--navy); box-shadow: 0 12px 30px rgba(20, 55, 88, .22); font-size: 14px; line-height: 1.5; }
+.criteria-help-sticky > span { position: relative; width: 24px; height: 24px; border-radius: 2px; background: #ffe28a; color: #533b0a; font-size: 10px; box-shadow: 0 1px 2px rgba(83, 59, 10, .2); clip-path: polygon(0 0, 75% 0, 100% 25%, 100% 100%, 0 100%); }
+.criteria-help-sticky > span::after { position: absolute; top: 0; right: 0; width: 6px; height: 6px; background: #cfa94b; content: ""; }
+.criteria-explanation-sticky { border-color: #d9b95d; background: #fff7d7; color: #493a16; white-space: pre-line; }
 @media (pointer: coarse) { .criteria-help { width: 44px; height: 44px; } }
 .criteria-contrast { display: grid; gap: 6px; margin: 8px 0 3px; }
 .criteria-lane { padding: 8px 9px; border: 1px solid; border-radius: 9px; }

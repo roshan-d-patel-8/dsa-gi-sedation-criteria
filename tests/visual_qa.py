@@ -625,7 +625,7 @@ def assert_sedation_reference(page):
     assert page.get_by_text("One-page clinical reference.", exact=False).count() == 0
     assert page.get_by_text("Boundary:", exact=True).count() == 0
     assert page.get_by_text("Peritoneal-dialysis cases must be booked at Antioch only—not Walnut Creek.", exact=False).is_visible()
-    assert page.get_by_text("All hemodialysis and peritoneal-dialysis patients require a STAT potassium order.", exact=False).is_visible()
+    assert page.get_by_role("button", name="HC booking and potassium instructions", exact=True).is_visible()
 
 
 def assert_coverage_reference(page):
@@ -1080,7 +1080,7 @@ with sync_playwright() as playwright:
     assert desktop.locator("details.orientation-site-group[open]").count() == 0
     directory_access = desktop.locator(".topic-contact-directory")
     directory_access.locator("summary").press("Enter")
-    assert directory_access.get_by_role("link", name="KPATHS Facility Information directory", exact=True).is_visible()
+    directory_access.get_by_role("link", name="KPATHS Facility Information directory", exact=True).wait_for(state="visible")
     assert desktop.get_by_role("heading", name="Dublin", exact=True).is_visible()
     contacts_departmentwide = desktop.locator(".site-group-departmentwide")
     contacts_departmentwide.locator("summary").click()
