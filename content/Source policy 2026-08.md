@@ -88,7 +88,7 @@ Consider MAC for significant pain during colonoscopy with moderate sedation beca
 
 These dated clarifications supplement the August source above:
 
-- For patients with quadriplegia, the risk of dysautonomia is an additional reason for OR scheduling, alongside the need for multiple staff for transfer.
+- 2026-10-14 For patients with quadriplegia, per some anesthesiologists the risk of dysautonomia (HTN) is an additional reason for OR scheduling. The original multiple-staff transfer criterion remains unchanged.
 - Emphasize the existing Antioch-only requirement for peritoneal dialysis. Walnut Creek has only 3 admit bays, making it difficult to administer pre-procedure antibiotics that take over 60 minutes. Antioch has greater capacity to accommodate this preparation.
 - In booking comments, state “Patient is on peritoneal dialysis” to alert schedulers that the case is restricted to Antioch.
 - Preserve the existing two-hour arrival and STAT potassium instructions. These clarifications do not change antibiotic regimens or other clinical routing thresholds.

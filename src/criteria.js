@@ -119,7 +119,16 @@ export const policySections = [
       "Severe gastroparesis.",
       "Intellectual disability or dementia when pre-procedure IV cannot be tolerated.",
       "Severe pulmonary hypertension.",
-      "Physical limitation such as quadriplegia or being bedbound when multiple people are needed for transfer. For patients with quadriplegia, the risk of dysautonomia is an additional reason for OR scheduling.",
+      {
+        text: "Physical limitation such as quadriplegia or being bedbound when multiple people are needed for transfer.",
+        note: {
+          id: "quadriplegia-hc-rationale",
+          label: "HC quadriplegia OR scheduling note",
+          icon: "HC",
+          tone: "sticky",
+          text: "2026-10-14 For patients with quadriplegia, per some anesthesiologists the risk of dysautonomia (HTN) is an additional reason for OR scheduling.",
+        },
+      },
       "All OR procedures require POM clinic beforehand.",
     ],
   },

@@ -2028,7 +2028,8 @@ function CriteriaItem({ item }) {
   return (
     <li>
       {item.text}
-      {item.emphasis && <> <strong className="criteria-emphasis">{item.emphasis}</strong> <span className="criteria-help-controls"><CriteriaExplanation explanation={item.explanation} />{item.note && <CriteriaExplanation explanation={item.note} />}</span></>}
+      {item.emphasis && <> <strong className="criteria-emphasis">{item.emphasis}</strong></>}
+      {(item.explanation || item.note) && <> <span className="criteria-help-controls">{item.explanation && <CriteriaExplanation explanation={item.explanation} />}{item.note && <CriteriaExplanation explanation={item.note} />}</span></>}
       {item.contrast && <div className="criteria-contrast">
         {item.contrast.map((lane) => (
           <section className={`criteria-lane criteria-lane-${lane.tone}`} key={lane.label}>

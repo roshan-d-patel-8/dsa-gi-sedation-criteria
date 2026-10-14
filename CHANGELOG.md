@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.43.1 — 2026-10-14
+
+- Move the quadriplegia dysautonomia rationale into the existing yellow HC sticky-note control, preserving the transfer criterion.
+- Use Roshan’s exact dated wording, attributing the rationale to some anesthesiologists and specifying dysautonomia (HTN).
+- Persist the reusable HC-note convention in the repository and clarify the existing clinician history entry without adding a formatting-only item.
+
 ## 0.43.0 — 2026-10-14
 
 - Replace the Choosing Wisely banner with the supplied January–September 2026 image: 281 patients graduated and 56 procedure units freed. Update accessible description and expanded caption together.

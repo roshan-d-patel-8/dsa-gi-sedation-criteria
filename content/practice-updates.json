@@ -61,10 +61,11 @@
     "date": "2026-10-14",
     "title": "OR scheduling and peritoneal dialysis",
     "sourceReleases": [
-      "0.38.2"
+      "0.38.2",
+      "0.43.1"
     ],
     "changes": [
-      "Clarified that dysautonomia risk is an additional reason for OR scheduling in patients with quadriplegia.",
+      "Clarified that, per some anesthesiologists, dysautonomia (HTN) risk is an additional reason for OR scheduling in patients with quadriplegia.",
       "Clarified the rationale for booking peritoneal-dialysis cases at Antioch: Walnut Creek has only three admit bays, limiting its ability to accommodate pre-procedure antibiotics that take over 60 minutes.",
       "In booking comments, state “Patient is on peritoneal dialysis” so schedulers recognize that the case is restricted to Antioch."
     ]
