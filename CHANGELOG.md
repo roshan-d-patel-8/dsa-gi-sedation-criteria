@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.40.3 — 2026-10-14
+
+- Show complete primary-tab labels by preventing flex compression and allowing long labels to wrap within the viewport.
+- Remove ellipsis and legacy minimum widths while retaining the compact numbered Podlets tab.
+- Verify complete labels, navigation, and desktop/mobile/zoom layouts. No clinician practice-history entry: presentation only.
+
 ## 0.40.2 — 2026-10-14
 
 - Shorten the primary coverage navigation label to “Podlets” while retaining “02”.

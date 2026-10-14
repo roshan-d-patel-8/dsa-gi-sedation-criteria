@@ -69,7 +69,9 @@ def assert_tabs(page):
     label = podlets_tab.locator("strong")
     expected_font_size = 12 if page.viewport_size["width"] <= 680 else 15
     assert float(label.evaluate("element => parseFloat(getComputedStyle(element).fontSize)")) >= expected_font_size
-    assert label.evaluate("element => element.scrollWidth <= element.clientWidth")
+    for tab_label in page.locator(".folder-tab:not(.folder-tab-home) > strong").all():
+        assert tab_label.evaluate("element => element.scrollWidth <= element.clientWidth + 1 && element.scrollHeight <= element.clientHeight + 1")
+        assert tab_label.evaluate("element => getComputedStyle(element).textOverflow !== 'ellipsis'")
 
 
 def assert_global_zoom(page, mobile=False):

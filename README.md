@@ -37,6 +37,8 @@ The application is static and has no clinical inputs, backend, database, analyti
 
 ## Publication
 
+On 2026-10-14 Roshan requested that primary navigation words not be cut off. Tabs now retain their full labels, use content-based sizing, and wrap long text when needed within the viewport. The compact “02 Podlets” label is preserved. This formatting correction is excluded from the clinician practice history.
+
 On 2026-10-14 Roshan requested the compact primary navigation label “02 Podlets”. The tab now fits its label without the former long-name minimum widths; the full page heading and clinical content remain unchanged. This presentation-only update is excluded from the clinician-facing practice history.
 
 On 2026-10-14 Roshan assigned Construct to add a public DTM tab with the Phase I pharmacy rollout as its bulletin and the supplied working refill agreement. The release identifies the October 14 go-live, pharmacy workflow, provider responsibilities, explicit out-of-scope medications, and 54 actionable medication entries across five groups. The unresolved `TCA's?` worksheet marker is excluded because the rollout brief explicitly places TCAs outside Phase I; the blank Simethicone refill field remains visibly unspecified. The forwarded email and original spreadsheet remain outside the public build.

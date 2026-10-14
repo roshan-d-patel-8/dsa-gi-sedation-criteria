@@ -73,8 +73,9 @@ body::before {
 .folder-tabs::-webkit-scrollbar { display: none; }
 .folder-tab {
   min-height: 54px;
-  min-width: 250px;
-  max-width: 360px;
+  min-width: 0;
+  max-width: min(360px, calc(100vw - 24px));
+  flex: 0 0 auto;
   padding: 10px 20px 12px;
   display: flex;
   align-items: center;
@@ -87,16 +88,16 @@ body::before {
   box-shadow: inset 0 3px 0 rgba(76, 124, 174, .22);
   cursor: pointer;
   text-align: left;
-  white-space: nowrap;
+  white-space: normal;
   transition: color .18s ease, background .18s ease, transform .18s ease, box-shadow .18s ease;
 }
 .folder-tab-home { min-width: 64px; width: 64px; max-width: 64px; justify-content: center; padding-inline: 15px; color: var(--way); box-shadow: inset 0 3px 0 rgba(27, 117, 187, .65); }
 .calendar-tab-icon { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 3px 5px rgba(27, 117, 187, .2)); }
 .folder-tab:nth-child(3) { min-width: 0; flex: 0 0 auto; gap: 6px; padding-inline: 14px; box-shadow: inset 0 3px 0 rgba(242, 160, 184, .7); }
-.folder-tab:nth-child(4) { min-width: 356px; box-shadow: inset 0 3px 0 rgba(217, 164, 65, .72); }
-.folder-tab:nth-child(5) { min-width: 220px; box-shadow: inset 0 3px 0 rgba(41, 145, 132, .7); }
-.folder-tab > span { color: #91a2b3; font-size: 11px; font-weight: 900; letter-spacing: .14em; line-height: 1; }
-.folder-tab > strong { overflow: hidden; text-overflow: ellipsis; font-size: clamp(15px, 1.05vw, 16px); font-weight: 800; line-height: 1.08; letter-spacing: -.02em; }
+.folder-tab:nth-child(4) { box-shadow: inset 0 3px 0 rgba(217, 164, 65, .72); }
+.folder-tab:nth-child(5) { box-shadow: inset 0 3px 0 rgba(41, 145, 132, .7); }
+.folder-tab > span { flex: 0 0 auto; color: #91a2b3; font-size: 11px; font-weight: 900; letter-spacing: .14em; line-height: 1; }
+.folder-tab > strong { min-width: 0; white-space: normal; font-size: clamp(15px, 1.05vw, 16px); font-weight: 800; line-height: 1.3; letter-spacing: -.02em; }
 .folder-tab:hover { color: var(--navy); background: #f5f7f9; }
 .folder-tab.active {
   position: relative;
@@ -981,10 +982,7 @@ body.presentation-open { overflow: hidden; }
 @media (max-width: 1120px) {
   .site-header { grid-template-columns: 1fr; gap: 5px; padding-right: clamp(16px, 3vw, 48px); }
   .brand { margin-bottom: 0; }
-  .folder-tab { min-width: 230px; }
   .folder-tab-home { min-width: 60px; width: 60px; }
-  .folder-tab:nth-child(4) { min-width: 338px; }
-  .folder-tab:nth-child(5) { min-width: 210px; }
   .year-calendar { grid-template-columns: minmax(0, 1fr) 250px; }
   .calendar-announcements-header { min-height: auto; padding: 17px 18px; }
   .announcement-list { grid-template-columns: 1fr; }
@@ -1016,10 +1014,8 @@ body.presentation-open { overflow: hidden; }
   .brand-mark { width: 32px; height: 32px; }
   .brand small { font-size: 12px; }
   .folder-tabs { margin-inline: -12px; padding-inline: 12px; }
-  .folder-tab { min-width: 220px; min-height: 50px; padding: 9px 13px 10px; }
+  .folder-tab { min-height: 50px; padding: 9px 13px 10px; }
   .folder-tab-home { min-width: 54px; width: 54px; padding-inline: 13px; }
-  .folder-tab:nth-child(4) { min-width: 320px; }
-  .folder-tab:nth-child(5) { min-width: 190px; }
   .folder-tab > span { font-size: 10px; }
   .folder-tab > strong { font-size: 12px; }
   .home-page, .reference-page, .coverage-page, .orientation-page, .dtm-page { padding: 18px 12px 28px; }
