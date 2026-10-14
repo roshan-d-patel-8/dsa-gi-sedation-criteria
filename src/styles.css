@@ -1318,3 +1318,17 @@ body.presentation-open { overflow: hidden; }
 .meeting-sticky-note > div { padding: 4px 14px 14px; font-size: 13px; line-height: 1.6; }
 .meeting-sticky-note :focus-visible { outline: 3px solid #bd963a; outline-offset: 2px; }
 @media (max-width: 680px) { .meeting-notes-dialog { width: calc(100vw - 12px); max-height: calc(100dvh - 12px); border-radius: 12px; } .meeting-notes-dialog > header { padding: 15px 12px; gap: 10px; } .meeting-notes-body { padding: 5px 14px 18px; font-size: 14px; } }
+
+.meeting-announcement { margin: 0 14px 15px; overflow: hidden; border: 1px solid #9ec8e2; border-radius: 12px; background: #f5f9fc; color: var(--navy); }
+.meeting-announcement .meeting-notes-card { width: 100%; margin: 0; border: 0; border-bottom: 1px solid #d3e0eb; border-radius: 0; }
+.meeting-highlights { padding: 0 13px 14px; font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; }
+.meeting-highlights > section { padding-top: 14px; }
+.meeting-highlights h4 { margin: 0 0 7px; color: var(--blue); font-size: 13px; }
+.meeting-highlights ul { margin: 0; padding-left: 16px; }
+.meeting-highlights li + li { margin-top: 10px; }
+.meeting-highlights a { color: #1467a8; font-weight: 800; text-decoration: underline; }
+.meeting-highlights .meeting-sticky-note { margin-top: 10px; }
+.meeting-highlights .meeting-sticky-note > summary { font-size: 10px; padding-inline: 7px; gap: 6px; }
+.meeting-highlights .meeting-sticky-note > div { padding: 4px 10px 10px; font-size: 12px; }
+.meeting-full-notes { width: 100%; min-height: 44px; margin-top: 16px; padding: 8px; border: 1px solid #b8ccde; border-radius: 7px; background: #e8f2f9; color: var(--navy); font-weight: 850; cursor: pointer; }
+@media (max-width: 680px) { .meeting-highlights { font-size: 14px; line-height: 1.65; padding-inline: 15px; } .meeting-highlights h4 { font-size: 15px; } .meeting-highlights .meeting-sticky-note > summary { font-size: 12px; } }

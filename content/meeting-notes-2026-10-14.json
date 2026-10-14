@@ -95,5 +95,61 @@
         }
       ]
     }
+  ],
+  "preview": [
+    {
+      "title": "TPIP",
+      "items": [
+        [
+          "Oct 17: 6-hour, in-person Northern California TPIP at Oakland Medical Center, SMOB conference rooms. Parking: 3701 Broadway. Nov 5 makeup covers only 2 of the 6 hours. Unable to attend Saturday? ",
+          {
+            "label": "Microsoft Forms",
+            "href": "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=xHuKPzfjpUeg_A1RLA4F8Zj47EYlwklOq4uH6MhZSndUODlDNDdGTEtSR0JGQ1BNT0U0TlZXWTVHRS4u"
+          },
+          " to explore a possible work group."
+        ],
+        [
+          "Dec 1: Complete the 6-hour ",
+          {
+            "label": "online regional TPIP",
+            "href": "https://tpmgphysicianed.org/user/login?destination=node/141371"
+          },
+          " during uncompensated time for the financial incentive. Updating MDO (My Doctor Online) is also required; complete Sachin Kapoor’s email request if received."
+        ]
+      ]
+    },
+    {
+      "title": "Administrative",
+      "items": [
+        [
+          "Nov 1: Shareholder and participant election votes are due. Support Kay for shareholder and Mariel for participant."
+        ],
+        [
+          "Fri, Oct 16: Physician Opinion Survey and JAMM surveys are due. Use the survey link in the countdown above to share feedback on the department and TPMG."
+        ]
+      ]
+    },
+    {
+      "title": "Initiatives",
+      "items": [
+        [
+          "Courtney: Podlet updates, DRV MA pilot review and feedback, and Desktop Medicine Phase I rollout on Oct 14."
+        ],
+        [
+          "Dan: In-person Pleasanton orientation on Thu, Oct 15."
+        ]
+      ]
+    },
+    {
+      "title": "Reminders",
+      "items": [
+        [
+          "Review the anesthesia sedation criteria."
+        ],
+        [
+          "Place inpatient OR consent when placing the case request. Call anesthesia after seeing and evaluating the patient."
+        ]
+      ]
+    }
   ]
 }

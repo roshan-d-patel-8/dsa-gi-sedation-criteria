@@ -2505,7 +2505,7 @@ function OrientationMaterials() {
   const activeSection = visibleSections.find((section) => section.id === activeSectionId) || visibleSections[0];
   const activeSectionMarkup = useMemo(() => ({ __html: activeSection?.html || "" }), [activeSection?.html]);
   const isChoosingWisely = activeSection?.short === "Choosing Wisely";
-  const choosingWiselyInfographic = `${import.meta.env.BASE_URL}choosing-wisely-graduation-jan-jul-2026.jpg`;
+  const choosingWiselyInfographic = `${import.meta.env.BASE_URL}choosing-wisely-graduation-jan-sep-2026.webp`;
 
   useEffect(() => {
     document.getElementById(`${activeSectionId}-tab`)?.scrollIntoView({ block: "nearest", inline: "center" });
@@ -2802,9 +2802,9 @@ function OrientationMaterials() {
             </button>
             <img
               src={choosingWiselyInfographic}
-              alt="Choosing Wisely year-to-date infographic: 203 patients graduated from surveillance colonoscopy from January through July 2026, freeing 40 procedure units."
+              alt="Choosing Wisely year-to-date infographic: 281 patients graduated from surveillance colonoscopy from January through September 2026, freeing 56 procedure units. Five colonoscopies equal one procedure unit."
             />
-            <figcaption id="cw-infographic-title">Choosing Wisely · Graduation from Surveillance Colonoscopy · January–July 2026</figcaption>
+            <figcaption id="cw-infographic-title">Choosing Wisely · Graduation from Surveillance Colonoscopy · January–September 2026</figcaption>
           </figure>
         </div>
       )}

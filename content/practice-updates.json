@@ -1,5 +1,16 @@
 [
   {
+    "id": "2026-10-14-choosing-wisely-september",
+    "date": "2026-10-14",
+    "title": "Choosing Wisely: January–September results",
+    "sourceReleases": [
+      "0.43.0"
+    ],
+    "changes": [
+      "Updated the Choosing Wisely results banner: 281 patients graduated from surveillance colonoscopy and 56 procedure units freed during January–September 2026."
+    ]
+  },
+  {
     "id": "2026-10-14-meeting-notes",
     "date": "2026-10-14",
     "title": "October department meeting notes",

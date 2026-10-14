@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.43.0 — 2026-10-14
+
+- Replace the Choosing Wisely banner with the supplied January–September 2026 image: 281 patients graduated and 56 procedure units freed. Update accessible description and expanded caption together.
+- Preserve the original PNG in the vault archive and publish an optimized, uncropped WebP at the original 5504×3072 dimensions.
+- Show all eight October 14 meeting highlights inline in four groups, with direct links and expandable context; retain the complete notes dialog.
+- Verify image fidelity, captions, inline content, full source notes, links and responsive interactions.
+
 ## 0.42.0 — 2026-10-14
 
 - Add the complete October 14 Department Meeting Notes to the October Calendar announcements/department meeting area.

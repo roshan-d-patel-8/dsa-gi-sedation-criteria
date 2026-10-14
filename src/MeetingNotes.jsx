@@ -15,10 +15,20 @@ function StickyNote({ note }) {
 }
 
 export function MeetingNotesCard({ notes, onOpen }) {
-  return <button type="button" className="meeting-notes-card" onClick={onOpen} aria-label={`Read ${notes.title}`}>
-    <span className="meeting-notes-card-date" aria-hidden="true">OCT<strong>14</strong></span>
-    <span><small>Department meeting · Notes</small><strong>{notes.title}</strong><span>TPIP, administrative updates, initiatives and reminders</span><b>Read notes →</b></span>
-  </button>;
+  return <article className="meeting-announcement">
+    <button type="button" className="meeting-notes-card" onClick={onOpen} aria-label={`Read ${notes.title}`}>
+      <span className="meeting-notes-card-date" aria-hidden="true">OCT<strong>14</strong></span>
+      <span><small>Department meeting · Notes</small><strong>{notes.title}</strong><b>Read full notes →</b></span>
+    </button>
+    <div className="meeting-highlights" aria-label="Meeting highlights">
+      {notes.preview?.map((section, sectionIndex) => <section key={section.title}>
+        <h4>{section.title}</h4><ul>{section.items.map((segments, index) => <li key={index}>{segments.map((segment, i) => typeof segment === "string" ? segment : <a href={segment.href} target="_blank" rel="noreferrer" key={i}>{segment.label}</a>)}</li>)}</ul>
+        {sectionIndex === 0 && <StickyNote note={notes.sections[0].items[0].note} />}
+        {sectionIndex === 3 && <StickyNote note={notes.sections[3].items[1].note} />}
+      </section>)}
+      <button type="button" className="meeting-full-notes" onClick={onOpen}>Read complete meeting notes →</button>
+    </div>
+  </article>;
 }
 
 export function MeetingNotesDialog({ notes, onClose }) {

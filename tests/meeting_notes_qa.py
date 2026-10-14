@@ -16,6 +16,19 @@ def assert_meeting_notes(page, base_url, output=None, touch=False):
         page.get_by_role('button',name='Next month' if month<10 else 'Previous month',exact=True).click()
     trigger=page.get_by_role('button',name='Read '+SOURCE['title'],exact=True)
     expect(trigger).to_be_visible()
+    highlights=page.get_by_label('Meeting highlights',exact=True)
+    expect(highlights).to_be_visible()
+    assert page.get_by_role('dialog',name=SOURCE['title'],exact=True).count()==0
+    assert highlights.locator('h4').all_text_contents()==[s['title'] for s in SOURCE['preview']]
+    actual_preview=highlights.locator(':scope > section > ul > li').all_text_contents()
+    expected_preview=[''.join(seg if isinstance(seg,str) else seg['label'] for seg in row) for section in SOURCE['preview'] for row in section['items']]
+    assert actual_preview==expected_preview and len(actual_preview)==8
+    assert '2 of the 6 hours' in highlights.inner_text()
+    assert not highlights.locator(':scope > section > ul > li').evaluate_all('es=>es.some(e=>e.closest("details"))')
+    for section in SOURCE['preview']:
+        for row in section['items']:
+            for seg in row:
+                if isinstance(seg,dict): assert highlights.get_by_role('link',name=seg['label'],exact=True).get_attribute('href')==seg['href']
     page.get_by_role('button',name='Previous month',exact=True).click();expect(trigger).to_have_count(0)
     page.get_by_role('button',name='Next month',exact=True).click();expect(trigger).to_be_visible()
     page.get_by_role('button',name='Next month',exact=True).click();expect(trigger).to_have_count(0)

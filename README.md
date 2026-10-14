@@ -37,6 +37,8 @@ The application is static and has no clinical inputs, backend, database, analyti
 
 ## Publication
 
+On 2026-10-14 Roshan supplied the January–September 2026 Choosing Wisely banner (281 surveillance-colonoscopy graduations; 56 procedure units freed; five colonoscopies per unit). Its exact original PNG is archived at `ARCHIVES/Choosing Wisely banner January–September 2026.png`; the public WebP preserves its complete composition and 5504×3072 dimensions. The prior January–July asset remains historical. The public image, alternative text, and caption use the new period and supplied metrics; no recalculation or additional utilization claim is made. Source and derivative hashes are in `content/choosing-wisely-banner-2026-09.json`. Roshan also requested more visible October 14 meeting content: all eight main items now have grouped inline highlights and direct links, with full notes retained. That presentation-only adjustment is excluded from the clinician practice history.
+
 On 2026-10-14 Roshan supplied the October 14 Department Meeting Notes for publication in that month’s announcements/meeting section. All supplied paragraphs and both exact links are included, with structured sections and expandable sticky notes for the optional TPIP alternatives and OR consent context. Notes remain scoped to October 2026. Parking is labeled separately from the meeting venue; optional sessions and the two-of-six-hour makeup retain their supplied qualifications.
 
 On 2026-10-14 Roshan requested the primary navigation label “03 Field Guide”. The tab uses the shorter label with its existing number and content-sized width; the document heading and content are preserved. This navigation-only correction is excluded from the clinician practice history.
