@@ -898,6 +898,19 @@ body.presentation-open { overflow: hidden; }
 .dtm-live-stamp { width: 165px; min-height: 132px; padding: 20px; display: grid; align-content: center; gap: 8px; border: 1px solid rgba(255, 255, 255, .24); border-radius: 18px; background: rgba(255, 255, 255, .1); backdrop-filter: blur(12px); }
 .dtm-live-stamp span { width: max-content; padding: 5px 9px; border-radius: 999px; background: #bff5e9; color: #124c45; font-size: 9px; font-weight: 950; letter-spacing: .11em; text-transform: uppercase; }
 .dtm-live-stamp time { font-size: 21px; font-weight: 900; line-height: 1.05; }
+.dtm-launch-note { position: relative; padding: clamp(22px, 3vw, 34px); border: 1px solid #ddc56f; border-radius: 5px 0 14px 14px; background: #fff7d7; color: #493a16; box-shadow: 0 12px 26px rgba(100, 76, 22, .12); }
+.dtm-launch-note::after { position: absolute; top: -1px; right: -1px; width: 28px; height: 28px; background: linear-gradient(45deg, #e4c66b 50%, #f4f6f8 50%); content: ""; }
+.dtm-launch-note > header { padding-right: 19px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 10px 24px; }
+.dtm-launch-note h2 { margin: 0; color: #533b0a; font-size: clamp(24px, 3vw, 32px); letter-spacing: -.025em; }
+.dtm-launch-note time { color: #70571c; font-size: 12px; font-weight: 800; }
+.dtm-launch-note-sections { margin-top: 23px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 36px; }
+.dtm-launch-note h3 { margin: 0 0 10px; color: #533b0a; font-size: 17px; line-height: 1.25; }
+.dtm-launch-note p { margin: 0; font-size: 14px; line-height: 1.65; }
+.dtm-launch-note p + p { margin-top: 9px; }
+.dtm-launch-feedback { grid-column: 1 / -1; padding-top: 18px; border-top: 1px solid #e5d398; }
+.dtm-launch-note a { color: #174d78; font-weight: 800; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.dtm-launch-note a:focus-visible { outline: 3px solid #946e15; outline-offset: 4px; border-radius: 2px; }
+@media (max-width: 680px) { .dtm-launch-note-sections { grid-template-columns: minmax(0, 1fr); gap: 22px; } .dtm-launch-note { padding: 22px 20px; } }
 .dtm-bulletin { padding: clamp(22px, 3vw, 34px); display: grid; grid-template-columns: 86px minmax(0, 1fr); gap: 24px; border: 1px solid rgba(33, 118, 110, .24); border-radius: 18px; background: linear-gradient(120deg, #e8f7f4, #fff); box-shadow: var(--shadow); }
 .dtm-bulletin-mark { width: 86px; height: 86px; display: grid; place-items: center; border-radius: 18px; background: var(--dtm); color: white; font-size: 22px; font-weight: 950; letter-spacing: -.04em; box-shadow: 0 8px 22px rgba(33, 118, 110, .24); }
 .dtm-bulletin h2, .dtm-boundaries h2, .dtm-agreement h2 { margin: 5px 0 8px; color: var(--navy); font-size: clamp(25px, 3vw, 38px); letter-spacing: -.035em; line-height: 1; }

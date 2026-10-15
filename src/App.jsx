@@ -2830,6 +2830,29 @@ function DtmPage() {
         </div>
       </header>
 
+      <aside className="dtm-launch-note" aria-labelledby="dtm-launch-note-title">
+        <header>
+          <h2 id="dtm-launch-note-title">Phase I launch note</h2>
+          <time dateTime="2026-10-14">October 14, 2026</time>
+        </header>
+        <div className="dtm-launch-note-sections">
+          <section aria-labelledby="dtm-readiness-title">
+            <h3 id="dtm-readiness-title">Readiness Requirements</h3>
+            <p>If physicians did not attend the Town Hall, they should watch the recording.</p>
+            <p>Physicians must complete the Pharmacy Authorization Form, Clinician Protocol Authorization</p>
+          </section>
+          <section aria-labelledby="dtm-impact-title">
+            <h3 id="dtm-impact-title">Operational Impact</h3>
+            <p>Physicians may notice fewer messages in their InBasket.</p>
+            <p>The Desktop Medicine Pharmacy team will manage messages tagged Clinical Medication Request, as appropriate.</p>
+          </section>
+          <section className="dtm-launch-feedback" aria-labelledby="dtm-feedback-title">
+            <h3 id="dtm-feedback-title">Feedback</h3>
+            <p>We welcome your feedback as we launch this phase. Please send feedback to <a href="mailto:DMSpecialtyFeedback@kp.org">DMSpecialtyFeedback@kp.org</a> with the following information</p>
+          </section>
+        </div>
+      </aside>
+
       <section className="dtm-bulletin" aria-labelledby="dtm-bulletin-title">
         <div className="dtm-bulletin-mark" aria-hidden="true">DTM</div>
         <div>

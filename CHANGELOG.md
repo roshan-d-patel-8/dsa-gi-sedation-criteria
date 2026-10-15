@@ -5,6 +5,11 @@ tags:
 
 # Changelog
 
+## 0.44.0 — 2026-10-14
+
+- Add a visible dated yellow Desktop Medicine launch note with the supplied readiness requirements, qualified operational impact, and feedback email.
+- Keep the three source sections readable on desktop and phone screens; retain the source’s unfinished feedback lead-in without inventing requested fields or links.
+
 ## 0.43.1 — 2026-10-14
 
 - Move the quadriplegia dysautonomia rationale into the existing yellow HC sticky-note control, preserving the transfer criterion.

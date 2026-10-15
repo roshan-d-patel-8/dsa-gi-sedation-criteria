@@ -37,11 +37,13 @@
     "date": "2026-10-14",
     "title": "Desktop Medicine: Phase I pharmacy refill support",
     "sourceReleases": [
-      "0.40.0"
+      "0.40.0",
+      "0.44.0"
     ],
     "changes": [
       "Phase I pharmacy refill support went live October 14. Pharmacy may renew eligible GI prescriptions with no refills remaining within the medication-specific limits of the working agreement.",
-      "The Desktop Medicine reference covers monitoring requirements, refill limits, exclusions, and when Pharmacy routes a case back to the prescribing provider. Providers remain responsible for reviewing results and deciding whether therapy continues."
+      "The Desktop Medicine reference covers monitoring requirements, refill limits, exclusions, and when Pharmacy routes a case back to the prescribing provider. Providers remain responsible for reviewing results and deciding whether therapy continues.",
+      "Physicians must complete the Pharmacy Authorization Form, Clinician Protocol Authorization. Those who missed the Town Hall should watch the recording. The Desktop Medicine Pharmacy team will manage Clinical Medication Request messages as appropriate; launch feedback goes to DMSpecialtyFeedback@kp.org."
     ]
   },
   {
