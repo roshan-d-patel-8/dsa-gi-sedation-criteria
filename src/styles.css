@@ -1345,3 +1345,9 @@ body.presentation-open { overflow: hidden; }
 .meeting-highlights .meeting-sticky-note > div { padding: 4px 10px 10px; font-size: 12px; }
 .meeting-full-notes { width: 100%; min-height: 44px; margin-top: 16px; padding: 8px; border: 1px solid #b8ccde; border-radius: 7px; background: #e8f2f9; color: var(--navy); font-weight: 850; cursor: pointer; }
 @media (max-width: 680px) { .meeting-highlights { font-size: 14px; line-height: 1.65; padding-inline: 15px; } .meeting-highlights h4 { font-size: 15px; } .meeting-highlights .meeting-sticky-note > summary { font-size: 12px; } }
+
+/* Highlight explicitly revised milestone deadlines in both calendar surfaces. */
+.deadline-update-dot { position: absolute; top: 7px; right: 7px; width: 10px; height: 10px; border: 2px solid white; border-radius: 50%; background: #d92d20; box-sizing: content-box; }
+.calendar-event-marker.has-deadline-update { --event-accent: #d92d20; }
+.deadline-update-note { display: block; color: #b42318; font-size: 12px; font-weight: 800; line-height: 1.4; }
+.countdown-dialog > .deadline-update-note { margin-top: 10px; }

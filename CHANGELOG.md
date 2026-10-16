@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.44.1 — 2026-10-16
+
+- Move the 2026 TPMG POS and JAMM Survey deadline from October 16 to October 21 in the calendar and countdown, keeping countdowns in date order.
+- Highlight the revised deadline with a red dot on the survey tile and calendar marker, plus readable deadline-update text in the details.
+- Verify desktop/mobile date placement, survey destination, highlight, countdown expiry, and existing site regressions.
+
 ## 0.44.0 — 2026-10-14
 
 - Add a visible dated yellow Desktop Medicine launch note with the supplied readiness requirements, qualified operational impact, and feedback email.

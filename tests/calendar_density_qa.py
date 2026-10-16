@@ -28,9 +28,17 @@ def assert_density(page, width, touch):
     assert page.locator(".calendar-tab-icon rect").count() == 1
     cards = page.locator(".countdown-card")
     assert cards.count() == 5
-    assert cards.locator("time").evaluate_all("es => es.map(e => e.dateTime)") == ["2026-10-16", "2026-10-17", "2026-10-19", "2026-11-02", "2026-11-18"]
-    assert cards.locator(".countdown-number strong").all_text_contents() == ["4", "5", "7", "21", "37"]
+    assert cards.locator("time").evaluate_all("es => es.map(e => e.dateTime)") == ["2026-10-17", "2026-10-19", "2026-10-21", "2026-11-02", "2026-11-18"]
+    assert cards.locator(".countdown-number strong").all_text_contents() == ["5", "7", "9", "21", "37"]
     assert cards.locator(".pixel-number").count() == 5
+    survey = cards.filter(has_text="Survey")
+    expect(survey.locator(".deadline-update-dot")).to_be_visible()
+    expect(survey).to_have_attribute("aria-label", "2026 TPMG POS and JAMM Survey, 9 days remaining, Wed · Oct 21, 2026, Deadline updated to October 21.")
+    marker = page.locator(".calendar-event-marker.has-deadline-update")
+    expect(marker).to_have_count(1)
+    assert marker.evaluate("e => getComputedStyle(e, '::before').backgroundColor") == "rgb(217, 45, 32)"
+    assert marker.locator("xpath=..").get_attribute("aria-label") == "October 2026 21: 2026 TPMG POS and JAMM Survey"
+    assert page.get_by_role("gridcell", name="October 2026 16", exact=True).locator(".calendar-event-marker").count() == 0
     assert page.locator(".countdown-strip").evaluate("e => e.scrollWidth <= e.clientWidth")
     calendar = page.locator(".calendar-main").bounding_box()
     sidebar = page.locator(".calendar-sidebar").bounding_box()
@@ -80,7 +88,7 @@ def assert_density(page, width, touch):
         fits_viewport(page, dialog)
         close = dialog.get_by_role("button", name="Close milestone details")
         expect(close).to_be_focused()
-        if index == 0:
+        if "Survey" in tile.get_attribute("aria-label"):
             link = dialog.get_by_role("link", name="Take the survey", exact=False)
             expect(link).to_have_attribute("href", "https://tpmghr.kp.org/physician-opinion-survey")
             expect(link).to_have_attribute("target", "_blank")
@@ -108,7 +116,7 @@ def assert_density(page, width, touch):
     cards.first.scroll_into_view_if_needed()
     if not touch:
         cards.first.hover()
-        fits_viewport(page, page.locator("#countdown-details-2026-10-16"))
+        fits_viewport(page, page.locator("#countdown-details-2026-10-17"))
     cards.first.tap() if touch else cards.first.click()
     fits_viewport(page, page.get_by_role("dialog"))
     page.keyboard.press("Escape")
@@ -117,7 +125,7 @@ def assert_density(page, width, touch):
 
     # The minute refresh removes a zero-day tile even when its detail card is open.
     cards.first.click()
-    page.clock.set_system_time("2026-10-16T12:00:00-07:00")
+    page.clock.set_system_time("2026-10-17T12:00:00-07:00")
     page.clock.run_for(60_100)
     expect(cards).to_have_count(4)
     expect(page.get_by_role("dialog")).to_have_count(0)

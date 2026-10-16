@@ -46,16 +46,17 @@ function highlightSearchText(text, query) {
 const countdowns = [
   { label: "Aysha Aslam — first day", date: "2026-09-28", displayDate: "Mon · Sep 28, 2026" },
   { label: "Dublin — closure / last booking day", date: "2026-10-02", displayDate: "Fri · Oct 2, 2026", tone: "gold" },
+  { label: "NorCal in-person TPIP — Oakland", date: "2026-10-17", displayDate: "Sat · Oct 17, 2026" },
+  { label: "Pleasanton soft launch — Room 1", date: "2026-10-19", displayDate: "Mon · Oct 19, 2026", tone: "gold" },
   {
     label: "2026 TPMG POS and JAMM Survey",
-    date: "2026-10-16",
-    displayDate: "Fri · Oct 16, 2026",
+    date: "2026-10-21",
+    displayDate: "Wed · Oct 21, 2026",
     href: "https://tpmghr.kp.org/physician-opinion-survey",
     cta: "Take the survey",
     tone: "way",
+    updateNote: "Deadline updated to October 21.",
   },
-  { label: "NorCal in-person TPIP — Oakland", date: "2026-10-17", displayDate: "Sat · Oct 17, 2026" },
-  { label: "Pleasanton soft launch — Room 1", date: "2026-10-19", displayDate: "Mon · Oct 19, 2026", tone: "gold" },
   { label: "Pleasanton — Room 2 opens", date: "2026-11-02", displayDate: "Mon · Nov 2, 2026", tone: "gold" },
   { label: "E2K — GI go-live", date: "2026-11-18", displayDate: "Wed · Nov 18, 2026 · confirmed", tone: "way" },
 ];
@@ -803,6 +804,7 @@ function CountdownDialog({ item, onClose }) {
         <div className="countdown-dialog-number"><strong className="sr-only">{item.days}</strong><PixelNumber value={item.days} /><span>{item.days === 1 ? "day" : "days"} remaining</span></div>
         <h2 id="countdown-dialog-title">{item.label}</h2>
         <time dateTime={item.date}>{item.displayDate}</time>
+        {item.updateNote && <span className="deadline-update-note">{item.updateNote}</span>}
         {item.href && <a className="countdown-cta" href={item.href} target="_blank" rel="noreferrer">{item.cta}<span aria-hidden="true">↗</span></a>}
       </section>
     </div>, document.body,
@@ -813,7 +815,7 @@ function CountdownTiles({ items }) {
   const [activeItem, setActiveItem] = useState(null);
   const triggerRef = useRef(null);
   const shortLabels = {
-    "2026-09-28": "Aslam", "2026-10-02": "Dublin", "2026-10-16": "Survey",
+    "2026-09-28": "Aslam", "2026-10-02": "Dublin", "2026-10-21": "Survey",
     "2026-10-17": "TPIP", "2026-10-19": "PL · Rm 1", "2026-11-02": "PL · Rm 2", "2026-11-18": "E2K",
   };
   const closeDetails = useCallback(() => {
@@ -836,12 +838,13 @@ function CountdownTiles({ items }) {
         {items.map((item) => {
           const tooltipId = `countdown-details-${item.date}`;
           return (
-            <button className={`countdown-card tone-${item.tone || "blue"}`} type="button" key={item.date}
-              aria-label={`${item.label}, ${item.days} ${item.days === 1 ? "day" : "days"} remaining, ${item.displayDate}`}
+            <button className={`countdown-card tone-${item.tone || "blue"}${item.updateNote ? " has-deadline-update" : ""}`} type="button" key={item.date}
+              aria-label={`${item.label}, ${item.days} ${item.days === 1 ? "day" : "days"} remaining, ${item.displayDate}${item.updateNote ? `, ${item.updateNote}` : ""}`}
               aria-describedby={tooltipId} aria-haspopup="dialog" onClick={(event) => {
                 triggerRef.current = event.currentTarget;
                 setActiveItem(item.date);
               }}>
+              {item.updateNote && <span className="deadline-update-dot" aria-hidden="true" />}
               <span className="countdown-number"><strong className="sr-only">{item.days}</strong><PixelNumber value={item.days} /><span>{item.days === 1 ? "day" : "days"}</span></span>
               <span className="countdown-short-label">{shortLabels[item.date] || item.label}</span>
               <time className="sr-only" dateTime={item.date}>{item.displayDate}</time>
@@ -849,6 +852,7 @@ function CountdownTiles({ items }) {
                 <small>{item.days} {item.days === 1 ? "day" : "days"} remaining</small>
                 <strong>{item.label}</strong>
                 <time dateTime={item.date}>{item.displayDate}</time>
+                {item.updateNote && <span className="deadline-update-note">{item.updateNote}</span>}
                 {item.cta && <em>{item.cta} ↗ · Open details</em>}
               </CalendarPreview>
             </button>
@@ -1010,9 +1014,9 @@ function Calendar2026({ upcomingCountdowns }) {
                 const tooltipId = `calendar-event-${date}-${eventIndex}`;
                 return (
                   <span
-                    className={`calendar-event-marker tone-${event.tone || "blue"}`}
+                    className={`calendar-event-marker tone-${event.tone || "blue"}${event.updateNote ? " has-deadline-update" : ""}`}
                     tabIndex="0"
-                    aria-label={`${event.label}, ${event.displayDate.replace(" · confirmed", "")}`}
+                    aria-label={`${event.label}, ${event.displayDate.replace(" · confirmed", "")}${event.updateNote ? `, ${event.updateNote}` : ""}`}
                     aria-describedby={tooltipId}
                     key={event.label}
                   >
@@ -1020,6 +1024,7 @@ function Calendar2026({ upcomingCountdowns }) {
                     <CalendarPreview className="calendar-event-tooltip" id={tooltipId} placement="below">
                       <strong>{event.label}</strong>
                       <small>{event.displayDate.replace(" · confirmed", "")}</small>
+                      {event.updateNote && <span className="deadline-update-note">{event.updateNote}</span>}
                     </CalendarPreview>
                   </span>
                 );

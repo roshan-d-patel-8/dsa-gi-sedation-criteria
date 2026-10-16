@@ -128,12 +128,12 @@ def assert_home(page):
     assert page.get_by_text("The next markers on the map.", exact=True).count() == 0
     assert page.locator(".calendar-tab-icon").is_visible()
     today = datetime.now(ZoneInfo("America/Los_Angeles")).date()
-    milestone_dates = ["2026-09-28", "2026-10-02", "2026-10-16", "2026-10-17", "2026-10-19", "2026-11-02", "2026-11-18"]
+    milestone_dates = ["2026-09-28", "2026-10-02", "2026-10-17", "2026-10-19", "2026-10-21", "2026-11-02", "2026-11-18"]
     upcoming_dates = [value for value in milestone_dates if date.fromisoformat(value) > today]
     assert page.locator(".countdown-card").count() == len(upcoming_dates)
     assert page.locator(".countdown-card time").evaluate_all("elements => elements.map(element => element.dateTime)") == upcoming_dates
     assert page.locator(".countdown-number strong").evaluate_all("elements => elements.every(element => Number(element.textContent) > 0)")
-    if "2026-10-16" in upcoming_dates:
+    if "2026-10-21" in upcoming_dates:
         survey = page.get_by_role("button", name=re.compile("2026 TPMG POS and JAMM Survey"))
         assert survey.is_visible()
         survey.click()
@@ -415,7 +415,7 @@ def assert_calendar_navigation(page):
     assert page.get_by_role("button", name="Read October 14 Department Meeting Notes", exact=True).is_visible()
     assert page.locator(".calendar-event-marker").count() == 4
     survey_deadline = page.get_by_role(
-        "gridcell", name="October 2026 16: 2026 TPMG POS and JAMM Survey", exact=True
+        "gridcell", name="October 2026 21: 2026 TPMG POS and JAMM Survey", exact=True
     )
     assert survey_deadline.is_visible()
     assert survey_deadline.get_by_text("2026 TPMG POS and JAMM Survey", exact=True).is_visible()
