@@ -5,6 +5,11 @@ tags:
 
 # Changelog
 
+## 0.44.2 — 2026-10-18
+
+- Correct Anish Patel's birthday from October 14 to October 17 at Roshan's request, preserving Erina Foster's birthday on the same date.
+- Verify calendar placement, both birthday markers, portrait loading, and desktop/mobile birthday-card dismissal and focus return.
+
 ## 0.44.1 — 2026-10-16
 
 - Move the 2026 TPMG POS and JAMM Survey deadline from October 16 to October 21 in the calendar and countdown, keeping countdowns in date order.

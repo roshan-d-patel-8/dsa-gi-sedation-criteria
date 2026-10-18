@@ -99,6 +99,8 @@ The ERBE Settings and Upper EMR slide deck was explicitly requested for deployme
 
 Erina Foster's October 17 birthday was supplied by the user and explicitly requested for public calendar display on 2026-09-11.
 
+Anish Patel's birthday was corrected to October 17 for the existing public calendar at Roshan's explicit request on 2026-10-18. Erina Foster's birthday remains on the same date.
+
 The October 22, 2026 DSA GI Monthly Happy Hour details and accompanying infographic were supplied through the private Dispatch assignment and explicitly requested for public department-calendar display on 2026-09-30.
 
 The January–August 2026 calendar expansion and its vault-recorded DSA GI physician birthdays were explicitly requested for public display on 2026-09-11.

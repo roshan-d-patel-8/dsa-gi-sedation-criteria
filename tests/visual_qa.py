@@ -460,6 +460,9 @@ def assert_calendar_navigation(page):
     assert calendar_preview_for(page, erina_birthday).locator("img").evaluate("image => image.complete && image.naturalWidth > 0")
     erina_day = page.locator('.calendar-day[aria-label^="October 2026 17:"][aria-label*="Erina Foster birthday"]')
     assert erina_day.count() == 1
+    assert erina_day.locator(".birthday-marker").count() == 2
+    assert erina_day.get_by_label("Happy Birthday, Anish Patel!", exact=True).is_visible()
+    assert page.locator('.calendar-day[aria-label^="October 2026 14:"] .birthday-marker').count() == 0
     page.screenshot(path=OUTPUT / "dsa-gi-calendar-erina-birthday-desktop.png", full_page=False)
     assert previous.is_enabled()
     next_month.click()

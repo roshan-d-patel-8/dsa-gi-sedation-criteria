@@ -12,7 +12,7 @@ export const birthdayEvents = [
   { name: "Ahilan Arulanandan", date: "2026-09-08", displayDate: "September 8", photo: "ahilan-arulanandan.webp", sourceNote: "Ahilan Arulanandan.md" },
   { name: "Tom Haddad", date: "2026-09-28", displayDate: "September 28", photo: "tom-haddad.webp", sourceNote: "Tom Haddad.md" },
   { name: "Jag Mathur", date: "2026-10-01", displayDate: "October 1", photo: "jag-mathur.webp", sourceNote: "Jag Mathur.md" },
-  { name: "Anish Patel", date: "2026-10-14", displayDate: "October 14", photo: "anish-patel.webp", sourceNote: "Anish Patel.md" },
+  { name: "Anish Patel", date: "2026-10-17", displayDate: "October 17", photo: "anish-patel.webp", sourceNote: "Anish Patel.md" },
   { name: "Erina Foster", date: "2026-10-17", displayDate: "October 17", photo: "erina-foster.webp", sourceNote: "Erina Foster.md" },
   { name: "Dan Chung", date: "2026-11-16", displayDate: "November 16", photo: "dan-chung.webp", sourceNote: "Dan Chung.md" },
   { name: "Roshan Patel", date: "2026-11-21", displayDate: "November 21", photo: "roshan-patel.webp", source: "user" },
