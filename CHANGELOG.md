@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.45.0 — 2026-10-19
+
+- Add “The Four Habits (featuring Habit Zero!)” (3:39) under Field Guide → Clinic → Patient communication: The Four Habits and as a companion immediately below September 2026’s existing Four Habits deck.
+- Reuse one video definition and responsive, privacy-enhanced YouTube player with a direct watch link; preserve all existing slides, navigation and month boundaries.
+- Verify both placements, foldout/search access, desktop/mobile/zoom layouts, existing presentation controls, and local/live regressions. Public embedding and deployment explicitly authorized by Roshan.
+
 ## 0.44.2 — 2026-10-18
 
 - Correct Anish Patel's birthday from October 14 to October 17 at Roshan's request, preserving Erina Foster's birthday on the same date.

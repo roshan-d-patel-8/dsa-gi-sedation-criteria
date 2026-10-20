@@ -1,5 +1,14 @@
 [
   {
+    "id": "2026-10-19-four-habits-video",
+    "date": "2026-10-19",
+    "title": "The Four Habits: patient communication video",
+    "sourceReleases": ["0.45.0"],
+    "changes": [
+      "Added The Four Habits (featuring Habit Zero!), a 3:39 overview for patient conversations, under Field Guide → Clinic and beside September’s Four Habits slides."
+    ]
+  },
+  {
     "id": "2026-10-14-choosing-wisely-september",
     "date": "2026-10-14",
     "title": "Choosing Wisely: January–September results",

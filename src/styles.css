@@ -298,6 +298,19 @@ body.birthday-dialog-open, body.social-event-dialog-open { overflow: hidden; }
 .department-resources-header h3 { margin: 0; color: var(--white); font-size: 18px; line-height: 1.08; letter-spacing: -.025em; }
 .department-resources-header small { color: rgba(255, 255, 255, .58); font-size: 9px; font-weight: 800; }
 .department-resource-list { padding: 0 14px 15px; display: grid; gap: 12px; }
+.department-resource-entry { min-width: 0; display: grid; gap: 10px; }
+.patient-communication-video { min-width: 0; padding: 16px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; border: 1px solid #bed8e4; border-radius: 13px; background: #f4f9fc; color: var(--navy); overflow-wrap: anywhere; }
+.patient-communication-video header { display: grid; gap: 6px; }
+.patient-communication-video header > span { color: #0d7895; font-size: 10px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
+.patient-communication-video h4 { margin: 0; font-size: 18px; line-height: 1.2; }
+.patient-communication-video p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.patient-communication-player { position: relative; overflow: hidden; aspect-ratio: 16 / 9; border-radius: 8px; background: #102b47; }
+.patient-communication-player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.patient-communication-video > a { min-height: 44px; padding: 10px 12px; display: flex; align-items: center; justify-content: center; border: 1px solid #b0cddd; border-radius: 8px; background: white; color: var(--way); font-size: 13px; font-weight: 850; text-decoration: none; text-align: center; }
+.patient-communication-video > a:hover { background: #e7f2f8; }
+.patient-communication-video > a:focus-visible { outline: 3px solid #d9a441; outline-offset: 3px; }
+.topic-clinic-communication .orientation-topic-body { padding: 0; }
+.topic-clinic-communication .patient-communication-video { border: 0; border-radius: 0; }
 .department-resource-card { width: 100%; padding: 0; display: grid; overflow: hidden; border: 1px solid rgba(158, 200, 226, .3); border-radius: 13px; background: #f9fbfc; box-shadow: 0 11px 24px rgba(2, 15, 27, .28); color: var(--navy); cursor: pointer; text-align: left; transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
 .department-resource-card:hover { border-color: #66cfe0; box-shadow: 0 15px 30px rgba(2, 15, 27, .36); transform: translateY(-2px); }
 .department-resource-card:focus-visible { outline: 3px solid #f3b847; outline-offset: 3px; }

@@ -119,6 +119,34 @@ const monthlyAnnouncements = {
   ],
 };
 
+const fourHabitsVideo = {
+  id: "four-habits-habit-zero",
+  title: "The Four Habits (featuring Habit Zero!)",
+  duration: "3:39",
+  watchUrl: "https://youtu.be/8v02PAIYWyw",
+  embedUrl: "https://www.youtube-nocookie.com/embed/8v02PAIYWyw?rel=0",
+  description: "A short overview of Habit Zero and the Four Habits for patient conversations.",
+};
+
+function fourHabitsVideoMarkup(video = fourHabitsVideo) {
+  return `
+    <div class="patient-communication-video" data-video-id="${video.id}">
+      <header>
+        <span>Companion video · ${video.duration}</span>
+        <h4>${video.title}</h4>
+        <p>${video.description}</p>
+      </header>
+      <div class="patient-communication-player">
+        <iframe src="${video.embedUrl}" title="${video.title}"
+          loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen></iframe>
+      </div>
+      <a href="${video.watchUrl}" target="_blank" rel="noreferrer">Watch on YouTube · ${video.duration} ↗</a>
+    </div>
+  `;
+}
+
 const monthlyDepartmentResources = {
   6: [
     {
@@ -156,6 +184,7 @@ const monthlyDepartmentResources = {
     {
       id: "four-habits",
       title: "The Four Habits",
+      companionVideo: fourHabitsVideo,
       description: "A user’s guide for difficult conversations.",
       assetPath: "department-meeting-resources/2026-09/the-four-habits",
       slideTitles: [
@@ -1072,24 +1101,26 @@ function Calendar2026({ upcomingCountdowns }) {
             {departmentResources.length > 0 ? (
               <div className="department-resource-list">
                 {departmentResources.map((resource) => (
-                  <button
-                    className="department-resource-card"
-                    type="button"
-                    onClick={() => setActiveResource(resource)}
-                    aria-label={`Open ${resource.title} presentation, ${resource.slideTitles.length} slides`}
-                    key={resource.id}
-                  >
-                    <span className="department-resource-cover">
-                      <img src={`${import.meta.env.BASE_URL}${resource.assetPath}/slide-01.webp`} alt="" />
-                      <i aria-hidden="true">View deck</i>
-                    </span>
-                    <span className="department-resource-copy">
-                      <small>Presentation · {resource.slideTitles.length} slides</small>
-                      <strong>{resource.title}</strong>
-                      <span>{resource.description}</span>
-                    </span>
-                    <b aria-hidden="true">Open →</b>
-                  </button>
+                  <article className="department-resource-entry" key={resource.id}>
+                    <button
+                      className="department-resource-card"
+                      type="button"
+                      onClick={() => setActiveResource(resource)}
+                      aria-label={`Open ${resource.title} presentation, ${resource.slideTitles.length} slides`}
+                    >
+                      <span className="department-resource-cover">
+                        <img src={`${import.meta.env.BASE_URL}${resource.assetPath}/slide-01.webp`} alt="" />
+                        <i aria-hidden="true">View deck</i>
+                      </span>
+                      <span className="department-resource-copy">
+                        <small>Presentation · {resource.slideTitles.length} slides</small>
+                        <strong>{resource.title}</strong>
+                        <span>{resource.description}</span>
+                      </span>
+                      <b aria-hidden="true">Open →</b>
+                    </button>
+                    {resource.companionVideo && <div dangerouslySetInnerHTML={{ __html: fourHabitsVideoMarkup(resource.companionVideo) }} />}
+                  </article>
                 ))}
               </div>
             ) : meetingNotes.length ? null : (
@@ -1755,6 +1786,13 @@ function groupStandardSections(container, doc, sectionShort) {
     const physicianAssistants = findNodeIndex(nodes, /^Physician Assistants \(PAs\):/i);
     if (secondOpinions < 0 || physicianAssistants < 0) return;
     container.replaceChildren(
+      createTopicFoldout(doc, {
+        code: "CARE",
+        title: "Patient communication: The Four Habits",
+        description: "Habit Zero and the Four Habits · Watch 3:39",
+        className: "topic-clinic-communication",
+        nodes: Array.from(doc.createRange().createContextualFragment(fourHabitsVideoMarkup()).childNodes),
+      }),
       createTopicFoldout(doc, {
         code: "VISIT",
         title: "Appointments & Access",
