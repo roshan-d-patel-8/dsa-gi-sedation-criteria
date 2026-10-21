@@ -5,6 +5,11 @@ tags:
 
 # Changelog
 
+## 0.46.0 — 2026-10-21
+
+- Add a chicklet-style app icon on the Calendar page, between the calendar and the Change Log portal, linking to the password-gated DSA GI Conjunctions companion site (opens in a new tab) with an accessible description, hover/focus states, and a data-driven companion-site list for future tiles.
+- Verify unit suite, production build, desktop/mobile layout, and live deployment. No clinical content or calendar data changed; excluded from the clinician practice history.
+
 ## 0.45.0 — 2026-10-19
 
 - Add “The Four Habits (featuring Habit Zero!)” (3:39) under Field Guide → Clinic → Patient communication: The Four Habits and as a companion immediately below September 2026’s existing Four Habits deck.

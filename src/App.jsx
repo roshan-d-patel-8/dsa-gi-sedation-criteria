@@ -43,6 +43,16 @@ function highlightSearchText(text, query) {
   ));
 }
 
+const companionSites = [
+  {
+    id: "conjunctions",
+    label: "Conjunctions",
+    caption: "When our paths cross",
+    href: "https://roshan-d-patel-8.github.io/conjunction/",
+    description: "Password-gated DSA GI co-location board: when you were last, and will next be, at the same site as each colleague.",
+  },
+];
+
 const countdowns = [
   { label: "Aysha Aslam — first day", date: "2026-09-28", displayDate: "Mon · Sep 28, 2026" },
   { label: "Dublin — closure / last booking day", date: "2026-10-02", displayDate: "Fri · Oct 2, 2026", tone: "gold" },
@@ -249,6 +259,16 @@ function pacificToday() {
 function daysUntil(date, today = pacificToday()) {
   const [year, month, day] = date.split("-").map(Number);
   return Math.ceil((Date.UTC(year, month - 1, day) - today) / 86_400_000);
+}
+
+function ConjunctionIcon() {
+  return (
+    <svg viewBox="0 0 40 40" width="34" height="34" aria-hidden="true" focusable="false">
+      <circle cx="15" cy="20" r="10.5" fill="none" stroke="currentColor" strokeWidth="2.6" />
+      <circle cx="25" cy="20" r="10.5" fill="none" stroke="currentColor" strokeWidth="2.6" />
+      <path d="M20 11.1a10.5 10.5 0 0 1 0 17.8a10.5 10.5 0 0 1 0-17.8z" fill="currentColor" opacity=".85" />
+    </svg>
+  );
 }
 
 function CalendarIcon() {
@@ -1158,6 +1178,14 @@ function HomePage({ onOpenChangeLog }) {
   return (
     <main className="home-page" id="home-panel" role="tabpanel" aria-labelledby="home-tab">
       <Calendar2026 upcomingCountdowns={upcomingCountdowns} />
+      <nav className="calendar-chicklets" aria-label="Companion sites">
+        {companionSites.map((site) => (
+          <a className="chicklet" href={site.href} target="_blank" rel="noreferrer" title={site.description} aria-label={`${site.label}: ${site.description} Opens in a new tab.`} key={site.id}>
+            <span className="chicklet-icon" aria-hidden="true"><ConjunctionIcon /></span>
+            <span className="chicklet-label" aria-hidden="true"><strong>{site.label}</strong><small>{site.caption} ↗</small></span>
+          </a>
+        ))}
+      </nav>
       <nav className="change-log-portal" aria-label="Site updates">
         <a
           href="?view=change-log"

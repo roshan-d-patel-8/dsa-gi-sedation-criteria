@@ -5,7 +5,7 @@ tags:
 
 # DSA GI Resources
 
-A compact, tabbed DSA GI clinical-operations reference. The primary Calendar tab carries compact Pacific-time countdown tiles, a navigable January–December 2026 milestone calendar, month-specific department meeting resources, and a Change Log link to the chronological practice updates. The calendar opens to the current Pacific-time month. The remaining tabs contain the August 2026 anesthesia procedure criteria, DSA GI MA–MD pod assignments, a searchable New Physician Orientation field guide, and the Phase I Desktop Medicine pharmacy refill agreement. Its Referrals section includes regional routes, DSA GI subspecialists, and a source-labeled Outside KP Referrals reference for transplant coordination.
+A compact, tabbed DSA GI clinical-operations reference. The primary Calendar tab carries compact Pacific-time countdown tiles, a navigable January–December 2026 milestone calendar, month-specific department meeting resources, a chicklet-style app icon linking to the password-gated DSA GI Conjunctions companion site, and a Change Log link to the chronological practice updates. The calendar opens to the current Pacific-time month. The remaining tabs contain the August 2026 anesthesia procedure criteria, DSA GI MA–MD pod assignments, a searchable New Physician Orientation field guide, and the Phase I Desktop Medicine pharmacy refill agreement. Its Referrals section includes regional routes, DSA GI subspecialists, and a source-labeled Outside KP Referrals reference for transplant coordination.
 
 ## Live site
 
