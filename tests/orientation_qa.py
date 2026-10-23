@@ -9,6 +9,8 @@ def assert_section_foldout_toggle(page):
     expect(button).to_be_visible()
     assert button.get_attribute("aria-controls") == content.get_attribute("id")
     assert button.locator("svg path").count() == 2
+    # Wait for the section entrance before measuring the touch target.
+    button.evaluate("element => Promise.all(element.closest('.orientation-card').getAnimations().map(animation => animation.finished))")
     assert button.bounding_box()["height"] >= 44
     if not foldouts.count():
         expect(button).to_be_disabled()

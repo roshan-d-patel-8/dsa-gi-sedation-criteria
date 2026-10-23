@@ -6,9 +6,9 @@ import { recentFieldGuideUpdates } from "../src/field-guide-updates.js";
 const today = (date) => Date.parse(`${date}T00:00:00Z`);
 const entries = JSON.parse(readFileSync(new URL('../content/practice-updates.json', import.meta.url)));
 
-test('only the four published Field Guide content updates qualify on October 23', () => {
+test('only the five published Field Guide content updates qualify on October 23', () => {
   assert.deepEqual(recentFieldGuideUpdates(entries, today('2026-10-23')), {
-    Clinic: '2026-10-19', 'Choosing Wisely': '2026-10-14', 'MA-MD': '2026-10-14', Referrals: '2026-10-09',
+    Ergonomics: '2026-10-23', Clinic: '2026-10-19', 'Choosing Wisely': '2026-10-14', 'MA-MD': '2026-10-14', Referrals: '2026-10-09',
   });
 });
 

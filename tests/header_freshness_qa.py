@@ -46,11 +46,11 @@ with sync_playwright() as p:
             assert zoom['x']+zoom['width'] <= icon['x']-5
         page.get_by_role('tab',name='Field Guide',exact=False).click()
         recent=page.locator('.orientation-subtab.is-recently-updated')
-        expect(recent).to_have_count(4)
-        assert recent.locator('strong').all_text_contents()==['Referrals','Clinic','Choosing Wisely','MA-MD']
+        expect(recent).to_have_count(5)
+        assert recent.locator('strong').all_text_contents()==['Referrals','Clinic','Choosing Wisely','Ergonomics','MA-MD']
         assert recent.evaluate_all("es=>es.every(e=>getComputedStyle(e).boxShadow!=='none')")
-        expect(page.locator('.orientation-subtab').filter(has_text='Ergonomics')).not_to_have_class(__import__('re').compile('is-recently-updated'))
-        for section in ['Referrals','Clinic','Choosing Wisely','MA-MD']:
+        expect(page.locator('.orientation-subtab').filter(has_text='Ergonomics')).to_have_class(__import__('re').compile('is-recently-updated'))
+        for section in ['Referrals','Clinic','Choosing Wisely','Ergonomics','MA-MD']:
             tab=page.locator('.orientation-subtab').filter(has=page.locator('strong',has_text=section))
             expect(tab.locator('.section-update-hint')).to_contain_text('Updated Oct')
             assert 'Content updated within the past 30 days.' in tab.get_attribute('aria-description')
@@ -74,15 +74,19 @@ with sync_playwright() as p:
         popup.close()
         page.clock.set_system_time('2026-11-07T23:59:30-08:00')
         page.evaluate("window.dispatchEvent(new Event('focus'))")
-        expect(recent).to_have_count(4)
+        expect(recent).to_have_count(5)
         page.clock.fast_forward(61_000)
-        expect(recent).to_have_count(3)
+        expect(recent).to_have_count(4)
         expect(page.locator('#orientation-services-tab')).not_to_have_class(__import__('re').compile('is-recently-updated'))
         page.clock.set_system_time('2026-11-18T12:00:00-08:00')
+        page.evaluate("window.dispatchEvent(new Event('focus'))")
+        expect(recent).to_have_count(1)
+        expect(recent.locator('strong')).to_have_text('Ergonomics')
+        page.clock.set_system_time('2026-11-22T12:00:00-08:00')
         page.evaluate("window.dispatchEvent(new Event('focus'))")
         expect(recent).to_have_count(0)
         expect(page.locator('.orientation-card.is-recently-updated')).to_have_count(0)
         assert not errors, errors
         context.close()
     browser.close()
-print('Header/freshness QA passed: upper-right 44px Conjunctions link on all pages, hover/focus text, real desktop/mobile new-tab click, separate zoom at 140%, four source-backed glowing sections, Pacific day-30 expiry, reduced motion and no errors/overflow.')
+print('Header/freshness QA passed: upper-right 44px Conjunctions link on all pages, hover/focus text, real desktop/mobile new-tab click, separate zoom at 140%, five source-backed glowing sections, Pacific day-30 expiry, reduced motion and no errors/overflow.')

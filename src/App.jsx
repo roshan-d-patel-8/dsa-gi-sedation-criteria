@@ -4,6 +4,7 @@ import { POLICY_VERSION, policySections } from "./criteria.js";
 import { coverageSites, inBasketCoverageGroups } from "./podlets.js";
 import { birthdayEvents } from "./birthdays.js";
 import { recentFieldGuideUpdates, fieldGuideUpdateLabel } from "./field-guide-updates.js";
+import { ergonomicsPresentation } from "./ergonomics.js";
 import { medicationHoldSections } from "./medication-holds.js";
 import { dtmMedicationGroups } from "./dtm.js";
 import orientationSource from "./orientation-source.html?raw";
@@ -482,7 +483,7 @@ function PresentationViewer({ resource, onClose }) {
       >
         <header className="presentation-header">
           <div>
-            <small>Department meeting resource</small>
+            <small>{resource.contextLabel || "Department meeting resource"}</small>
             <h2 id="presentation-title">{resource.title}</h2>
           </div>
           <div className="presentation-header-actions">
@@ -1283,7 +1284,7 @@ const orientationSectionMeta = [
   { short: "Choosing Wisely", descriptor: "CRC surveillance graduation", tone: "sage" },
   { short: "Orders", descriptor: "E-consult and E2K", tone: "aqua" },
   { short: "OR workflow", descriptor: "Outpatient case booking", tone: "coral" },
-  { short: "Ergonomics", descriptor: "Early-career evaluation", tone: "teal" },
+  { short: "Ergonomics", descriptor: "Slides and early-career evaluation", tone: "teal" },
   { short: "MA-MD", descriptor: "Partnership playbook", tone: "pink" },
 ];
 
@@ -1884,13 +1885,39 @@ function groupStandardSections(container, doc, sectionShort) {
   }
 
   if (sectionShort === "Ergonomics") {
-    container.replaceChildren(createTopicFoldout(doc, {
-      code: "ERGO",
-      title: "Ergonomic Evaluation",
-      description: "Early-career assessment and follow-up",
-      className: "topic-ergonomics",
-      nodes,
-    }));
+    const resource = ergonomicsPresentation;
+    const presentationCard = doc.createRange().createContextualFragment(`
+      <button class="department-resource-card ergonomics-resource-card" type="button"
+        data-presentation-resource="${resource.id}" aria-haspopup="dialog"
+        aria-label="Open ${resource.title} presentation, ${resource.slideTitles.length} slides">
+        <span class="department-resource-cover">
+          <img src="${import.meta.env.BASE_URL}${resource.assetPath}/slide-01.webp" alt="" loading="lazy" />
+          <i aria-hidden="true">View deck</i>
+        </span>
+        <span class="department-resource-copy">
+          <small>Presentation · ${resource.slideTitles.length} slides · Jenise Leichenger</small>
+          <strong>${resource.title}</strong>
+          <span>${resource.description}</span>
+        </span>
+        <b aria-hidden="true">Open →</b>
+      </button>
+    `);
+    container.replaceChildren(
+      createTopicFoldout(doc, {
+        code: "LEARN",
+        title: "Ergonomics presentation",
+        description: "Posture, reach, wrist alignment and movement · 18 slides",
+        className: "topic-ergonomics-presentation",
+        nodes: Array.from(presentationCard.childNodes),
+      }),
+      createTopicFoldout(doc, {
+        code: "ERGO",
+        title: "Ergonomic Evaluation",
+        description: "Early-career assessment and follow-up",
+        className: "topic-ergonomics",
+        nodes,
+      }),
+    );
     return;
   }
 
@@ -2584,6 +2611,7 @@ function OrientationMaterials() {
   const [activeSectionId, setActiveSectionId] = useState(sections[0]?.id);
   const [showChoosingWiselyInfographic, setShowChoosingWiselyInfographic] = useState(false);
   const [workflowImage, setWorkflowImage] = useState(null);
+  const [activePresentation, setActivePresentation] = useState(null);
   const [visibleMatchCount, setVisibleMatchCount] = useState(0);
   const [foldoutState, setFoldoutState] = useState({ count: 0, allOpen: false });
   const orientationContentRef = useRef(null);
@@ -2724,6 +2752,12 @@ function OrientationMaterials() {
   }
 
   function handleOrientationContentClick(event) {
+    const presentationButton = event.target.closest("[data-presentation-resource]");
+    if (presentationButton?.dataset.presentationResource === ergonomicsPresentation.id) {
+      setActivePresentation(ergonomicsPresentation);
+      return;
+    }
+
     const imageButton = event.target.closest("[data-workflow-image]");
     if (imageButton) {
       const image = imageButton.querySelector("img");
@@ -2865,6 +2899,7 @@ function OrientationMaterials() {
         )}
       </div>
 
+      <PresentationViewer resource={activePresentation} onClose={() => setActivePresentation(null)} />
       {workflowImage && <WorkflowScreenshotDialog image={workflowImage} onClose={() => setWorkflowImage(null)} />}
       {showChoosingWiselyInfographic && (
         <div

@@ -1,0 +1,129 @@
+{
+  "sourceFile": "GI - Ergonomics_Desktop.pptx",
+  "sourceSha256": "cca8fed3a851aa26b66a3e9dcf631f9ea9c3bd631d641898babf3e42978edb1b",
+  "sourceAuthor": "Jenise L. Leichenger",
+  "sourceModified": "2026-07-07",
+  "slideCount": 18,
+  "hiddenSlides": [],
+  "assetPath": "field-guide/ergonomics",
+  "width": 2560,
+  "height": 1440,
+  "coverSlide": 1,
+  "rendering": "Static final slide frames; original fonts resolved; animations and hyperlinks flattened.",
+  "publicationStatus": "Public release authorized by Roshan on 2026-10-23, including the slide16 internal-use label.",
+  "sourceFilesExcluded": [
+    "PPTX",
+    "PDF",
+    "speaker notes"
+  ],
+  "internalUseLabelSlide": 16,
+  "renderingAdjustments": [
+    {
+      "slide": 2,
+      "reason": "Source question box begins off-canvas. Repositioned the exact question inside the original left image panel in a temporary web-render copy; text, font and images unchanged.",
+      "originalTextbox": {
+        "x": -1204499,
+        "y": 5048680,
+        "cx": 9559702,
+        "cy": 3085729
+      },
+      "webTextbox": {
+        "x": 200000,
+        "y": 5048680,
+        "cx": 7950000,
+        "cy": 1600000
+      }
+    },
+    {
+      "slide": 16,
+      "reason": "Freeze source July 7, 2026 date field as stored text and shift date left to avoid inherited slide-number overlap, in temporary rendering copy only. Original PowerPoint untouched."
+    }
+  ],
+  "slides": [
+    {
+      "file": "slide-01.webp",
+      "sha256": "cc4ab3e13525661e94bba77581f4a0d260f3356a8b177f742a629b90411235be"
+    },
+    {
+      "file": "slide-02.webp",
+      "sha256": "52c81f3eb2b8012cbfbefef78d63937705a96e557d2ed400693e29c5723ccd42"
+    },
+    {
+      "file": "slide-03.webp",
+      "sha256": "09be265c9e05d640b0fcdad85978d78547335892e703d0789f8b619d9a246144"
+    },
+    {
+      "file": "slide-04.webp",
+      "sha256": "1115a8f01c4edfa57bf64dc5ae3ac3078d7eb9aef2b8b51e792b03e9a8518be3"
+    },
+    {
+      "file": "slide-05.webp",
+      "sha256": "e2583afde8e8887fda1e32d587d6941f9c99af61f800a46b39fac48bd6bebd44"
+    },
+    {
+      "file": "slide-06.webp",
+      "sha256": "9d0e0b236aec4cc6846c9a1d375777fdd34ee90dc4d39a83b82c11334e4fb96e"
+    },
+    {
+      "file": "slide-07.webp",
+      "sha256": "8b1c52e86b13b87f1aa8664ab904ef5b4a03c123ee34c62dff2c2a3864ed4f7a"
+    },
+    {
+      "file": "slide-08.webp",
+      "sha256": "24595c0073b0212d8ff0cab61469a6bbc677079016a6715e399a445a2e138bfd"
+    },
+    {
+      "file": "slide-09.webp",
+      "sha256": "a1a613c153de1c51cbcaf4da570ff4800b3b0758899f497f0284854ebebd6ebe"
+    },
+    {
+      "file": "slide-10.webp",
+      "sha256": "f084dface8d0c3c3c2ca229f0d699a0f5507be46725a4be18aa1d1cda92c8ff3"
+    },
+    {
+      "file": "slide-11.webp",
+      "sha256": "4d4704d14d824663e7a883a1a6ed295bb75536340d384b9ad0da7073217c9b33"
+    },
+    {
+      "file": "slide-12.webp",
+      "sha256": "1700d7aa4ac1971f38052c4312de6559a7d75e3376aa71d90ec4f2ddc85b28c9"
+    },
+    {
+      "file": "slide-13.webp",
+      "sha256": "45f86d5390f7bef1d850608ce6487a94df403fb0c474ba4b0151b303502c0e69"
+    },
+    {
+      "file": "slide-14.webp",
+      "sha256": "4511fd48b4f5721d0737063594271d067fee751b05231b8f23c296e326a4645d"
+    },
+    {
+      "file": "slide-15.webp",
+      "sha256": "193d19303f573c0178b82867c4bb006048a56d2a48375acb7b6895d368c714a9"
+    },
+    {
+      "file": "slide-16.webp",
+      "sha256": "ba336dedb54aae28cd22293dc6863c986974cc0b3464e531ccedf00dea2199ed"
+    },
+    {
+      "file": "slide-17.webp",
+      "sha256": "9dc7223bcc8479f45435326acca95a353a95d65e72387d5bb1da43c667971de8"
+    },
+    {
+      "file": "slide-18.webp",
+      "sha256": "b9fad2b2f15fc0e956bc34bbd43c0e7c020036319a43e44c5df0e4f0a499dae7"
+    }
+  ],
+  "resolvedFontFamilies": {
+    "Arial": "Arial",
+    "Arial Narrow": "Arial Narrow",
+    "Calibri": "Calibri",
+    "Calibri Light": "Calibri,Calibri Light",
+    "Century Gothic": "Century Gothic"
+  },
+  "renderMethod": "Font-isolated LibreOffice PDF export; 18 final static slide frames rendered at 2560x1440 and WebP quality 92.",
+  "publicAuthorization": {
+    "date": "2026-10-23",
+    "source": "Direct user instruction in this Construct chat",
+    "quote": "also i clear public release on the slides"
+  }
+}

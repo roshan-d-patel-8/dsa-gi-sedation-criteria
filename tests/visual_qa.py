@@ -855,7 +855,7 @@ def assert_choosing_wisely(page):
 
 
 def assert_all_orientation_sections_are_clean(page):
-    expected_accordion_counts = [3, 3, 3, 5, 3, 4, 4, 0, 1, 1, 1, 5]
+    expected_accordion_counts = [3, 3, 3, 5, 3, 4, 4, 0, 1, 1, 2, 5]
     for index in range(page.locator(".orientation-subtab").count()):
         page.locator(".orientation-subtab").nth(index).click()
         accordions = page.locator(".orientation-content details.orientation-site-group")

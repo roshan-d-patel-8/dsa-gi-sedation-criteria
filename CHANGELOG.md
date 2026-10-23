@@ -5,6 +5,15 @@ tags:
 
 # Changelog
 
+## 0.49.0 — 2026-10-23
+
+- Add all 18 supplied Ergonomics slides under Field Guide → Ergonomics, alongside the preserved early-career ergonomic evaluation guidance. Reuse the shared presentation viewer and existing resource-card styling.
+- Preserve slide order and source fonts in 2560×1440 WebP frames, with meaningful slide titles, keyboard/click/swipe navigation, fullscreen, and focus return. PowerPoint animations and hyperlinks are flattened; original PPTX/PDF and speaker notes are excluded.
+- Web-render copy brings slide 2’s off-canvas question inside its original image panel and freezes the stored July 7, 2026 date. Source PowerPoint remains unchanged.
+- Browser QA now waits for section entrance animations before measuring foldout touch targets, preserving the 44-pixel requirement.
+- Local validation passed: 18-slide asset verifier, 25 unit tests (one source-availability skip), production build, focused desktop/390/320 viewer/search/touch/fullscreen checks, and full visual functional assertions. The final console gate recorded only the previously observed external YouTube compute-pressure diagnostic; changed UI checks were clean.
+- Roshan explicitly cleared public release of all slides on October 23, resolving the slide 16 internal-use label gate. Add the October 23 Ergonomics publication mapping so its Field Guide tab/panel glows for 30 days. No calendar assignment or training-completion claim.
+
 ## 0.48.0 — 2026-10-23
 
 - Move Conjunctions into the persistent upper-right header with a 44-pixel link target and adjacent text revealed on hover or keyboard focus. Preserve its destination and new-tab behavior; retain separate access to page zoom.

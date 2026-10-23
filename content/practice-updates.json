@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-10-23-ergonomics-slides",
+    "fieldGuideSections": ["Ergonomics"],
+    "date": "2026-10-23",
+    "title": "Ergonomics: caring for yourself while caring for patients",
+    "sourceReleases": [
+      "0.49.0"
+    ],
+    "changes": [
+      "Added an 18-slide Ergonomics reference under Field Guide → Ergonomics, covering posture, reach, wrist alignment, movement and stretch breaks. The existing early-career ergonomic evaluation guidance remains available."
+    ]
+  },
+  {
     "id": "2026-10-19-four-habits-video",
     "fieldGuideSections": ["Clinic"],
     "date": "2026-10-19",
