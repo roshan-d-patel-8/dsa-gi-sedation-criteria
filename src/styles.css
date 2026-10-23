@@ -193,6 +193,9 @@ body::before {
 .calendar-day.has-event > time { background: var(--way); color: var(--white); }
 .calendar-day.has-birthday { border-color: rgba(198, 95, 130, .3); background: radial-gradient(circle at 88% 13%, rgba(242, 160, 184, .16), transparent 30%), linear-gradient(145deg, rgba(217, 164, 65, .07), rgba(255, 255, 255, .96)); }
 .calendar-day.has-event.has-birthday { background: radial-gradient(circle at 88% 13%, rgba(242, 160, 184, .18), transparent 29%), linear-gradient(145deg, rgba(27, 117, 187, .08), rgba(255, 255, 255, .96)); }
+.calendar-day.is-today { border-color: var(--way); box-shadow: inset 0 0 0 2px var(--way); }
+.calendar-day.is-today > time { background: var(--way); color: var(--white); }
+.calendar-today-label { display: block; width: fit-content; margin-top: 3px; color: var(--way); font-size: 9px; font-weight: 900; line-height: 1.2; }
 .calendar-day-empty { border-color: transparent; background: transparent; }
 .calendar-birthday-cluster { position: absolute; z-index: 6; top: 7px; right: 7px; display: flex; gap: 4px; }
 .calendar-birthday-cluster:has(.birthday-marker:hover), .calendar-birthday-cluster:has(.birthday-marker:focus) { z-index: 80; }

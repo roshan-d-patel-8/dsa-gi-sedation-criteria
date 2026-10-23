@@ -913,7 +913,8 @@ function CountdownTiles({ items }) {
   );
 }
 
-function Calendar2026({ upcomingCountdowns }) {
+function Calendar2026({ upcomingCountdowns, today }) {
+  const todayDate = new Date(today).toISOString().slice(0, 10);
   const [monthPosition, setMonthPosition] = useState(currentCalendarPosition);
   const [activeResource, setActiveResource] = useState(null);
   const [activeBirthday, setActiveBirthday] = useState(null);
@@ -991,14 +992,16 @@ function Calendar2026({ upcomingCountdowns }) {
           const events = monthEvents.filter((item) => item.date === date);
           const birthdays = monthBirthdays.filter((item) => item.date === date);
           const socials = monthSocialEvents.filter((item) => item.date === date);
+          const isToday = date === todayDate;
           const dayDetails = [
             ...events.map((event) => event.label),
             ...socials.map((event) => event.label),
             ...birthdays.map((birthday) => `${birthday.name} birthday`),
           ];
           return (
-            <div className={`calendar-day${events.length ? " has-event" : ""}${socials.length ? " has-social-event" : ""}${birthdays.length ? " has-birthday" : ""}`} role="gridcell" aria-label={`${monthLabel} ${day}${dayDetails.length ? `: ${dayDetails.join(", ")}` : ""}`} key={date}>
+            <div className={`calendar-day${isToday ? " is-today" : ""}${events.length ? " has-event" : ""}${socials.length ? " has-social-event" : ""}${birthdays.length ? " has-birthday" : ""}`} role="gridcell" aria-current={isToday ? "date" : undefined} aria-label={`${monthLabel} ${day}${dayDetails.length ? `: ${dayDetails.join(", ")}` : ""}`} key={date}>
               <time dateTime={date}>{day}</time>
+              {isToday && <span className="calendar-today-label">Today</span>}
               {birthdays.length > 0 && (
                 <span className="calendar-birthday-cluster">
                   {birthdays.map((birthday, birthdayIndex) => {
@@ -1177,7 +1180,7 @@ function HomePage({ onOpenChangeLog }) {
 
   return (
     <main className="home-page" id="home-panel" role="tabpanel" aria-labelledby="home-tab">
-      <Calendar2026 upcomingCountdowns={upcomingCountdowns} />
+      <Calendar2026 upcomingCountdowns={upcomingCountdowns} today={today} />
       <nav className="calendar-chicklets" aria-label="Companion sites">
         {companionSites.map((site) => (
           <a className="chicklet" href={site.href} target="_blank" rel="noreferrer" title={site.description} aria-label={`${site.label}: ${site.description} Opens in a new tab.`} key={site.id}>

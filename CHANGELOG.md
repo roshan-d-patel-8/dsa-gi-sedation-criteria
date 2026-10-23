@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.47.0 — 2026-10-23
+
+- Add Omar Al-Shuwaykh’s October 22 birthday with his existing portrait, preserving the same-day happy hour. Date supplied by Roshan on October 23; no birth year recorded.
+- Mark the current Pacific date with a blue outline, highlighted date number, visible Today label, and accessible current-date designation. Reuse the existing minute/focus refresh so the marker follows date changes.
+- Validate local and live desktop/mobile calendar interactions, Pacific midnight rollover, adjacent months, production build, and existing regressions. Excluded from clinician practice history.
+
 ## 0.46.0 — 2026-10-21
 
 - Add a chicklet-style app icon on the Calendar page, between the calendar and the Change Log portal, linking to the password-gated DSA GI Conjunctions companion site (opens in a new tab) with an accessible description, hover/focus states, and a data-driven companion-site list for future tiles.

@@ -10,7 +10,7 @@ const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const contactsRoot = resolve(repoRoot, "..", "Contacts");
 
 test("2026 GI physician birthday data is complete and has portraits", () => {
-  assert.equal(birthdayEvents.length, 20);
+  assert.equal(birthdayEvents.length, 21);
   assert.deepEqual([...birthdayEvents].sort((a, b) => a.date.localeCompare(b.date)), birthdayEvents);
   assert.equal(new Set(birthdayEvents.map(({ name }) => name)).size, birthdayEvents.length);
 

@@ -419,14 +419,14 @@ def assert_calendar_navigation(page):
     )
     assert survey_deadline.is_visible()
     assert survey_deadline.get_by_text("2026 TPMG POS and JAMM Survey", exact=True).is_visible()
-    assert page.locator(".birthday-marker").count() == 3
+    assert page.locator(".birthday-marker").count() == 4
     assert page.locator(".calendar-social-marker").count() == 1
     happy_hour = page.get_by_label(
         "GI Monthly Happy Hour, Thu · Oct 22, 2026 · 5:30–6:00 PM arrival, Bare Bottle Brewery · Across the street from WCR Kaiser",
         exact=True,
     )
     assert happy_hour.is_visible()
-    assert page.get_by_role("gridcell", name="October 2026 22: GI Monthly Happy Hour", exact=True).is_visible()
+    assert page.get_by_role("gridcell", name="October 2026 22: GI Monthly Happy Hour, Omar Al-Shuwaykh birthday", exact=True).is_visible()
     happy_hour.focus()
     page.wait_for_timeout(200)
     happy_hour_tooltip = calendar_preview_for(page, happy_hour)
