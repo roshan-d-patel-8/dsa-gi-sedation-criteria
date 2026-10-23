@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { POLICY_VERSION, policySections } from "./criteria.js";
 import { coverageSites, inBasketCoverageGroups } from "./podlets.js";
 import { birthdayEvents } from "./birthdays.js";
+import { recentFieldGuideUpdates, fieldGuideUpdateLabel } from "./field-guide-updates.js";
 import { medicationHoldSections } from "./medication-holds.js";
 import { dtmMedicationGroups } from "./dtm.js";
 import orientationSource from "./orientation-source.html?raw";
@@ -1161,7 +1162,7 @@ function Calendar2026({ upcomingCountdowns, today }) {
   );
 }
 
-function HomePage({ onOpenChangeLog }) {
+function usePacificToday() {
   const [today, setToday] = useState(pacificToday);
 
   useEffect(() => {
@@ -1174,6 +1175,25 @@ function HomePage({ onOpenChangeLog }) {
     };
   }, []);
 
+  return today;
+}
+
+function CompanionLinks() {
+  return (
+      <nav className="header-companions" aria-label="Companion sites">
+        {companionSites.map((site) => (
+          <a className="chicklet" href={site.href} target="_blank" rel="noreferrer" aria-label={`${site.label}: ${site.description} Opens in a new tab.`} key={site.id}>
+            <span className="chicklet-icon" aria-hidden="true"><ConjunctionIcon /></span>
+            <span className="chicklet-label" aria-hidden="true"><strong>{site.label}</strong><small>{site.caption} ↗</small></span>
+          </a>
+        ))}
+      </nav>
+  );
+}
+
+function HomePage({ onOpenChangeLog }) {
+  const today = usePacificToday();
+
   const upcomingCountdowns = countdowns
     .map((item) => ({ ...item, days: daysUntil(item.date, today) }))
     .filter(({ days }) => days > 0);
@@ -1181,14 +1201,6 @@ function HomePage({ onOpenChangeLog }) {
   return (
     <main className="home-page" id="home-panel" role="tabpanel" aria-labelledby="home-tab">
       <Calendar2026 upcomingCountdowns={upcomingCountdowns} today={today} />
-      <nav className="calendar-chicklets" aria-label="Companion sites">
-        {companionSites.map((site) => (
-          <a className="chicklet" href={site.href} target="_blank" rel="noreferrer" title={site.description} aria-label={`${site.label}: ${site.description} Opens in a new tab.`} key={site.id}>
-            <span className="chicklet-icon" aria-hidden="true"><ConjunctionIcon /></span>
-            <span className="chicklet-label" aria-hidden="true"><strong>{site.label}</strong><small>{site.caption} ↗</small></span>
-          </a>
-        ))}
-      </nav>
       <nav className="change-log-portal" aria-label="Site updates">
         <a
           href="?view=change-log"
@@ -2565,6 +2577,8 @@ function WorkflowScreenshotDialog({ image, onClose }) {
 }
 
 function OrientationMaterials() {
+  const today = usePacificToday();
+  const recentUpdates = useMemo(() => recentFieldGuideUpdates(changeLogEntries, today), [today]);
   const sections = useMemo(() => parseOrientationSource(orientationSource), []);
   const [query, setQuery] = useState("");
   const [activeSectionId, setActiveSectionId] = useState(sections[0]?.id);
@@ -2764,7 +2778,9 @@ function OrientationMaterials() {
         <nav className="orientation-subtabs" role="tablist" aria-label="Orientation sections">
           {visibleSections.map((section, index) => (
             <button
-              className={`orientation-subtab tone-${section.tone}${activeSection?.id === section.id ? " active" : ""}`}
+              className={`orientation-subtab tone-${section.tone}${activeSection?.id === section.id ? " active" : ""}${recentUpdates[section.short] ? " is-recently-updated" : ""}`}
+              data-updated={recentUpdates[section.short]}
+              aria-description={recentUpdates[section.short] ? `${fieldGuideUpdateLabel(recentUpdates[section.short])}. Content updated within the past 30 days.` : undefined}
               id={`${section.id}-tab`}
               type="button"
               role="tab"
@@ -2778,6 +2794,7 @@ function OrientationMaterials() {
               <span>{String(sections.indexOf(section) + 1).padStart(2, "0")}</span>
               <strong>{highlightSearchText(section.short, normalizedQuery)}</strong>
               <small>{highlightSearchText(section.descriptor, normalizedQuery)}</small>
+              {recentUpdates[section.short] && <em className="section-update-hint" aria-hidden="true">{fieldGuideUpdateLabel(recentUpdates[section.short])}</em>}
             </button>
           ))}
         </nav>
@@ -2791,7 +2808,7 @@ function OrientationMaterials() {
       <div className="orientation-sections">
         {activeSection && (
           <section
-            className={`orientation-card tone-${activeSection.tone}${activeSection.sensitive ? " orientation-card-sensitive" : ""}`}
+            className={`orientation-card tone-${activeSection.tone}${activeSection.sensitive ? " orientation-card-sensitive" : ""}${recentUpdates[activeSection.short] ? " is-recently-updated" : ""}`}
             id={`${activeSection.id}-panel`}
             role="tabpanel"
             aria-labelledby={`${activeSection.id}-tab`}
@@ -3164,6 +3181,7 @@ export default function App() {
           <span><strong>DSA GI</strong><small>Resources</small></span>
         </div>
         <FolderTabs activeTab={activeTab} onChange={selectTab} />
+        <CompanionLinks />
         <ZoomControl zoom={zoom} onZoomChange={setZoom} />
       </header>
 

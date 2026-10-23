@@ -1,6 +1,7 @@
 [
   {
     "id": "2026-10-19-four-habits-video",
+    "fieldGuideSections": ["Clinic"],
     "date": "2026-10-19",
     "title": "The Four Habits: patient communication video",
     "sourceReleases": ["0.45.0"],
@@ -10,6 +11,7 @@
   },
   {
     "id": "2026-10-14-choosing-wisely-september",
+    "fieldGuideSections": ["Choosing Wisely"],
     "date": "2026-10-14",
     "title": "Choosing Wisely: January–September results",
     "sourceReleases": [
@@ -57,6 +59,7 @@
   },
   {
     "id": "2026-10-14-1",
+    "fieldGuideSections": ["MA-MD"],
     "date": "2026-10-14",
     "title": "Pathology result workflow",
     "sourceReleases": [
@@ -83,6 +86,7 @@
   },
   {
     "id": "2026-10-09-3",
+    "fieldGuideSections": ["Referrals"],
     "date": "2026-10-09",
     "title": "Outside KP referrals",
     "sourceReleases": [

@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.48.0 — 2026-10-23
+
+- Move Conjunctions into the persistent upper-right header with a 44-pixel link target and adjacent text revealed on hover or keyboard focus. Preserve its destination and new-tab behavior; retain separate access to page zoom.
+- Give Field Guide section tabs and selected panels a gold glow for published content updates within the last 30 Pacific calendar dates, with visible update dates and accessible descriptions. Dates are sourced from published practice history and expire automatically on minute/focus refresh.
+- Validate 25 unit tests (one source-availability skip), production build, desktop/1024/390/320 focus/hover/new-tab/zoom/expiry checks and calendar density/date refresh. Full visual functional assertions completed; final console gate reported the previously observed external YouTube compute-pressure policy diagnostic. No new UI errors or overflow.
+- Current qualifying sections: Referrals (October 9), Choosing Wisely and MA-MD (October 14), Clinic (October 19). UI-only changes and the unpublished ergonomics candidate do not reset content dates.
+
 ## 0.47.0 — 2026-10-23
 
 - Add Omar Al-Shuwaykh’s October 22 birthday with his existing portrait, preserving the same-day happy hour. Date supplied by Roshan on October 23; no birth year recorded.
