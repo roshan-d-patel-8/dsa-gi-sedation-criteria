@@ -31,10 +31,16 @@ def assert_acls(page, url, output=None, touch=False):
     dialog = page.get_by_role('dialog', name='ACLS certification workflow', exact=True)
     expect(dialog).to_be_visible()
     expect(trigger).to_have_attribute('aria-expanded', 'true')
-    assert dialog.locator('ol > li').count() == 4
+    assert dialog.locator('.acls-flow > li').count() == 4
     text = dialog.inner_text()
     for phrase in ['Highly recommended for Pleasanton physicians.', 'All physicians in our group may opt in', 'MD People portal', '2–5 hours', 'accuracy of your answers', 'After passing the online component', 'About 20 minutes', 'at one of our sites', 'no instructor or supervisor present', 'final certification test']:
         assert phrase in text, phrase
+    registration = dialog.locator('.acls-flow > li').first
+    substep = registration.get_by_role('list', name='Registration substep', exact=True)
+    expect(substep.get_by_role('heading', name='Choose this location', exact=True)).to_be_visible()
+    assert 'On the registration site, select Crow Canyon.' in substep.inner_text()
+    assert substep.locator('address').inner_text() == '3 Crow Canyon Court #205\nSan Ramon, CA 94583'
+    assert dialog.locator('.acls-flow > li').last.locator('address').count() == 0
     # Exercise link activation and the complete exact destination, without submitting forms.
     for label, href in [('Sign up for ACLS training', REGISTRATION), ('Notify us you’re ready to test', READINESS)]:
         link = dialog.get_by_role('link', name=label, exact=False)

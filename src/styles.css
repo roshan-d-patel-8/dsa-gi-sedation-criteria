@@ -1428,3 +1428,9 @@ body.presentation-open { overflow: hidden; }
   .acls-flow h3 { font-size: 17px; }
   .acls-finish { margin-left: 38px; padding: 12px; }
 }
+
+.acls-registration-substeps { list-style: none; margin: 14px 0 0; padding: 12px 0 0; border-top: 1px solid #ead6da; }
+.acls-registration-substeps > li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 9px; }
+.acls-registration-substeps > li > span { display: grid; place-items: center; align-self: start; min-height: 28px; border-radius: 7px; background: #fae9eb; color: #941a2a; font-size: 12px; font-weight: 800; }
+.acls-registration-substeps h4 { margin: 0 0 5px; color: var(--navy); font-size: 15px; }
+.acls-registration-substeps address { margin-top: 6px; color: #526477; font-size: 13px; font-style: normal; }

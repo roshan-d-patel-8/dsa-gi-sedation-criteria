@@ -5,6 +5,11 @@ tags:
 
 # Changelog
 
+## 0.50.1 — 2026-10-28
+
+- Add registration substep 1a: choose Crow Canyon, 3 Crow Canyon Court #205, San Ramon, CA 94583, transcribed from Roshan’s supplied location screenshot. Keep the later team-arranged test at one of our sites.
+- Verify the substep remains inside step 1 and preserves exact address copy, both links, dialog interaction, month isolation and desktop/phone viewport fit.
+
 ## 0.50.0 — 2026-10-28
 
 - Add a red rounded heart/ACLS button beneath the October 29 department meeting announcement in the October 2026 calendar rail. Preserve October 14 notes and adjacent-month isolation.
