@@ -12,6 +12,7 @@ from orientation_qa import assert_section_foldout_toggle, assert_all_section_fol
 from changelog_qa import assert_change_log
 from meeting_notes_qa import assert_meeting_notes
 from acls_qa import assert_acls
+from thanksgiving_qa import assert_thanksgiving
 
 
 OUTPUT = Path(os.environ.get("VISUAL_QA_OUTPUT", "/private/tmp/dsa-gi-visual-qa"))
@@ -1353,6 +1354,9 @@ with sync_playwright() as playwright:
     assert_inbasket_dismissal(compact_mobile, compact_trigger, compact_panel, mobile=True)
     assert compact_mobile.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
 
+    assert_thanksgiving(desktop, BASE_URL)
+    assert_thanksgiving(mobile, BASE_URL, touch=True)
+    assert_thanksgiving(compact_mobile, BASE_URL, touch=True)
     assert_acls(desktop, BASE_URL)
     assert_acls(mobile, BASE_URL, touch=True)
     assert_acls(compact_mobile, BASE_URL, touch=True)

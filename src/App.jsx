@@ -76,6 +76,22 @@ const countdowns = [
 
 const calendarArtEvents = [
   {
+    label: "Thanksgiving Networking Lunch",
+    date: "2026-11-02",
+    startDateTime: "2026-11-02T12:30:00-08:00",
+    displayDate: "Mon · Nov 2, 2026 · 12:30–1:30 PM",
+    venue: "Oaks Conference Rooms",
+    image: "thanksgiving-networking-lunch-2026-11-02.png",
+    imageAspectRatio: "946 / 729",
+    eyebrow: "Featuring: The Walnut Awards!",
+    marker: "meal",
+    description: [
+      "You are invited to our Thanksgiving Networking Lunch.",
+      "An award for our colleagues from our colleagues. Scan QR code to submit your nominations.",
+      "Join us for an afternoon of fun, music, great food, and recognition as we celebrate together in the Oaks Conference Rooms. We look forward to seeing you there!",
+    ],
+  },
+  {
     label: "Omar Al-Shuwaykh — first clinical day",
     date: "2026-08-31",
     displayDate: "Mon · Aug 31, 2026",
@@ -313,6 +329,13 @@ function ClinicalDayStarIcon() {
       <path d="m22 4 5.4 11 12.1 1.8-8.8 8.6 2.1 12.1L22 31.8l-10.8 5.7 2.1-12.1-8.8-8.6L16.6 15 22 4Z" />
     </svg>
   );
+}
+
+function MealIcon() {
+  return <svg className="meal-icon" viewBox="0 0 44 44" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="23" cy="22" r="10" /><circle cx="23" cy="22" r="6" />
+    <path d="M6 7v11c0 4 6 4 6 0V7M9 7v30M39 7c-5 6-5 12 0 14v16M39 7v14" />
+  </svg>;
 }
 
 function CocktailIcon() {
@@ -760,6 +783,12 @@ function SocialEventDialog({ event, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-label={`${event.label} details`}
+        onKeyDown={(keyEvent) => {
+          if (keyEvent.key === "Tab") {
+            keyEvent.preventDefault();
+            closeButtonRef.current?.focus();
+          }
+        }}
       >
         <button
           className="social-event-dialog-close"
@@ -774,13 +803,15 @@ function SocialEventDialog({ event, onClose }) {
           className={`social-event-dialog-art${event.marker === "star" ? " clinical-day-art" : ""}`}
           src={`${import.meta.env.BASE_URL}${event.image}`}
           alt={`${event.label} event infographic`}
+          style={event.imageAspectRatio ? { aspectRatio: event.imageAspectRatio } : undefined}
         />
-        <span className="social-event-dialog-copy">
+        <div className="social-event-dialog-copy">
           <small>{event.eyebrow}</small>
           <strong>{event.label}</strong>
-          <time dateTime={event.date}>{event.displayDate}</time>
+          <time dateTime={event.startDateTime || event.date}>{event.displayDate}</time>
           {event.venue && <em>{event.venue}</em>}
-        </span>
+          {event.description?.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+        </div>
       </section>
     </div>,
     document.body,
@@ -1050,9 +1081,9 @@ function Calendar2026({ upcomingCountdowns, today }) {
                         onClick={(clickEvent) => openSocialEvent(event, clickEvent.currentTarget)}
                         key={event.label}
                       >
-                        {event.marker === "star" ? <ClinicalDayStarIcon /> : <CocktailIcon />}
+                        {event.marker === "star" ? <ClinicalDayStarIcon /> : event.marker === "meal" ? <MealIcon /> : <CocktailIcon />}
                         <CalendarPreview className="calendar-social-tooltip" id={tooltipId} placement="above">
-                          <img className={event.marker === "star" ? "clinical-day-art" : undefined} src={`${import.meta.env.BASE_URL}${event.image}`} alt="" loading="lazy" />
+                          <img className={event.marker === "star" ? "clinical-day-art" : undefined} src={`${import.meta.env.BASE_URL}${event.image}`} alt="" loading="lazy" style={event.imageAspectRatio ? { aspectRatio: event.imageAspectRatio } : undefined} />
                           <span>
                             <small>{event.eyebrow}</small>
                             <strong>{event.label}</strong>

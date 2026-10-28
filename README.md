@@ -39,6 +39,8 @@ The application is static and has no clinical inputs, backend, database, or anal
 
 ## Publication
 
+On 2026-10-28 Roshan supplied the Thanksgiving Networking Lunch invitation and requested its event on the public November calendar. Publish the original poster and transcribed invitation for November 2, 2026, 12:30–1:30 PM, Oaks Conference Rooms, featuring The Walnut Awards and nominations via the poster QR code. No QR destination, nomination deadline, attendee or organizer is inferred. Preserve the original 946×729 composition without cropping and the existing same-day Pleasanton Room 2 milestone.
+
 On 2026-10-28 Roshan supplied a Crow Canyon location screenshot and requested a registration substep. Step 1 now instructs choosing Crow Canyon, 3 Crow Canyon Court #205, San Ramon, CA 94583. This is the registration-site selection; the final skills test remains team-arranged at one of our sites. The screenshot itself is excluded from public assets.
 
 On 2026-10-28 Roshan explicitly requested this Construct update to the public site: an October 29 meeting announcement with an ACLS certification workflow. Published copy follows his current recommended/opt-in language and supplied four-step pathway, including the exact registration and readiness-form links plus individual MD People reimbursement instructions. No exact test dates, named coordinator, or reimbursement guarantee are added. The flow is native linked HTML; no source files, slides, or attachments are published. October 14 notes remain dated October 14.

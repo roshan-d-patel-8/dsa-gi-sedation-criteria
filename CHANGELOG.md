@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.51.0 — 2026-10-28
+
+- Add Thanksgiving Networking Lunch featuring The Walnut Awards to November 2, 2026, 12:30–1:30 PM, Oaks Conference Rooms. Preserve the concurrent Pleasanton Room 2 milestone.
+- Use a lunch icon with the existing calendar hover/focus preview and click/tap dialog. Preserve the original 946×729 invitation without cropping; include the complete invitation text and QR nomination instruction as accessible text. No destination, nomination deadline, attendee or organizer inferred.
+- Verify original asset bytes/dimensions, desktop preview, real phone tap, complete copy, dialog viewport fit, scrolling, dismissal/focus, month isolation, existing unit/build and browser regressions, then live deployment. All full-suite functional assertions passed; the final console gate recorded only the known external YouTube compute-pressure policy diagnostic. Focused event checks had no console errors.
+
 ## 0.50.1 — 2026-10-28
 
 - Add registration substep 1a: choose Crow Canyon, 3 Crow Canyon Court #205, San Ramon, CA 94583, transcribed from Roshan’s supplied location screenshot. Keep the later team-arranged test at one of our sites.

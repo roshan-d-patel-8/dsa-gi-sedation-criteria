@@ -1434,3 +1434,7 @@ body.presentation-open { overflow: hidden; }
 .acls-registration-substeps > li > span { display: grid; place-items: center; align-self: start; min-height: 28px; border-radius: 7px; background: #fae9eb; color: #941a2a; font-size: 12px; font-weight: 800; }
 .acls-registration-substeps h4 { margin: 0 0 5px; color: var(--navy); font-size: 15px; }
 .acls-registration-substeps address { margin-top: 6px; color: #526477; font-size: 13px; font-style: normal; }
+
+.meal-icon { width: 30px; height: 30px; color: #88451d; }
+.social-event-dialog-copy p { margin: 5px 0 0; color: #e0e9f1; font-size: 14px; line-height: 1.55; }
+@media (max-width: 680px) { .meal-icon { width: 23px; height: 23px; } }
