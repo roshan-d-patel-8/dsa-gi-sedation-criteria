@@ -1438,3 +1438,18 @@ body.presentation-open { overflow: hidden; }
 .meal-icon { width: 30px; height: 30px; color: #88451d; }
 .social-event-dialog-copy p { margin: 5px 0 0; color: #e0e9f1; font-size: 14px; line-height: 1.55; }
 @media (max-width: 680px) { .meal-icon { width: 23px; height: 23px; } }
+
+/* Keep social artwork and same-day milestone markers in separate rows. */
+@media (min-width: 681px) {
+  .calendar-day.has-social-event.has-event { min-height: 116px; }
+  .calendar-day.has-social-event.has-event .calendar-social-cluster { position: relative; top: auto; right: auto; bottom: auto; display: flex; justify-content: flex-end; margin-top: 6px; }
+}
+@media (max-width: 680px) {
+  .calendar-day.has-social-event.has-event { min-height: 104px; }
+  .calendar-day.has-social-event.has-event .calendar-social-cluster { top: 37px; bottom: auto; }
+}
+.social-event-poster { position: relative; }
+.event-qr-link { position: absolute; left: 83.3%; top: 66.3%; width: 9.7%; height: 12.6%; min-width: 44px; min-height: 44px; border-radius: 3px; cursor: pointer; }
+.event-qr-link:hover, .event-qr-link:focus-visible { outline: 3px solid #1b75bb; outline-offset: 3px; background: #1b75bb12; }
+.social-event-cta { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; margin-top: 12px; padding: 12px 14px; border: 1px solid #f3b847; border-radius: 10px; background: #fff1ce; color: #193f64; font-size: 14px; font-weight: 850; text-decoration: underline; }
+.social-event-cta:focus-visible { outline: 3px solid #f3b847; outline-offset: 3px; }

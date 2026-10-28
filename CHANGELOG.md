@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.51.1 — 2026-10-28
+
+- Decode the poster QR locally and link its exact Microsoft Forms destination through a clickable QR hotspot and a separate Walnut Awards nomination link. Preserve the source poster bytes. Include links in the dialog keyboard loop and retain new-tab navigation.
+- Reserve separate rows for social icons and same-day milestones, keeping the November 2 lunch icon clear of Pleasanton Room 2 text on desktop and its marker on phones.
+- Verify actual QR-area activation, exact popup URL, keyboard navigation, non-overlapping marker/text rectangles, full poster/copy, month isolation, dismissal/focus and desktop/phone layout. Focused checks passed at 1440/1024/390/320 and 140% app zoom; unit/build passed. Full-suite functional assertions passed, with only the known external YouTube compute-pressure diagnostic at the final console gate.
+
 ## 0.51.0 — 2026-10-28
 
 - Add Thanksgiving Networking Lunch featuring The Walnut Awards to November 2, 2026, 12:30–1:30 PM, Oaks Conference Rooms. Preserve the concurrent Pleasanton Room 2 milestone.

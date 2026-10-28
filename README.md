@@ -39,6 +39,8 @@ The application is static and has no clinical inputs, backend, database, or anal
 
 ## Publication
 
+On 2026-10-28 Roshan requested a clickable Walnut Awards QR and correction of the lunch icon obscuring same-day text. The QR destination was decoded locally from the original poster, preserving its exact Microsoft Forms URL including origin=QRCode; both a positioned QR link and a visible nomination link open it in a new tab. Read-only verification returned HTTP 200 for the Microsoft Forms shell; no form response was submitted or form-field access inferred. The calendar reserves distinct icon/milestone rows.
+
 On 2026-10-28 Roshan supplied the Thanksgiving Networking Lunch invitation and requested its event on the public November calendar. Publish the original poster and transcribed invitation for November 2, 2026, 12:30–1:30 PM, Oaks Conference Rooms, featuring The Walnut Awards and nominations via the poster QR code. No QR destination, nomination deadline, attendee or organizer is inferred. Preserve the original 946×729 composition without cropping and the existing same-day Pleasanton Room 2 milestone.
 
 On 2026-10-28 Roshan supplied a Crow Canyon location screenshot and requested a registration substep. Step 1 now instructs choosing Crow Canyon, 3 Crow Canyon Court #205, San Ramon, CA 94583. This is the registration-site selection; the final skills test remains team-arranged at one of our sites. The screenshot itself is excluded from public assets.

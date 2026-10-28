@@ -85,6 +85,7 @@ const calendarArtEvents = [
     imageAspectRatio: "946 / 729",
     eyebrow: "Featuring: The Walnut Awards!",
     marker: "meal",
+    nominationUrl: "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=xHuKPzfjpUeg_A1RLA4F8dmV0_O2WPRFs-_E3YU7z6xUMUlPTUZQNVlSNkNXQkw1MFcwWjlMUFVIMC4u&origin=QRCode",
     description: [
       "You are invited to our Thanksgiving Networking Lunch.",
       "An award for our colleagues from our colleagues. Scan QR code to submit your nominations.",
@@ -784,9 +785,14 @@ function SocialEventDialog({ event, onClose }) {
         aria-modal="true"
         aria-label={`${event.label} details`}
         onKeyDown={(keyEvent) => {
-          if (keyEvent.key === "Tab") {
-            keyEvent.preventDefault();
-            closeButtonRef.current?.focus();
+          if (keyEvent.key !== "Tab") return;
+          const targets = Array.from(keyEvent.currentTarget.querySelectorAll("button, a[href]"));
+          const first = targets[0];
+          const last = targets[targets.length - 1];
+          if (keyEvent.shiftKey && document.activeElement === first) {
+            keyEvent.preventDefault(); last.focus();
+          } else if (!keyEvent.shiftKey && document.activeElement === last) {
+            keyEvent.preventDefault(); first.focus();
           }
         }}
       >
@@ -799,18 +805,27 @@ function SocialEventDialog({ event, onClose }) {
         >
           ×
         </button>
-        <img
-          className={`social-event-dialog-art${event.marker === "star" ? " clinical-day-art" : ""}`}
-          src={`${import.meta.env.BASE_URL}${event.image}`}
-          alt={`${event.label} event infographic`}
-          style={event.imageAspectRatio ? { aspectRatio: event.imageAspectRatio } : undefined}
-        />
+        <div className="social-event-poster">
+          <img
+            className={`social-event-dialog-art${event.marker === "star" ? " clinical-day-art" : ""}`}
+            src={`${import.meta.env.BASE_URL}${event.image}`}
+            alt={`${event.label} event infographic`}
+            style={event.imageAspectRatio ? { aspectRatio: event.imageAspectRatio } : undefined}
+          />
+          {event.nominationUrl && <a className="event-qr-link" href={event.nominationUrl} target="_blank" rel="noreferrer"
+            aria-label="Open Walnut Awards nomination form from QR code (opens in a new tab)" title="Open Walnut Awards nomination form">
+            <span className="sr-only">Open Walnut Awards nomination form</span>
+          </a>}
+        </div>
         <div className="social-event-dialog-copy">
           <small>{event.eyebrow}</small>
           <strong>{event.label}</strong>
           <time dateTime={event.startDateTime || event.date}>{event.displayDate}</time>
           {event.venue && <em>{event.venue}</em>}
           {event.description?.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          {event.nominationUrl && <a className="social-event-cta" href={event.nominationUrl} target="_blank" rel="noreferrer">
+            Open Walnut Awards nomination form <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span>
+          </a>}
         </div>
       </section>
     </div>,
