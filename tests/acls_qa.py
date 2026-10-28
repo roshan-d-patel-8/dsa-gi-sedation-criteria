@@ -1,0 +1,79 @@
+"""ACLS calendar placement, linked workflow and native dialog interaction checks."""
+import os
+from datetime import datetime
+from pathlib import Path
+from zoneinfo import ZoneInfo
+from playwright.sync_api import sync_playwright, expect
+
+REGISTRATION = 'https://cprvam.com/classes/acls/acls-online-skills/'
+READINESS = 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=xHuKPzfjpUeg_A1RLA4F8Zj47EYlwklOq4uH6MhZSndUMVVaR0VRODBXTVpKVkNUOUpLTzY1TEFSSy4u'
+
+def assert_acls(page, url, output=None, touch=False):
+    page.goto(url, wait_until='networkidle')
+    month = datetime.now(ZoneInfo('America/Los_Angeles')).month
+    for _ in range(abs(month-10)):
+        page.get_by_role('button', name='Previous month' if month>10 else 'Next month', exact=True).click()
+    announcement = page.get_by_role('region', name='October 29 department meeting announcements', exact=True)
+    expect(announcement).to_be_visible()
+    assert announcement.locator('time').get_attribute('datetime') == '2026-10-29'
+    trigger = page.get_by_role('button', name='ACLS Certification workflow', exact=True)
+    expect(trigger).to_be_visible()
+    assert trigger.locator('svg').count() == 1
+    assert page.locator('.calendar-sidebar').evaluate('e=>e.textContent.indexOf("October 29") < e.textContent.indexOf("October 14")')
+    for direction, reverse in [('Previous month','Next month'),('Next month','Previous month')]:
+        page.get_by_role('button', name=direction, exact=True).click()
+        expect(trigger).to_have_count(0)
+        page.get_by_role('button', name=reverse, exact=True).click()
+    trigger.scroll_into_view_if_needed()
+    if output: page.screenshot(path=str(output / f'acls-button-{page.viewport_size["width"]}.png'))
+    if touch: trigger.tap()
+    else: trigger.click()
+    dialog = page.get_by_role('dialog', name='ACLS certification workflow', exact=True)
+    expect(dialog).to_be_visible()
+    expect(trigger).to_have_attribute('aria-expanded', 'true')
+    assert dialog.locator('ol > li').count() == 4
+    text = dialog.inner_text()
+    for phrase in ['Highly recommended for Pleasanton physicians.', 'All physicians in our group may opt in', 'MD People portal', '2–5 hours', 'accuracy of your answers', 'After passing the online component', 'About 20 minutes', 'at one of our sites', 'no instructor or supervisor present', 'final certification test']:
+        assert phrase in text, phrase
+    # Exercise link activation and the complete exact destination, without submitting forms.
+    for label, href in [('Sign up for ACLS training', REGISTRATION), ('Notify us you’re ready to test', READINESS)]:
+        link = dialog.get_by_role('link', name=label, exact=False)
+        assert link.get_attribute('href') == href
+        assert link.get_attribute('target') == '_blank'
+        assert link.get_attribute('rel') == 'noreferrer'
+        page.context.route(href, lambda route: route.fulfill(status=200, content_type='text/html', body='<title>Link target check</title>'))
+        with page.expect_popup() as popup_info: link.click()
+        popup = popup_info.value
+        popup.wait_for_load_state()
+        assert popup.url == href
+        popup.close()
+        page.context.unroute(href)
+    close = dialog.get_by_role('button', name='Close ACLS certification workflow', exact=True)
+    close.focus(); page.keyboard.press('Shift+Tab')
+    expect(dialog.get_by_role('link').last).to_be_focused()
+    page.keyboard.press('Tab'); expect(close).to_be_focused()
+    box=dialog.bounding_box(); w=page.viewport_size['width']; h=page.viewport_size['height']
+    assert box['x']>=0 and box['y']>=0 and box['x']+box['width']<=w+1 and box['y']+box['height']<=h+1
+    assert dialog.evaluate('e=>e.scrollWidth<=e.clientWidth+1')
+    assert page.evaluate('document.documentElement.scrollWidth<=document.documentElement.clientWidth+1')
+    last=dialog.get_by_role('heading', name='Complete the computerized manikin test', exact=True)
+    last.scroll_into_view_if_needed();expect(last).to_be_visible()
+    dialog.evaluate('e=>e.scrollTop=0')
+    if output: page.screenshot(path=str(output / f'acls-flow-{w}.png'))
+    close.click(); expect(dialog).to_have_count(0); expect(trigger).to_be_focused()
+    trigger.click(); page.keyboard.press('Escape'); expect(dialog).to_have_count(0);expect(trigger).to_be_focused()
+    trigger.click();page.mouse.click(1,1);expect(dialog).to_have_count(0);expect(trigger).to_be_focused()
+    assert page.locator('body').evaluate('e=>e.style.overflow')!='hidden'
+
+if __name__ == '__main__':
+    output=Path(os.environ.get('VISUAL_QA_OUTPUT','/private/tmp/acls-qa'));output.mkdir(parents=True,exist_ok=True)
+    with sync_playwright() as p:
+        browser=p.chromium.launch();errors=[]
+        for w,h in [(1440,1000),(390,844),(320,568)]:
+            page=browser.new_page(viewport={'width':w,'height':h},has_touch=w<500)
+            page.on('pageerror',lambda e:errors.append(str(e)))
+            page.on('console',lambda m:errors.append(m.text) if m.type=='error' else None)
+            assert_acls(page,os.environ.get('VISUAL_QA_URL','http://127.0.0.1:5173'),output,touch=w<500)
+            page.close()
+        browser.close();assert not errors,errors
+    print('ACLS QA passed at 1440/390/320: October29 placement, adjacent-month isolation, real pointer/tap opening, complete workflow, exact new-tab link activation, focus containment/return, all dismissal modes, scrolling and viewport fit; no console errors.')

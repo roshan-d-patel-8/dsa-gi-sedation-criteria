@@ -12,6 +12,7 @@ import pathWorkflowSource from "./path-workflow.html?raw";
 import changeLogEntries from "../content/practice-updates.json";
 import octoberMeetingNotes from "../content/meeting-notes-2026-10-14.json";
 import { MeetingNotesCard, MeetingNotesDialog } from "./MeetingNotes.jsx";
+import { AclsAnnouncement } from "./AclsWorkflow.jsx";
 
 const columnLayout = [
   ["optiflow", "or"],
@@ -1094,7 +1095,7 @@ function Calendar2026({ upcomingCountdowns, today }) {
           <header className="calendar-announcements-header">
             <span>Bulletin</span>
             <h2>Announcements</h2>
-            <small>{announcements.length ? `${announcements.length} items` : meetingNotes.length ? "Meeting notes available" : "All clear"}</small>
+            <small>{monthIndex === 9 ? "October meeting updates" : announcements.length ? `${announcements.length} items` : meetingNotes.length ? "Meeting notes available" : "All clear"}</small>
           </header>
           {announcements.length > 0 ? (
             <div className="announcement-list">
@@ -1116,6 +1117,7 @@ function Calendar2026({ upcomingCountdowns, today }) {
             <p className="announcements-empty">No announcements for this month.</p>
           )}
 
+          {monthIndex === 9 && <AclsAnnouncement />}
           <section className="department-resources" aria-labelledby={`department-resources-${monthIndex}`}>
             <header className="department-resources-header">
               <span>Reference library</span>

@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.50.0 — 2026-10-28
+
+- Add a red rounded heart/ACLS button beneath the October 29 department meeting announcement in the October 2026 calendar rail. Preserve October 14 notes and adjacent-month isolation.
+- Open an accessible native dialog with four linked flow steps: registration and individual MD People reimbursement; adaptive online course/exam (2–5 hours); readiness form; team-arranged computerized manikin test at one of our sites (about 20 minutes, no instructor/supervisor).
+- Use Roshan’s current highly-recommended Pleasanton / group-wide opt-in wording. Preserve the exact supplied registration and Microsoft Forms URLs, opening in new tabs.
+- Validate desktop and mobile pointer activation, complete copy/link targets, keyboard focus containment, close/Escape/backdrop dismissal, focus return, scrolling, and viewport fit, alongside the existing test/build and browser regressions.
+
 ## 0.49.0 — 2026-10-23
 
 - Add all 18 supplied Ergonomics slides under Field Guide → Ergonomics, alongside the preserved early-career ergonomic evaluation guidance. Reuse the shared presentation viewer and existing resource-card styling.
