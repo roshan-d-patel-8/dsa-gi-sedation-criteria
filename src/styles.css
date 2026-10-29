@@ -1455,3 +1455,18 @@ body.presentation-open { overflow: hidden; }
 .social-event-cta:focus-visible { outline: 3px solid #f3b847; outline-offset: 3px; }
 
 .acls-registration-substeps > li + li { margin-top: 14px; padding-top: 14px; border-top: 1px solid #ead6da; }
+
+.acls-leave-guide { margin: 0 0 22px 50px; padding: 18px; border: 1px solid #c8d8e6; border-radius: 12px; background: #eef4f9; }
+.acls-leave-guide > small { color: #526477; font-size: 11px; font-weight: 800; }
+.acls-leave-guide h3 { margin: 4px 0 12px; color: var(--navy); font-size: 20px; line-height: 1.25; }
+.acls-leave-guide p { margin: 0; }
+.acls-unit-table { width: 100%; margin: 16px 0; border-collapse: collapse; background: white; color: var(--navy); font-size: 14px; }
+.acls-unit-table caption { padding: 10px; border: 1px solid #acbdce; border-bottom: 0; background: #173a5f; color: white; font-size: 14px; font-weight: 850; text-align: left; }
+.acls-unit-table th, .acls-unit-table td { padding: 9px 12px; border: 1px solid #acbdce; text-align: left; }
+.acls-unit-table thead { background: #e0eaf3; }
+.acls-timesheet-suggestion { padding: 12px; border-left: 3px solid #b52335; background: white; }
+@media (max-width: 480px) {
+  .acls-leave-guide { margin-left: 38px; padding: 12px; }
+  .acls-unit-table { font-size: 13px; }
+  .acls-unit-table th, .acls-unit-table td { padding: 8px; }
+}

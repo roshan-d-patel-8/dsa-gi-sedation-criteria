@@ -47,6 +47,21 @@ def assert_acls(page, url, output=None, touch=False):
     expect(substep.get_by_role('heading', name='Request reimbursement', exact=True)).to_be_visible()
     assert '20 minutes' not in text
     assert '2–5 hours for the online assessment and 30 minutes for the in-person computerized manikin test' in text
+    leave = dialog.get_by_role('region', name='ED leave for ACLS training', exact=True)
+    assert 'Department guidance' in leave.inner_text()
+    assert 'It is reasonable and expected to charge 1–2 units of ED leave for the time required to complete both the online assessment and the in-person manikin test.' in leave.inner_text()
+    assert 'Consider adding the ED-leave entry on a weekend day so it does not overlap with weekday timesheet entries and cause confusion.' in leave.inner_text()
+    conversion = leave.get_by_role('table', name='Hours-to-Units Conversion Table', exact=True)
+    assert conversion.locator('thead th').all_text_contents() == ['Hours', 'Units']
+    assert [row.all_text_contents() for row in [conversion.locator('tbody tr').nth(i).locator('th, td') for i in range(4)]] == [['8 Hours','2.00 Units'],['4 Hours','1.00 Unit'],['3 Hours','0.75 Units'],['2 Hours','0.50 Units']]
+    assert conversion.locator('tbody tr').count() == 4
+    conversion.scroll_into_view_if_needed()
+    expect(conversion).to_be_visible()
+    assert leave.evaluate('e=>e.scrollWidth<=e.clientWidth+1')
+    assert conversion.evaluate('e=>e.scrollWidth<=e.clientWidth+1')
+    if output:
+        page.wait_for_timeout(500) # Let native mobile tap feedback settle before the visual capture.
+        page.screenshot(path=str(output / f'acls-ed-leave-{page.viewport_size["width"]}.png'))
     # Exercise link activation and the complete exact destination, without submitting forms.
     for label, href in [('Sign up for ACLS training', REGISTRATION), ('Open MD People reimbursement portal', REIMBURSEMENT), ('How to create an expense report for physicians', EXPENSE_GUIDE), ('Notify us you’re ready to test', READINESS)]:
         link = dialog.get_by_role('link', name=label, exact=False)

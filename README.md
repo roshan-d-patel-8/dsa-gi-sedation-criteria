@@ -39,6 +39,8 @@ The application is static and has no clinical inputs, backend, database, or anal
 
 ## Publication
 
+On 2026-10-28 Roshan supplied the Hours-to-Units Conversion Table and explicitly confirmed publishing 1–2 ED-leave units as department guidance for the online assessment plus manikin test. The table is reproduced as accessible HTML (8h=2.00 units; 4h=1.00; 3h=0.75; 2h=0.50), while the confirmed range is not presented as a derived rounding formula or formal payroll code. The weekend-entry advice remains optional. No payroll action or training appointment is performed, and the screenshot itself is excluded from public assets.
+
 On 2026-10-28 Roshan explicitly confirmed publishing that the $280 ACLS fee is reimbursable under the $5,000 Annual Professional Allowance and supplied the MD People portal plus physician expense-report guide links. The current guide records his confirmed guidance; internal policy pages were not independently accessible and no additional eligibility or payment rules are inferred. His revised time estimates are 2–5 hours online and 30 minutes for the in-person manikin test, replacing the earlier approximately 20-minute estimate.
 
 On 2026-10-28 Roshan requested a clickable Walnut Awards QR and correction of the lunch icon obscuring same-day text. The QR destination was decoded locally from the original poster, preserving its exact Microsoft Forms URL including origin=QRCode; both a positioned QR link and a visible nomination link open it in a new tab. Read-only verification returned HTTP 200 for the Microsoft Forms shell; no form response was submitted or form-field access inferred. The calendar reserves distinct icon/milestone rows.

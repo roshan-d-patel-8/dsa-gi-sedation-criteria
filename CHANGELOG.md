@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.52.0 — 2026-10-28
+
+- Add an ACLS education-leave section stating that charging 1–2 ED-leave units for the online assessment and manikin test is reasonable and expected, explicitly confirmed by Roshan as department guidance. Preserve existing cost, allowance, registration and training-time facts.
+- Transcribe the supplied conversion table into accessible HTML: 8 hours→2.00 units; 4→1.00; 3→0.75; 2→0.50. Keep the confirmed guidance range distinct from arithmetic; infer no rounding rule or formal payroll code.
+- Add the optional weekend-entry suggestion to avoid overlap/confusion with weekday timesheet entries; no actual timesheet entry or training date is created. Verify exact table/copy, mobile fit, scrolling, links, keyboard/dismissal and existing browser/unit/build regressions. Local focused and full browser suites passed with no console errors; 25 unit tests passed, one unavailable-source skip, production build and diff check passed.
+
 ## 0.51.2 — 2026-10-28
 
 - Add ACLS registration substep 1b: the $280 fee is reimbursable under the $5,000 Annual Professional Allowance, per Roshan’s explicit confirmation. Link the supplied MD People portal and physician expense-report submission guide, both opening in new tabs.

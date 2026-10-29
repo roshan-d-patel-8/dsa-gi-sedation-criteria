@@ -63,6 +63,22 @@ function AclsDialog({ onClose }) {
         <li><span className="acls-step-number" aria-hidden="true">3</span><div><small>Notify us</small><h3>Submit the readiness form</h3><p>After passing the online component, fill out this form to let us know you are eligible for the skills test.</p><a href={readinessUrl} target="_blank" rel="noreferrer">Notify us you’re ready to test <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a></div></li>
         <li><span className="acls-step-number" aria-hidden="true">4</span><div><small>At one of our sites · 30 minutes</small><h3>Complete the computerized manikin test</h3><p>We will arrange a time for you to test at one of our sites. The computerized manikin is the actual final certification test, with no instructor or supervisor present.</p></div></li>
       </ol>
+      <section className="acls-leave-guide" aria-labelledby="acls-leave-title">
+        <small>Department guidance</small>
+        <h3 id="acls-leave-title">ED leave for ACLS training</h3>
+        <p>It is reasonable and expected to charge <strong>1–2 units of ED leave</strong> for the time required to complete both the online assessment and the in-person manikin test.</p>
+        <table className="acls-unit-table">
+          <caption>Hours-to-Units Conversion Table</caption>
+          <thead><tr><th scope="col">Hours</th><th scope="col">Units</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">8 Hours</th><td>2.00 Units</td></tr>
+            <tr><th scope="row">4 Hours</th><td>1.00 Unit</td></tr>
+            <tr><th scope="row">3 Hours</th><td>0.75 Units</td></tr>
+            <tr><th scope="row">2 Hours</th><td>0.50 Units</td></tr>
+          </tbody>
+        </table>
+        <p className="acls-timesheet-suggestion"><strong>Timesheet suggestion:</strong> Consider adding the ED-leave entry on a weekend day so it does not overlap with weekday timesheet entries and cause confusion.</p>
+      </section>
       <p className="acls-finish"><HeartIcon /><strong>Pass the skills test → Complete ACLS certification</strong></p>
     </div>
   </dialog>, document.body);
