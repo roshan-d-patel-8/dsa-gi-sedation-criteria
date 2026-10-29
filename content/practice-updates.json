@@ -1,5 +1,18 @@
 [
   {
+    "id": "2026-10-29-remimazolam-three-steps",
+    "date": "2026-10-29",
+    "title": "Remimazolam: three-step booking workflow",
+    "sourceReleases": [
+      "0.54.1"
+    ],
+    "changes": [
+      "Send a staff message to Roshan to review the case and include the indication for remimazolam.",
+      "Place the case request under monitored anesthesia care (MAC). If the patient does not accept the offered REMI dates, we will offer MAC dates.",
+      "Start booking comments with REMI as the first word. This allows our schedulers to sort the depot and book REMI cases expeditiously."
+    ]
+  },
+  {
     "id": "2026-10-29-adenoma-and-erbe",
     "date": "2026-10-29",
     "fieldGuideSections": [

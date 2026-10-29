@@ -136,9 +136,14 @@ def assert_sedation_clarifications(page, touch=False):
 
     remi_card = page.locator('.tone-card-remi')
     assert remi_card.get_by_role('heading', name='Remimazolam', exact=True).is_visible()
-    assert remi_card.locator('li').first.inner_text().startswith('REMI must be the first word in booking comments.')
-    assert 'Schedulers can sort the depot of open cases for REMI patients and offer available dates.' in remi_card.inner_text()
-    assert 'If the patient is unavailable on those dates, monitored anesthesia care may be offered as a backup.' in remi_card.inner_text()
+    steps = remi_card.locator('ol > li')
+    assert steps.all_text_contents() == [
+        'Send a staff message to Roshan to review the case and include the indication for remimazolam.',
+        'Place the case request under monitored anesthesia care (MAC). If the patient does not accept the offered REMI dates, we will offer MAC dates.',
+        'Start booking comments with REMI as the first word. This allows our schedulers to sort the depot and book REMI cases expeditiously.',
+    ]
+    assert remi_card.locator(':scope > ul > li').count() == 6
+    assert remi_card.locator(':scope > :last-child').get_attribute('class') == 'criteria-card-note'
     remi_trigger = remi_card.get_by_role('button', name='HC Remimazolam case request instructions', exact=True)
     assert remi_trigger.inner_text() == 'HC'
     assert 'criteria-help-sticky' in remi_trigger.get_attribute('class')

@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.54.1 — 2026-10-29
+
+- Reformat Remimazolam booking into three numbered steps: staff-message Roshan for review with the indication; place a MAC case request with MAC dates offered if the patient does not accept REMI dates; start comments with REMI so schedulers can sort the depot and book REMI cases expeditiously.
+- Move the existing HC sticky-note control to the bottom of the card, preserving its exact text, shared interactions and six clinical-selection bullets. Add the revised workflow to the public practice updates.
+- Focused desktop/390/320 browser checks passed for exact step order, bottom placement, hover/focus/tap access, dismissal and viewport fit. Full responsive browser regressions passed with no console errors. Unit tests: 25 passed, one unavailable-source skip; production build and diff check passed.
+
 ## 0.54.0 — 2026-10-29
 
 - Add the exact supplied advanced-adenoma PNG beside Choosing Wisely’s advanced-adenoma guidance, with accessible text and tap/click enlargement using the existing image dialog. Preserve the full image and existing graduation-results graphic. Align the adjacent definition from >10 mm to ≥10 mm, consistent with the supplied visual and USMSTF definition; surveillance intervals and graduation age thresholds remain unchanged.

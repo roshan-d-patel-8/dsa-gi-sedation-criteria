@@ -2255,7 +2255,9 @@ function CriteriaCard({ section, index }) {
     >
       <span className="card-index">{String(index).padStart(2, "0")}</span>
       <h2>{section.title}</h2>
+      {section.steps && <ol className="criteria-booking-steps">{section.steps.map((step) => <li key={step}>{step}</li>)}</ol>}
       <ul>{section.items.map((item) => <CriteriaItem key={typeof item === "string" ? item : item.text} item={item} />)}</ul>
+      {section.note && <div className="criteria-card-note"><CriteriaExplanation explanation={section.note} /></div>}
     </article>
   );
 }
