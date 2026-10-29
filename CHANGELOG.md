@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.51.2 — 2026-10-28
+
+- Add ACLS registration substep 1b: the $280 fee is reimbursable under the $5,000 Annual Professional Allowance, per Roshan’s explicit confirmation. Link the supplied MD People portal and physician expense-report submission guide, both opening in new tabs.
+- Show 2–5 hours for the online assessment and 30 minutes for the in-person manikin test, superseding the prior approximately 20-minute estimate. Preserve Crow Canyon registration selection and team-arranged final testing at one of our sites.
+- Verify exact reimbursement/time copy, all four destination links, substep placement, keyboard focus, mobile scrolling/viewport fit and existing browser/unit/build regressions. Local focused and full browser suites passed with no console errors; 25 unit tests passed, one source-availability skip, production build and diff check passed. Internal policy pages were not independently read; confirmation comes from Roshan, and no other eligibility rules are added.
+
 ## 0.51.1 — 2026-10-28
 
 - Decode the poster QR locally and link its exact Microsoft Forms destination through a clickable QR hotspot and a separate Walnut Awards nomination link. Preserve the source poster bytes. Include links in the dialog keyboard loop and retain new-tab navigation.

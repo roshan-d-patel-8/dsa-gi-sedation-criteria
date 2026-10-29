@@ -6,6 +6,8 @@ from zoneinfo import ZoneInfo
 from playwright.sync_api import sync_playwright, expect
 
 REGISTRATION = 'https://cprvam.com/classes/acls/acls-online-skills/'
+REIMBURSEMENT = 'https://tpmghcm.kp.org/nphrprd/signon.html'
+EXPENSE_GUIDE = 'https://sp-cloud.kp.org/sites/TPMGPhysicianPayroll/SitePages/How-to-Create-an-Expense-Report-for-Physicians.aspx'
 READINESS = 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=xHuKPzfjpUeg_A1RLA4F8Zj47EYlwklOq4uH6MhZSndUMVVaR0VRODBXTVpKVkNUOUpLTzY1TEFSSy4u'
 
 def assert_acls(page, url, output=None, touch=False):
@@ -33,16 +35,20 @@ def assert_acls(page, url, output=None, touch=False):
     expect(trigger).to_have_attribute('aria-expanded', 'true')
     assert dialog.locator('.acls-flow > li').count() == 4
     text = dialog.inner_text()
-    for phrase in ['Highly recommended for Pleasanton physicians.', 'All physicians in our group may opt in', 'MD People portal', '2–5 hours', 'accuracy of your answers', 'After passing the online component', 'About 20 minutes', 'at one of our sites', 'no instructor or supervisor present', 'final certification test']:
+    for phrase in ['Highly recommended for Pleasanton physicians.', 'All physicians in our group may opt in', 'MD People portal', '$280 ACLS fee is reimbursable under the $5,000 Annual Professional Allowance', '2–5 hours', 'accuracy of your answers', 'After passing the online component', '30 minutes', 'at one of our sites', 'no instructor or supervisor present', 'final certification test']:
         assert phrase in text, phrase
     registration = dialog.locator('.acls-flow > li').first
-    substep = registration.get_by_role('list', name='Registration substep', exact=True)
+    substep = registration.get_by_role('list', name='Registration substeps', exact=True)
     expect(substep.get_by_role('heading', name='Choose this location', exact=True)).to_be_visible()
     assert 'On the registration site, select Crow Canyon.' in substep.inner_text()
     assert substep.locator('address').inner_text() == '3 Crow Canyon Court #205\nSan Ramon, CA 94583'
     assert dialog.locator('.acls-flow > li').last.locator('address').count() == 0
+    assert registration.get_by_role('listitem').count() == 2
+    expect(substep.get_by_role('heading', name='Request reimbursement', exact=True)).to_be_visible()
+    assert '20 minutes' not in text
+    assert '2–5 hours for the online assessment and 30 minutes for the in-person computerized manikin test' in text
     # Exercise link activation and the complete exact destination, without submitting forms.
-    for label, href in [('Sign up for ACLS training', REGISTRATION), ('Notify us you’re ready to test', READINESS)]:
+    for label, href in [('Sign up for ACLS training', REGISTRATION), ('Open MD People reimbursement portal', REIMBURSEMENT), ('How to create an expense report for physicians', EXPENSE_GUIDE), ('Notify us you’re ready to test', READINESS)]:
         link = dialog.get_by_role('link', name=label, exact=False)
         assert link.get_attribute('href') == href
         assert link.get_attribute('target') == '_blank'

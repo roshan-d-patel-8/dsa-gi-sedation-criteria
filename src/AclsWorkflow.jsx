@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 const registrationUrl = "https://cprvam.com/classes/acls/acls-online-skills/";
+const reimbursementUrl = "https://tpmghcm.kp.org/nphrprd/signon.html";
+const expenseGuideUrl = "https://sp-cloud.kp.org/sites/TPMGPhysicianPayroll/SitePages/How-to-Create-an-Expense-Report-for-Physicians.aspx";
 const readinessUrl = "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=xHuKPzfjpUeg_A1RLA4F8Zj47EYlwklOq4uH6MhZSndUMVVaR0VRODBXTVpKVkNUOUpLTzY1TEFSSy4u";
 
 function HeartIcon() {
@@ -44,16 +46,22 @@ function AclsDialog({ onClose }) {
     </header>
     <div className="acls-dialog-body">
       <p className="acls-audience" id="acls-audience"><strong>Highly recommended for Pleasanton physicians.</strong> All physicians in our group may opt in if interested in becoming ACLS certified.</p>
-      <p className="acls-overview">Complete the adaptive online course, then take a brief skills test on a computerized manikin to achieve final official certification.</p>
+      <p className="acls-overview">Plan for 2–5 hours for the online assessment and 30 minutes for the in-person computerized manikin test to complete ACLS certification.</p>
       <ol className="acls-flow" aria-label="Four steps to ACLS certification">
-        <li><span className="acls-step-number" aria-hidden="true">1</span><div><small>Register</small><h3>Sign up for ACLS training</h3><p>Register using the training site below. Request reimbursement individually through the MD People portal.</p><a href={registrationUrl} target="_blank" rel="noreferrer">Sign up for ACLS training <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a>
-          <ol className="acls-registration-substeps" aria-label="Registration substep"><li>
+        <li><span className="acls-step-number" aria-hidden="true">1</span><div><small>Register</small><h3>Sign up for ACLS training</h3><p>Register using the training site below. The ACLS fee is $280; submit an individual reimbursement request as described in step 1b.</p><a href={registrationUrl} target="_blank" rel="noreferrer">Sign up for ACLS training <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a>
+          <ol className="acls-registration-substeps" aria-label="Registration substeps"><li>
             <span aria-hidden="true">1a</span><div><h4>Choose this location</h4><p>On the registration site, select <strong>Crow Canyon</strong>.</p><address>3 Crow Canyon Court #205<br />San Ramon, CA 94583</address></div>
+          </li><li>
+            <span aria-hidden="true">1b</span><div><h4>Request reimbursement</h4>
+              <p>The <strong>$280 ACLS fee is reimbursable under the $5,000 Annual Professional Allowance</strong>. Submit your reimbursement request individually through the MD People portal.</p>
+              <a href={reimbursementUrl} target="_blank" rel="noreferrer">Open MD People reimbursement portal <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a>
+              <a href={expenseGuideUrl} target="_blank" rel="noreferrer">How to create an expense report for physicians <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a>
+            </div>
           </li></ol>
         </div></li>
         <li><span className="acls-step-number" aria-hidden="true">2</span><div><small>Online · 2–5 hours</small><h3>Pass the self-paced adaptive course / exam</h3><p>The time varies with the accuracy of your answers. Complete and pass the online component before proceeding.</p></div></li>
         <li><span className="acls-step-number" aria-hidden="true">3</span><div><small>Notify us</small><h3>Submit the readiness form</h3><p>After passing the online component, fill out this form to let us know you are eligible for the skills test.</p><a href={readinessUrl} target="_blank" rel="noreferrer">Notify us you’re ready to test <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a></div></li>
-        <li><span className="acls-step-number" aria-hidden="true">4</span><div><small>At one of our sites · About 20 minutes</small><h3>Complete the computerized manikin test</h3><p>We will arrange a time for you to test at one of our sites. The computerized manikin is the actual final certification test, with no instructor or supervisor present.</p></div></li>
+        <li><span className="acls-step-number" aria-hidden="true">4</span><div><small>At one of our sites · 30 minutes</small><h3>Complete the computerized manikin test</h3><p>We will arrange a time for you to test at one of our sites. The computerized manikin is the actual final certification test, with no instructor or supervisor present.</p></div></li>
       </ol>
       <p className="acls-finish"><HeartIcon /><strong>Pass the skills test → Complete ACLS certification</strong></p>
     </div>

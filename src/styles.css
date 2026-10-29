@@ -1453,3 +1453,5 @@ body.presentation-open { overflow: hidden; }
 .event-qr-link:hover, .event-qr-link:focus-visible { outline: 3px solid #1b75bb; outline-offset: 3px; background: #1b75bb12; }
 .social-event-cta { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; margin-top: 12px; padding: 12px 14px; border: 1px solid #f3b847; border-radius: 10px; background: #fff1ce; color: #193f64; font-size: 14px; font-weight: 850; text-decoration: underline; }
 .social-event-cta:focus-visible { outline: 3px solid #f3b847; outline-offset: 3px; }
+
+.acls-registration-substeps > li + li { margin-top: 14px; padding-top: 14px; border-top: 1px solid #ead6da; }

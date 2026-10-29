@@ -39,6 +39,8 @@ The application is static and has no clinical inputs, backend, database, or anal
 
 ## Publication
 
+On 2026-10-28 Roshan explicitly confirmed publishing that the $280 ACLS fee is reimbursable under the $5,000 Annual Professional Allowance and supplied the MD People portal plus physician expense-report guide links. The current guide records his confirmed guidance; internal policy pages were not independently accessible and no additional eligibility or payment rules are inferred. His revised time estimates are 2–5 hours online and 30 minutes for the in-person manikin test, replacing the earlier approximately 20-minute estimate.
+
 On 2026-10-28 Roshan requested a clickable Walnut Awards QR and correction of the lunch icon obscuring same-day text. The QR destination was decoded locally from the original poster, preserving its exact Microsoft Forms URL including origin=QRCode; both a positioned QR link and a visible nomination link open it in a new tab. Read-only verification returned HTTP 200 for the Microsoft Forms shell; no form response was submitted or form-field access inferred. The calendar reserves distinct icon/milestone rows.
 
 On 2026-10-28 Roshan supplied the Thanksgiving Networking Lunch invitation and requested its event on the public November calendar. Publish the original poster and transcribed invitation for November 2, 2026, 12:30–1:30 PM, Oaks Conference Rooms, featuring The Walnut Awards and nominations via the poster QR code. No QR destination, nomination deadline, attendee or organizer is inferred. Preserve the original 946×729 composition without cropping and the existing same-day Pleasanton Room 2 milestone.
