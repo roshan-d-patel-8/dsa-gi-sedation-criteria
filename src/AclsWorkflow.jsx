@@ -3,7 +3,8 @@ import { createPortal } from "react-dom";
 
 const onsiteTestingNote = "A company representative will bring the manikin to our sites, and we will block time in your daily schedule to complete the test.";
 
-const registrationUrl = "https://cprvam.com/classes/acls/acls-online-skills/";
+const registrationUrl = "https://heartstartcpr.enrollware.com/enroll?id=14815485";
+const deliveryCoordinationNote = "Our department will coordinate the manikin drop-off date and location with Heart Start CPR.";
 const reimbursementUrl = "https://tpmghcm.kp.org/nphrprd/signon.html";
 const expenseGuideUrl = "https://sp-cloud.kp.org/sites/TPMGPhysicianPayroll/SitePages/How-to-Create-an-Expense-Report-for-Physicians.aspx";
 const readinessUrl = "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=xHuKPzfjpUeg_A1RLA4F8Zj47EYlwklOq4uH6MhZSndUMVVaR0VRODBXTVpKVkNUOUpLTzY1TEFSSy4u";
@@ -48,22 +49,22 @@ function AclsDialog({ onClose }) {
     </header>
     <div className="acls-dialog-body">
       <p className="acls-audience" id="acls-audience"><strong>Highly recommended for Pleasanton physicians.</strong> All physicians in our group may opt in if interested in becoming ACLS certified.</p>
-      <p className="acls-overview">Plan for 2–5 hours for the online assessment and 30 minutes for the in-person computerized manikin test to complete ACLS certification.</p>
+      <p className="acls-overview">Department planning estimates: 2–5 hours for the online assessment and 30 minutes for the in-person computerized manikin test to complete ACLS certification.</p>
       <ol className="acls-flow" aria-label="Four steps to ACLS certification">
-        <li><span className="acls-step-number" aria-hidden="true">1</span><div><small>Register</small><h3>Sign up for ACLS training</h3><p>Register using the training site below. The ACLS fee is $280; submit an individual reimbursement request as described in step 1b.</p><a href={registrationUrl} target="_blank" rel="noreferrer">Sign up for ACLS training <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a>
+        <li><span className="acls-step-number" aria-hidden="true">1</span><div><small>Register</small><h3>Sign up for ACLS training</h3><p>Register using the group enrollment link below and share this link with our group. The ACLS fee is $270; submit an individual reimbursement request as described in step 1b.</p><a href={registrationUrl} target="_blank" rel="noreferrer">Sign up for ACLS training <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a>
           <ol className="acls-registration-substeps" aria-label="Registration substeps"><li>
-            <span aria-hidden="true">1a</span><div><h4>Choose this location</h4><p>On the registration site, select <strong>Crow Canyon</strong>.</p><address>3 Crow Canyon Court #205<br />San Ramon, CA 94583</address><p className="acls-location-clarification"><strong>Testing at our sites:</strong> {onsiteTestingNote}</p></div>
+            <span aria-hidden="true">1a</span><div><h4>Receive your HeartCode course</h4><p>As registrations are received, Heart Start CPR will assign the <strong>AHA ACLS HeartCode course</strong>.</p><p className="acls-location-clarification"><strong>Group testing arrangements:</strong> {deliveryCoordinationNote} {onsiteTestingNote}</p></div>
           </li><li>
             <span aria-hidden="true">1b</span><div><h4>Request reimbursement</h4>
-              <p>The <strong>$280 ACLS fee is reimbursable under the $5,000 Annual Professional Allowance</strong>. Submit your reimbursement request individually through the MD People portal.</p>
+              <p>The <strong>$270 ACLS fee is reimbursable under the $5,000 Annual Professional Allowance</strong>. Submit your reimbursement request individually through the MD People portal.</p>
               <a href={reimbursementUrl} target="_blank" rel="noreferrer">Open MD People reimbursement portal <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a>
               <a href={expenseGuideUrl} target="_blank" rel="noreferrer">How to create an expense report for physicians <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a>
             </div>
           </li></ol>
         </div></li>
-        <li><span className="acls-step-number" aria-hidden="true">2</span><div><small>Online · 2–5 hours</small><h3>Pass the self-paced adaptive course / exam</h3><p>The time varies with the accuracy of your answers. Complete and pass the online component before proceeding.</p></div></li>
+        <li><span className="acls-step-number" aria-hidden="true">2</span><div><small>Online · 2–5 hours · Department estimate</small><h3>Pass the self-paced adaptive course / exam</h3><p>Once Heart Start CPR assigns your course, complete and pass the AHA ACLS HeartCode online component before proceeding. The time varies with the accuracy of your answers.</p></div></li>
         <li><span className="acls-step-number" aria-hidden="true">3</span><div><small>Notify us</small><h3>Submit the readiness form</h3><p>After passing the online component, fill out this form to let us know you are eligible for the skills test.</p><a href={readinessUrl} target="_blank" rel="noreferrer">Notify us you’re ready to test <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a></div></li>
-        <li><span className="acls-step-number" aria-hidden="true">4</span><div><small>At one of our sites · 30 minutes</small><h3>Complete the computerized manikin test</h3><p>{onsiteTestingNote} The computerized manikin is the actual final certification test, with no instructor or supervisor present.</p></div></li>
+        <li><span className="acls-step-number" aria-hidden="true">4</span><div><small>Skills test · 30 minutes · Department estimate</small><h3>Complete the computerized manikin test</h3><p>{deliveryCoordinationNote} {onsiteTestingNote} The computerized manikin is the actual final certification test, with no instructor or supervisor present.</p><div className="acls-office-option"><h4>Prefer a vendor office?</h4><p>Providers who prefer to visit a Heart Start CPR office can choose Livermore, San Ramon, Walnut Creek, or the newly opened Concord office.</p></div></div></li>
       </ol>
       <section className="acls-leave-guide" aria-labelledby="acls-leave-title">
         <small>Department guidance</small>

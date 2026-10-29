@@ -1472,3 +1472,6 @@ body.presentation-open { overflow: hidden; }
 }
 
 .acls-flow .acls-location-clarification { margin-top: 12px; padding: 12px; border-left: 3px solid #1b75bb; background: #eef4f9; color: var(--navy); }
+
+.acls-office-option { margin-top: 14px; padding: 12px; border: 1px solid #c8d8e6; border-radius: 8px; background: #eef4f9; }
+.acls-office-option h4 { margin: 0 0 7px; color: var(--navy); font-size: 15px; }

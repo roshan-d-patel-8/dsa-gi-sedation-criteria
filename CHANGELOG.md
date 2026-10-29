@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.53.0 — 2026-10-28
+
+- Replace ACLS registration with the verified Heart Start CPR group enrollment destination from Roshan’s supplied URL Defense link. Group enrollment is on-site; retire the old required Crow Canyon selection/address. Explain group link sharing and assignment of the AHA ACLS HeartCode course as registrations arrive.
+- Add department/vendor coordination of manikin drop-off date/location and optional office visits in Livermore, San Ramon, Walnut Creek or the newly opened Concord office. Retain planned daily-schedule blocks and unsupervised testing; infer no appointment or office address.
+- Update the fee/reimbursement to $270 after Roshan explicitly confirmed the new enrollment-page price. Preserve the $5,000 allowance and ED-leave guidance. Label existing 2–5-hour/30-minute figures as department planning estimates; vendor’s generic ranges differ. Do not turn the listing’s November 30 date into a confirmed test appointment because its class notes say date/location TBD.
+- Verify new registration URL/course sequence, delivery coordination, all four office choices, corrected price, preserved links/ED-leave table, scrolling and desktop/mobile interactions, plus unit/build/browser regressions. Focused and full browser suites passed with no console errors; 25 unit tests passed, one unavailable-source skip, production build and diff check passed.
+
 ## 0.52.2 — 2026-10-28
 
 - Clarify immediately beneath the Crow Canyon registration address that a company representative will bring the manikin to our sites and the department will block time in each physician’s daily schedule for the test. Repeat the same source-backed statement in step 4.
