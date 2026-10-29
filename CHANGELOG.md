@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.53.1 — 2026-10-28
+
+- Clarify that each provider registers individually through the group enrollment link, then Heart Start CPR assigns that provider’s AHA ACLS HeartCode course.
+- Add a progress-update note to the online-course step: Heart Start CPR can provide online-course progress updates after assignment to each provider. Availability does not create automatic monitoring, a public progress tracker or an extra certification step; the readiness form still follows passing.
+- Preserve registration URL, fee/reimbursement, planning estimates, ED-leave guidance, test arrangements and office alternatives. Verify exact copy/step sequence, links, desktop/phone scrolling and existing unit/build/browser regressions. Focused and full browser suites passed with no console errors; 25 unit tests passed, one unavailable-source skip, production build and diff check passed.
+
 ## 0.53.0 — 2026-10-28
 
 - Replace ACLS registration with the verified Heart Start CPR group enrollment destination from Roshan’s supplied URL Defense link. Group enrollment is on-site; retire the old required Crow Canyon selection/address. Explain group link sharing and assignment of the AHA ACLS HeartCode course as registrations arrive.

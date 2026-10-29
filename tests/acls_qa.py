@@ -40,8 +40,15 @@ def assert_acls(page, url, output=None, touch=False):
     registration = dialog.locator('.acls-flow > li').first
     substep = registration.get_by_role('list', name='Registration substeps', exact=True)
     expect(substep.get_by_role('heading', name='Receive your HeartCode course', exact=True)).to_be_visible()
-    assert 'As registrations are received, Heart Start CPR will assign the AHA ACLS HeartCode course.' in substep.inner_text()
+    assert 'As each provider registers, Heart Start CPR will assign that provider the AHA ACLS HeartCode course.' in substep.inner_text()
     assert 'share this link with our group' in registration.inner_text()
+    assert 'Each provider registers individually using the group enrollment link below.' in registration.inner_text()
+    online = dialog.locator('.acls-flow > li').nth(1)
+    assert 'Heart Start CPR can provide online-course progress updates after the course has been assigned to each provider.' in online.inner_text()
+    expect(online.locator('.acls-progress-note')).to_be_visible()
+    assert 'Once Heart Start CPR assigns your course, complete and pass the AHA ACLS HeartCode online component before proceeding.' in online.inner_text()
+    assert 'After passing the online component' in dialog.locator('.acls-flow > li').nth(2).inner_text()
+
     note = 'A company representative will bring the manikin to our sites, and we will block time in your daily schedule to complete the test.'
     coordination = 'Our department will coordinate the manikin drop-off date and location with Heart Start CPR.'
     assert note in substep.locator('li').first.inner_text()
