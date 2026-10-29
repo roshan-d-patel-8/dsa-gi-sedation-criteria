@@ -35,13 +35,21 @@ def assert_acls(page, url, output=None, touch=False):
     expect(trigger).to_have_attribute('aria-expanded', 'true')
     assert dialog.locator('.acls-flow > li').count() == 4
     text = dialog.inner_text()
-    for phrase in ['Highly recommended for Pleasanton physicians.', 'All physicians in our group may opt in', 'MD People portal', '$280 ACLS fee is reimbursable under the $5,000 Annual Professional Allowance', '2–5 hours', 'accuracy of your answers', 'After passing the online component', '30 minutes', 'at one of our sites', 'no instructor or supervisor present', 'final certification test']:
+    for phrase in ['Highly recommended for Pleasanton physicians.', 'All physicians in our group may opt in', 'MD People portal', '$280 ACLS fee is reimbursable under the $5,000 Annual Professional Allowance', '2–5 hours', 'accuracy of your answers', 'After passing the online component', '30 minutes', 'At one of our sites · 30 minutes', 'no instructor or supervisor present', 'final certification test']:
         assert phrase in text, phrase
     registration = dialog.locator('.acls-flow > li').first
     substep = registration.get_by_role('list', name='Registration substeps', exact=True)
     expect(substep.get_by_role('heading', name='Choose this location', exact=True)).to_be_visible()
     assert 'On the registration site, select Crow Canyon.' in substep.inner_text()
     assert substep.locator('address').inner_text() == '3 Crow Canyon Court #205\nSan Ramon, CA 94583'
+    note = 'A company representative will bring the manikin to our sites, and we will block time in your daily schedule to complete the test.'
+    assert note in substep.locator('li').first.inner_text()
+    clarification = substep.locator('.acls-location-clarification')
+    expect(clarification).to_be_visible()
+    assert substep.locator('li').first.evaluate('e=>e.querySelector("address").nextElementSibling.classList.contains("acls-location-clarification")')
+    assert note in dialog.locator('.acls-flow > li').last.inner_text()
+    assert 'no instructor or supervisor present' in dialog.locator('.acls-flow > li').last.inner_text()
+
     assert dialog.locator('.acls-flow > li').last.locator('address').count() == 0
     assert registration.get_by_role('listitem').count() == 2
     expect(substep.get_by_role('heading', name='Request reimbursement', exact=True)).to_be_visible()

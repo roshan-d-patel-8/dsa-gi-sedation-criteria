@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.52.2 — 2026-10-28
+
+- Clarify immediately beneath the Crow Canyon registration address that a company representative will bring the manikin to our sites and the department will block time in each physician’s daily schedule for the test. Repeat the same source-backed statement in step 4.
+- Preserve the 30-minute estimate, unsupervised-test guidance, reimbursement, ED-leave/table and concurrent Remimazolam changes. No actual appointment, schedule block, venue address or coordinator is inferred or created.
+- Verify address-adjacent placement, matching final-step copy, existing links, desktop/mobile fit, scrolling, keyboard/dismissal and existing unit/build/browser regressions. Focused and full browser suites passed with no console errors; 25 unit tests passed, one unavailable-source skip, production build and diff check passed.
+
 ## 0.52.1 — 2026-10-28
 
 - Rename the procedure card to Remimazolam. Add the existing yellow HC sticky note with the exact MAC case-request instruction.

@@ -1470,3 +1470,5 @@ body.presentation-open { overflow: hidden; }
   .acls-unit-table { font-size: 13px; }
   .acls-unit-table th, .acls-unit-table td { padding: 8px; }
 }
+
+.acls-flow .acls-location-clarification { margin-top: 12px; padding: 12px; border-left: 3px solid #1b75bb; background: #eef4f9; color: var(--navy); }

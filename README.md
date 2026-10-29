@@ -39,6 +39,8 @@ The application is static and has no clinical inputs, backend, database, or anal
 
 ## Publication
 
+On 2026-10-28 Roshan clarified the Crow Canyon registration address: a company representative will bring the manikin to our sites and the department will block time in each physician’s daily schedule for testing. This explanation appears directly below that address and in the final testing step. It describes the planned arrangement; no actual appointment or schedule block is created, and delivery does not imply an instructor supervises testing. Existing reimbursement, time and ED-leave guidance remains.
+
 On 2026-10-28 Roshan requested the public Remimazolam booking clarification: file the case request under monitored anesthesia care and start booking comments with REMI so schedulers can sort open cases and offer available REMI dates. If the patient is unavailable, MAC may be offered as a backup. This is booking workflow guidance; existing clinical selection criteria are unchanged. The HC note reuses the existing yellow sticky-note interaction.
 
 On 2026-10-28 Roshan supplied the Hours-to-Units Conversion Table and explicitly confirmed publishing 1–2 ED-leave units as department guidance for the online assessment plus manikin test. The table is reproduced as accessible HTML (8h=2.00 units; 4h=1.00; 3h=0.75; 2h=0.50), while the confirmed range is not presented as a derived rounding formula or formal payroll code. The weekend-entry advice remains optional. No payroll action or training appointment is performed, and the screenshot itself is excluded from public assets.
