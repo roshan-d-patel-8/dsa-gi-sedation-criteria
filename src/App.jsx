@@ -4,6 +4,7 @@ import { POLICY_VERSION, policySections } from "./criteria.js";
 import { coverageSites, inBasketCoverageGroups } from "./podlets.js";
 import { birthdayEvents } from "./birthdays.js";
 import { recentFieldGuideUpdates, fieldGuideUpdateLabel } from "./field-guide-updates.js";
+import { updateDestinations, destinationHref, readSiteLocation } from "./update-links.js";
 import { ergonomicsPresentation } from "./ergonomics.js";
 import { medicationHoldSections } from "./medication-holds.js";
 import { dtmMedicationGroups } from "./dtm.js";
@@ -962,9 +963,9 @@ function CountdownTiles({ items }) {
   );
 }
 
-function Calendar2026({ upcomingCountdowns, today }) {
+function Calendar2026({ upcomingCountdowns, today, initialMonth }) {
   const todayDate = new Date(today).toISOString().slice(0, 10);
-  const [monthPosition, setMonthPosition] = useState(currentCalendarPosition);
+  const [monthPosition, setMonthPosition] = useState(() => Number.isInteger(initialMonth) ? calendarMonths.indexOf(initialMonth) : currentCalendarPosition());
   const [activeResource, setActiveResource] = useState(null);
   const [activeBirthday, setActiveBirthday] = useState(null);
   const [activeSocialEvent, setActiveSocialEvent] = useState(null);
@@ -1177,6 +1178,7 @@ function Calendar2026({ upcomingCountdowns, today }) {
                   <article className="department-resource-entry" key={resource.id}>
                     <button
                       className="department-resource-card"
+                      data-calendar-resource={resource.id}
                       type="button"
                       onClick={() => setActiveResource(resource)}
                       aria-label={`Open ${resource.title} presentation, ${resource.slideTitles.length} slides`}
@@ -1240,7 +1242,7 @@ function CompanionLinks() {
   );
 }
 
-function HomePage() {
+function HomePage({ initialMonth }) {
   const today = usePacificToday();
 
   const upcomingCountdowns = countdowns
@@ -1249,12 +1251,12 @@ function HomePage() {
 
   return (
     <main className="home-page" id="home-panel" role="tabpanel" aria-labelledby="home-tab">
-      <Calendar2026 upcomingCountdowns={upcomingCountdowns} today={today} />
+      <Calendar2026 upcomingCountdowns={upcomingCountdowns} today={today} initialMonth={initialMonth} />
     </main>
   );
 }
 
-function ChangeLogPage({ onClose }) {
+function ChangeLogPage({ onClose, onOpenSection }) {
   return (
     <main className="change-log-page" aria-labelledby="change-log-title">
       <header className="change-log-hero">
@@ -1275,7 +1277,7 @@ function ChangeLogPage({ onClose }) {
 
       <section className="change-log-timeline" aria-label="Chronological practice updates">
         {changeLogEntries.map((entry) => (
-            <article className="change-log-entry" key={entry.id}>
+            <article className="change-log-entry" data-update-entry={entry.id} key={entry.id}>
               <header>
                 <time dateTime={entry.date}>{new Date(`${entry.date}T12:00:00`).toLocaleDateString("en-US", {
                   month: "long",
@@ -1284,7 +1286,13 @@ function ChangeLogPage({ onClose }) {
                 })}</time>
                 <h2>{entry.title}</h2>
               </header>
-              <ul>{entry.changes.map((change) => <li key={change}>{change}</li>)}</ul>
+              <ul>{entry.changes.map((change, index) => <li key={change}>
+                <p className="change-log-copy">{change}</p>
+                <div className="change-log-section-links">{entry.targets[index].map((key) => <a
+                  href={destinationHref(key)} data-update-link={`${entry.id}:${index}:${key}`}
+                  onClick={(event) => onOpenSection(key, event)} key={key}
+                >{updateDestinations[key].label}<span aria-hidden="true"> →</span></a>)}</div>
+              </li>)}</ul>
             </article>
         ))}
       </section>
@@ -2236,6 +2244,7 @@ function CriteriaItem({ item }) {
 function CriteriaCard({ section, index }) {
   return (
     <article
+      id={`criteria-${section.id}`}
       className={`criteria-card tone-card-${section.tone}`}
       style={{ "--order": index, "--delay": `${(index - 1) * 45}ms` }}
     >
@@ -2681,12 +2690,12 @@ function WorkflowScreenshotDialog({ image, onClose }) {
   );
 }
 
-function OrientationMaterials() {
+function OrientationMaterials({ initialSection }) {
   const today = usePacificToday();
   const recentUpdates = useMemo(() => recentFieldGuideUpdates(changeLogEntries, today), [today]);
   const sections = useMemo(() => parseOrientationSource(orientationSource), []);
   const [query, setQuery] = useState("");
-  const [activeSectionId, setActiveSectionId] = useState(sections[0]?.id);
+  const [activeSectionId, setActiveSectionId] = useState(() => sections.find((section) => section.id === sectionId(initialSection || ""))?.id || sections[0]?.id);
   const [showChoosingWiselyInfographic, setShowChoosingWiselyInfographic] = useState(false);
   const [workflowImage, setWorkflowImage] = useState(null);
   const [activePresentation, setActivePresentation] = useState(null);
@@ -3253,8 +3262,12 @@ function ZoomControl({ zoom, onZoomChange }) {
 }
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState("home");
-  const [showChangeLog, setShowChangeLog] = useState(() => new URLSearchParams(window.location.search).get("view") === "change-log");
+  const initialLocation = useMemo(() => readSiteLocation(window.location.search), []);
+  const [activeTab, setActiveTab] = useState(initialLocation.tab);
+  const [showChangeLog, setShowChangeLog] = useState(initialLocation.updates);
+  const [destinationKey, setDestinationKey] = useState(initialLocation.destination);
+  const [destinationError, setDestinationError] = useState(false);
+  const destination = updateDestinations[destinationKey];
   const [zoom, setZoom] = useState(() => {
     const storedZoom = Number(window.localStorage.getItem(zoomStorageKey));
     return zoomLevels.includes(storedZoom) ? storedZoom : 100;
@@ -3268,26 +3281,80 @@ export default function App() {
 
   useEffect(() => {
     const syncView = () => {
-      const open = new URLSearchParams(window.location.search).get("view") === "change-log";
-      setShowChangeLog(open);
-      if (open) setActiveTab("home");
+      const location = readSiteLocation(window.location.search);
+      setShowChangeLog(location.updates);
+      setActiveTab(location.tab);
+      setDestinationKey(location.destination);
+      setDestinationError(false);
     };
     window.addEventListener("popstate", syncView);
     return () => window.removeEventListener("popstate", syncView);
   }, []);
 
+  useEffect(() => {
+    if (!destination || showChangeLog) return undefined;
+    let revealFrame;
+    const frame = requestAnimationFrame(() => {
+      revealFrame = requestAnimationFrame(() => {
+        const target = document.querySelector(destination.selector);
+        if (!target) { setDestinationError(true); return; }
+        // Reveal nested native foldouts before scrolling to their content.
+        for (let node = target; node; node = node.parentElement) {
+          if (node.matches("details")) node.open = true;
+          node.getAnimations().forEach((animation) => animation.finish());
+        }
+        const focusTarget = target.matches("details") ? target.querySelector("summary") : target;
+        target.setAttribute("data-update-arrival", destinationKey);
+        focusTarget.classList.add("section-link-arrival");
+        if (!focusTarget.matches("a, button, input, summary, [tabindex]")) focusTarget.tabIndex = -1;
+        focusTarget.scrollIntoView({ block: "start", inline: "nearest", behavior: "instant" });
+        focusTarget.focus({ preventScroll: true });
+        if (destination.action === "click") target.click();
+      });
+    });
+    return () => { cancelAnimationFrame(frame); cancelAnimationFrame(revealFrame); };
+  }, [destination, destinationKey, showChangeLog]);
+
   const navigateChangeLog = (open) => {
     const url = new URL(window.location.href);
+    url.searchParams.delete("section");
+    url.searchParams.delete("tab");
     if (open) url.searchParams.set("view", "change-log");
     else url.searchParams.delete("view");
     window.history.pushState({}, "", `${url.pathname}${url.search}${url.hash}`);
     setShowChangeLog(open);
+    setDestinationKey(null);
+    setDestinationError(false);
     setActiveTab("home");
     window.scrollTo({ top: 0, behavior: "instant" });
   };
 
+  const navigateSection = (key, event) => {
+    if (event && (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)) return;
+    event?.preventDefault();
+    const selected = updateDestinations[key];
+    const url = new URL(window.location.href);
+    url.searchParams.delete("view");
+    url.searchParams.delete("tab");
+    url.searchParams.set("section", key);
+    window.history.pushState({}, "", `${url.pathname}${url.search}`);
+    setShowChangeLog(false);
+    setActiveTab(selected.tab);
+    setDestinationKey(key);
+    setDestinationError(false);
+  };
+
   const selectTab = (tabId) => {
-    if (showChangeLog) navigateChangeLog(false);
+    if (showChangeLog || destinationKey) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("view");
+      url.searchParams.delete("section");
+      url.searchParams.delete("tab");
+      window.history.pushState({}, "", `${url.pathname}${url.search}`);
+    }
+    setShowChangeLog(false);
+    setDestinationKey(null);
+    setDestinationError(false);
     setActiveTab(tabId);
   };
 
@@ -3319,13 +3386,14 @@ export default function App() {
         data-zoom={zoom}
         style={{ "--page-zoom": zoom / 100, "--page-zoom-width": `${10000 / zoom}%` }}
       >
-        <div className="folder-sheet">
-          {showChangeLog ? <ChangeLogPage onClose={() => navigateChangeLog(false)} /> : (
+        <div className="folder-sheet" key={`${showChangeLog ? "updates" : activeTab}:${destinationKey || ""}`}>
+          {destinationError && <p className="section-link-status" role="status">This section could not be opened. Use the tabs above to continue.</p>}
+          {showChangeLog ? <ChangeLogPage onClose={() => navigateChangeLog(false)} onOpenSection={navigateSection} /> : (
             <>
-              {activeTab === "home" && <HomePage />}
+              {activeTab === "home" && <HomePage initialMonth={destination?.month} />}
               {activeTab === "sedation" && <CriteriaMatrix />}
               {activeTab === "coverage" && <CoveragePodlets />}
-              {activeTab === "orientation" && <OrientationMaterials />}
+              {activeTab === "orientation" && <OrientationMaterials initialSection={destination?.section} />}
               {activeTab === "dtm" && <DtmPage />}
             </>
           )}

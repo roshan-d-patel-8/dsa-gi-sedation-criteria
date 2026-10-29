@@ -37,7 +37,15 @@ The Four Habits companion video uses YouTube’s privacy-enhanced `youtube-nocoo
 
 The application is static and has no clinical inputs, backend, database, or analytics. The application itself sets no cookies; embedded playback is handled by YouTube as described above. Physician portraits and presentation slides are optimized local assets; the site does not fetch external profile data. The original PowerPoint file is not included in the public build. The orientation source contains internal operational details, including facility door codes, phone numbers, inbox names, schedules, named staff, and source-labeled referral contacts. Its original two HealthConnect screenshots were not imported because they show patient names. This exclusion does not apply to the separately authorized October 14 pathology-workflow screenshots described below. The DTM interface contains only the authorized operational guidance and medication matrix; its forwarded-email HTML, spreadsheet, Todoist comments, and other source attachments are excluded from the public build.
 
+## What's New publication standard
+
+Every change bullet in `content/practice-updates.json` must have a matching nonempty `targets` array, containing stable destination keys from `src/update-links.js`. A bullet affecting multiple sections needs all relevant links. Reuse existing keys; keep their public `?section=...` URLs compatible when content moves. Targets select the owning tab, exact Field Guide subsection or assigned calendar month, reveal enclosing foldouts, focus/highlight the changed section, and open notes/panels containing the actual change. The existing history's copy and dates are retained.
+
+Both `npm test` and `npm run build` enforce this contract. Missing, empty or unknown targets stop publication. Before release run `tests/update_links_qa.py` through the existing webapp-testing server helper, then repeat against the deployed site: all published links, every destination on phones, Back/Forward, direct URLs, reload and native new tabs must work. These requirements also live in this repository's `AGENTS.md` for future maintainers.
+
 ## Publication
+
+On 2026-10-29 Roshan made direct links from every What's New item to its changed section standard work and requested retroactive application. All 27 existing entries (40 change bullets) now have 41 section links, including multiple destinations when needed. Clinical copy/dates remain intact. This adds navigation and publication validation, not clinical guidance or a new practice-history entry.
 
 On 2026-10-29 Roshan corrected the Remimazolam presentation: all booking text belongs inside the HC sticky note at the bottom, with the staff-message review/indication sentence as introduction and two numbered actions (MAC request/fallback dates; REMI-first comments/depot rationale). The inline three-step block is removed and the prior one-line note replaced. Six inline clinical bullets, including the sigmoid/pain example, remain. This supersedes earlier descriptions of inline booking steps without changing the underlying workflow.
 

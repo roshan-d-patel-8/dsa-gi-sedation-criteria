@@ -1,11 +1,11 @@
 {
   "name": "dsa-gi-sedation-criteria",
-  "version": "0.54.5",
+  "version": "0.55.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node scripts/validate-updates.mjs && vite build",
     "preview": "vite preview",
     "test": "node --test tests/*.test.mjs"
   },

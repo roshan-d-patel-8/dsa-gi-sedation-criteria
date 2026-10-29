@@ -70,7 +70,8 @@ def assert_change_log(page, base_url, screenshot_path=None):
     for card, entry in zip(cards.all(), entries):
         expect(card.get_by_role("heading", name=entry["title"], exact=True)).to_be_visible()
         assert card.locator("time").get_attribute("datetime") == entry["date"]
-        assert card.locator("li").all_text_contents() == entry["changes"]
+        assert card.locator(".change-log-copy").all_text_contents() == entry["changes"]
+        assert card.locator("[data-update-link]").count() == sum(len(targets) for targets in entry["targets"])
     text = page.locator(".change-log-page").inner_text()
     assert "dysautonomia" in text and "STAT potassium" in text and "PROMPT" in text
     assert not re.search(r"Release \d|hover|viewport|formatting|regression|keyboard|screenshot|pixel|deployment", text, re.I)

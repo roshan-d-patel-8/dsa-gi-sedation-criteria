@@ -5,6 +5,13 @@ tags:
 
 # Changelog
 
+## 0.55.0 — 2026-10-29
+
+- Add named section links to every existing What's New change: 27 entries, 40 bullets and 41 links. Preserve all existing copy, dates and clinical guidance. Route to exact Field Guide subsections, cards, HC notes, medication/In Basket references and correctly dated calendar resources; reveal folded content and focus/highlight the arrival.
+- Add compatible `?section=...` URLs with direct-load/reload/new-tab and browser-history handling. Preserve `?view=change-log` and the compact shared-header button.
+- Make direct section links required standard work in repository AGENTS/README. Both unit tests and production build reject missing, empty, duplicate or unknown destinations; add exhaustive browser link checks for desktop and phones.
+- Validation: 29 unit tests passed, one unavailable-source skip; build/diff check and complete responsive regressions passed with no console errors. Focused browser checks passed all 41 published links on desktop and all 31 distinct destinations at 390/320px, including exact subsections/months, foldout/note/dialog reveal, viewport arrival, Back/Forward, direct reload, keyboard and native new-tab navigation. Original history fields verified unchanged.
+
 ## 0.54.5 — 2026-10-29
 
 - Move all Remimazolam booking instructions inside the existing bottom HC sticky note: review/indication introduction, then numbered MAC-request and REMI-comment actions. Remove the inline three-step block and replace the prior one-line sticky text with Roshan’s exact supplied copy.

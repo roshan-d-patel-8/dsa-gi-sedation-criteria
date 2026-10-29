@@ -8,6 +8,11 @@
     ],
     "changes": [
       "Consider MAC for significant colonoscopy pain under moderate sedation because remimazolam has no analgesic properties. A great example is patients with tightly angulated sigmoid colons and pain sensitivity, best served by monitored anesthesia care."
+    ],
+    "targets": [
+      [
+        "remimazolam"
+      ]
     ]
   },
   {
@@ -21,6 +26,17 @@
       "Send a staff message to Roshan to review the case and include the indication for remimazolam.",
       "Place the case request under monitored anesthesia care (MAC). If the patient does not accept the offered REMI dates, we will offer MAC dates.",
       "Start booking comments with REMI as the first word. This allows our schedulers to sort the depot and book REMI cases expeditiously."
+    ],
+    "targets": [
+      [
+        "remimazolam-booking"
+      ],
+      [
+        "remimazolam-booking"
+      ],
+      [
+        "remimazolam-booking"
+      ]
     ]
   },
   {
@@ -37,6 +53,14 @@
     "changes": [
       "Added an advanced-adenoma definition illustration to Choosing Wisely: conventional adenoma with high-grade dysplasia, villous/tubulovillous histology, or size ≥10 mm. Aligned the existing size definition to ≥10 mm.",
       "Tom’s 22-slide ERBE Settings and Upper EMR presentation is now also available under Field Guide → Procedures. Its July 2026 calendar resource remains available."
+    ],
+    "targets": [
+      [
+        "advanced-adenoma"
+      ],
+      [
+        "procedures-erbe"
+      ]
     ]
   },
   {
@@ -48,11 +72,18 @@
     ],
     "changes": [
       "Place the Remimazolam case request under monitored anesthesia care. Start booking comments with REMI so schedulers can sort open cases and offer available REMI dates. If the patient is unavailable on those dates, monitored anesthesia care may be offered as a backup."
+    ],
+    "targets": [
+      [
+        "remimazolam-booking"
+      ]
     ]
   },
   {
     "id": "2026-10-23-ergonomics-slides",
-    "fieldGuideSections": ["Ergonomics"],
+    "fieldGuideSections": [
+      "Ergonomics"
+    ],
     "date": "2026-10-23",
     "title": "Ergonomics: caring for yourself while caring for patients",
     "sourceReleases": [
@@ -60,21 +91,37 @@
     ],
     "changes": [
       "Added an 18-slide Ergonomics reference under Field Guide → Ergonomics, covering posture, reach, wrist alignment, movement and stretch breaks. The existing early-career ergonomic evaluation guidance remains available."
+    ],
+    "targets": [
+      [
+        "ergonomics"
+      ]
     ]
   },
   {
     "id": "2026-10-19-four-habits-video",
-    "fieldGuideSections": ["Clinic"],
+    "fieldGuideSections": [
+      "Clinic"
+    ],
     "date": "2026-10-19",
     "title": "The Four Habits: patient communication video",
-    "sourceReleases": ["0.45.0"],
+    "sourceReleases": [
+      "0.45.0"
+    ],
     "changes": [
       "Added The Four Habits (featuring Habit Zero!), a 3:39 overview for patient conversations, under Field Guide → Clinic and beside September’s Four Habits slides."
+    ],
+    "targets": [
+      [
+        "four-habits-video"
+      ]
     ]
   },
   {
     "id": "2026-10-14-choosing-wisely-september",
-    "fieldGuideSections": ["Choosing Wisely"],
+    "fieldGuideSections": [
+      "Choosing Wisely"
+    ],
     "date": "2026-10-14",
     "title": "Choosing Wisely: January–September results",
     "sourceReleases": [
@@ -82,6 +129,11 @@
     ],
     "changes": [
       "Updated the Choosing Wisely results banner: 281 patients graduated from surveillance colonoscopy and 56 procedure units freed during January–September 2026."
+    ],
+    "targets": [
+      [
+        "choosing-wisely-results"
+      ]
     ]
   },
   {
@@ -93,6 +145,11 @@
     ],
     "changes": [
       "Added October 14 meeting notes covering TPIP attendance and alternatives, education and voting deadlines, Desktop Medicine and Pleasanton updates, and inpatient OR consent and anesthesia-call reminders."
+    ],
+    "targets": [
+      [
+        "october-meeting-notes"
+      ]
     ]
   },
   {
@@ -104,6 +161,11 @@
     ],
     "changes": [
       "Added Omar Al-Shuwaykh and Aysha Aslam as a new two-physician group in In Basket Podlet Coverage."
+    ],
+    "targets": [
+      [
+        "inbasket-coverage"
+      ]
     ]
   },
   {
@@ -118,11 +180,24 @@
       "Phase I pharmacy refill support went live October 14. Pharmacy may renew eligible GI prescriptions with no refills remaining within the medication-specific limits of the working agreement.",
       "The Desktop Medicine reference covers monitoring requirements, refill limits, exclusions, and when Pharmacy routes a case back to the prescribing provider. Providers remain responsible for reviewing results and deciding whether therapy continues.",
       "Physicians must complete the Pharmacy Authorization Form, Clinician Protocol Authorization. Those who missed the Town Hall should watch the recording. The Desktop Medicine Pharmacy team will manage Clinical Medication Request messages as appropriate; launch feedback goes to DMSpecialtyFeedback@kp.org."
+    ],
+    "targets": [
+      [
+        "desktop-medicine"
+      ],
+      [
+        "desktop-medicine-matrix"
+      ],
+      [
+        "desktop-medicine-readiness"
+      ]
     ]
   },
   {
     "id": "2026-10-14-1",
-    "fieldGuideSections": ["MA-MD"],
+    "fieldGuideSections": [
+      "MA-MD"
+    ],
     "date": "2026-10-14",
     "title": "Pathology result workflow",
     "sourceReleases": [
@@ -131,6 +206,14 @@
     "changes": [
       "Added the MD-MA QuickAction protocol for colonoscopy, EGD, and combined EGD/colonoscopy (TURN) pathology results under Orientation → MA-MD → Messages & Result Notes.",
       "The reference covers MD QuickAction setup and routing to the MA inbox, MA result letters and dotphrases, and the MD’s responsibility to update PROMPT with the surveillance interval."
+    ],
+    "targets": [
+      [
+        "pathology-workflow"
+      ],
+      [
+        "pathology-workflow"
+      ]
     ]
   },
   {
@@ -145,11 +228,24 @@
       "Clarified that, per some anesthesiologists, dysautonomia (HTN) risk is an additional reason for OR scheduling in patients with quadriplegia.",
       "Clarified the rationale for booking peritoneal-dialysis cases at Antioch: Walnut Creek has only three admit bays, limiting its ability to accommodate pre-procedure antibiotics that take over 60 minutes.",
       "In booking comments, state “Patient is on peritoneal dialysis” so schedulers recognize that the case is restricted to Antioch."
+    ],
+    "targets": [
+      [
+        "quadriplegia-note"
+      ],
+      [
+        "dialysis-rationale"
+      ],
+      [
+        "dialysis-booking"
+      ]
     ]
   },
   {
     "id": "2026-10-09-3",
-    "fieldGuideSections": ["Referrals"],
+    "fieldGuideSections": [
+      "Referrals"
+    ],
     "date": "2026-10-09",
     "title": "Outside KP referrals",
     "sourceReleases": [
@@ -157,6 +253,11 @@
     ],
     "changes": [
       "Added KP transplant coordinator alphabet routing, Mayo Clinic Arizona coverage hours, and UCSF Hepatology & Liver Transplant Clinic contacts under Orientation → Referrals → Outside KP Referrals."
+    ],
+    "targets": [
+      [
+        "outside-kp-referrals"
+      ]
     ]
   },
   {
@@ -170,6 +271,15 @@
     "changes": [
       "Corrected the In Basket coverage reference to show each original column as an independent group: eight physician groups and one PA group.",
       "Removed transferred Tom Haddad from active In Basket coverage and the MA-MD Podlets roster. Aysha Aslam remains the standalone provider in her existing Podlets row."
+    ],
+    "targets": [
+      [
+        "inbasket-coverage"
+      ],
+      [
+        "inbasket-coverage",
+        "podlets"
+      ]
     ]
   },
   {
@@ -181,6 +291,11 @@
     ],
     "changes": [
       "Added the supplied blood-thinner and diabetes medication hold instructions, including hold intervals and skipped-dose counts, to Procedure Sedation Criteria → Medication holds (DOAC/Diabetes meds)."
+    ],
+    "targets": [
+      [
+        "medication-holds"
+      ]
     ]
   },
   {
@@ -192,6 +307,11 @@
     ],
     "changes": [
       "Added the Immunotherapy-Induced Hepatitis presentation from the September 21 Topic Based Discussion to September Department meeting resources."
+    ],
+    "targets": [
+      [
+        "september-hepatitis"
+      ]
     ]
   },
   {
@@ -205,6 +325,14 @@
     "changes": [
       "Added ERBE Settings and Upper EMR to July Department meeting resources.",
       "Added The Four Habits communication presentation to September Department meeting resources."
+    ],
+    "targets": [
+      [
+        "july-erbe"
+      ],
+      [
+        "september-four-habits"
+      ]
     ]
   },
   {
@@ -217,6 +345,14 @@
     "changes": [
       "Added the GI Choosing Wisely consensus reference with age-based recommendations, risk/benefit discussion, patient messaging, procedure-note language, and PROMPT outreach guidance.",
       "The reference includes DSAGIGRADNOTE, DSAGIGRADLETTER, DSAGIGRADMA, and DSAGIGRADDC."
+    ],
+    "targets": [
+      [
+        "choosing-wisely"
+      ],
+      [
+        "choosing-wisely"
+      ]
     ]
   },
   {
@@ -230,6 +366,14 @@
     "changes": [
       "Added a reference for nine HealthConnect pool addresses and their uses under Orientation → Communication → Pool Party. The three infusion RN destinations are labeled reference-only.",
       "Consolidated clinician email contacts, including the centralized physician schedule and time-off request mailbox, under Orientation → Communication → Email Directory."
+    ],
+    "targets": [
+      [
+        "pool-party"
+      ],
+      [
+        "email-directory"
+      ]
     ]
   },
   {
@@ -241,6 +385,11 @@
     ],
     "changes": [
       "Updated Walnut Creek Pod 03: Martha replaces Natalie in the MA roster."
+    ],
+    "targets": [
+      [
+        "walnut-creek-podlets"
+      ]
     ]
   },
   {
@@ -252,6 +401,11 @@
     ],
     "changes": [
       "Added the DSA GI Skills Day 2025 recording as a procedure education reference, available under Orientation → Procedures → Skills Day."
+    ],
+    "targets": [
+      [
+        "skills-day"
+      ]
     ]
   },
   {
@@ -264,6 +418,11 @@
     ],
     "changes": [
       "Added the KPATHS Facility Information directory under Orientation → Contacts. Access requires a KP device on site or GlobalProtect offsite."
+    ],
+    "targets": [
+      [
+        "facility-directory"
+      ]
     ]
   },
   {
@@ -276,6 +435,14 @@
     "changes": [
       "Clarified that peritoneal-dialysis cases must be booked at Antioch only, not Walnut Creek.",
       "All hemodialysis and peritoneal-dialysis patients require a STAT potassium order."
+    ],
+    "targets": [
+      [
+        "dialysis-rationale"
+      ],
+      [
+        "dialysis-booking"
+      ]
     ]
   },
   {
@@ -287,6 +454,11 @@
     ],
     "changes": [
       "Added the supplied orientation reference covering scheduling, communication, contacts, referrals, clinic, procedures, orders, OR workflow, ergonomics, and MA-MD partnership."
+    ],
+    "targets": [
+      [
+        "field-guide"
+      ]
     ]
   },
   {
@@ -298,6 +470,11 @@
     ],
     "changes": [
       "Added the 2026 Deer Valley and Walnut Creek MA-MD pod assignments, including clinician membership, MA responsibilities, workday patterns, and coverage arrangements."
+    ],
+    "targets": [
+      [
+        "podlets"
+      ]
     ]
   },
   {
@@ -309,6 +486,11 @@
     ],
     "changes": [
       "Restored the complete high-dose and long-acting narcotic MAC criteria in the sedation reference."
+    ],
+    "targets": [
+      [
+        "mac-opioids"
+      ]
     ]
   },
   {
@@ -320,6 +502,11 @@
     ],
     "changes": [
       "Added the procedure sedation criteria reference, including procedure and BMI thresholds, cardiopulmonary and medication considerations, dialysis, OR/POM routing, and Pleasanton eligibility."
+    ],
+    "targets": [
+      [
+        "sedation"
+      ]
     ]
   }
 ]

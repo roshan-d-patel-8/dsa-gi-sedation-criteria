@@ -1021,6 +1021,14 @@ body.presentation-open { overflow: hidden; }
 .change-log-entry h2 { margin: 0; color: var(--navy); font-size: 15px; line-height: 1.35; }
 .change-log-entry ul { margin: 0; padding: 14px 18px 15px 35px; display: grid; gap: 7px; }
 .change-log-entry li { padding-left: 3px; color: #3f556b; font-size: 11px; font-weight: 670; line-height: 1.52; }
+.change-log-copy { margin: 0; }
+.change-log-section-links { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 5px; }
+.change-log-section-links a { min-height: 44px; display: inline-flex; align-items: center; gap: 4px; color: var(--way); font-size: 11px; font-weight: 850; text-decoration: underline; text-underline-offset: 3px; }
+.change-log-section-links a:hover { color: var(--navy); }
+.change-log-section-links a:focus-visible { outline: 3px solid var(--way); outline-offset: 3px; border-radius: 3px; }
+.section-link-arrival { scroll-margin-top: 160px; outline: 3px solid var(--gold); outline-offset: 4px; }
+.section-link-status { margin: 16px; padding: 14px; border: 1px solid var(--gold); border-radius: 10px; color: var(--navy); background: #fff7d7; }
+
 
 @keyframes card-in { from { opacity: 0; transform: translateY(8px) scale(.995); } to { opacity: 1; transform: none; } }
 @keyframes pod-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
