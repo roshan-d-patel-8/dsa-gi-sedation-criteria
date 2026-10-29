@@ -1249,7 +1249,6 @@ function HomePage({ onOpenChangeLog }) {
 
   return (
     <main className="home-page" id="home-panel" role="tabpanel" aria-labelledby="home-tab">
-      <Calendar2026 upcomingCountdowns={upcomingCountdowns} today={today} />
       <nav className="change-log-portal" aria-label="Site updates">
         <a
           href="?view=change-log"
@@ -1260,10 +1259,11 @@ function HomePage({ onOpenChangeLog }) {
           }}
         >
           <span aria-hidden="true">↗</span>
-          <span><strong>Change Log</strong><small>Practice updates and clinical references.</small></span>
+          <span><strong>What's New</strong><small>Practice updates and clinical references.</small></span>
           <b aria-hidden="true">View updates →</b>
         </a>
       </nav>
+      <Calendar2026 upcomingCountdowns={upcomingCountdowns} today={today} />
     </main>
   );
 }
@@ -1283,7 +1283,7 @@ function ChangeLogPage({ onClose }) {
           <span aria-hidden="true">←</span> Back to Calendar
         </a>
         <span>DSA GI Resources · Practice updates</span>
-        <h1 id="change-log-title">Change Log</h1>
+        <h1 id="change-log-title">What's New</h1>
         <p>Clinical guidance, workflow changes, and new practice references—newest first. Dates indicate when this reference was updated.</p>
       </header>
 
@@ -3332,7 +3332,7 @@ export default function App() {
         </div>
 
         <footer className="site-footer">
-          <div><strong>DSA GI · Trust Your Gut</strong><span>{showChangeLog ? "Change Log" : isSedation ? `Sedation Criteria · Revised ${POLICY_VERSION}` : activeTabLabel}</span></div>
+          <div><strong>DSA GI · Trust Your Gut</strong><span>{showChangeLog ? "What's New" : isSedation ? `Sedation Criteria · Revised ${POLICY_VERSION}` : activeTabLabel}</span></div>
           <p>The DSA Way · Physician-led, team-owned clinical operations.</p>
         </footer>
       </div>

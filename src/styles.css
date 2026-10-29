@@ -998,15 +998,15 @@ body.presentation-open { overflow: hidden; }
 .chicklet:focus-visible { outline: none; }
 .chicklet:focus-visible .chicklet-icon { outline: 3px solid rgba(27, 117, 187, .45); outline-offset: 3px; }
 
-.change-log-portal { margin: 18px 0 4px; }
+.change-log-portal { margin: 0 0 18px; }
 .change-log-portal a { min-height: 82px; padding: 16px 18px; display: grid; grid-template-columns: 42px minmax(0, 1fr) auto; align-items: center; gap: 14px; border: 1px solid rgba(27, 117, 187, .22); border-radius: 14px; background: linear-gradient(120deg, rgba(229, 241, 249, .8), rgba(255, 255, 255, .96)); color: var(--navy); text-decoration: none; box-shadow: 0 8px 20px rgba(20, 55, 88, .07); transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease; }
 .change-log-portal a:hover { border-color: rgba(27, 117, 187, .55); box-shadow: 0 12px 26px rgba(20, 55, 88, .12); transform: translateY(-1px); }
 .change-log-portal a:focus-visible { outline: 3px solid rgba(27, 117, 187, .3); outline-offset: 3px; }
-.change-log-portal > a > span:first-child { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 11px; background: var(--blue); color: white; font-size: 18px; font-weight: 950; }
+.change-log-portal > a > span:first-child { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 11px; background: var(--way); color: white; font-size: 18px; font-weight: 950; }
 .change-log-portal > a > span:nth-child(2) { display: grid; gap: 4px; }
 .change-log-portal strong { font-size: 17px; letter-spacing: -.015em; }
 .change-log-portal small { color: #647a91; font-size: 10px; font-weight: 760; line-height: 1.35; }
-.change-log-portal b { color: var(--blue); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; }
+.change-log-portal b { color: var(--way); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; }
 .change-log-page { min-height: 60vh; padding: clamp(24px, 4vw, 54px); background: linear-gradient(180deg, #f6f9fc 0, #fff 260px); }
 .change-log-hero { max-width: 980px; margin: 0 auto 28px; }
 .change-log-hero > a { min-height: 44px; padding: 0 2px; display: inline-flex; align-items: center; gap: 8px; color: var(--blue); font-size: 11px; font-weight: 900; text-decoration: none; }

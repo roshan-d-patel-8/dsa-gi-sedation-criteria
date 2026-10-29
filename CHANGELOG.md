@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.54.3 — 2026-10-29
+
+- Rename the public Change Log link, page heading and footer label to What's New. Move its existing full-width link above the Home countdown/calendar so it is visible without scrolling and easy to click or tap.
+- Preserve the existing ?view=change-log address, browser history/return navigation and all clinician practice-update entries. This UI-only release adds no public practice update.
+- Focused 1440/390/320 checks passed top-of-screen visibility, unobstructed click target, direct links, full history, browser navigation and return behavior. Full responsive browser regressions passed with no console errors; 25 unit tests passed, one unavailable-source skip; production build and diff check passed.
+
 ## 0.54.2 — 2026-10-29
 
 - Append Roshan’s exact tightly angulated sigmoid/pain-sensitivity example to the existing Remimazolam colonoscopy-pain/MAC bullet. Preserve the three booking steps, bottom HC note and all other criteria.

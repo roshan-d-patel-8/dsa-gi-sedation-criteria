@@ -5,7 +5,7 @@ tags:
 
 # DSA GI Resources
 
-A compact, tabbed DSA GI clinical-operations reference. The primary Calendar tab carries compact Pacific-time countdown tiles, a navigable January–December 2026 milestone calendar, month-specific department meeting resources, a chicklet-style app icon linking to the password-gated DSA GI Conjunctions companion site, and a Change Log link to the chronological practice updates. The calendar opens to the current Pacific-time month. The remaining tabs contain the August 2026 anesthesia procedure criteria, DSA GI MA–MD pod assignments, a searchable New Physician Orientation field guide, and the Phase I Desktop Medicine pharmacy refill agreement. Its Referrals section includes regional routes, DSA GI subspecialists, and a source-labeled Outside KP Referrals reference for transplant coordination.
+A compact, tabbed DSA GI clinical-operations reference. The primary Calendar tab carries compact Pacific-time countdown tiles, a navigable January–December 2026 milestone calendar, month-specific department meeting resources, a chicklet-style app icon linking to the password-gated DSA GI Conjunctions companion site, and a prominent What's New link above the countdown/calendar to the chronological practice updates. The calendar opens to the current Pacific-time month. The remaining tabs contain the August 2026 anesthesia procedure criteria, DSA GI MA–MD pod assignments, a searchable New Physician Orientation field guide, and the Phase I Desktop Medicine pharmacy refill agreement. Its Referrals section includes regional routes, DSA GI subspecialists, and a source-labeled Outside KP Referrals reference for transplant coordination.
 
 ## Live site
 
@@ -38,6 +38,8 @@ The Four Habits companion video uses YouTube’s privacy-enhanced `youtube-nocoo
 The application is static and has no clinical inputs, backend, database, or analytics. The application itself sets no cookies; embedded playback is handled by YouTube as described above. Physician portraits and presentation slides are optimized local assets; the site does not fetch external profile data. The original PowerPoint file is not included in the public build. The orientation source contains internal operational details, including facility door codes, phone numbers, inbox names, schedules, named staff, and source-labeled referral contacts. Its original two HealthConnect screenshots were not imported because they show patient names. This exclusion does not apply to the separately authorized October 14 pathology-workflow screenshots described below. The DTM interface contains only the authorized operational guidance and medication matrix; its forwarded-email HTML, spreadsheet, Todoist comments, and other source attachments are excluded from the public build.
 
 ## Publication
+
+On 2026-10-29 Roshan requested renaming Change Log to What's New and moving the link near the top. The existing full-width link now appears first on Home above the countdown/calendar; the view heading and footer use the same name. The ?view=change-log address and complete history remain compatible. This navigation-only update adds no clinician practice-history entry or operational guidance.
 
 On 2026-10-29 Roshan requested appending this exact example to the existing Remimazolam colonoscopy-pain/MAC bullet: “A great example is patients with tightly angulated sigmoid colons and pain sensitivity, best served by monitored anesthesia care.” This is his supplied clinical example; the existing rationale and booking workflow remain in place.
 

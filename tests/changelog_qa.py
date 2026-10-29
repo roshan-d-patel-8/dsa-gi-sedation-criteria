@@ -1,4 +1,4 @@
-"""Focused local/live checks for the public Change Log view."""
+"""Focused local/live checks for the public What's New view."""
 import json
 import os
 import re
@@ -32,16 +32,23 @@ def assert_change_log(page, base_url, screenshot_path=None):
 
     portal = page.get_by_role("navigation", name="Site updates")
     link = portal.locator("a")
-    link.scroll_into_view_if_needed()
     expect(link).to_be_visible()
-    expect(link).to_contain_text("Change Log")
+    expect(link).to_contain_text("What's New")
     expect(link).to_contain_text("Practice updates and clinical references.")
     assert link.bounding_box()["height"] >= 44
+    box = link.bounding_box()
+    assert box["y"] >= page.locator('.site-header').bounding_box()["height"] - 1
+    assert box["y"] + box["height"] <= page.viewport_size["height"], "What's New must be visible without scrolling"
+    assert portal.evaluate("el => el === el.parentElement.firstElementChild")
+    assert box["y"] + box["height"] <= page.locator('.year-calendar').bounding_box()["y"]
+    assert page.evaluate('point => document.elementFromPoint(...point).closest("a") === document.querySelector(".change-log-portal a")', [box["x"] + box["width"] / 2, box["y"] + box["height"] / 2])
     assert page.locator(".site-footer").bounding_box()["y"] >= portal.bounding_box()["y"] + portal.bounding_box()["height"]
 
+    if screenshot_path:
+        page.screenshot(path=Path(screenshot_path).with_name(f"whats-new-home-{page.viewport_size['width']}.png"))
     link.click()
     expect(page).to_have_url(re.compile(r"[?&]view=change-log(?:&|$)"))
-    expect(page.get_by_role("heading", name="Change Log", exact=True)).to_be_visible()
+    expect(page.get_by_role("heading", name="What's New", exact=True)).to_be_visible()
     expect(page.get_by_text("Clinical guidance, workflow changes, and new practice references—newest first. Dates indicate when this reference was updated.", exact=True)).to_be_visible()
 
     entries = expected_entries()
@@ -65,7 +72,7 @@ def assert_change_log(page, base_url, screenshot_path=None):
     expect(page.locator(".year-calendar")).to_be_visible()
     assert "view=change-log" not in page.url
     page.go_forward()
-    expect(page.get_by_role("heading", name="Change Log", exact=True)).to_be_visible()
+    expect(page.get_by_role("heading", name="What's New", exact=True)).to_be_visible()
     expect(page.get_by_role("tab", name="Calendar", exact=False)).to_have_attribute("aria-selected", "true")
     page.get_by_role("link", name="Back to Calendar", exact=False).click()
     expect(page.locator(".year-calendar")).to_be_visible()
@@ -73,7 +80,7 @@ def assert_change_log(page, base_url, screenshot_path=None):
 
     page.goto(url_with_view(base_url, True))
     page.wait_for_load_state("networkidle")
-    expect(page.get_by_role("heading", name="Change Log", exact=True)).to_be_visible()
+    expect(page.get_by_role("heading", name="What's New", exact=True)).to_be_visible()
     assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
     page.get_by_role("link", name="Back to Calendar", exact=False).click()
     expect(page.locator(".year-calendar")).to_be_visible()
@@ -93,4 +100,4 @@ if __name__ == "__main__":
             assert_change_log(page, base_url, output / f"change-log-{width}.png")
             assert not errors, errors
         browser.close()
-    print("Change Log QA passed: Home placement, maintained newest-first history, direct link, browser navigation, return link, desktop/touch layout, viewport fit, and no console/page errors.")
+    print("What's New QA passed: top-of-Home placement without scrolling, maintained newest-first history, direct link, browser navigation, return link, desktop/touch layout, viewport fit, and no console/page errors.")
