@@ -1240,7 +1240,7 @@ function CompanionLinks() {
   );
 }
 
-function HomePage({ onOpenChangeLog }) {
+function HomePage() {
   const today = usePacificToday();
 
   const upcomingCountdowns = countdowns
@@ -1249,20 +1249,6 @@ function HomePage({ onOpenChangeLog }) {
 
   return (
     <main className="home-page" id="home-panel" role="tabpanel" aria-labelledby="home-tab">
-      <nav className="change-log-portal" aria-label="Site updates">
-        <a
-          href="?view=change-log"
-          onClick={(event) => {
-            if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-            event.preventDefault();
-            onOpenChangeLog();
-          }}
-        >
-          <span aria-hidden="true">↗</span>
-          <span><strong>What's New</strong><small>Practice updates and clinical references.</small></span>
-          <b aria-hidden="true">View updates →</b>
-        </a>
-      </nav>
       <Calendar2026 upcomingCountdowns={upcomingCountdowns} today={today} />
     </main>
   );
@@ -3177,6 +3163,10 @@ function DtmPage() {
 }
 
 function FolderTabs({ activeTab, onChange }) {
+  useEffect(() => {
+    document.getElementById(`${activeTab}-tab`)?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "instant" });
+  }, [activeTab]);
+
   function handleKeyDown(event, currentIndex) {
     if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
     event.preventDefault();
@@ -3309,7 +3299,18 @@ export default function App() {
           <img className="brand-mark" src={`${import.meta.env.BASE_URL}dsa-gi-logo.png`} alt="DSA GI logo" />
           <span><strong>DSA GI</strong><small>Resources</small></span>
         </div>
-        <FolderTabs activeTab={activeTab} onChange={selectTab} />
+        <div className="header-navigation">
+          <nav className="header-updates" aria-label="Site updates">
+            <a href="?view=change-log" aria-current={showChangeLog ? "page" : undefined}
+              onClick={(event) => {
+                if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                event.preventDefault();
+                navigateChangeLog(true);
+              }}
+            >What's New</a>
+          </nav>
+          <FolderTabs activeTab={activeTab} onChange={selectTab} />
+        </div>
         <CompanionLinks />
         <ZoomControl zoom={zoom} onZoomChange={setZoom} />
       </header>
@@ -3322,7 +3323,7 @@ export default function App() {
         <div className="folder-sheet">
           {showChangeLog ? <ChangeLogPage onClose={() => navigateChangeLog(false)} /> : (
             <>
-              {activeTab === "home" && <HomePage onOpenChangeLog={() => navigateChangeLog(true)} />}
+              {activeTab === "home" && <HomePage />}
               {activeTab === "sedation" && <CriteriaMatrix />}
               {activeTab === "coverage" && <CoveragePodlets />}
               {activeTab === "orientation" && <OrientationMaterials />}

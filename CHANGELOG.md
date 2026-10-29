@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.54.4 — 2026-10-29
+
+- Replace the Home-only What's New banner with a compact, 44px-high link in the shared sticky header beside the tab strip. Keep it visible and clickable from Calendar, Sedation, Podlets, Field Guide and Desktop Medicine, including while scrolled.
+- Retain the complete history, ?view=change-log compatibility and existing browser/return navigation. Keep header controls separate and tab labels within the available horizontal scrolling area. No public practice-update entry or operational-content change.
+- Focused 1440/390/320 checks passed actual access from every tab while scrolled, header target visibility/hit testing, selected-tab visibility, exact full history, direct link and browser/return navigation. Full responsive regressions passed with no console errors; 25 unit tests passed, one unavailable-source skip; build and diff check passed.
+
 ## 0.54.3 — 2026-10-29
 
 - Rename the public Change Log link, page heading and footer label to What's New. Move its existing full-width link above the Home countdown/calendar so it is visible without scrolling and easy to click or tap.
