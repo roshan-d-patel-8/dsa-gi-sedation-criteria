@@ -24,7 +24,7 @@ CARD_HEADINGS = [
     "MAC + POM",
     "Operating room",
     "Pleasanton exclusions",
-    "Remimazolam considerations",
+    "Remimazolam",
 ]
 PROVIDERS = [
     "Suk Seo",

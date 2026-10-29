@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.52.1 — 2026-10-28
+
+- Rename the procedure card to Remimazolam. Add the existing yellow HC sticky note with the exact MAC case-request instruction.
+- Require REMI as the first word in booking comments so schedulers can sort open cases and offer available REMI dates; MAC may be offered as a backup if the patient is unavailable. Preserve all existing clinical criteria.
+- Local QA passed: 25 unit tests, one unavailable-source skip, production build, diff check, focused desktop/390/320 hover/keyboard/tap/dismissal and exact-copy checks, and the complete responsive browser suite with no console errors. Preserve all existing selection criteria; verify Pages and live behavior after push.
+
 ## 0.52.0 — 2026-10-28
 
 - Add an ACLS education-leave section stating that charging 1–2 ED-leave units for the online assessment and manikin test is reasonable and expected, explicitly confirmed by Roshan as department guidance. Preserve existing cost, allowance, registration and training-time facts.

@@ -152,9 +152,20 @@ export const policySections = [
   },
   {
     id: "remimazolam",
-    title: "Remimazolam considerations",
+    title: "Remimazolam",
     tone: "remi",
     items: [
+      {
+        text: "REMI must be the first word in booking comments.",
+        note: {
+          id: "remimazolam-hc-booking",
+          label: "HC Remimazolam case request instructions",
+          icon: "HC",
+          tone: "sticky",
+          text: "Please place the case request under monitored anesthesia care.",
+        },
+      },
+      "Schedulers can sort the depot of open cases for REMI patients and offer available dates. If the patient is unavailable on those dates, monitored anesthesia care may be offered as a backup.",
       "High-dose or long-acting opiates.",
       "Failed moderate sedation in the past.",
       "Very heavy alcohol or drug use.",

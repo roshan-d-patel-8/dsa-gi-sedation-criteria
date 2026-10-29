@@ -1,5 +1,16 @@
 [
   {
+    "id": "2026-10-28-remimazolam-booking",
+    "date": "2026-10-28",
+    "title": "Remimazolam booking instructions",
+    "sourceReleases": [
+      "0.52.1"
+    ],
+    "changes": [
+      "Place the Remimazolam case request under monitored anesthesia care. Start booking comments with REMI so schedulers can sort open cases and offer available REMI dates. If the patient is unavailable on those dates, monitored anesthesia care may be offered as a backup."
+    ]
+  },
+  {
     "id": "2026-10-23-ergonomics-slides",
     "fieldGuideSections": ["Ergonomics"],
     "date": "2026-10-23",

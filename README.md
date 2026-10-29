@@ -39,6 +39,8 @@ The application is static and has no clinical inputs, backend, database, or anal
 
 ## Publication
 
+On 2026-10-28 Roshan requested the public Remimazolam booking clarification: file the case request under monitored anesthesia care and start booking comments with REMI so schedulers can sort open cases and offer available REMI dates. If the patient is unavailable, MAC may be offered as a backup. This is booking workflow guidance; existing clinical selection criteria are unchanged. The HC note reuses the existing yellow sticky-note interaction.
+
 On 2026-10-28 Roshan supplied the Hours-to-Units Conversion Table and explicitly confirmed publishing 1–2 ED-leave units as department guidance for the online assessment plus manikin test. The table is reproduced as accessible HTML (8h=2.00 units; 4h=1.00; 3h=0.75; 2h=0.50), while the confirmed range is not presented as a derived rounding formula or formal payroll code. The weekend-entry advice remains optional. No payroll action or training appointment is performed, and the screenshot itself is excluded from public assets.
 
 On 2026-10-28 Roshan explicitly confirmed publishing that the $280 ACLS fee is reimbursable under the $5,000 Annual Professional Allowance and supplied the MD People portal plus physician expense-report guide links. The current guide records his confirmed guidance; internal policy pages were not independently accessible and no additional eligibility or payment rules are inferred. His revised time estimates are 2–5 hours online and 30 minutes for the in-person manikin test, replacing the earlier approximately 20-minute estimate.

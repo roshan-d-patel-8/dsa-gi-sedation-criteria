@@ -134,6 +134,38 @@ def assert_sedation_clarifications(page, touch=False):
         assert quad_trigger.evaluate('el => el === document.activeElement')
 
 
+    remi_card = page.locator('.tone-card-remi')
+    assert remi_card.get_by_role('heading', name='Remimazolam', exact=True).is_visible()
+    assert remi_card.locator('li').first.inner_text().startswith('REMI must be the first word in booking comments.')
+    assert 'Schedulers can sort the depot of open cases for REMI patients and offer available dates.' in remi_card.inner_text()
+    assert 'If the patient is unavailable on those dates, monitored anesthesia care may be offered as a backup.' in remi_card.inner_text()
+    remi_trigger = remi_card.get_by_role('button', name='HC Remimazolam case request instructions', exact=True)
+    assert remi_trigger.inner_text() == 'HC'
+    assert 'criteria-help-sticky' in remi_trigger.get_attribute('class')
+    remi_trigger.scroll_into_view_if_needed()
+    if touch: remi_trigger.tap()
+    else: remi_trigger.hover()
+    remi_note = page.locator('#remimazolam-hc-booking')
+    remi_note.wait_for(state='visible')
+    assert remi_note.inner_text() == 'Please place the case request under monitored anesthesia care.'
+    assert 'criteria-explanation-sticky' in remi_note.get_attribute('class')
+    box = remi_note.bounding_box()
+    assert box['x'] >= 0 and box['x'] + box['width'] <= page.viewport_size['width'] + 1
+    assert box['y'] >= 0 and box['y'] + box['height'] <= page.viewport_size['height'] + 1
+    assert page.evaluate('document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1')
+    page.screenshot(path=output / f"remimazolam-hc-{page.viewport_size['width']}.png")
+    page.keyboard.press('Escape'); assert remi_note.count() == 0
+    if touch:
+        remi_trigger.tap(); assert remi_note.is_visible()
+        remi_trigger.tap(); assert remi_note.count() == 0
+        remi_trigger.tap(); remi_card.get_by_role('heading').tap(); assert remi_note.count() == 0
+    else:
+        page.mouse.move(0, 0); remi_trigger.focus(); assert remi_note.is_visible()
+        assert remi_trigger.get_attribute('aria-describedby') == 'remimazolam-hc-booking'
+        page.keyboard.press('Escape'); assert remi_note.count() == 0
+        assert remi_trigger.evaluate('el => el === document.activeElement')
+
+
 if __name__ == '__main__':
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
