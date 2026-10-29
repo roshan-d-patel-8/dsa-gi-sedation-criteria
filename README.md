@@ -39,6 +39,8 @@ The application is static and has no clinical inputs, backend, database, or anal
 
 ## Publication
 
+On 2026-10-29 Roshan corrected the Remimazolam presentation: all booking text belongs inside the HC sticky note at the bottom, with the staff-message review/indication sentence as introduction and two numbered actions (MAC request/fallback dates; REMI-first comments/depot rationale). The inline three-step block is removed and the prior one-line note replaced. Six inline clinical bullets, including the sigmoid/pain example, remain. This supersedes earlier descriptions of inline booking steps without changing the underlying workflow.
+
 On 2026-10-29 Roshan refined What's New to a compact button in the top header available from every tab. The shared sticky header now holds the 44px-high link beside the tab strip, replacing the Home-only banner. Existing update history and ?view=change-log links remain compatible. This supersedes the immediately prior Home placement; no clinical history entry or operational fact is added.
 
 On 2026-10-29 Roshan requested renaming Change Log to What's New and moving the link near the top. The existing full-width link now appears first on Home above the countdown/calendar; the view heading and footer use the same name. The ?view=change-log address and complete history remain compatible. This navigation-only update adds no clinician practice-history entry or operational guidance.

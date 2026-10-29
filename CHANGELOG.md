@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.54.5 — 2026-10-29
+
+- Move all Remimazolam booking instructions inside the existing bottom HC sticky note: review/indication introduction, then numbered MAC-request and REMI-comment actions. Remove the inline three-step block and replace the prior one-line sticky text with Roshan’s exact supplied copy.
+- Preserve all six inline clinical bullets, including the sigmoid/pain example, and the shared-header What’s New button. Presentation correction only; no clinical/booking rule or public practice-history addition.
+- Focused desktop/390/320 checks passed exact multiline note text, absence of inline booking steps, bottom trigger, six clinical bullets, hover/focus/tap, dismissal and viewport fit. Unit tests: 25 passed, one unavailable-source skip; build/diff check passed. Full responsive functional assertions completed; its final console gate reported the previously observed compute-pressure permissions-policy diagnostic. No full-suite console pass claimed.
+
 ## 0.54.4 — 2026-10-29
 
 - Replace the Home-only What's New banner with a compact, 44px-high link in the shared sticky header beside the tab strip. Keep it visible and clickable from Calendar, Sedation, Podlets, Field Guide and Desktop Medicine, including while scrolled.

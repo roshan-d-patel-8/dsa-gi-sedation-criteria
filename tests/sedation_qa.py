@@ -136,12 +136,10 @@ def assert_sedation_clarifications(page, touch=False):
 
     remi_card = page.locator('.tone-card-remi')
     assert remi_card.get_by_role('heading', name='Remimazolam', exact=True).is_visible()
-    steps = remi_card.locator('ol > li')
-    assert steps.all_text_contents() == [
-        'Send a staff message to Roshan to review the case and include the indication for remimazolam.',
-        'Place the case request under monitored anesthesia care (MAC). If the patient does not accept the offered REMI dates, we will offer MAC dates.',
-        'Start booking comments with REMI as the first word. This allows our schedulers to sort the depot and book REMI cases expeditiously.',
-    ]
+    assert remi_card.locator('ol').count() == 0
+    assert 'Send a staff message to Roshan' not in remi_card.inner_text()
+    assert 'Place the case request under monitored anesthesia care (MAC)' not in remi_card.inner_text()
+    assert 'Start booking comments with REMI' not in remi_card.inner_text()
     assert remi_card.locator(':scope > ul > li').count() == 6
     assert remi_card.locator(':scope > :last-child').get_attribute('class') == 'criteria-card-note'
     remi_trigger = remi_card.get_by_role('button', name='HC Remimazolam case request instructions', exact=True)
@@ -152,7 +150,7 @@ def assert_sedation_clarifications(page, touch=False):
     else: remi_trigger.hover()
     remi_note = page.locator('#remimazolam-hc-booking')
     remi_note.wait_for(state='visible')
-    assert remi_note.inner_text() == 'Please place the case request under monitored anesthesia care.'
+    assert remi_note.inner_text() == 'Send a staff message to Roshan to review the case and include the indication for remimazolam.\n\n1. Place the case request under monitored anesthesia care (MAC). If the patient does not accept the offered REMI dates, we will offer MAC dates.\n2. Start booking comments with REMI as the first word. This allows our schedulers to sort the depot and book REMI cases expeditiously.'
     assert 'criteria-explanation-sticky' in remi_note.get_attribute('class')
     box = remi_note.bounding_box()
     assert box['x'] >= 0 and box['x'] + box['width'] <= page.viewport_size['width'] + 1
@@ -163,7 +161,7 @@ def assert_sedation_clarifications(page, touch=False):
     if touch:
         remi_trigger.tap(); assert remi_note.is_visible()
         remi_trigger.tap(); assert remi_note.count() == 0
-        remi_trigger.tap(); remi_card.get_by_role('heading').tap(); assert remi_note.count() == 0
+        remi_trigger.tap(); page.touchscreen.tap(2, 2); assert remi_note.count() == 0
     else:
         page.mouse.move(0, 0); remi_trigger.focus(); assert remi_note.is_visible()
         assert remi_trigger.get_attribute('aria-describedby') == 'remimazolam-hc-booking'

@@ -154,17 +154,12 @@ export const policySections = [
     id: "remimazolam",
     title: "Remimazolam",
     tone: "remi",
-    steps: [
-      "Send a staff message to Roshan to review the case and include the indication for remimazolam.",
-      "Place the case request under monitored anesthesia care (MAC). If the patient does not accept the offered REMI dates, we will offer MAC dates.",
-      "Start booking comments with REMI as the first word. This allows our schedulers to sort the depot and book REMI cases expeditiously.",
-    ],
     note: {
       id: "remimazolam-hc-booking",
       label: "HC Remimazolam case request instructions",
       icon: "HC",
       tone: "sticky",
-      text: "Please place the case request under monitored anesthesia care.",
+      text: "Send a staff message to Roshan to review the case and include the indication for remimazolam.\n\n1. Place the case request under monitored anesthesia care (MAC). If the patient does not accept the offered REMI dates, we will offer MAC dates.\n2. Start booking comments with REMI as the first word. This allows our schedulers to sort the depot and book REMI cases expeditiously.",
     },
     items: [
       "High-dose or long-acting opiates.",
