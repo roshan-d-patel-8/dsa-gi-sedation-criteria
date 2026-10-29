@@ -79,8 +79,18 @@ def assert_acls(page, url, output=None, touch=False):
     if output:
         page.wait_for_timeout(500) # Let native mobile tap feedback settle before the visual capture.
         page.screenshot(path=str(output / f'acls-ed-leave-{page.viewport_size["width"]}.png'))
+    prep = dialog.get_by_role('region', name='Helpful preparatory resources', exact=True)
+    assert prep.locator('li').count() == 3
+    assert 'Optional study aids' in prep.inner_text()
+    assert 'assigned AHA ACLS HeartCode materials' in prep.inner_text()
+    assert prep.evaluate('e=>e === e.parentElement.lastElementChild')
+    prep.scroll_into_view_if_needed()
+    expect(prep).to_be_visible()
+    assert prep.evaluate('e=>e.scrollWidth<=e.clientWidth+1')
+    assert prep.evaluate('e=>getComputedStyle(e).backgroundColor') != 'rgba(0, 0, 0, 0)'
+    if output: page.screenshot(path=str(output / f'acls-prep-{page.viewport_size["width"]}.png'))
     # Exercise link activation and the complete exact destination, without submitting forms.
-    for label, href in [('Sign up for ACLS training', REGISTRATION), ('Open MD People reimbursement portal', REIMBURSEMENT), ('How to create an expense report for physicians', EXPENSE_GUIDE), ('Notify us you’re ready to test', READINESS)]:
+    for label, href in [('Sign up for ACLS training', REGISTRATION), ('Open MD People reimbursement portal', REIMBURSEMENT), ('How to create an expense report for physicians', EXPENSE_GUIDE), ('Notify us you’re ready to test', READINESS), ('National CPR Association', 'https://www.nationalcprassociation.com/acls-study-guide/'), ('ACLS Certification Association', 'https://aclscertification.org/practice-tests/'), ('ACLS.com', 'https://acls.com/resources/practice-tests/')]:
         link = dialog.get_by_role('link', name=label, exact=False)
         assert link.get_attribute('href') == href
         assert link.get_attribute('target') == '_blank'

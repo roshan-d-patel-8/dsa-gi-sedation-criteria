@@ -83,6 +83,15 @@ function AclsDialog({ onClose }) {
         <p className="acls-timesheet-suggestion"><strong>Timesheet suggestion:</strong> Consider adding the ED-leave entry on a weekend day so it does not overlap with weekday timesheet entries and cause confusion.</p>
       </section>
       <p className="acls-finish"><HeartIcon /><strong>Pass the skills test → Complete ACLS certification</strong></p>
+      <section className="acls-prep-resources" aria-labelledby="acls-prep-title">
+        <h3 id="acls-prep-title">Helpful preparatory resources</h3>
+        <p>Optional study aids to support your preparation. Use your assigned AHA ACLS HeartCode materials for current course guidance.</p>
+        <ul>
+          <li><a href="https://www.nationalcprassociation.com/acls-study-guide/" target="_blank" rel="noreferrer"><span><strong>National CPR Association</strong><span>Study guide</span></span><span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a href="https://aclscertification.org/practice-tests/" target="_blank" rel="noreferrer"><span><strong>ACLS Certification Association</strong><span>Interactive practice tests</span></span><span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a href="https://acls.com/resources/practice-tests/" target="_blank" rel="noreferrer"><span><strong>ACLS.com</strong><span>Algorithm-specific rhythm quizzes</span></span><span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a></li>
+        </ul>
+      </section>
     </div>
   </dialog>, document.body);
 }

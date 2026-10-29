@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.53.2 — 2026-10-29
+
+- Add a compact lavender Helpful preparatory resources box at the bottom of the ACLS workflow, with the three user-supplied study-guide, interactive practice-test and rhythm-quiz links opening in new tabs. Keep the four certification steps intact and identify resources as optional study aids alongside assigned AHA ACLS HeartCode guidance.
+- Label the National CPR Association destination Study guide: its supplied page presents web content and a provider-manual PDF was not verified. No external clinical material is copied or certification equivalence implied.
+- All seven workflow/resource links, bottom placement, keyboard focus containment/return and phone tap/scrolling/viewport fit passed focused desktop/mobile checks. Full browser regressions passed with no console errors; 25 unit tests passed, one unavailable-source skip, production build and diff check passed.
+
 ## 0.53.1 — 2026-10-28
 
 - Clarify that each provider registers individually through the group enrollment link, then Heart Start CPR assigns that provider’s AHA ACLS HeartCode course.
