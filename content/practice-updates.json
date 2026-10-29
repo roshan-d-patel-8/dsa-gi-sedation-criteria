@@ -1,5 +1,16 @@
 [
   {
+    "id": "2026-10-29-remimazolam-pain-example",
+    "date": "2026-10-29",
+    "title": "Remimazolam: colonoscopy pain example",
+    "sourceReleases": [
+      "0.54.2"
+    ],
+    "changes": [
+      "Consider MAC for significant colonoscopy pain under moderate sedation because remimazolam has no analgesic properties. A great example is patients with tightly angulated sigmoid colons and pain sensitivity, best served by monitored anesthesia care."
+    ]
+  },
+  {
     "id": "2026-10-29-remimazolam-three-steps",
     "date": "2026-10-29",
     "title": "Remimazolam: three-step booking workflow",

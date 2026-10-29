@@ -171,7 +171,7 @@ export const policySections = [
       "Failed moderate sedation in the past.",
       "Very heavy alcohol or drug use.",
       "No BMI or cardiopulmonary criteria currently listed.",
-      "Consider MAC for significant colonoscopy pain under moderate sedation because remimazolam has no analgesic properties.",
+      "Consider MAC for significant colonoscopy pain under moderate sedation because remimazolam has no analgesic properties. A great example is patients with tightly angulated sigmoid colons and pain sensitivity, best served by monitored anesthesia care.",
       "Consider MAC for heavy cannabis use.",
     ],
   },

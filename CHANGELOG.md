@@ -5,6 +5,11 @@ tags:
 
 # Changelog
 
+## 0.54.2 — 2026-10-29
+
+- Append Roshan’s exact tightly angulated sigmoid/pain-sensitivity example to the existing Remimazolam colonoscopy-pain/MAC bullet. Preserve the three booking steps, bottom HC note and all other criteria.
+- Validation: 25 unit tests passed, one unavailable-source skip; production build, diff check and full responsive browser regressions passed with no console errors.
+
 ## 0.54.1 — 2026-10-29
 
 - Reformat Remimazolam booking into three numbered steps: staff-message Roshan for review with the indication; place a MAC case request with MAC dates offered if the patient does not accept REMI dates; start comments with REMI so schedulers can sort the depot and book REMI cases expeditiously.

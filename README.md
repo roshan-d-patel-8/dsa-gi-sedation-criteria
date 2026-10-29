@@ -39,6 +39,8 @@ The application is static and has no clinical inputs, backend, database, or anal
 
 ## Publication
 
+On 2026-10-29 Roshan requested appending this exact example to the existing Remimazolam colonoscopy-pain/MAC bullet: “A great example is patients with tightly angulated sigmoid colons and pain sensitivity, best served by monitored anesthesia care.” This is his supplied clinical example; the existing rationale and booking workflow remain in place.
+
 On 2026-10-29 Roshan requested a three-step Remimazolam booking workflow: send him a staff message for case review with the indication; place the case request under MAC and offer MAC dates if the patient does not accept REMI dates; start booking comments with REMI so schedulers can sort the depot and book REMI cases expeditiously. The existing yellow HC sticky-note control now sits at the bottom of the card. Clinical selection criteria are preserved. These are published staff instructions; no patient-specific message or booking is performed.
 
 On 2026-10-29 Roshan authorized publishing the supplied advanced-adenoma infographic in Choosing Wisely and adding Tom’s existing ERBE/Upper EMR deck under Procedures. The PNG is preserved byte-for-byte at 1382×356 with accessible definition text and enlargement; existing Choosing Wisely results remain. The adjacent >10 mm definition is aligned to ≥10 mm to match the supplied image and [USMSTF definition](https://pmc.ncbi.nlm.nih.gov/articles/PMC7393611/). No surveillance interval, age threshold or graduation rule is added or changed. Procedures reuses the July 2026 22-slide resource, existing static WebP frames, slide-1 cover and shared viewer; the calendar placement remains. No new rendering, source PowerPoint/PDF or slide content is published.
