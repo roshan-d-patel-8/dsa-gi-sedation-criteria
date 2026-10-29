@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.54.0 — 2026-10-29
+
+- Add the exact supplied advanced-adenoma PNG beside Choosing Wisely’s advanced-adenoma guidance, with accessible text and tap/click enlargement using the existing image dialog. Preserve the full image and existing graduation-results graphic. Align the adjacent definition from >10 mm to ≥10 mm, consistent with the supplied visual and USMSTF definition; surveillance intervals and graduation age thresholds remain unchanged.
+- Add Tom’s ERBE Settings and Upper EMR as a Procedures subsection, sharing July 2026’s existing 22-slide resource, slide-1 cover and presentation viewer. Retain the calendar entry and unchanged slide assets; no source PowerPoint/PDF published or rendering repeated. Existing slides remain flattened static frames.
+- Add dated public reference updates for Choosing Wisely and Procedures. Original image bytes/dimensions, expansion/actual-size/focus, all slide assets, both entry points, viewer controls and section search/expand behavior verified. Focused 1440/390/320 and full responsive browser suites passed with no console errors; 25 unit tests passed, one unavailable-source skip, production build and diff check passed.
+
 ## 0.53.2 — 2026-10-29
 
 - Add a compact lavender Helpful preparatory resources box at the bottom of the ACLS workflow, with the three user-supplied study-guide, interactive practice-test and rhythm-quiz links opening in new tabs. Keep the four certification steps intact and identify resources as optional study aids alongside assigned AHA ACLS HeartCode guidance.

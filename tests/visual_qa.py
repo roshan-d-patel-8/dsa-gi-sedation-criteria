@@ -11,6 +11,7 @@ from path_workflow_qa import assert_path_workflow
 from orientation_qa import assert_section_foldout_toggle, assert_all_section_foldout_toggles, assert_outside_kp_referrals
 from changelog_qa import assert_change_log
 from meeting_notes_qa import assert_meeting_notes
+from adenoma_erbe_qa import assert_adenoma_erbe
 from acls_qa import assert_acls
 from thanksgiving_qa import assert_thanksgiving
 
@@ -857,7 +858,7 @@ def assert_choosing_wisely(page):
 
 
 def assert_all_orientation_sections_are_clean(page):
-    expected_accordion_counts = [3, 3, 3, 5, 3, 4, 4, 0, 1, 1, 2, 5]
+    expected_accordion_counts = [3, 3, 3, 5, 3, 4, 5, 0, 1, 1, 2, 5]
     for index in range(page.locator(".orientation-subtab").count()):
         page.locator(".orientation-subtab").nth(index).click()
         accordions = page.locator(".orientation-content details.orientation-site-group")
@@ -1119,10 +1120,10 @@ with sync_playwright() as playwright:
     procedures_tab = desktop.get_by_role("tab", name="Procedures Appointment types and documentation", exact=False)
     procedures_tab.click()
     assert desktop.locator(".orientation-procedure-grid").count() == 1
-    assert desktop.locator("details.orientation-procedure-group").count() == 3
-    assert desktop.locator("details.orientation-site-group").count() == 4
+    assert desktop.locator("details.orientation-procedure-group").count() == 4
+    assert desktop.locator("details.orientation-site-group").count() == 5
     assert desktop.locator("details.orientation-site-group[open]").count() == 0
-    assert desktop.locator(".orientation-procedure-grid summary > i").count() == 4
+    assert desktop.locator(".orientation-procedure-grid summary > i").count() == 5
     for heading in ["Appointment types", "Sedation & flex-sig routing", "Procedure documentation", "Skills Day"]:
         assert desktop.get_by_role("heading", name=heading, exact=True).is_visible()
     desktop.locator(".orientation-card").scroll_into_view_if_needed()
@@ -1363,6 +1364,9 @@ with sync_playwright() as playwright:
     assert_meeting_notes(desktop, BASE_URL, OUTPUT / "oct14-meeting-desktop.png")
     assert_meeting_notes(mobile, BASE_URL, OUTPUT / "oct14-meeting-mobile.png", touch=True)
     assert_meeting_notes(compact_mobile, BASE_URL, touch=True)
+    assert_adenoma_erbe(desktop, BASE_URL)
+    assert_adenoma_erbe(mobile, BASE_URL, touch=True)
+    assert_adenoma_erbe(compact_mobile, BASE_URL, touch=True)
     assert not desktop_errors, desktop_errors
     assert not mobile_errors, mobile_errors
     assert not compact_mobile_errors, compact_mobile_errors

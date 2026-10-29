@@ -1,5 +1,21 @@
 [
   {
+    "id": "2026-10-29-adenoma-and-erbe",
+    "date": "2026-10-29",
+    "fieldGuideSections": [
+      "Choosing Wisely",
+      "Procedures"
+    ],
+    "title": "Advanced adenoma illustration and ERBE reference slides",
+    "sourceReleases": [
+      "0.54.0"
+    ],
+    "changes": [
+      "Added an advanced-adenoma definition illustration to Choosing Wisely: conventional adenoma with high-grade dysplasia, villous/tubulovillous histology, or size ≥10 mm. Aligned the existing size definition to ≥10 mm.",
+      "Tom’s 22-slide ERBE Settings and Upper EMR presentation is now also available under Field Guide → Procedures. Its July 2026 calendar resource remains available."
+    ]
+  },
+  {
     "id": "2026-10-28-remimazolam-booking",
     "date": "2026-10-28",
     "title": "Remimazolam booking instructions",

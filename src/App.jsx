@@ -2038,6 +2038,47 @@ function createProcedureFoldout(doc, { code, title, description, className, node
   return foldout;
 }
 
+function createErbeProcedureFoldout(doc) {
+  const resource = monthlyDepartmentResources[6][0];
+  const card = doc.createRange().createContextualFragment(`
+    <button class="department-resource-card ergonomics-resource-card" type="button"
+      data-presentation-resource="${resource.id}" aria-haspopup="dialog"
+      aria-label="Open ${resource.title} presentation, ${resource.slideTitles.length} slides">
+      <span class="department-resource-cover">
+        <img src="${import.meta.env.BASE_URL}${resource.assetPath}/slide-01.webp" alt="" loading="lazy" />
+        <i aria-hidden="true">View deck</i>
+      </span>
+      <span class="department-resource-copy">
+        <small>Tom’s slides · July 2026 · ${resource.slideTitles.length} slides</small>
+        <strong>${resource.title}</strong><span>${resource.description}</span>
+      </span><b aria-hidden="true">Open →</b>
+    </button>
+  `);
+  return createProcedureFoldout(doc, {
+    code: "ERBE", title: resource.title,
+    description: "Tom’s slides · Electrosurgery and upper-GI polypectomy",
+    className: "procedure-group-erbe", nodes: Array.from(card.children),
+  });
+}
+
+function addAdvancedAdenomaInfographic(container, doc, sectionShort) {
+  if (sectionShort !== "Choosing Wisely") return;
+  const decisions = container.querySelector(".cw-decision-section");
+  if (!decisions) return;
+  const figure = doc.createElement("figure");
+  figure.className = "cw-adenoma-figure";
+  figure.innerHTML = `
+    <figcaption><strong>What is an advanced adenoma?</strong><span>Tap the illustration to enlarge</span></figcaption>
+    <button type="button" data-workflow-image="advanced-adenoma-definition.png"
+      data-image-title="Advanced adenoma · illustrated definition"
+      aria-label="Enlarge advanced adenoma infographic">
+      <img src="${import.meta.env.BASE_URL}advanced-adenoma-definition.png" width="1382" height="356" loading="lazy"
+        alt="Advanced adenoma: a conventional adenoma with high-grade dysplasia, villous or tubulovillous histology, OR size ≥ 10 mm. High-grade dysplasia shows crowded, irregular nuclei and an intact basement membrane without invasion. Villous histology has fingerlike architecture. Simplified illustrations." />
+      <span aria-hidden="true">Enlarge ↗</span>
+    </button>`;
+  decisions.append(figure);
+}
+
 function groupProcedures(container, doc, sectionShort) {
   if (sectionShort !== "Procedures") return;
   const nodes = Array.from(container.children);
@@ -2069,6 +2110,7 @@ function groupProcedures(container, doc, sectionShort) {
       className: "procedure-group-documentation",
       nodes: nodes.slice(documentationIndex + 1),
     }),
+    createErbeProcedureFoldout(doc),
     createSkillsDayFoldout(doc),
   );
   container.replaceChildren(groupGrid);
@@ -2095,6 +2137,7 @@ function parseOrientationSource(source) {
     groupCommunicationContent(container, doc, sectionKey);
     addPoolParty(container, doc, sectionKey);
     groupProcedures(container, doc, sectionKey);
+    addAdvancedAdenomaInfographic(container, doc, sectionKey);
     groupSchedules(container, doc, sectionKey);
     groupStandardSections(container, doc, sectionKey);
     Array.from(container.children).forEach((node) => {
@@ -2640,7 +2683,7 @@ function WorkflowScreenshotDialog({ image, onClose }) {
     <dialog className="workflow-image-dialog" ref={dialogRef} aria-labelledby="workflow-image-title"
       onCancel={(event) => { event.preventDefault(); onClose(); }}
       onClick={(event) => { if (event.target === event.currentTarget) onClose(); }}>
-      <header><h2 id="workflow-image-title">{image.alt}</h2><div>
+      <header><h2 id="workflow-image-title">{image.title || image.alt}</h2><div>
         <button type="button" onClick={() => setActualSize(!actualSize)} aria-pressed={actualSize}>{actualSize ? "Fit image" : "Actual size"}</button>
         <button type="button" autoFocus aria-label="Close workflow screenshot" onClick={onClose}>Close</button>
       </div></header>
@@ -2801,15 +2844,16 @@ function OrientationMaterials() {
 
   function handleOrientationContentClick(event) {
     const presentationButton = event.target.closest("[data-presentation-resource]");
-    if (presentationButton?.dataset.presentationResource === ergonomicsPresentation.id) {
-      setActivePresentation(ergonomicsPresentation);
+    const selectedPresentation = [ergonomicsPresentation, monthlyDepartmentResources[6][0]].find((resource) => resource.id === presentationButton?.dataset.presentationResource);
+    if (selectedPresentation) {
+      setActivePresentation(selectedPresentation);
       return;
     }
 
     const imageButton = event.target.closest("[data-workflow-image]");
     if (imageButton) {
       const image = imageButton.querySelector("img");
-      setWorkflowImage({ src: image.src, alt: image.alt, trigger: imageButton });
+      setWorkflowImage({ src: image.src, alt: image.alt, title: imageButton.dataset.imageTitle, trigger: imageButton });
       return;
     }
 
