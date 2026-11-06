@@ -841,13 +841,13 @@ def assert_choosing_wisely(page):
     assert panel.locator(".cw-smartphrase-panel").is_visible()
     assert panel.get_by_role("heading", name="GI Choosing Wisely TPIP Consensus Recommendations and Implementation", exact=True).is_visible()
     assert panel.locator(".cw-smartphrase-code").count() == 4
-    assert panel.locator(".cw-age").all_text_contents() == ["76–79", "76–79", "80–84", "≥ 85"]
+    assert panel.locator(".cw-age").all_text_contents() == ["76–79", "76–79", "≥ 80"]
     for smartphrase in ["DSAGIGRADNOTE", "DSAGIGRADLETTER", "DSAGIGRADMA", "DSAGIGRADDC"]:
         phrase = panel.get_by_text(smartphrase, exact=True)
         assert phrase.is_visible()
         assert int(phrase.evaluate("element => getComputedStyle(element).fontWeight")) >= 700
     assert panel.get_by_text("Continue routine screening and surveillance colonoscopies in patients aged 70-75", exact=True).is_visible()
-    assert panel.get_by_text("Discontinue surveillance colonoscopies for all patients age ≥ 85", exact=True).is_visible()
+    assert panel.get_by_text("Discontinue surveillance and screening colonoscopies for all patients age ≥ 80", exact=True).is_visible()
     assert panel.get_by_text("Based on a careful review of this patient's age, medical history, and prior colon cancer screening, no further colon cancer screening indicated (PROMPT updated).", exact=True).is_visible()
     assert panel.get_by_role("heading", name="Graduation Smartphrase for Patient Discharge Instructions", exact=True).is_visible()
     assert panel.get_by_role("heading", name="Graduation Smartphrase for Procedural Note", exact=True).is_visible()

@@ -762,7 +762,7 @@ body.presentation-open { overflow: hidden; }
 .cw-section-heading { padding: 17px 20px; border-bottom: 1px solid #dce6e9; background: linear-gradient(120deg, #edf6f3, rgba(255, 255, 255, .94)); }
 .cw-section-heading span { color: #477d75; }
 .cw-section-heading h3 { margin: 4px 0 0; color: #255a53; font-size: 21px; line-height: 1.2; letter-spacing: -.02em; }
-.cw-age-grid { padding: 16px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.cw-age-grid { padding: 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .cw-age-grid article { padding: 16px; border: 1px solid #d4e3df; border-top: 5px solid #477d75; border-radius: 11px; background: #f8fbfa; }
 .cw-age { display: inline-block; padding: 4px 8px; border-radius: 6px; background: #255a53; color: white; font-size: 11px; font-weight: 950; letter-spacing: .06em; }
 .cw-age-grid p { margin: 12px 0 0; color: var(--navy); font-weight: 800; line-height: 1.45; }

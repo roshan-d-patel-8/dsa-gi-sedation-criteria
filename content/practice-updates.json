@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-11-06-choosing-wisely-80-plus",
+    "date": "2026-11-06",
+    "title": "Choosing Wisely: one recommendation for age 80 and older",
+    "fieldGuideSections": [
+      "Choosing Wisely"
+    ],
+    "sourceReleases": [
+      "0.55.3"
+    ],
+    "changes": [
+      "Combined the prior 80–84 and ≥85 groups into one recommendation: discontinue surveillance and screening colonoscopies for all patients age ≥80. The two 76–79 recommendations remain unchanged."
+    ],
+    "targets": [
+      [
+        "choosing-wisely-age-bands"
+      ]
+    ]
+  },
+  {
     "id": "2026-11-05-choosing-wisely-age-bands",
     "date": "2026-11-05",
     "title": "Choosing Wisely: graduation age bands",

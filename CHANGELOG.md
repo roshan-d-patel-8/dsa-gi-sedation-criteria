@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.55.3 — 2026-11-06
+
+- Combine the prior 80–84 and ≥85 Choosing Wisely groups into one ≥80 all-patient recommendation to discontinue surveillance and screening colonoscopies, per Roshan’s explicit consolidation instruction. Keep the documentation note and both 76–79 groups.
+- Use three desktop cards and add a directly linked What’s New entry; preserve the prior release history, research age groups, discussion heading and patient scripts. The matching DSA-branded PDF is updated separately on the Desktop and is not published as a site asset.
+- Validation: 29 unit tests passed, one unavailable-source skip; build/diff check, PDF source parity/render, and focused local 1440/390/320 checks passed. Exhaustive local links passed 43 desktop links and 32 distinct destinations at each phone width; the 320px run required explicit instant positioning before real taps to avoid a scrolling race. Full responsive suite stopped at the previously observed unrelated mobile sedation-tooltip dismissal assertion; isolated390/320 clarification checks passed. No full-suite pass claimed.
+
 ## 0.55.2 — 2026-11-05
 
 - Correct Choosing Wisely recommendation bands and matching text to 76–79 (both groups), 80–84, and ≥85 at Roshan’s request. Preserve the published study age groups, discussion heading and patient scripts.

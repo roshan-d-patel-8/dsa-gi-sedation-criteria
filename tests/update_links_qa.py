@@ -52,6 +52,8 @@ def assert_update_links(page, destinations, touch=False, all_links=True):
     for entry, index, key in links:
         link = page.locator(f'[data-update-link="{entry}:{index}:{key}"]')
         expect(link).to_have_attribute('href', f'?section={key}')
+        # Settle history restoration and smooth scrolling before a real pointer action.
+        link.evaluate('el => el.scrollIntoView({block: "center", behavior: "instant"})')
         if touch:
             link.tap()
         else:
