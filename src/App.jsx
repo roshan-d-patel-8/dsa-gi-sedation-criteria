@@ -72,7 +72,7 @@ const countdowns = [
     updateNote: "Deadline updated to October 21.",
   },
   { label: "Pleasanton — Room 2 opens", date: "2026-11-02", displayDate: "Mon · Nov 2, 2026", tone: "gold" },
-  { label: "E2K — GI go-live", date: "2026-11-18", displayDate: "Wed · Nov 18, 2026 · confirmed", tone: "way" },
+  { label: "E2K — GI go-live", date: "2026-12-08", displayDate: "Tue · Dec 8, 2026 · confirmed", tone: "way" },
 ];
 
 const calendarArtEvents = [
@@ -915,7 +915,7 @@ function CountdownTiles({ items }) {
   const triggerRef = useRef(null);
   const shortLabels = {
     "2026-09-28": "Aslam", "2026-10-02": "Dublin", "2026-10-21": "Survey",
-    "2026-10-17": "TPIP", "2026-10-19": "PL · Rm 1", "2026-11-02": "PL · Rm 2", "2026-11-18": "E2K",
+    "2026-10-17": "TPIP", "2026-10-19": "PL · Rm 1", "2026-11-02": "PL · Rm 2", "2026-12-08": "E2K",
   };
   const closeDetails = useCallback(() => {
     setActiveItem(null);

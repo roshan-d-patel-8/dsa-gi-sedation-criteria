@@ -131,7 +131,7 @@ def assert_home(page):
     assert page.get_by_text("The next markers on the map.", exact=True).count() == 0
     assert page.locator(".calendar-tab-icon").is_visible()
     today = datetime.now(ZoneInfo("America/Los_Angeles")).date()
-    milestone_dates = ["2026-09-28", "2026-10-02", "2026-10-17", "2026-10-19", "2026-10-21", "2026-11-02", "2026-11-18"]
+    milestone_dates = ["2026-09-28", "2026-10-02", "2026-10-17", "2026-10-19", "2026-10-21", "2026-11-02", "2026-12-08"]
     upcoming_dates = [value for value in milestone_dates if date.fromisoformat(value) > today]
     assert page.locator(".countdown-card").count() == len(upcoming_dates)
     assert page.locator(".countdown-card time").evaluate_all("elements => elements.map(element => element.dateTime)") == upcoming_dates
@@ -148,7 +148,7 @@ def assert_home(page):
     assert page.get_by_text("Sheikah Slate", exact=False).count() == 0
     assert page.locator(".countdown-strip").get_by_text("Tom Haddad — last on-site day", exact=True).count() == 0
     assert page.locator(".countdown-strip").get_by_text("Thu · Sep 17, 2026", exact=True).count() == 0
-    if "2026-11-18" in upcoming_dates:
+    if "2026-12-08" in upcoming_dates:
         assert page.locator(".countdown-strip").get_by_role("button", name=re.compile("E2K — GI go-live")).is_visible()
     assert page.get_by_text("Rest of 2026", exact=True).count() == 0
     assert page.get_by_text("September—December", exact=True).count() == 0
@@ -472,7 +472,7 @@ def assert_calendar_navigation(page):
     assert page.get_by_role("grid", name="November 2026", exact=True).is_visible()
     assert page.locator(".calendar-controls").get_by_text("November 2026", exact=True).count() == 1
     assert page.locator(".announcement-card").count() == 0
-    assert page.locator(".calendar-event-marker").count() == 2
+    assert page.locator(".calendar-event-marker").count() == 1
     assert page.locator(".birthday-marker").count() == 4
     roshan_birthday = page.get_by_label("Happy Birthday, Roshan Patel!", exact=True)
     assert roshan_birthday.is_visible()
@@ -484,7 +484,8 @@ def assert_calendar_navigation(page):
     next_month.click()
     assert page.get_by_role("grid", name="December 2026", exact=True).is_visible()
     assert page.locator(".calendar-controls").get_by_text("December 2026", exact=True).count() == 1
-    assert page.locator(".calendar-event-marker").count() == 0
+    assert page.locator(".calendar-event-marker").count() == 1
+    assert page.get_by_role("gridcell", name="December 2026 8: E2K — GI go-live", exact=True).is_visible()
     assert page.locator(".birthday-marker").count() == 1
     assert next_month.is_disabled()
     previous.click()

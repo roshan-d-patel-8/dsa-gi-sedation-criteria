@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.55.1 — 2026-11-05
+
+- Move the E2K GI go-live countdown and its calendar milestone from November 18 to Tuesday, December 8, 2026, at Roshan’s request. Keep the compact E2K tile label and confirmed status.
+- Update browser date/countdown expectations and verify the date in the tile, detail dialog and December calendar, with no November E2K marker.
+- Validation: 29 unit tests passed, one unavailable-source skip; build/diff check, focused 1440/390/320 countdown/date/dialog/focus/Pacific-expiry checks, countdown density/accessibility checks and exhaustive desktop/mobile What’s New links passed. Full responsive functional checks completed; the final console gate reported the previously observed third-party compute-pressure permissions-policy diagnostic.
+
 ## 0.55.0 — 2026-10-29
 
 - Add named section links to every existing What's New change: 27 entries, 40 bullets and 41 links. Preserve all existing copy, dates and clinical guidance. Route to exact Field Guide subsections, cards, HC notes, medication/In Basket references and correctly dated calendar resources; reveal folded content and focus/highlight the arrival.

@@ -28,8 +28,8 @@ def assert_density(page, width, touch):
     assert page.locator(".calendar-tab-icon rect").count() == 1
     cards = page.locator(".countdown-card")
     assert cards.count() == 5
-    assert cards.locator("time").evaluate_all("es => es.map(e => e.dateTime)") == ["2026-10-17", "2026-10-19", "2026-10-21", "2026-11-02", "2026-11-18"]
-    assert cards.locator(".countdown-number strong").all_text_contents() == ["5", "7", "9", "21", "37"]
+    assert cards.locator("time").evaluate_all("es => es.map(e => e.dateTime)") == ["2026-10-17", "2026-10-19", "2026-10-21", "2026-11-02", "2026-12-08"]
+    assert cards.locator(".countdown-number strong").all_text_contents() == ["5", "7", "9", "21", "57"]
     assert cards.locator(".pixel-number").count() == 5
     survey = cards.filter(has_text="Survey")
     expect(survey.locator(".deadline-update-dot")).to_be_visible()
