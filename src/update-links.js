@@ -22,6 +22,7 @@ export const updateDestinations = {
   "september-hepatitis": { label: "September 2026: Immunotherapy-Induced Hepatitis", tab: "home", month: 8, selector: '[data-calendar-resource="immunotherapy-induced-hepatitis"]' },
   "july-erbe": { label: "July 2026: ERBE presentation", tab: "home", month: 6, selector: '[data-calendar-resource="erbe-settings-and-upper-emr"]' },
   "september-four-habits": { label: "September 2026: Four Habits presentation", tab: "home", month: 8, selector: '[data-calendar-resource="four-habits"]' },
+  "choosing-wisely-age-bands": { label: "Choosing Wisely: graduation age bands", tab: "orientation", section: "Choosing Wisely", selector: ".cw-decision-section" },
   "choosing-wisely": { label: "Choosing Wisely: colonoscopy graduation", tab: "orientation", section: "Choosing Wisely", selector: ".orientation-card" },
   "pool-party": { label: "Communication: Pool Party", tab: "orientation", section: "Communication", selector: ".orientation-pool-party" },
   "email-directory": { label: "Communication: Email Directory", tab: "orientation", section: "Communication", selector: ".orientation-email-directory" },

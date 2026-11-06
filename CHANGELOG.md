@@ -5,6 +5,12 @@ tags:
 
 # Changelog
 
+## 0.55.2 — 2026-11-05
+
+- Correct Choosing Wisely recommendation bands and matching text to 76–79 (both groups), 80–84, and ≥85 at Roshan’s request. Preserve the published study age groups, discussion heading and patient scripts.
+- Add a dated What’s New entry linked directly to the recommendation section, and verify the exact rendered age bands.
+- Validation: 29 unit tests passed, one unavailable-source skip; build/diff check, focused 1440/390/320 age-band and source-preservation checks, and exhaustive What’s New links passed (42 desktop links; 32 distinct destinations at each phone width). Full responsive suite stopped at an unrelated mobile sedation-tooltip dismissal assertion; isolated 390/320 sedation clarification checks passed, so no full-suite pass is claimed.
+
 ## 0.55.1 — 2026-11-05
 
 - Move the E2K GI go-live countdown and its calendar milestone from November 18 to Tuesday, December 8, 2026, at Roshan’s request. Keep the compact E2K tile label and confirmed status.

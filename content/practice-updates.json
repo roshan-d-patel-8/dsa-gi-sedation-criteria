@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-11-05-choosing-wisely-age-bands",
+    "date": "2026-11-05",
+    "title": "Choosing Wisely: graduation age bands",
+    "fieldGuideSections": [
+      "Choosing Wisely"
+    ],
+    "sourceReleases": [
+      "0.55.2"
+    ],
+    "changes": [
+      "Updated the colonoscopy graduation recommendations to ages 76–79 for average-risk patients with low-risk or no prior polyps and for patients with prior high-risk polyps / advanced adenoma; ages 80–84 for high-risk patients; and age ≥85 for all patients."
+    ],
+    "targets": [
+      [
+        "choosing-wisely-age-bands"
+      ]
+    ]
+  },
+  {
     "id": "2026-10-29-remimazolam-pain-example",
     "date": "2026-10-29",
     "title": "Remimazolam: colonoscopy pain example",
